@@ -20,12 +20,14 @@ namespace CoderDojoEnnis
 
             app.UseErrorPage();
 
+            app.UseRuntimeInfoPage("/info");
+
             var staticFileOptions = new StaticFileOptions();
             app.UseStaticFiles(staticFileOptions);
 
             // app.UseMvcWithDefaultRoute();
 
-            app.UseWelcomePage();
+            app.UseWelcomePage("/welcome");
         }
     }
 }
