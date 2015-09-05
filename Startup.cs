@@ -1,4 +1,5 @@
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.StaticFiles;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 
@@ -14,10 +15,13 @@ namespace CoderDojoEnnis
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            
+
+            app.UseStatusCodePages();
+
             app.UseErrorPage();
 
-            app.UseStaticFiles();
+            var staticFileOptions = new StaticFileOptions();
+            app.UseStaticFiles(staticFileOptions);
 
             // app.UseMvcWithDefaultRoute();
 
