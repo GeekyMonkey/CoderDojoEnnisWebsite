@@ -1,0 +1,29 @@
+{
+  "siteName": {
+    "value": "WebApplication32504"
+  },
+  "hostingPlanName": {
+    "value": "Default1"
+  },
+  "siteLocation": {
+    "value": "North Europe"
+  },
+  "sku": {
+    "value": "Shared"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "siteMode": {
+    "value": "Limited"
+  },
+  "computeMode": {
+    "value": "0"
+  },
+  "subscriptionId": {
+    "value": "b18107cb-6840-47c2-adc1-3c67aa25d4d9"
+  },
+  "resourceGroup": {
+    "value": "Default-Web-NorthEurope"
+  }
+}
