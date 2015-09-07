@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.StaticFiles;
 using Microsoft.Framework.DependencyInjection;
 
 namespace WebApplication3
@@ -17,6 +18,8 @@ namespace WebApplication3
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = false });
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello Coder Dojo!");
