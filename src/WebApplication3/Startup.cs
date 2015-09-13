@@ -18,12 +18,16 @@ namespace WebApplication3
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = false });
+            app.UseFileServer(new FileServerOptions { EnableDefaultFiles = true, EnableDirectoryBrowsing = false });
+            //app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = false });
+            // app.UseDefaultFiles();
 
+            /*
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello Coder Dojo!");
             });
+            */
         }
     }
 }
