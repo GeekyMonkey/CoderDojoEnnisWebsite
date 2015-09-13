@@ -6,16 +6,19 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
+var bower = require('gulp-bower');
 
-gulp.task('default', function () {
-    // place code for your default task here
-    console.log('Grunt - Running Default Task');
-
+gulp.task('bower', function () {
     // Copy angular
     //gulp.src([
     //'node_modules/systemjs/dist/*.*',
     //]).pipe(gulp.dest('wwwroot/lib/systemjs'));
 
+    return bower()
+           .pipe(gulp.dest('wwwroot/lib/'))
+});
+
+gulp.task('tsbuild', function () {
     var tsResult = gulp.src('ts/*.ts')
     .pipe(ts({
         noImplicitAny: true,
@@ -25,3 +28,5 @@ gulp.task('default', function () {
     }))
     .pipe(gulp.dest("wwwroot/js"));
 });
+
+gulp.task('default', ['bower', 'tsbuild']);
