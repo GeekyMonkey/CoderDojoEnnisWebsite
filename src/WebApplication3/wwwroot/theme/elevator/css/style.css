@@ -3,7 +3,7 @@
 
 
 body {
-    background-color: #222222;
+    background-color: #444;
     /*
     background: url(../images/background.jpg) no-repeat;
     background-attachment: fixed;
@@ -117,14 +117,20 @@ fieldset[disabled] .btn-primary.active {
     
 }
 
+.logo img {
+
+}
+
 .logo h1 {
-    font-family: 'Lobster', cursive;
+    font-family: 'Electrolize', sans-serif;
     color: #fff;
     font-size: 60px;
 }
 
-.logo span {
-    color: #999;
+.logo h2 {
+    font-family: 'Electrolize', sans-serif;
+    color: #eee;
+    font-size: 40px;
 }
 
 
