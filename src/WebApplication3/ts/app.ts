@@ -10,7 +10,7 @@ angular.module('DojoWebApp', [])
         "$scope",
         function (scope: IAppScope) {
 
-            scope.yourName = "Dude";
+            scope.yourName = "Dude Awesome";
 
             /*
                 var todoList = this;

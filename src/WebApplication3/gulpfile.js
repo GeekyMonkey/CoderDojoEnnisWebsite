@@ -14,8 +14,7 @@ gulp.task('bower', function () {
     //'node_modules/systemjs/dist/*.*',
     //]).pipe(gulp.dest('wwwroot/lib/systemjs'));
 
-    return bower()
-           .pipe(gulp.dest('wwwroot/lib/'))
+    //return bower().pipe(gulp.dest('wwwroot/lib/'))
 });
 
 gulp.task('tsbuild', function () {

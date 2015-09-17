@@ -3,7 +3,7 @@ angular.module('DojoWebApp', [])
     .controller('DojoWebController', [
     "$scope",
     function (scope) {
-        scope.yourName = "Dude";
+        scope.yourName = "Dude Awesome";
         /*
             var todoList = this;
             todoList.todos = [

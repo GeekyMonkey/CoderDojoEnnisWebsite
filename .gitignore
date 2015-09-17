@@ -2,4 +2,3 @@ artifacts/
 src/WebApplication3/wwwroot/bin/
 src/WebApplication3/node_modules/
 *.suo
-src/WebApplication3/wwwroot/lib/
