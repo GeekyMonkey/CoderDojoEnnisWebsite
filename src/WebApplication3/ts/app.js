@@ -4,6 +4,10 @@ angular.module('DojoWebApp', [])
     "$scope",
     function (scope) {
         scope.yourName = "Dude Awesome";
+        // If the modal is in the url - open it
+        if (location.hash) {
+            $('[href=' + location.hash.replace('/', '') + ']').trigger("click");
+        }
         /*
             var todoList = this;
             todoList.todos = [
