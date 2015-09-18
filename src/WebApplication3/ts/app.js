@@ -6,7 +6,11 @@ angular.module('DojoWebApp', [])
         scope.yourName = "Dude Awesome";
         // If the modal is in the url - open it
         if (location.hash) {
-            $('[href=' + location.hash.replace('/', '') + ']').trigger("click");
+            var modalId = location.hash.replace('/', '');
+            console.log("hash:" + modalId);
+            setTimeout(function () {
+                $('[href=' + modalId + ']').trigger("click");
+            }, 100);
         }
         /*
             var todoList = this;

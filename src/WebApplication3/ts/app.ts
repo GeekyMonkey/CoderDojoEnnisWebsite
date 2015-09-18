@@ -14,7 +14,11 @@ angular.module('DojoWebApp', [])
 
             // If the modal is in the url - open it
             if (location.hash) {
-                $('[href=' + location.hash.replace('/', '') + ']').trigger("click")
+                var modalId = location.hash.replace('/', '');
+                console.log("hash:" + modalId);
+                setTimeout(() => {
+                    $('[href=' + modalId + ']').trigger("click")
+                }, 100);
             }
 
             /*

@@ -6,6 +6,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.StaticFiles;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.AspNet.Diagnostics;
 
 namespace WebApplication3
 {
@@ -19,6 +20,14 @@ namespace WebApplication3
         public void Configure(IApplicationBuilder app)
         {
             app.UseFileServer(new FileServerOptions { EnableDefaultFiles = true, EnableDirectoryBrowsing = false });
+
+            app.UseErrorPage();
+
+            // ToDo: Only route to this from /index.php/calendar/
+            app.UseStatusCodePagesWithRedirects("/#/WhenWhereModal");
+
+//            app.UseStatusCodePages();
+
             //app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = false });
             // app.UseDefaultFiles();
 
