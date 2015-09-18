@@ -102,6 +102,14 @@ fieldset[disabled] .btn-primary.active {
     text-transform: none;
 }
 
+h4{
+    color: #666 !important;
+    //font-style: italic;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    text-transform: none;
+}
+
 .section-title p {
     padding-bottom: 60px;
     color: #999;
