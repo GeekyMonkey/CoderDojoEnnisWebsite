@@ -19,15 +19,25 @@ namespace WebApplication3
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseFileServer(new FileServerOptions { EnableDefaultFiles = true, EnableDirectoryBrowsing = false });
+            var fileServerOptions = new FileServerOptions
+            {
+                EnableDefaultFiles = true, 
+                EnableDirectoryBrowsing = false
+            };
+            FileExtensionContentTypeProvider contentTypeProvider = (FileExtensionContentTypeProvider)fileServerOptions.StaticFileOptions.ContentTypeProvider;
+            contentTypeProvider.Mappings.Add(".svg", "image/svg+xml");
+            app.UseFileServer(fileServerOptions);
 
             app.UseErrorPage();
 
             // ToDo: Only route to this from /index.php/calendar/
             app.UseStatusCodePagesWithRedirects("/#/WhenWhereModal");
 
-//            app.UseStatusCodePages();
+            //            app.UseStatusCodePages();
 
+            // StaticFileOptions option = new StaticFileOptions();
+            // FileExtensionContentTypeProvider contentTypeProvider = (FileExtensionContentTypeProvider)option.ContentTypeProvider;
+            //contentTypeProvider.Mappings.Add("<<yourextention>>", "<<mimetype>>");
             //app.UseStaticFiles(new StaticFileOptions { ServeUnknownFileTypes = false });
             // app.UseDefaultFiles();
 
