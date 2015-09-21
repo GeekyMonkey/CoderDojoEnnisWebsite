@@ -25,6 +25,7 @@ namespace WebApplication3
                 EnableDirectoryBrowsing = false
             };
             FileExtensionContentTypeProvider contentTypeProvider = (FileExtensionContentTypeProvider)fileServerOptions.StaticFileOptions.ContentTypeProvider;
+            contentTypeProvider.Mappings.Remove(".svg");
             contentTypeProvider.Mappings.Add(".svg", "image/svg+xml");
             app.UseFileServer(fileServerOptions);
 
