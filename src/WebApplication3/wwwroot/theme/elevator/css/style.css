@@ -974,3 +974,20 @@ and (max-width : 991px) {
     padding: 20px;
     color: #fff;
 }
+
+
+#GithubUsers a {
+      padding: 2px;
+      display: block;
+      border: solid 1px transparent;
+    }
+
+#GithubUsers a:hover
+{
+    border-color: blueviolet;
+}
+
+#GithubUsers img
+    {
+        height: 32px;
+    }
