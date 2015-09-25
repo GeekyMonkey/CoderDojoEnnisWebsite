@@ -1,14 +1,35 @@
 ﻿/// <reference path="../typings/angularjs/angular.d.ts" />
 
+interface IGithubUser {
+    FirstName: string;
+    LastName: string;
+    GithubLogin: string;
+}
+
+
+interface IGithubUsersCollection {
+    Members: IGithubUser[];
+    Mentors: IGithubUser[];
+}
+
 interface IAppScope extends angular.IScope
 {
     yourName: string;
+    GithubUsers: IGithubUsersCollection;
+
+    ShowMembers(): void;
+
+    // ToDo: Move to a service
+    LoadGithubAccounts(): void;
 }
+
+var AppScope: IAppScope;
 
 angular.module('DojoWebApp', [])
     .controller('DojoWebController', [
         "$scope",
         function (scope: IAppScope) {
+            AppScope = scope;
 
             scope.yourName = "Dude Awesome";
 
@@ -19,7 +40,21 @@ angular.module('DojoWebApp', [])
                 setTimeout(() => {
                     $('[href=' + modalId + ']').trigger("click")
                 }, 100);
-            }
+            };
+
+
+            scope.ShowMembers = () => {
+                scope.LoadGithubAccounts();
+            };
+
+            scope.LoadGithubAccounts = (): void => {
+                console.log("AJAX CALL");
+                $.ajax("http://member.coderdojoennis.com/api/githubaccounts")
+                    .done((data) => {
+                        scope.GithubUsers = data;
+                        scope.$apply();
+                    });
+            };
 
             /*
                 var todoList = this;

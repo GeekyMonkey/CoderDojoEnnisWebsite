@@ -22,6 +22,15 @@
                 <div class="col-12 text-center">
                     <h4>Coming Soon</h4>
                     <p>Our member and volunteer profiles will appear here soon...</p>
+
+                    <div ng-repeat="user in GithubUsers.Members">
+                        {{user.FirstName}}
+                    </div>
+
+                    <div ng-repeat="user in GithubUsers.Mentors">
+                        {{user.FirstName}}
+                    </div>
+
                 </div>
             </div>
 
