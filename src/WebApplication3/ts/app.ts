@@ -47,6 +47,14 @@ angular.module('DojoWebApp', [])
                 scope.LoadGithubAccounts();
             };
 
+            scope.LoadWebhubNinjas = (): void => {
+                $.ajax("http://webhub.coderdojoennis.com/ninja-list.php")
+                    .done((data) => {
+                        scope.WebhubNinjas = data;
+                        scope.$apply();
+                    });
+            }
+
             scope.LoadGithubAccounts = (): void => {
                 console.log("AJAX CALL");
                 $.ajax("http://member.coderdojoennis.com/api/githubaccounts")
