@@ -2,3 +2,4 @@ artifacts/
 src/WebApplication3/wwwroot/bin/
 src/WebApplication3/node_modules/
 *.suo
+.vs/Supercharger/

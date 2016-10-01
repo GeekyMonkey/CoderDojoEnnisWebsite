@@ -1,22 +1,28 @@
 /// <reference path="../typings/angularjs/angular.d.ts" />
 var AppScope;
-angular.module('DojoWebApp', [])
-    .controller('DojoWebController', [
+angular.module("DojoWebApp", [])
+    .controller("DojoWebController", [
     "$scope",
     function (scope) {
         AppScope = scope;
         scope.yourName = "Dude Awesome";
         // If the modal is in the url - open it
         if (location.hash) {
-            var modalId = location.hash.replace('/', '');
+            var modalId = location.hash.replace("/", "");
             console.log("hash:" + modalId);
             setTimeout(function () {
-                $('[href=' + modalId + ']').trigger("click");
+                $("[href=" + modalId + "]").trigger("click");
             }, 100);
         }
-        ;
         scope.ShowMembers = function () {
             scope.LoadGithubAccounts();
+        };
+        scope.LoadWebhubNinjas = function () {
+            $.ajax("http://webhub.coderdojoennis.com/ninja-list.php")
+                .done(function (data) {
+                scope.WebhubNinjas = data;
+                scope.$apply();
+            });
         };
         scope.LoadGithubAccounts = function () {
             console.log("AJAX CALL");

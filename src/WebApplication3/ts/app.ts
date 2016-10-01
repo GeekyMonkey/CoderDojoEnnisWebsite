@@ -6,27 +6,27 @@ interface IGithubUser {
     GithubLogin: string;
 }
 
-
 interface IGithubUsersCollection {
     Members: IGithubUser[];
     Mentors: IGithubUser[];
 }
 
-interface IAppScope extends angular.IScope
-{
+interface IAppScope extends angular.IScope {
     yourName: string;
     GithubUsers: IGithubUsersCollection;
+    WebhubNinjas: any;
 
     ShowMembers(): void;
 
     // ToDo: Move to a service
     LoadGithubAccounts(): void;
+    LoadWebhubNinjas(): void;
 }
 
 var AppScope: IAppScope;
 
-angular.module('DojoWebApp', [])
-    .controller('DojoWebController', [
+angular.module("DojoWebApp", [])
+    .controller("DojoWebController", [
         "$scope",
         function (scope: IAppScope) {
             AppScope = scope;
@@ -35,13 +35,12 @@ angular.module('DojoWebApp', [])
 
             // If the modal is in the url - open it
             if (location.hash) {
-                var modalId = location.hash.replace('/', '');
+                var modalId = location.hash.replace("/", "");
                 console.log("hash:" + modalId);
                 setTimeout(() => {
-                    $('[href=' + modalId + ']').trigger("click")
+                    $("[href=" + modalId + "]").trigger("click");
                 }, 100);
-            };
-
+            }
 
             scope.ShowMembers = () => {
                 scope.LoadGithubAccounts();
@@ -53,7 +52,7 @@ angular.module('DojoWebApp', [])
                         scope.WebhubNinjas = data;
                         scope.$apply();
                     });
-            }
+            };
 
             scope.LoadGithubAccounts = (): void => {
                 console.log("AJAX CALL");
