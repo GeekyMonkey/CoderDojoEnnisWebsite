@@ -19,19 +19,17 @@
 
   "publishExclude": [
     "node_modules",
-    "bower_components",
     "**.xproj",
     "**.user",
     "**.vspscc"
   ],
   "exclude": [
     "wwwroot",
-    "node_modules",
-    "bower_components"
+    "node_modules"
   ],
   "scripts": {
     "postrestore": [
-      "npm install",
-      "bower install" ],
-    "prepare": [ "gulp bower" ]   }
+      "npm install"
+       ],
+    "prepare": [ ]   }
 }
