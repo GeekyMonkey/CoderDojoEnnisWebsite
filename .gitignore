@@ -1,5 +1,9 @@
-artifacts/
-src/WebApplication3/wwwroot/bin/
+**/bin/**
+bin/**
+bin
+bin/
+CoderDojoEnnisWebsite/bin/**
+CoderDojoEnnisWebsite/obj/*
 src/WebApplication3/node_modules/
 *.suo
-.vs/Supercharger/
+.vs/
