@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace CoderDojoEnnisWebsite
 {
@@ -30,6 +34,17 @@ namespace CoderDojoEnnisWebsite
 
             app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = { "index.html" } });
 
+            // Set up custom content types -associating file extension to MIME type
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            provider.Mappings[".txt"] = "text/text";
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
+                RequestPath = new PathString(""),
+                ContentTypeProvider = provider
+            });
             app.UseStaticFiles();
 
             app.UseMvc();
