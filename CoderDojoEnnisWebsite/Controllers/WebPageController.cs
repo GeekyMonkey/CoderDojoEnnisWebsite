@@ -20,7 +20,7 @@ namespace CoderDojoEnnisWebsite.Controllers
             return Content(@"This is a Brave Rewards publisher verification file.
 
 Domain: coderdojoennis.com
-Token: 51d24e9455ed94d33d2c6a4ec3fd146b95978b90bef2cd8c2d4e223545eb692c
+Token: 6bc16d4dbc7da5ed857e7893cc5b106c30de882c6af8180670b07c95d7619730
 ", 
             "text/plain" );
         }
