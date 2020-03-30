@@ -37,7 +37,7 @@ namespace CoderDojoEnnisWebsite
             // Set up custom content types -associating file extension to MIME type
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
-            provider.Mappings[".txt"] = "text/text";
+            provider.Mappings[".txt"] = "text/plain";
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
