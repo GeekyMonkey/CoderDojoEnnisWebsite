@@ -7,3 +7,4 @@ CoderDojoEnnisWebsite/obj/*
 src/WebApplication3/node_modules/
 *.suo
 .vs/
+CoderDojoEnnisWebsite/CoderDojoEnnisWebsite.csproj.user
