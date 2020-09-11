@@ -18,7 +18,7 @@ angular.module("DojoWebApp", [])
             scope.LoadGithubAccounts();
         };
         scope.LoadWebhubNinjas = function () {
-            $.ajax("http://webhub.coderdojoennis.com/ninja-list.php")
+            $.ajax("https://webhub.coderdojoennis.com/ninja-list.php")
                 .done(function (data) {
                 scope.WebhubNinjas = data;
                 scope.$apply();
@@ -26,7 +26,7 @@ angular.module("DojoWebApp", [])
         };
         scope.LoadGithubAccounts = function () {
             console.log("AJAX CALL");
-            $.ajax("http://member.coderdojoennis.com/api/githubaccounts")
+            $.ajax("https://member.coderdojoennis.com/api/githubaccounts")
                 .done(function (data) {
                 scope.GithubUsers = data;
                 scope.$apply();

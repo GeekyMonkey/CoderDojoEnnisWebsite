@@ -30,7 +30,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12 text-left">
                     <h4>Members</h4>
                     <div ng-repeat="user in GithubUsers.Members">
-                        <a ng-href="http://{{user.GithubLogin}}.github.io">
+                        <a ng-href="https://{{user.GithubLogin}}.github.io">
                             <img ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}" />
                             <span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
                         </a>
@@ -40,7 +40,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12 text-left">
                     <h4>Volunteers</h4>
                     <div ng-repeat="user in GithubUsers.Mentors">
-                        <a ng-href="http://{{user.GithubLogin}}.github.io">
+                        <a ng-href="https://{{user.GithubLogin}}.github.io">
                             <img ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}" />
                             <span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
                         </a>
