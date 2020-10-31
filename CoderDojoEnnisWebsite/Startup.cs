@@ -1,12 +1,13 @@
-﻿using System;
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 
 namespace CoderDojoEnnisWebsite
 {
@@ -16,40 +17,30 @@ namespace CoderDojoEnnisWebsite
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRouting();
-            services.AddResponseCaching();
-            services.AddMvc();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-               app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
-            var rewriteOptions = new Microsoft.AspNetCore.Rewrite.RewriteOptions().AddRedirect("index.php/calendar.*", "/#/WhenWhereModal");
-            app.UseRewriter(rewriteOptions);
+            app.UseHttpsRedirection();
 
-            app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = { "index.html" } });
-
-            // Set up custom content types -associating file extension to MIME type
-            var provider = new FileExtensionContentTypeProvider();
-            // Add new mappings
-            provider.Mappings[".txt"] = "text/plain";
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
-                RequestPath = new PathString(""),
-                ContentTypeProvider = provider
-            });
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseMvc();
+            app.UseRouting();
 
-            app.UseResponseCaching();
+            app.UseMvc();
         }
     }
 }
