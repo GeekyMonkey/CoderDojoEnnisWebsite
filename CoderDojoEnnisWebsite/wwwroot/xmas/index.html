@@ -136,9 +136,12 @@
         font-size: 25px;
         color: #ddd;
         display: flex;
+        flex-wrap: wrap;
     }
         #Ideas ul li a div {
             flex-grow: 1;
+            max-width: 400px;
+            margin: 0 auto;
         }
         #Ideas ul li a:hover {
             background-color: #600;
@@ -149,15 +152,17 @@
         #Ideas ul li:nth-child(2n+1) a:hover {
             background-color: #050;
         }
-    #Ideas ul li img {
-        width: 300px;
-    }
+        #Ideas ul li img {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
         #Ideas ul li a h3 {
             font-size: 30px;
         }
         #Ideas ul li a p {
             line-height: 1.2;
             font-size: 24px;
-            padding: 20px 50px;
+            padding: 20px;
         }
 </style>
