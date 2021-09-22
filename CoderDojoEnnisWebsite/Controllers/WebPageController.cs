@@ -14,6 +14,12 @@ namespace CoderDojoEnnisWebsite.Controllers
             return Content("boop");
         }
 
+        [Route("covid")]
+        public IActionResult Covid()
+        {
+            return Redirect("https://docs.google.com/document/d/1JW-hfn6n8Y41PlDMiAU3na-NagKuswkMjMcjARNnIbU/edit");
+        }
+
         [Route(".well-known/brave-rewards-verification.txt")]
         public IActionResult BraveRewards()
         {
