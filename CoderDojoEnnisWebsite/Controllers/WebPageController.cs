@@ -17,7 +17,7 @@ namespace CoderDojoEnnisWebsite.Controllers
         [Route("covid")]
         public IActionResult Covid()
         {
-            return Redirect("https://docs.google.com/document/d/1JW-hfn6n8Y41PlDMiAU3na-NagKuswkMjMcjARNnIbU/edit");
+            return Redirect("https://docs.google.com/document/d/1JW-hfn6n8Y41PlDMiAU3na-NagKuswkMjMcjARNnIbU");
         }
 
         [Route(".well-known/brave-rewards-verification.txt")]
