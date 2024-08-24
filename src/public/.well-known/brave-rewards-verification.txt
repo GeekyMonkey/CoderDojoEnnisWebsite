@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: coderdojoennis.com
+Token: 6bc16d4dbc7da5ed857e7893cc5b106c30de882c6af8180670b07c95d7619730

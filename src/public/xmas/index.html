@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="DojoWebApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Coder Dojo in Ennis, County Clare, Ireland">
+    <meta name="author" content="Russ Painter - Geeky Monkey Ltd.">
+
+    <title>Coder Dojo - Ennis</title>
+
+    <!-- Theme Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../theme/elevator/css/animate.css" rel="stylesheet" />
+    <link href="../theme/elevator/css/style.css" rel="stylesheet" />
+
+    <!-- Theme Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-controller="DojoWebController">
+    <!-- Start Logo Section -->
+    <section id="logo-section" class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="logo text-center">
+                        <a href="/">
+                            <h1>
+                                <!-- ToDo: use SVG -->
+                                <img src="/images/logos/logo.png" style="width: 100px;" />
+                                <span style="font-size: 16px;">CoderDojo Ennis</span>
+                            </h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="logo text-center">
+                        <a href="/xmas/">
+                            <h1>
+                                <img src="/images/xmas/xmascat.png" style="width:300px;" />
+                            </h1>
+                            <h2 style="font-size: 40px;color: red;">2022 Gift Ideas</h2>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Logo Section -->
+
+    <!-- Start Main Body Section -->
+    <div class="mainbody-section text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" id="Ideas">
+                    <ul>
+
+                        <!-- Basic Laptop -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3V9NRsn">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09XY3LGQX&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Laptop: <i>Basic</i></h3>
+                                    <p><i>A basic laptop that will suffice for Scratch, and simple tasks. OK for a
+                                            beginner
+                                            who's not sure how far they'll go, but not suitable for
+                                            moving up to more serious programming.</i></p>
+                                    <ul>
+                                        <li>RAM: 8GB minimum</li>
+                                        <li>Processor: Core-I5 or Ryzen-5, NOT Celeron</li>
+                                        <li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Better Laptop -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3tLPaC6">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09SG58693&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Laptop: <i>Better</i></h3>
+                                    <p><i>This one will manage anything we want to do at CoderDojo.</i></p>
+                                    <ul>
+                                        <li>RAM: 8-16GB minimum</li>
+                                        <li>Processor: Core-I5 or Ryzen-5</li>
+                                        <li>Graphics: RTX-3000 or higher</li>
+                                        <li>Windows, Mac, or Linux, <b>NOT Chromebook</b></li>
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Gaming Laptop -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3EOCuRo">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09S9VGZ45&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Laptop: <i>Best</i></h3>
+                                    <p><i>More hard-core gamer machine that will be great now, and won't be obsolete any
+                                            time soon.</i></p>
+                                    <ul>
+                                        <li>RAM: 16GB minimum</li>
+                                        <li>Processor: Core-I7 or Ryzen-7</li>
+                                        <li>Graphics: RTX-3000 or higher</li>
+                                        <li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
+
+                                    </ul>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Lego Robot -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3GwXDkm">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B06X6GN2VQ&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Lego Robot Kit</h3>
+                                    <p>Mindstorms kits are no longer being made, but you may be able to get one on
+                                        e-bay.</p>
+                                    <p>This Lego Boost kit looks cool.</p>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Arcade Handheld -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3V95sAA">
+                                <div>
+                                    <img
+                                        src="https://images-na.ssl-images-amazon.com/images/I/51%2B4M4zYhGL._AC_SY355_.jpg" />
+                                </div>
+                                <div>
+                                    <h3>DIY Handheld Game System</h3>
+                                    <p>Program your own games using Make Code Arcade, then load them onto your own
+                                        handheld system to play anywhere.</p>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Grapics Tablet -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3OtXe3V">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0785682VP&Format=_SL250_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Drawing Tablet</h3>
+                                    <p>Desktop/Laptop accessory to let your aspiring artist get creative. These are much
+                                        more than touch-screen inputs, they allow fine control with a stylus and even
+                                        pressure sensitivity. Press harder for thicker lines. Wacom and XP-Pen are great
+                                        brands.</p>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Gamepad -->
+                        <li>
+                            <a target="_blank"
+                                href="https://www.microsoft.com/en-ie/p/xbox-wireless-controller/8xn59crbsqgz?cid=msft_web_collection">
+                                <div>
+                                    <img
+                                        src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4FlSK?ver=3eb6&q=90&m=6&h=270&w=270&b=%23FFFFFFFF&f=jpg&o=f&aim=true" />
+                                </div>
+                                <div>
+                                    <h3>Gamepad</h3>
+                                    <p>These are compatable with PCs, and you can use them to control your own game
+                                        characters.</p>
+                                    <small>The latest XBox Series controller also work wirelessly with your PC. Previous
+                                        models required a USB cable.</small>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Mouse -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3EMuq3v">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07W5JKFQC&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Mouse</h3>
+                                    <p>That laptop touchpad isn't cutting it. A 3 button mouse is a necessity.</p>
+                                    <small>Wireless bluetooth ones are cool. But if you don't want to mess with
+                                        batteries, a wired one is the way to go.</small>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Headset -->
+                        <li>
+                            <a target="_blank"
+                                href="https://www.smythstoys.com/ie/en-ie/video-games-and-tablets/gaming-headsets/c/SM060407">
+                                <div>
+                                    <img src="https://image.smythstoys.com/picture/desktop/175484.jpg" />
+                                </div>
+                                <div>
+                                    <h3>Headset</h3>
+                                    <p>They'll love ths sound, you'll love the quiet. 😊</p>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Arduino starter kit -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3UVD6tW">
+                                <div>
+                                    <img
+                                        src="https://images-na.ssl-images-amazon.com/images/I/91g7PUlmfxL._AC_SX425_.jpg" />
+                                </div>
+                                <div>
+                                    <h3>Ardiuno Starter Kit</h3>
+                                    <p>Get started with electronics experimentation. A micro-processor that you can
+                                        program and attach to sensors and other devices.</p>
+                                    <small>Make sure to get a kit with an appropriate power supply like this
+                                        one.</small>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- ESP32 starter kit -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3ASMOp9">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09BC5B4H6&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>ESP321 Starter Kit</h3>
+                                    <p>A bit more modern than Arduino.</p>
+                                    <small>We can help them work through the tutorials</small>
+                                </div>
+                            </a>
+                        </li>
+
+
+                        <!-- Rpi Starter Kit -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3VaDjch">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09D774YWQ&Format=_SL160_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Raspberry Pi Starter Kit</h3>
+                                    <p>Your own mini-computer to program and use as the basis for more advanced robotics
+                                        projects.</p>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Pixel Display -->
+                        <li>
+                            <a target="_blank" href="https://amzn.to/3GsWOsE">
+                                <div>
+                                    <img
+                                        src="//ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07H7L1PLD&Format=_SL250_&ID=AsinImage&MarketPlace=GB&ServiceVersion=20070822&WS=1&tag=geekymonkey01-21&language=en_GB" />
+                                </div>
+                                <div>
+                                    <h3>Pixel Display Bluetooth Speaker</h3>
+                                    <p>A bit of fun with pixel art by linking to your smartphone.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    #Ideas ul li {
+        margin: 20px;
+    }
+
+    #Ideas ul li a {
+        display: block;
+        background-color: #500;
+        border: solid 2px #ddd;
+        padding: 20px 40px;
+        font-size: 25px;
+        color: #ddd;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #Ideas ul li a div {
+        flex-grow: 1;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    #Ideas ul li a:hover {
+        background-color: #600;
+    }
+
+    #Ideas ul li:nth-child(2n+1) a {
+        background-color: #040;
+    }
+
+    #Ideas ul li:nth-child(2n+1) a:hover {
+        background-color: #050;
+    }
+
+    #Ideas ul li img {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    #Ideas ul li a h3 {
+        font-size: 30px;
+    }
+
+    #Ideas ul li a p {
+        line-height: 1.2;
+        font-size: 24px;
+        padding: 20px;
+    }
+
+    #Ideas ul li a small {
+        line-height: 1.2;
+        display: block;
+        font-size: 16px;
+    }
+</style>
