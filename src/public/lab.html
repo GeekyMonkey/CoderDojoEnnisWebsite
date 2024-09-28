@@ -7,15 +7,58 @@
     <title>Lab 2024</title>
 
     <style>
-      @* Reduce flicker by pre-styling *@
-		html {
+      html {
         background-color: #142014;
+      }
+      a {
+        color: #77ff77 !important;
+      }
+      a:hover {
+        color: #142014 !important;
+      }
+      a:not([href]):hover {
+        color: #77ff77 !important;
+        background-color: #142014;
+      }
+      article {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+        justify-content: center;
+      }
+      article section {
+        min-width: 300px;
+      }
+      table {
+        width: 100%;
+        max-width: 800px;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #142014;
+        background-color: #77ff77;
+      }
+      td {
+        padding: 4px 10px;
+        border: solid 1px #44dd44;
+      }
+      em {
+        font-style: italic;
+        font-weight: bold;
+        text-transform: uppercase;
       }
     </style>
     <link href="/theme/retro/css/retro.css" rel="stylesheet" />
   </head>
+
   <body>
     <header>
+      <h1>https://coderdojoennis.com/lab</h1>
       <a href="/">
         <pre>
    ____          _           ____        _       
@@ -28,43 +71,127 @@
    | |   / _` | '_ \    __) | | | |__) | || |_     
    | |__| (_| | |_) |  / __/| |_| / __/|__   _|    
    |_____\__,_|_.__/  |_____|\___/_____|  |_|      
-                                                 
         </pre>
       </a>
     </header>
 
     <main>
       <article>
-        <h1>https://coderdojoennis.com/lab</h1>
-        <h2>Plan</h2>
-        <ul>
-          <li>50% Godot Learning</li>
-          <li>50% Project Work</li>
-          <li>Teams</li>
-        </ul>
-        <h2>Equipment Needed</h2>
-        <ul>
-          <li>
-            Laptop with
-            <a href="https://godotengine.org/download/windows/">Godot 4.3</a>
-          </li>
-          <li>Mouse</li>
-          <li>Headphones</li>
-          <li>
-            <a
-              href="https://www.humblebundle.com/software/learn-godot-43-complete-course-bundle-software?partner=gamefromscratch
+        <section>
+          <h2>Plan</h2>
+          <ul>
+            <li>50% Godot Learning</li>
+            <li>50% Project Work</li>
+            <li>Teams</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Equipment Needed</h2>
+          <ul>
+            <li>
+              Laptop with
+              <a href="https://godotengine.org/download/">Godot 4.3</a>
+            </li>
+            <li>Mouse</li>
+            <li>Headphones</li>
+            <li>
+              <a
+                href="https://www.humblebundle.com/software/learn-godot-43-complete-course-bundle-software?partner=gamefromscratch
 "
-              >Zembra Course Bundle</a
-            ><em> -- Sale ends 25 Sept!</em>
-          </li>
-        </ul>
+                >Zembra Course Bundle</a
+              ><em> -- Sale ends 25 Sept!</em>
+            </li>
+          </ul>
+        </section>
+      </article>
+
+      <article>
+        <section>
+          <table style="width: 100%">
+            <tr>
+              <th>Ninja</th>
+              <th>Project</th>
+            </tr>
+
+            <tr>
+              <td>Alan</td>
+              <td>
+                <a>Shooter game for starters </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Benjy</td>
+              <td>
+                <a><em>Pushover</em>: A checkers-style strategy board game</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>David</td>
+              <td>
+                <a
+                  ><em>PANDELANCER</em>: A Quake/Half-life/Doom inspired first
+                  person shooter</a
+                >
+              </td>
+            </tr>
+
+            <tr>
+              <td>Donnacha</td>
+              <td>
+                <a>Zelda-ish 16th century puzzle game </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Eoin</td>
+              <td>
+                <a><em>Wisp</em>: dungeon crawler</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Oisín</td>
+              <td>
+                <a>Top down car endless runner</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Ross</td>
+              <td>
+                <a><em>Blobbly</em>: 2D platformer puzzle game</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>Russ</td>
+              <td>
+                <a
+                  href="https://github.com/CoderDojo-Ennis/GodotSteampunkShooter#readme"
+                  >Steampunk Doom</a
+                >
+              </td>
+            </tr>
+
+            <tr>
+              <td>Shane</td>
+              <td>
+                <a>A 2D game foundation?</a>
+              </td>
+            </tr>
+          </table>
+        </section>
       </article>
     </main>
 
     <footer>
-      <!--
-		<span>&copy; @DateTime.Now.Year - Geeky Monkey Ltd.</span><span id="Cursor"> </span>
-        -->
+      <span
+        ><a href="https://github.com/GeekyMonkey/CoderDojoEnnisWebsite"
+          >Edit this document on GitHub</a
+        ></span
+      ><span id="Cursor"> </span>
     </footer>
 
     <div id="Overlay"></div>
