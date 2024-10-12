@@ -35,6 +35,10 @@
         max-width: 800px;
         border-collapse: collapse;
       }
+      .full-width {
+        width: 100%;
+      }
+      
       th {
         text-align: left;
         font-weight: bold;
@@ -46,6 +50,15 @@
       td {
         padding: 4px 10px;
         border: solid 1px #44dd44;
+      }
+      td a {
+        width: 100%;
+        display: block;
+      }
+      td img {
+        margin-right: 10px;
+        vertical-align: middle;
+        width: 40px;
       }
       em {
         font-style: italic;
@@ -116,7 +129,7 @@
 
       <article>
         <section>
-          <table style="width: 100%">
+          <table class="full-width">
             <tr>
               <th>Ninja</th>
               <th>Project</th>
@@ -134,7 +147,21 @@
                 <a href="https://github.com/PeckyChicken/">Benjy</a>
               </td>
               <td>
-                <a href="https://github.com/PeckyChicken/Pushover"><em>Pushover</em>: </a>A checkers-style strategy board game
+                <a href="https://github.com/PeckyChicken/Pushback">
+                  <em>Pushback</em>
+                  : A checkers-style strategy board game
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <a href="https://github.com/Yurtle11/">Conor</a>
+              </td>
+              <td>
+                <a href="">
+                  TBD
+                </a>
               </td>
             </tr>
 
@@ -159,6 +186,14 @@
 
             <tr>
               <td>
+                <a href="https://github.com/declan43">declan</a>
+              </td>
+              <td>
+                <a>racing game</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <a href="https://github.com/Mj517">Eoin</a>
               </td>
               <td>
@@ -167,7 +202,9 @@
             </tr>
 
             <tr>
-              <td>Oisín</td>
+              <td>
+                <a href="https://github.com/Bigspud200">Oisín</a>
+              </td>
               <td>
                 <a>Top down car endless runner</a>
               </td>
@@ -178,7 +215,9 @@
                 <a href="https://github.com/rozzy1/">Ross</a>
               </td>
               <td>
-                <a><em>Blobbly</em>: 2D platformer puzzle game</a>
+                <a href="https://github.com/Rozzy1/Blobby">
+                  <em>Blobbly</em>: 2D platformer puzzle game
+                </a>
               </td>
             </tr>
 
@@ -190,6 +229,10 @@
                 <a
                   href="https://github.com/CoderDojo-Ennis/GodotSteampunkShooter#readme"
                 >
+                  <img
+                    src="https://raw.githubusercontent.com/CoderDojo-Ennis/GodotSteampunkShooter/main/icon.png"
+                    alt="Steampunk Doom Icon"
+                  />
                   Steampunk Doom
                 </a>
               </td>
@@ -203,28 +246,27 @@
             </tr>
 
             <tr>
-            <td>
-              <a href="https://github.com/tiernancoderodjo">Tiernan</a>
-            </td>
-            <td>
-              <a
-                href=""
-              >
-                ...
-              </a>
-            </td>
-          </tr>
+              <td>
+                <a href="https://github.com/tiernancoderodjo">Tiernan</a>
+              </td>
+              <td>
+                <a href="https://github.com/tiernancoderodjo">
+                  Work on the Coderdojo website html
+                </a>
+              </td>
+            </tr>
           </table>
         </section>
       </article>
     </main>
 
     <footer>
-      <span
-        ><a href="https://github.com/GeekyMonkey/CoderDojoEnnisWebsite"
-          >Edit this document on GitHub</a
-        ></span
-      ><span id="Cursor"> </span>
+      <span>
+        <a href="https://github.com/GeekyMonkey/CoderDojoEnnisWebsite">
+          Edit this document on GitHub
+        </a>
+      </span>
+      <span id="Cursor"> </span>
     </footer>
 
     <div id="Overlay"></div>
