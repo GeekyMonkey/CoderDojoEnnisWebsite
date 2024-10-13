@@ -1,16 +1,25 @@
 {
-  "name": "nuxt-app",
+  "name": "coderdojo-ennis",
+  "license": "MIT", 
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
     "dev": "cls && yarn install && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "nuxt": "3.13.2",
     "vue": "3.5.12"
-  }
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "postcss-custom-properties": "14.0.1",
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
