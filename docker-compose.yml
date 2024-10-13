@@ -1,0 +1,20 @@
+services:
+  nuxt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_VERSION: "1.0.1" # Change this version to force rebuild
+    container_name: coderdojo-ennis
+    image: coderdojo-ennis:1 # <--automate this number change to trigger stack redeploy.
+    networks:
+      - default
+    ports:
+      - "3010:3000"
+    pull_policy: build
+    restart: unless-stopped
+    #depends_on:
+    #  - postgres
+    #environment:
+volumes:
+  games_data:
