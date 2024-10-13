@@ -1,7 +1,9 @@
-import { NuxtPage } from '#build/components'; import { NuxtLayout } from
-'#build/components';
 <template>
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
 </template>
+
+<script setup>
+import { NuxtPage, NuxtLayout } from "#components";
+</script>

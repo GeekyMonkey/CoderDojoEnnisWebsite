@@ -6,10 +6,17 @@ Feel free to edit the content and make a pull request. Or even better, convert f
 
 ## Developing Locally
 
-Setup with
+### One time setup
+
+In the _src_ folder: Setup with
 `yarn install`
 
-Run with
+
+### Running locally
+
+In the _src_ folder: Run with
 `yarn dev`
 
-Committing to github will deploy the website.
+## Deploying
+
+Committing to github master branch will deploy the website.

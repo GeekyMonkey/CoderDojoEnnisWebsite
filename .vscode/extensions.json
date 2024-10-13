@@ -1,3 +1,7 @@
 {
-  "recommendations": ["vue.volar", "esbenp.prettier-vscode"]
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "herrmannplatz.npm-dependency-links",
+    "vue.volar"
+  ]
 }
