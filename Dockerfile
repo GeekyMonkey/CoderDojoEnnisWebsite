@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 ARG NODE_VERSION=22.7.0
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
 
 ARG BUILD_VERSION
 ENV BUILD_VERSION=${BUILD_VERSION}

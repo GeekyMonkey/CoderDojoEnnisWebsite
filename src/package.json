@@ -1,6 +1,6 @@
 {
   "name": "coderdojo-ennis",
-  "license": "MIT", 
+  "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "cross-env": "7.0.3",
-    "postcss-custom-properties": "14.0.1",
+    "postcss-custom-properties": "14.0.2",
     "prettier": "3.3.3",
     "typescript": "5.6.3"
   },
