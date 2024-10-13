@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from "nuxt/config";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
@@ -48,12 +50,12 @@ export default defineNuxtConfig({
       //   },
       // }
     },
-    middleware: {},
+    // middleware: {},
+    // plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
     static: true,
   },
 
-  plugins: [
-  ],
+  // plugins: [],
 
   router: {
     options: {
@@ -66,10 +68,9 @@ export default defineNuxtConfig({
     public: {},
   },
 
-  serverMiddleware: [
-  ],
+  // serverMiddleware: [],
 
-  ssr: true,
+  ssr: false,
 
   vite: {
     css: {
@@ -89,6 +90,13 @@ export default defineNuxtConfig({
       public: {
         baseUrl: "",
       },
+    },
+  },
+
+  devServer: {
+    https: {
+      key: "certs/mylocalhost.key",
+      cert: "certs/mylocalhost.crt",
     },
   },
 });
