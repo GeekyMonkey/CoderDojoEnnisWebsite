@@ -52,7 +52,7 @@ export default defineNuxtConfig({
     },
     // middleware: {},
     // plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
-    static: true,
+    static: false,
   },
 
   // plugins: [],
