@@ -1,0 +1,30 @@
+// COLOR MODES
+.light-mode {
+  body {
+    background-color: #ddd;
+    color: #111;
+    transition:
+      background-color 1s,
+      color 0.5s;
+  }
+}
+
+.dark-mode {
+  body {
+    background-color: #091a28;
+    color: #ebf4f1;
+    transition:
+      background-color 1s,
+      color 0.5s;
+  }
+}
+
+.sepia-mode {
+  body {
+    background-color: #f1e7d0;
+    color: #433422;
+    transition:
+      background-color 1s,
+      color 0.5s;
+  }
+}

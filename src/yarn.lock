@@ -1059,6 +1059,17 @@
     vite-plugin-checker "^0.8.0"
     vue-bundle-renderer "^2.1.0"
 
+"@nuxtjs/color-mode@^3.5.1":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/color-mode/-/color-mode-3.5.1.tgz#018f0f97fb3409336fa5ed49b899b9bf4320d7dd"
+  integrity sha512-GRHF3WUwX6fXIiRVlngNq1nVDwrVuP6dWX1DRmox3QolzX0eH1oJEcFr/lAm1nkT71JVGb8mszho9w+yHJbePw==
+  dependencies:
+    "@nuxt/kit" "^3.13.1"
+    changelogen "^0.5.5"
+    pathe "^1.1.2"
+    pkg-types "^1.2.0"
+    semver "^7.6.3"
+
 "@nuxtjs/tailwindcss@6.12.1":
   version "6.12.1"
   resolved "https://registry.yarnpkg.com/@nuxtjs/tailwindcss/-/tailwindcss-6.12.1.tgz#9871b234385c2b97fc84306415a6c6163f150278"

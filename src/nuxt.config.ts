@@ -12,6 +12,10 @@ export default defineNuxtConfig({
     pageTransition: false,
   },
 
+  colorMode: {
+    preference: "dark",
+  },
+
   compatibilityDate: "2024-07-19",
 
   css: ["~~/assets/css/app.scss"],
@@ -32,6 +36,7 @@ export default defineNuxtConfig({
     // "@primevue/nuxt-module",
     // "@nuxt/scripts",
     // "@nuxtjs/supabase",
+    "@nuxtjs/color-mode",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "shadcn-nuxt",
