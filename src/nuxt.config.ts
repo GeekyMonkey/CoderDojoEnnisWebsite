@@ -24,14 +24,12 @@ export default defineNuxtConfig({
     // dirs: ["~~/models"],
   },
 
-  modules: [
-    // "@nuxt/icon",
-    // "@nuxt/image",
-    // "@primevue/nuxt-module",
-    // "@nuxt/scripts",
-    // "@nuxtjs/supabase",
-    // "@vueuse/nuxt",
-  ],
+  modules: [// "@nuxt/icon",
+  // "@nuxt/image",
+  // "@primevue/nuxt-module",
+  // "@nuxt/scripts",
+  // "@nuxtjs/supabase",
+  "@vueuse/nuxt", "@nuxtjs/tailwindcss"],
 
   nitro: {
     esbuild: {
