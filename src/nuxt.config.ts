@@ -14,6 +14,8 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-07-19",
 
+  css: ["~~/assets/css/app.scss"],
+
   devtools: { enabled: false },
 
   future: {
@@ -24,12 +26,16 @@ export default defineNuxtConfig({
     // dirs: ["~~/models"],
   },
 
-  modules: [// "@nuxt/icon",
-  // "@nuxt/image",
-  // "@primevue/nuxt-module",
-  // "@nuxt/scripts",
-  // "@nuxtjs/supabase",
-  "@vueuse/nuxt", "@nuxtjs/tailwindcss"],
+  modules: [
+    // "@nuxt/icon",
+    // "@nuxt/image",
+    // "@primevue/nuxt-module",
+    // "@nuxt/scripts",
+    // "@nuxtjs/supabase",
+    "@nuxtjs/tailwindcss",
+    "@vueuse/nuxt",
+    "shadcn-nuxt",
+  ],
 
   nitro: {
     esbuild: {
@@ -67,6 +73,18 @@ export default defineNuxtConfig({
   },
 
   // serverMiddleware: [],
+
+  shadcn: {
+    /**
+     * Prefix for all the imported component
+     */
+    prefix: "",
+
+    /**
+     * Directory that the component lives in.
+     */
+    componentDir: "./app/components/ui",
+  },
 
   ssr: false,
 
