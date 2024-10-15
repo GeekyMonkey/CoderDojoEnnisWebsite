@@ -1,30 +1,49 @@
+:root {
+  --card-border-color: #0a0;
+}
+
 // COLOR MODES
 .light-mode {
   body {
-    background-color: #ddd;
-    color: #111;
-    transition:
-      background-color 1s,
-      color 0.5s;
+    --background-color: #ddd;
+    --foreground-color: #111;
+    --hilight-color: #080;
   }
 }
 
 .dark-mode {
   body {
-    background-color: #091a28;
-    color: #ebf4f1;
-    transition:
-      background-color 1s,
-      color 0.5s;
+    --background-color: #050a18;
+    --foreground-color: #ddd;
+    --hilight-color: lime;
   }
 }
 
 .sepia-mode {
   body {
-    background-color: #f1e7d0;
-    color: #433422;
-    transition:
-      background-color 1s,
-      color 0.5s;
+    --background-color: #f1e7d0;
+    --foreground-color: #433422;
+    --hilight-color: #338833;
   }
+}
+
+body {
+  text-wrap: balance;
+  color: var(--foreground-color);
+  background: var(--background-color);
+  background: linear-gradient(
+    0deg,
+    rgba(10, 10, 30, 1) 0%,
+    rgba(5, 5, 10, 1) 100%
+  );
+  transition:
+    background-color 1s,
+    color 0.5s;
+}
+
+form {
+  border: solid 1px pink;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #8888880f;
 }

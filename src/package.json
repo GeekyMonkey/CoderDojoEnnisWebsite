@@ -12,16 +12,21 @@
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {
-    "@nuxtjs/color-mode": "^3.5.1",
+    "@nuxtjs/color-mode": "3.5.1",
     "@nuxtjs/tailwindcss": "6.12.1",
     "@radix-icons/vue": "1.0.0",
+    "@vee-validate/zod": "4.13.2",
+    "@vueuse/core": "11.1.0",
     "@vueuse/nuxt": "11.1.0",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "0.7.0",
     "nuxt": "3.13.2",
     "radix-vue": "^1.9.7",
     "shadcn-nuxt": "0.10.4",
-    "tailwind-merge": "^2.5.4",
-    "vue": "3.5.12"
+    "tailwind-merge": "2.5.4",
+    "tailwindcss-animate": "1.0.7",
+    "vee-validate": "4.13.2",
+    "vue": "3.5.12",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@iconify-json/radix-icons": "1.2.1",
@@ -29,7 +34,7 @@
     "cross-env": "7.0.3",
     "postcss-custom-properties": "14.0.2",
     "prettier": "3.3.3",
-    "sass": "^1.79.5",
+    "sass": "1.79.5",
     "typescript": "5.6.3"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"

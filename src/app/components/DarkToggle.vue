@@ -34,7 +34,10 @@ const toggleColorMode = () => {
   position: relative;
 
   .ToggleIcon {
-    @apply h-[1.2rem] w-[1.2rem] transition-all duration-1000;
+    @apply h-[1.2rem] w-[1.2rem];
+    transition:
+      scale 0.5s,
+      transform 0.5s;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
   }
