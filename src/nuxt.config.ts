@@ -18,7 +18,7 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-07-19",
 
-  css: ["~~/assets/css/app.scss"],
+  css: ["~/assets/css/tailwind.scss", "~/assets/css/app.scss"],
 
   devtools: { enabled: false },
 
@@ -92,6 +92,14 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
+
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        baseUrl: ".",
+      },
+    },
+  },
 
   vite: {
     css: {

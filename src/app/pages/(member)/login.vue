@@ -5,7 +5,7 @@
         <CardTitle>CoderDojo Ennis Member Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <Form
+        <!-- <Form
           v-slot="{ setFieldValue }"
           :validation-schema="accountFormSchema"
           class="space-y-8"
@@ -28,7 +28,7 @@
               <FormMessage />
             </FormItem>
           </FormField>
-        </Form>
+        </Form> -->
 
         <form @submit.prevent="handleLogin">
           <FormItem>
@@ -41,7 +41,15 @@
             <Input type="password" id="password" v-model="password" required />
           </FormItem>
 
-          <Button type="submit" class="w-full">Login</Button>
+          <Calendar
+            v-model="dt"
+            :weekday-format="'short'"
+            class="rounded-md border"
+          />
+
+          <Button type="submit" class="w-full" variant="default" size="lg">
+            Login
+          </Button>
         </form>
       </CardContent>
     </Card>
@@ -49,14 +57,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  type DateValue,
+  getLocalTimeZone,
+  today,
+} from "@internationalized/date";
 
 const username = ref("");
 const password = ref("");
+
+const dt = ref(today(getLocalTimeZone())) as Ref<DateValue>;
 
 const handleLogin = () => {
   // Handle login logic here

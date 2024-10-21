@@ -27,7 +27,7 @@ const props = defineProps<{
 
   &.Active,
   &:has(:focus) {
-    box-shadow: 0 0 13px lime;
+    box-shadow: 0 0 13px var(--hilight-color);
   }
 }
 </style>
