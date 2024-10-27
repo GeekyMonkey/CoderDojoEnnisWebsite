@@ -42,9 +42,10 @@ export default defineNuxtModule<ShadcnVueOptions>({
         extensions: [".vue"],
         prefix,
         pathPrefix: false,
+        // priority: 2,
       },
       {
-        prepend: true,
+        prepend: false,
       }
     );
 

@@ -19,8 +19,19 @@ const props = withDefaults(defineProps<Props>(), {
   <Primitive
     :as="as"
     :as-child="asChild"
-    :class="cn(buttonVariants({ variant, size }), props.class)"
+    :class="'Button ' + cn(buttonVariants({ variant, size }), props.class)"
   >
     <slot />
   </Primitive>
 </template>
+
+<style lang="scss">
+.Button {
+  border: solid 1px var(--card-border-color);
+
+  &:focus {
+    box-shadow: 0 0 13px var(--hilight-color);
+    border-color: var(--hilight-color);
+  }
+}
+</style>

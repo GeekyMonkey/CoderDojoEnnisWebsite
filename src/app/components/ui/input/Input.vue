@@ -37,23 +37,33 @@ input.Input {
   /* &::placeholder {
     color: var(--text-muted-foreground);
   } */
-  box-shadow: 2px 2px 3px 0px black inset;
+  border-radius: 8px;
+  box-shadow: 2px 2px 3px 0px var(--shadow-color) inset;
   border-color: #222;
   border-bottom-color: #888;
   border-right-color: #888;
-  border-radius: 8px;
 
   &:focus-within {
     outline: none;
     border-color: var(--ring);
     box-shadow:
-      0 0 5px 2px lime,
-      0 0 5px 3px black inset;
+      0 0 5px 2px var(--hilight-color),
+      2px 2px 3px 0px var(--shadow-color) inset;
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+}
+
+.light-mode {
+  input.Input {
+  }
+}
+
+.dark-mode {
+  input.Input {
   }
 }
 </style>

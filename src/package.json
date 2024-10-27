@@ -20,7 +20,7 @@
     "@vueuse/nuxt": "11.1.0",
     "class-variance-authority": "0.7.0",
     "nuxt": "3.13.2",
-    "radix-vue": "1.9.7",
+    "radix-vue": "1.9.8",
     "shadcn-nuxt": "0.10.4",
     "tailwind-merge": "2.5.4",
     "tailwindcss-animate": "1.0.7",

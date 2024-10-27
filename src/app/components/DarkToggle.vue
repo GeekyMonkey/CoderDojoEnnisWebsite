@@ -32,6 +32,8 @@ const toggleColorMode = () => {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   position: relative;
+  background: var(--background-color);
+  color: var(--foreground-color);
 
   .ToggleIcon {
     @apply h-[1.2rem] w-[1.2rem];

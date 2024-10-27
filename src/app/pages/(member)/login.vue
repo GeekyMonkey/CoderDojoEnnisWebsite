@@ -41,12 +41,6 @@
             <Input type="password" id="password" v-model="password" required />
           </FormItem>
 
-          <Calendar
-            v-model="dt"
-            :weekday-format="'short'"
-            class="rounded-md border"
-          />
-
           <Button type="submit" class="w-full" variant="default" size="lg">
             Login
           </Button>
