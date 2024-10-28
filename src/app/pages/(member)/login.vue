@@ -2,22 +2,22 @@
   <div class="flex items-center justify-center min-h-screen">
     <Card class="w-full max-w-md">
       <CardHeader>
-        <CardTitle>CoderDojo Ennis Member Login</CardTitle>
+        <CardTitle>{{ $t("login.title") }}</CardTitle>
       </CardHeader>
       <CardContent>
         <form @submit.prevent="handleLogin">
           <FormItem>
-            <Label for="username">Username</Label>
+            <Label for="username">{{ $t("login.username") }}</Label>
             <Input type="text" id="username" v-model="username" required />
           </FormItem>
 
           <FormItem>
-            <Label for="password">Password</Label>
+            <Label for="password">{{ $t("login.password") }}</Label>
             <Input type="password" id="password" v-model="password" required />
           </FormItem>
 
           <Button type="submit" class="w-full" variant="default" size="lg">
-            Login
+            {{ $t("login.loginButton") }}
           </Button>
         </form>
       </CardContent>

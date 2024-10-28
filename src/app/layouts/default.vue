@@ -5,8 +5,9 @@
 
     <div>
       <button @click="setLocale('en')">en</button>
+    </div>
+    <div>
       <button @click="setLocale('fr')">fr</button>
-      <p>{{ $t("welcome") }}</p>
     </div>
 
     <slot />
