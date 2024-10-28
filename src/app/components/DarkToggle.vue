@@ -1,52 +1,49 @@
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/vue";
+	import { Button } from "@/components/ui/button";
+	import { Icon } from "@iconify/vue";
+	import { onMounted } from "vue";
 
-const colorMode = useColorMode();
+	const colorMode = useColorMode();
 
-/**
- * Toggle the color mode
- */
-const toggleColorMode = () => {
-  colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
-  if (colorMode.preference === "dark") {
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.remove("dark");
-  }
-};
+	/**
+	 * Toggle the color mode
+	 */
+	const toggleColorMode = () => {
+		colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
+		setBodyClass();
+	};
+
+	const setBodyClass = () => {
+		if (colorMode.preference === "dark") {
+			document.body.classList.add("dark");
+		} else {
+			document.body.classList.remove("dark");
+		}
+	};
+
+	// Start in the right mode
+	onMounted(() => {
+		setBodyClass();
+	});
 </script>
 
 <template>
-  <Button class="DarkToggleButton" variant="outline" @click="toggleColorMode">
-    <Icon
-      icon="radix-icons:moon"
-      class="ToggleIcon rotate-0 scale-100 dark:-rotate-180 dark:scale-0"
-    />
-    <Icon
-      icon="radix-icons:sun"
-      class="ToggleIcon rotate-180 scale-0 dark:rotate-0 dark:scale-100"
-    />
-    <span class="sr-only">Toggle theme</span>
-  </Button>
+	<Button class="DarkToggleButton" variant="outline" @click="toggleColorMode">
+		<Icon
+			v-if="colorMode.preference === 'dark'"
+			icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition"
+			class="ToggleIcon w-5 h-5"
+		/>
+		<Icon
+			v-else
+			icon="line-md:moon-filled-to-sunny-filled-loop-transition"
+			class="ToggleIcon w-5 h-5"
+		/>
+		<span class="sr-only">Toggle theme</span>
+	</Button>
 </template>
 
 <style scoped lang="scss">
-.DarkToggleButton {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  position: relative;
-  background: var(--background-color);
-  color: var(--foreground-color);
-
-  .ToggleIcon {
-    @apply h-[1.2rem] w-[1.2rem];
-    transition:
-      scale 0.5s,
-      transform 0.5s;
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-  }
-}
+	.DarkToggleButton {
+	}
 </style>

@@ -1,43 +1,56 @@
 {
-  "name": "coderdojo-ennis-website",
-  "license": "MIT",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
-    "dev": "cls && yarn install && nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "start": "node .output/server/index.mjs"
-  },
-  "dependencies": {
-    "@nuxtjs/color-mode": "3.5.2",
-    "@nuxtjs/i18n": "8.5.5",
-    "@nuxtjs/tailwindcss": "6.12.2",
-    "@radix-icons/vue": "1.0.0",
-    "@vee-validate/zod": "4.14.6",
-    "@vueuse/core": "11.1.0",
-    "@vueuse/nuxt": "11.1.0",
-    "class-variance-authority": "0.7.0",
-    "nuxt": "3.13.2",
-    "radix-vue": "1.9.8",
-    "shadcn-nuxt": "0.10.4",
-    "tailwind-merge": "2.5.4",
-    "tailwindcss-animate": "1.0.7",
-    "vee-validate": "4.14.6",
-    "vue": "3.5.12",
-    "zod": "3.23.8"
-  },
-  "devDependencies": {
-    "@iconify-json/radix-icons": "1.2.1",
-    "@iconify/vue": "4.1.2",
-    "cross-env": "7.0.3",
-    "postcss-custom-properties": "14.0.3",
-    "prettier": "3.3.3",
-    "sass": "1.80.4",
-    "typescript": "5.6.3"
-  },
-  "packageManager": "yarn@1.22.22",
-  "version": "0.0.0"
+	"name": "coderdojo-ennis-website",
+	"license": "MIT",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
+		"dev": "cls && yarn install && nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"start": "node .output/server/index.mjs"
+	},
+	"dependencies": {
+		"@nuxtjs/color-mode": "3.5.2",
+		"@nuxtjs/i18n": "8.5.5",
+		"@nuxtjs/tailwindcss": "6.12.2",
+		"@radix-icons/vue": "1.0.0",
+		"@vee-validate/zod": "^4.14.6",
+		"@vueuse/core": "^11.1.0",
+		"@vueuse/nuxt": "11.1.0",
+		"class-variance-authority": "0.7.0",
+		"lucide-vue-next": "0.453.0",
+		"nuxt": "3.13.2",
+		"radix-vue": "1.9.8",
+		"shadcn-nuxt": "0.10.4",
+		"tailwind-merge": "2.5.4",
+		"tailwindcss-animate": "1.0.7",
+		"vaul-vue": "^0.2.0",
+		"vee-validate": "^4.14.6",
+		"vue": "3.5.12",
+		"vue-sonner": "^1.2.3",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@iconify-json/radix-icons": "1.2.1",
+		"@iconify/vue": "4.1.2",
+		"@nuxt/icon": "1.5.8",
+		"cross-env": "7.0.3",
+		"postcss-custom-properties": "14.0.3",
+		"prettier": "3.3.3",
+		"sass": "1.80.4",
+		"typescript": "5.6.3"
+	},
+	"packageManager": "yarn@1.22.22",
+	"prettier": {
+		"endOfLine": "lf",
+		"semi": true,
+		"singleQuote": false,
+		"tabWidth": 3,
+		"trailingComma": "all",
+		"useTabs": true,
+		"vueIndentScriptAndStyle": true
+	},
+	"version": "0.0.0"
 }

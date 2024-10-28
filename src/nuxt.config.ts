@@ -2,152 +2,176 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  app: {
-    head: {
-      title: "CoderDojo Ennis",
-      htmlAttrs: { lang: "en" },
-      bodyAttrs: {},
-    },
-    layoutTransition: false,
-    pageTransition: false,
-  },
+	app: {
+		head: {
+			title: "CoderDojo Ennis",
+			htmlAttrs: { lang: "en" },
+			bodyAttrs: { class: "dark" },
+		},
+		layoutTransition: false,
+		pageTransition: false,
+	},
 
-  colorMode: {
-    preference: "dark",
-  },
+	colorMode: {
+		preference: "dark",
+	},
 
-  compatibilityDate: "2024-07-19",
+	compatibilityDate: "2024-07-19",
 
-  css: ["~/assets/css/tailwind.scss", "~/assets/css/app.scss"],
+	css: [
+		"~/assets/css/tailwind.scss",
+		"~/assets/css/shadcn.scss",
+		"~/assets/css/app.scss",
+	],
 
-  devtools: { enabled: false },
+	devtools: { enabled: false },
 
-  future: {
-    compatibilityVersion: 4,
-  },
+	future: {
+		compatibilityVersion: 4,
+	},
 
-  i18n: {
-    detectBrowserLanguage: {
-      alwaysRedirect: false,
-      cookieCrossOrigin: true,
-      cookieKey: "i18n_redirected",
-      cookieSecure: false,
-      fallbackLocale: "en",
-      redirectOn: "all",
-      useCookie: true,
-    },
-    experimental: {
-      localeDetector: "../i18n/localeDetector.ts",
-    },
-    locales: [
-      { code: "en", language: "English" },
-      { code: "fr", language: "Français" },
-    ],
-    strategy: "no_prefix",
-    vueI18n: "../i18n/i18n.config.ts",
-  },
+	i18n: {
+		detectBrowserLanguage: {
+			alwaysRedirect: false,
+			cookieCrossOrigin: true,
+			cookieKey: "i18n_redirected",
+			cookieSecure: false,
+			fallbackLocale: "en",
+			redirectOn: "all",
+			useCookie: true,
+		},
+		experimental: {
+			localeDetector: "../i18n/localeDetector.ts",
+		},
+		locales: [
+			{ code: "en", language: "English" },
+			{ code: "fr", language: "Français" },
+		],
+		strategy: "no_prefix",
+		vueI18n: "../i18n/i18n.config.ts",
+	},
 
-  imports: {
-    // dirs: ["~~/models"],
-  },
+	icon: {
+		aliases: {
+			nuxt: "logos:nuxt-icon",
+			Language: "akar-icons:language", // or heroicons:globe-alt
+		},
+		componentName: "NuxtIcon",
+		// customCollections: [
+		//   {
+		//     prefix: "asset-icon",
+		//     dir: "./assets/icons",
+		//   },
+		// ],
+		serverBundle: {
+			collections: ["heroicons", "logos", "util"],
+		},
+		size: "24px", // default <Icon> size applied
+		class: "icon", // default <Icon> class applied
+		mode: "css", // default <Icon> mode applied
+	},
 
-  modules: [
-    // "@nuxt/icon",
-    // "@nuxt/image",
-    // "@primevue/nuxt-module",
-    // "@nuxt/scripts",
-    // "@nuxtjs/supabase",
-    "@nuxtjs/color-mode",
-    "@nuxtjs/i18n",
-    "@nuxtjs/tailwindcss",
-    "@vueuse/nuxt",
-    "shadcn-nuxt",
-  ],
+	imports: {
+		// dirs: ["~~/models"],
+	},
 
-  nitro: {
-    esbuild: {
-      options: {
-        target: "esnext",
-      },
-    },
-    experimental: {
-      asyncContext: true,
-      openAPI: false,
-      // openAPI: {
-      //   meta: {
-      //     title: "My Awesome Project",
-      //     description: "This might become the next big thing.",
-      //     version: "1.0",
-      //   },
-      // }
-    },
-    // middleware: {},
-    // plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
-    static: false,
-  },
+	modules: [
+		// "@nuxt/image",
+		// "@primevue/nuxt-module",
+		// "@nuxt/scripts",
+		// "@nuxtjs/supabase",
+		"@nuxt/icon",
+		"@nuxtjs/color-mode",
+		"@nuxtjs/i18n",
+		"@nuxtjs/tailwindcss",
+		"@vueuse/nuxt",
+		"shadcn-nuxt",
+	],
 
-  // plugins: [],
+	nitro: {
+		esbuild: {
+			options: {
+				target: "esnext",
+			},
+		},
+		experimental: {
+			asyncContext: true,
+			openAPI: false,
+			// openAPI: {
+			//   meta: {
+			//     title: "My Awesome Project",
+			//     description: "This might become the next big thing.",
+			//     version: "1.0",
+			//   },
+			// }
+		},
+		// middleware: {},
+		// plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
+		static: false,
+	},
 
-  router: {
-    options: {
-      scrollBehaviorType: "smooth",
-    },
-  },
+	// plugins: [],
 
-  runtimeConfig: {
-    private: {},
-    public: {},
-  },
+	router: {
+		options: {
+			scrollBehaviorType: "smooth",
+		},
+	},
 
-  // serverMiddleware: [],
+	runtimeConfig: {
+		private: {},
+		public: {},
+	},
 
-  shadcn: {
-    /**
-     * Prefix for all the imported component
-     */
-    prefix: "",
+	// serverMiddleware: [],
 
-    /**
-     * Directory that the component lives in.
-     */
-    componentDir: "./app/components/ui",
-  },
+	shadcn: {
+		/**
+		 * Prefix for all the imported component
+		 */
+		prefix: "",
 
-  ssr: false,
+		/**
+		 * Directory that the component lives in.
+		 */
+		componentDir: "./app/components/ui",
+	},
 
-  typescript: {
-    tsConfig: {
-      compilerOptions: {
-        baseUrl: ".",
-      },
-    },
-  },
+	ssr: false,
 
-  vite: {
-    css: {
-      preprocessorOptions: {
-        sass: {},
-      },
-    },
-  },
+	typescript: {
+		tsConfig: {
+			compilerOptions: {
+				baseUrl: ".",
+			},
+		},
+	},
 
-  $development: {
-    app: {
-      head: {
-        titleTemplate: "%s : DEV",
-      },
-    },
-    runtimeConfig: {
-      public: {
-        baseUrl: "",
-      },
-    },
-  },
+	vite: {
+		css: {
+			preprocessorOptions: {
+				sass: {},
+			},
+		},
+	},
 
-  devServer: {
-    https: {
-      key: "certs/mylocalhost.key",
-      cert: "certs/mylocalhost.crt",
-    },
-  },
+	$development: {
+		app: {
+			head: {
+				titleTemplate: "%s : DEV",
+			},
+		},
+		runtimeConfig: {
+			public: {
+				baseUrl: "",
+			},
+		},
+	},
+
+	devServer: {
+		https: {
+			key: "certs/mylocalhost.key",
+			cert: "certs/mylocalhost.crt",
+		},
+	},
 });

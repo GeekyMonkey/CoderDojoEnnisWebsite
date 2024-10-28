@@ -1,11 +1,11 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <script setup>
-import { NuxtPage, NuxtLayout } from "#components";
+	import { NuxtPage, NuxtLayout } from "#components";
 </script>
 
 <style lang="scss"></style>
