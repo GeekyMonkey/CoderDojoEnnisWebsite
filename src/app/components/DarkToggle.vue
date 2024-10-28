@@ -9,6 +9,11 @@ const colorMode = useColorMode();
  */
 const toggleColorMode = () => {
   colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
+  if (colorMode.preference === "dark") {
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
 };
 </script>
 

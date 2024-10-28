@@ -5,31 +5,6 @@
         <CardTitle>CoderDojo Ennis Member Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <!-- <Form
-          v-slot="{ setFieldValue }"
-          :validation-schema="accountFormSchema"
-          class="space-y-8"
-          @submit="onSubmit"
-        >
-          <FormField v-slot="{ componentField }" name="name">
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Your name"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <FormDescription>
-                This is the name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-        </Form> -->
-
         <form @submit.prevent="handleLogin">
           <FormItem>
             <Label for="username">Username</Label>

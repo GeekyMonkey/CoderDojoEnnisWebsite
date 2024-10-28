@@ -5,8 +5,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "CoderDojo Ennis",
-      htmlAttrs: { lang: "en", class: "dark" },
-      bodyAttrs: { class: "dark" },
+      htmlAttrs: { lang: "en" },
+      bodyAttrs: {},
     },
     layoutTransition: false,
     pageTransition: false,
