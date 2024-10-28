@@ -1,4 +1,4 @@
-// import { defineNuxtPlugin } from "nuxt/app";
+import { defineNuxtPlugin, useNuxtApp } from "nuxt/app";
 
 export default defineNuxtPlugin({
   name: "startup-plugin",

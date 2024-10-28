@@ -26,6 +26,10 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  i18n: {
+    vueI18n: "../i18n/i18n.config.ts",
+  },
+
   imports: {
     // dirs: ["~~/models"],
   },
@@ -37,6 +41,7 @@ export default defineNuxtConfig({
     // "@nuxt/scripts",
     // "@nuxtjs/supabase",
     "@nuxtjs/color-mode",
+    "@nuxtjs/i18n",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
     "shadcn-nuxt",
