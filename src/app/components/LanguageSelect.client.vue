@@ -8,6 +8,9 @@
 		</DialogTrigger>
 		<DialogContent class="LanguageDialog">
 			<DialogHeader>
+				<VisuallyHidden>
+					<DialogTitle>Choose Language</DialogTitle>
+				</VisuallyHidden>
 				<NuxtIcon name="Language" class="LanguageIcon w-8 h-8" />
 				<DialogCloseButton />
 			</DialogHeader>
@@ -31,6 +34,8 @@
 <script setup lang="ts">
 	import { onMounted } from "vue";
 	import DialogHeader from "./ui/dialog/DialogHeader.vue";
+	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
+	import { VisuallyHidden } from "radix-vue";
 
 	const { locale, setLocale, setLocaleCookie, locales, availableLocales } =
 		useI18n();

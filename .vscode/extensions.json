@@ -3,6 +3,7 @@
     "esbenp.prettier-vscode",
     "herrmannplatz.npm-dependency-links",
     "vue.volar",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "nuxtr.nuxt-vscode-extentions"
   ]
 }

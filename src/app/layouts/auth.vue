@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-	import LanguageSelect from "~/components/LanguageSelect.vue";
+	import LanguageSelect from "~/components/LanguageSelect.client.vue";
 </script>
 
 <style lang="scss">

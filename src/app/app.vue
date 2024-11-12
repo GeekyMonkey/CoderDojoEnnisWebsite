@@ -8,9 +8,4 @@
 	import { NuxtPage, NuxtLayout } from "#components";
 </script>
 
-<style lang="scss">
-	body {
-		background-color: black;
-		color: white;
-	}
-</style>
+<style lang="scss"></style>

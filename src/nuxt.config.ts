@@ -1,4 +1,8 @@
+import fs from "fs";
+import path from "path";
+// import { buildTime, version } from "./build/Version";
 import { defineNuxtConfig } from "nuxt/config";
+import { supabase } from "~/utils/supabaseClient";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -8,18 +12,20 @@ export default defineNuxtConfig({
 			htmlAttrs: {},
 			bodyAttrs: {
 				class: "dark",
-				style: "background-color:black; color:white;",
+				style: "background-color:black;",
 			},
 		},
 		layoutTransition: false,
 		pageTransition: false,
 	},
 
+	// builder: "vite",
+
 	colorMode: {
 		preference: "dark",
 	},
 
-	compatibilityDate: "2024-07-19",
+	compatibilityDate: "2024-08-01",
 
 	css: [
 		"~/assets/css/tailwind.scss",
@@ -29,8 +35,22 @@ export default defineNuxtConfig({
 
 	devtools: { enabled: false },
 
+	experimental: {
+		scanPageMeta: "after-resolve",
+	},
+
 	future: {
 		compatibilityVersion: 4,
+	},
+
+	googleFonts: {
+		download: true,
+		families: {
+			"Nunito Sans": {
+				wght: "200..900",
+				ital: "200..700",
+			},
+		},
 	},
 
 	i18n: {
@@ -67,7 +87,7 @@ export default defineNuxtConfig({
 		//   },
 		// ],
 		serverBundle: {
-			collections: ["heroicons", "logos", "util"],
+			collections: ["heroicons", "logos", "mdi", "util"],
 		},
 		size: "24px", // default <Icon> size applied
 		class: "icon", // default <Icon> class applied
@@ -82,10 +102,11 @@ export default defineNuxtConfig({
 		// "@nuxt/image",
 		// "@primevue/nuxt-module",
 		// "@nuxt/scripts",
-		// "@nuxtjs/supabase",
 		"@nuxt/icon",
 		"@nuxtjs/color-mode",
+		"@nuxtjs/google-fonts",
 		"@nuxtjs/i18n",
+		"@nuxtjs/supabase",
 		"@nuxtjs/tailwindcss",
 		"@vueuse/nuxt",
 		"shadcn-nuxt",
@@ -115,6 +136,11 @@ export default defineNuxtConfig({
 
 	// plugins: [],
 
+	// redirectOptions: {
+	// 	login: "/auth",
+	// 	enabled: true,
+	// },
+
 	router: {
 		options: {
 			scrollBehaviorType: "smooth",
@@ -122,10 +148,26 @@ export default defineNuxtConfig({
 	},
 
 	runtimeConfig: {
-		private: {},
-		public: {},
+		public: {
+			supabase: {
+				url: process.env.SUPABASE_URL,
+				key: process.env.SUPABASE_KEY,
+			},
+			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
+			// buildTarget: buildTarget,
+			// buildTimeString: String(buildTime),
+			// isIonic: isIonic,
+			// isPwa: isPwa,
+			// version: version,
+		},
+		private: {
+			supabase: {
+				url: process.env.SUPABASE_URL,
+				key: process.env.SUPABASE_KEY,
+				password: process.env.SUPABASE_PASSWORD,
+			},
+		},
 	},
-
 	// serverMiddleware: [],
 
 	shadcn: {
@@ -141,6 +183,21 @@ export default defineNuxtConfig({
 	},
 
 	ssr: false,
+
+	supabase: {
+		redirectOptions: {
+			login: "/login",
+			callback: "/logged_in",
+			include: [
+				"/coder(/*)?",
+				"/mentor(/*)?",
+				"/parent(/*)?",
+				"/debug(/*)?",
+			],
+			exclude: [],
+			cookieRedirect: true,
+		},
+	},
 
 	typescript: {
 		tsConfig: {
@@ -173,8 +230,8 @@ export default defineNuxtConfig({
 
 	devServer: {
 		https: {
-			key: "certs/mylocalhost.key",
-			cert: "certs/mylocalhost.crt",
+			key: "certs/server.key",
+			cert: "certs/server.cert",
 		},
 	},
 });

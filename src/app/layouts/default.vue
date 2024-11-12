@@ -33,7 +33,9 @@
 </template>
 
 <script setup lang="ts">
-	import LanguageSelect from "~/components/LanguageSelect.vue";
+	import LanguageSelect from "~/components/LanguageSelect.client.vue";
+
+	const currentPage = ref("ToDo: currentPage");
 </script>
 
 <style lang="scss">
