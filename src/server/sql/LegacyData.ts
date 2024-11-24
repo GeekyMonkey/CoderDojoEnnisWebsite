@@ -2,6 +2,9 @@ import sql, { config } from "mssql";
 import { LegacyBadgeCategoryEntity } from "./Models/LegacyBadgeCategoryEntity";
 import { LegacyBadgeEntity } from "./Models/LegacyBadgeEntity";
 import { LegacyTeamEntity } from "./Models/LegacyTeamEntity";
+import { LegacyBeltEntity } from "./Models/LegacyBeltEntity";
+import { LegacyMemberEntity } from "./Models/LegacyMemberEntity";
+import { LegacyAdultEntity } from "./Models/LegacyAdultEntity";
 
 const config = useRuntimeConfig();
 
@@ -28,6 +31,10 @@ async function ReatTable<T>(tableName: string): Promise<T[]> {
 	}
 }
 
+export async function ReadAdults(): Promise<LegacyAdultEntity[]> {
+	return await ReatTable<LegacyAdultEntity>("Adults");
+}
+
 export async function ReadBadgeCategories(): Promise<
 	LegacyBadgeCategoryEntity[]
 > {
@@ -36,6 +43,14 @@ export async function ReadBadgeCategories(): Promise<
 
 export async function ReadBadges(): Promise<LegacyBadgeEntity[]> {
 	return await ReatTable<LegacyBadgeEntity>("Badges");
+}
+
+export async function ReadBelts(): Promise<LegacyBeltEntity[]> {
+	return await ReatTable<LegacyBeltEntity>("Belts");
+}
+
+export async function ReadNinjas(): Promise<LegacyMemberEntity[]> {
+	return await ReatTable<LegacyMemberEntity>("Members");
 }
 
 export async function ReadTeams(): Promise<LegacyTeamEntity[]> {

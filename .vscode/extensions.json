@@ -4,6 +4,7 @@
     "herrmannplatz.npm-dependency-links",
     "vue.volar",
     "bradlc.vscode-tailwindcss",
-    "nuxtr.nuxt-vscode-extentions"
+    "nuxtr.nuxt-vscode-extentions",
+    "renesaarsoo.sql-formatter-vsc"
   ]
 }

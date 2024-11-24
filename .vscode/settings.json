@@ -32,5 +32,10 @@
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#040d0999",
     "titleBar.inactiveForeground": "#e7e7e799"
-  }
+  },
+  "SQL-Formatter-VSCode.dataTypeCase": "upper",
+  "SQL-Formatter-VSCode.dialect": "postgresql",
+  "SQL-Formatter-VSCode.ignoreTabSettings": true,
+  "SQL-Formatter-VSCode.insertSpacesOverride": true,
+  "editor.gotoLocation.multipleDefinitions": "goto"
 }
