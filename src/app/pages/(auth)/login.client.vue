@@ -53,7 +53,7 @@
 
 	const bogus = async (num: number) => {
 		console.log("Bogus", num);
-		const result = await $fetch<{ session: Session }>("/api/auth/bogus", {
+		const result = await $fetch<{ session: Session }>("/api/Auth/Bogus", {
 			method: "POST",
 			body: { bogusIndex: num },
 		});
@@ -105,7 +105,9 @@
 							>
 								<Icon
 									:icon="
-										showPassword ? 'mdi:show' : 'mdi-show-outline'
+										showPassword
+											? 'mdi:show'
+											: 'mdi-show-outline'
 									"
 									class="ToggleIcon w-5 h-5"
 								/>
@@ -113,7 +115,12 @@
 						</div>
 					</FormItem>
 
-					<Button type="submit" class="w-full" variant="default" size="lg">
+					<Button
+						type="submit"
+						class="w-full"
+						variant="default"
+						size="lg"
+					>
 						{{ $t("login.loginButton") }}
 					</Button>
 				</form>

@@ -1,0 +1,17 @@
+meta {
+  name: Auth - Bogus
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{Host}}/api/Auth/Bogus
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bogusIndex": 43
+  }
+}
