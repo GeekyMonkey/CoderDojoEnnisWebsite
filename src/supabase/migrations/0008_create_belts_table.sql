@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS coderdojo.belts;
-
 CREATE TABLE IF NOT EXISTS coderdojo.belts (
     id UUID PRIMARY KEY,
     deleted BOOLEAN NOT NULL DEFAULT FALSE,

@@ -1,11 +1,18 @@
 import { createClient, Session, SupabaseClient } from "@supabase/supabase-js";
 import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
 import {
+	ReadAdultAttendances,
+	ReadAdultBadgeCategories,
 	ReadAdults,
 	ReadBadgeCategories,
 	ReadBadges,
 	ReadBelts,
+	ReadMemberAttendances,
+	ReadMemberBadges,
+	ReadMemberBelts,
+	ReadMemberParents,
 	ReadNinjas,
+	ReadSessions,
 	ReadTeams,
 } from "~~/server/sql/LegacyData";
 import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
@@ -14,6 +21,13 @@ import { FromLegacyBadgeEntities } from "~~/server/sql/Models/LegacyBadgeEntity"
 import { FromLegacyBeltEntities } from "~~/server/sql/Models/LegacyBeltEntity";
 import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
 import { FromLegacyAdultEntities } from "~~/server/sql/Models/LegacyAdultEntity";
+import { FromLegacySessionEntities } from "~~/server/sql/Models/LegacySessionEntity";
+import { FromLegacyMemberAttendanceEntities } from "~~/server/sql/Models/LegacyMemberAttendanceEntity";
+import { FromLegacyAdultAttendanceEntities } from "~~/server/sql/Models/LegacyAdultAttendanceEntity";
+import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/LegacyAdultBadgeCategoryEntity";
+import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
+import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
+import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {};
@@ -64,6 +78,12 @@ async function CopyData(resp: ResponseBody): Promise<string[]> {
 		logs.push(...(await CopyBadgesTable(supabase)));
 		logs.push(...(await CopyBeltsTable(supabase)));
 		logs.push(...(await CopyMembersTable(supabase)));
+		logs.push(...(await CopySessionsTable(supabase)));
+		logs.push(...(await CopyAttendanceTable(supabase)));
+		logs.push(...(await CopyMemberBadgeCategoriesTable(supabase)));
+		logs.push(...(await CopyMemberParentsTable(supabase)));
+		logs.push(...(await CopyMemberBadgesTable(supabase)));
+		logs.push(...(await CopyMemberBeltsTable(supabase)));
 	} catch (error: any) {
 		console.error("Error copying data:", error);
 		logs.push("Error: " + error.message);
@@ -258,6 +278,178 @@ async function CopyMembersTable(
 	// if (!adultError) {
 	// 	logs.push(`Inserted adults`);
 	// }
+
+	return logs;
+}
+
+async function CopySessionsTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "sessions")));
+	const oldEntities = await ReadSessions();
+	const newEntities = FromLegacySessionEntities(oldEntities);
+	logs.push("Copying Sessions table with " + oldEntities.length + " rows");
+	const { data: insertData, error: insertError } = await supabase
+		.from("sessions")
+		.insert(newEntities);
+
+	if (insertError) {
+		logs.push("Error in Sessions Insert: " + insertError.message);
+	} else {
+		logs.push(`Inserted Sessions`);
+	}
+
+	return logs;
+}
+
+async function CopyMemberBadgesTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "member_badges")));
+
+	const oldEntities = await ReadMemberBadges();
+	const newEntities = FromLegacyMemberBadgeEntities(oldEntities);
+	logs.push(
+		"Copying Member Badges table with " + oldEntities.length + " rows",
+	);
+	const { data: insertData, error: insertError } = await supabase
+		.from("member_badges")
+		.insert(newEntities);
+
+	if (insertError) {
+		logs.push("Error in Member Badges Insert: " + insertError.message);
+	} else {
+		logs.push(`Inserted Member Badges`);
+	}
+
+	return logs;
+}
+
+async function CopyMemberBeltsTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "member_belts")));
+
+	const oldEntities = await ReadMemberBelts();
+	const newEntities = FromLegacyMemberBeltEntities(oldEntities);
+	logs.push(
+		"Copying Member Belts table with " + oldEntities.length + " rows",
+	);
+	const { data: insertData, error: insertError } = await supabase
+		.from("member_belts")
+		.insert(newEntities);
+
+	if (insertError) {
+		logs.push("Error in Member Belts Insert: " + insertError.message);
+	} else {
+		logs.push(`Inserted Member Belts`);
+	}
+
+	return logs;
+}
+
+async function CopyMemberBadgeCategoriesTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "member_badge_categories")));
+
+	const oldEntities = await ReadAdultBadgeCategories();
+	const newEntities = FromLegacyAdultBadgeCategoryEntities(oldEntities);
+	logs.push(
+		"Copying Member Badge Categories table with " +
+			oldEntities.length +
+			" rows",
+	);
+	const { data: insertData, error: insertError } = await supabase
+		.from("member_badge_categories")
+		.insert(newEntities);
+
+	if (insertError) {
+		logs.push(
+			"Error in Member Badge Categories Insert: " + insertError.message,
+		);
+	} else {
+		logs.push(`Inserted Member Badge Categories`);
+	}
+
+	return logs;
+}
+
+async function CopyMemberParentsTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "member_parents")));
+
+	const oldEntities = await ReadMemberParents();
+	const newEntities = FromLegacyMemberParentEntities(oldEntities);
+	logs.push(
+		"Copying Member Parents table with " + oldEntities.length + " rows",
+	);
+	const { data: insertData, error: insertError } = await supabase
+		.from("member_parents")
+		.insert(newEntities);
+
+	if (insertError) {
+		logs.push("Error in Member Parents Insert: " + insertError.message);
+	} else {
+		logs.push(`Inserted Member Parents`);
+	}
+
+	return logs;
+}
+
+async function CopyAttendanceTable(
+	supabase: SupabaseClientType,
+): Promise<string[]> {
+	const logs: string[] = [];
+
+	logs.push(...(await PurgeTable(supabase, "member_attendances")));
+
+	const oldMemberEntities = await ReadMemberAttendances();
+	let newEntities = FromLegacyMemberAttendanceEntities(oldMemberEntities);
+	logs.push(
+		"Copying Attendances table with " +
+			oldMemberEntities.length +
+			" member rows",
+	);
+	const { data: insertMemberData, error: insertMemberError } = await supabase
+		.from("member_attendances")
+		.insert(newEntities);
+	if (insertMemberError) {
+		logs.push(
+			"Error in Member Attendances Insert: " + insertMemberError.message,
+		);
+	} else {
+		logs.push(`Inserted Member Attendances`);
+	}
+
+	const oldAdultEntities = await ReadAdultAttendances();
+	newEntities = FromLegacyAdultAttendanceEntities(oldAdultEntities);
+	logs.push(
+		"Copying Attendances table with " +
+			oldAdultEntities.length +
+			" member rows",
+	);
+	const { data: insertAdultData, error: insertAdultError } = await supabase
+		.from("member_attendances")
+		.insert(newEntities);
+	if (insertAdultError) {
+		logs.push(
+			"Error in Adult Attendances Insert: " + insertAdultError.message,
+		);
+	} else {
+		logs.push(`Inserted Adult Attendances`);
+	}
 
 	return logs;
 }

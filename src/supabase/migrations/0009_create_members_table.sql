@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS coderdojo.members;
-
 CREATE TABLE IF NOT EXISTS coderdojo.members (
     id UUID PRIMARY KEY,
     birth_year INT,
