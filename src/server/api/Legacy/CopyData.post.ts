@@ -1,5 +1,4 @@
-import { createClient, Session, SupabaseClient } from "@supabase/supabase-js";
-import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
+import { defineEventHandler, readBody } from "#imports";
 import {
 	ReadAdultAttendances,
 	ReadAdultBadgeCategories,
@@ -28,8 +27,20 @@ import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/Legac
 import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
 import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
 import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
-import { DB } from "~~/server/db";
-import { teams as teamsTable } from "~~/server/db/schema/schemas";
+import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
+import {
+	badgeCategories,
+	badges,
+	belts,
+	memberAttendances,
+	memberBadgeCategories,
+	memberBadges,
+	memberBelts,
+	memberParents,
+	members,
+	sessions,
+	teams as teamsTable,
+} from "~~/server/db/schema/schemas";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {};
@@ -39,8 +50,9 @@ type ResponseBody = {
 	success: boolean;
 };
 
-type SupabaseClientType = SupabaseClient<any, "coderdojo", any>;
-
+/**
+ * POST: api/Legacy/CopyData
+ */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const { req } = event.node;
 
@@ -59,33 +71,28 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	};
 });
 
+/**
+ * Copy the SQL Server data to Supabase
+ */
 async function CopyData(resp: ResponseBody): Promise<string[]> {
 	const logs: string[] = [];
 	try {
-		// Get Supabase configuration from runtime config
-		const config = useRuntimeConfig();
-		const supabaseUrl = config.public.supabase.url;
-		const supabaseServiceRoleKey = config.private.supabase.password;
+		// Get a DB connection
+		const db = UseDrizzle();
+		logs.push("Drizzle client created");
 
-		// Create Supabase client with schema specified
-		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
-			db: {
-				schema: "coderdojo",
-			},
-		});
-		logs.push("Supabase client created");
-
-		logs.push(...(await CopyTeamsTable(supabase)));
-		// logs.push(...(await CopyBadgeCategoriesTable(supabase)));
-		// logs.push(...(await CopyBadgesTable(supabase)));
-		// logs.push(...(await CopyBeltsTable(supabase)));
-		// logs.push(...(await CopyMembersTable(supabase)));
-		// logs.push(...(await CopySessionsTable(supabase)));
-		// logs.push(...(await CopyAttendanceTable(supabase)));
-		// logs.push(...(await CopyMemberBadgeCategoriesTable(supabase)));
-		// logs.push(...(await CopyMemberParentsTable(supabase)));
-		// logs.push(...(await CopyMemberBadgesTable(supabase)));
-		// logs.push(...(await CopyMemberBeltsTable(supabase)));
+		// Copy the data
+		logs.push(...(await CopyTeamsTable(db)));
+		logs.push(...(await CopyBadgeCategoriesTable(db)));
+		logs.push(...(await CopyBadgesTable(db)));
+		logs.push(...(await CopyBeltsTable(db)));
+		logs.push(...(await CopyMembersTable(db)));
+		logs.push(...(await CopySessionsTable(db)));
+		logs.push(...(await CopyAttendanceTable(db)));
+		logs.push(...(await CopyMemberBadgeCategoriesTable(db)));
+		logs.push(...(await CopyMemberParentsTable(db)));
+		logs.push(...(await CopyMemberBadgesTable(db)));
+		logs.push(...(await CopyMemberBeltsTable(db)));
 	} catch (error: any) {
 		console.error("Error copying data:", error);
 		logs.push("Error: " + error.message);
@@ -94,274 +101,223 @@ async function CopyData(resp: ResponseBody): Promise<string[]> {
 }
 
 /**
- * Purge a table
+ * Copy the teams table
  */
-async function PurgeTable(
-	supabase: SupabaseClientType,
-	tableName: string,
-): Promise<string[]> {
+async function CopyTeamsTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(`Purging ${tableName} table`);
-	const { data: deleteData, error: deleteError } = await supabase
-		.from(tableName)
-		.delete()
-		.not("id", "is", "null");
-	if (deleteError) {
-		logs.push(`Error in ${tableName} Purge: ` + deleteError.message);
-		return logs;
-	}
-	return logs;
-}
+	logs.push("Purging teams");
+	await db.delete(teamsTable).execute();
 
-async function CopyTeamsTable(supabase: SupabaseClientType): Promise<string[]> {
-	const logs: string[] = [];
-
-	logs.push(...(await PurgeTable(supabase, "teams")));
+	logs.push("Reading teams");
 	const teams = await ReadTeams();
-	const newTeams = FromLegacyTeamEntities(teams);
-	logs.push("Copying teams table with " + teams.length + " rows");
-	const { data: insertData, error: insertError } = await supabase
-		.from("teams")
-		.insert(newTeams);
 
-	if (insertError) {
-		logs.push("Error in Teams Insert: " + insertError.message);
-	} else {
+	logs.push("Copying teams table with " + teams.length + " rows");
+	const newTeams = FromLegacyTeamEntities(teams);
+
+	try {
+		await db.insert(teamsTable).values(newTeams).execute();
 		logs.push(`Inserted teams`);
+	} catch (error: any) {
+		logs.push("Error in Teams Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyBadgeCategoriesTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy badge categories table
+ */
+async function CopyBadgeCategoriesTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "badge_categories")));
+	await db.delete(badgeCategories).execute();
+
 	const oldEntities = await ReadBadgeCategories();
 	const newEntities = FromLegacyBadgeCategoryEntities(oldEntities);
 	logs.push(
 		"Copying badge cateogires table with " + oldEntities.length + " rows",
 	);
-	const { data: insertData, error: insertError } = await supabase
-		.from("badge_categories")
-		.insert(newEntities);
 
-	if (insertError) {
-		logs.push("Error in badge categories Insert: " + insertError.message);
-	} else {
-		logs.push(`Inserted badge categories`);
+	try {
+		await db.insert(badgeCategories).values(newEntities).execute();
+		logs.push(`Inserted badge cateogires`);
+	} catch (error: any) {
+		logs.push("Error in badge cateogires Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyBadgesTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy badges table
+ */
+async function CopyBadgesTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "badges")));
+	await db.delete(badges).execute();
+
 	const oldEntities = await ReadBadges();
 	const newEntities = FromLegacyBadgeEntities(oldEntities);
 	logs.push("Copying badges table with " + oldEntities.length + " rows");
-	const { data: insertData, error: insertError } = await supabase
-		.from("badges")
-		.insert(newEntities);
 
-	if (insertError) {
-		logs.push("Error in badge Insert: " + insertError.message);
-	} else {
+	try {
+		await db.insert(badges).values(newEntities).execute();
 		logs.push(`Inserted badges`);
+	} catch (error: any) {
+		logs.push("Error in badges Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyBeltsTable(supabase: SupabaseClientType): Promise<string[]> {
+/**
+ * Copy belts table
+ */
+async function CopyBeltsTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "belts")));
+	await db.delete(belts).execute();
+
 	const oldEntities = await ReadBelts();
 	const newEntities = FromLegacyBeltEntities(oldEntities);
 	logs.push("Copying belts table with " + oldEntities.length + " rows");
-	const { data: insertData, error: insertError } = await supabase
-		.from("belts")
-		.insert(newEntities);
 
-	if (insertError) {
-		logs.push("Error in belts Insert: " + insertError.message);
-	} else {
+	try {
+		await db.insert(belts).values(newEntities).execute();
 		logs.push(`Inserted belts`);
+	} catch (error: any) {
+		logs.push("Error in belts Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyMembersTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy the members table
+ */
+async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "members")));
+	await db.delete(members).execute();
 
 	const oldNinjas = await ReadNinjas();
 	const newNinjas = FromLegacyMemberEntities(oldNinjas);
 
-	// Copy all at once
-	logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
-	const { data: insertNinjaData, error: insertNinjaError } = await supabase
-		.from("members")
-		.insert(newNinjas);
-	if (insertNinjaError) {
-		logs.push("Error in ninja Insert: " + insertNinjaError.message);
-	} else {
-		logs.push(`Inserted ninjas`);
-	}
-
-	// Copy one at a time
-	// let ninjaError: boolean = false;
-	// logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
+	// Copy ninjas one at a time
 	// for (const ninja of newNinjas) {
-	// 	const { data: insertNinjaData, error: insertNinjaError } =
-	// 		await supabase.from("members").insert(ninja);
-	// 	if (insertNinjaError) {
-	// 		logs.push(
-	// 			"Error in ninja Insert: " +
-	// 				insertNinjaError.message +
-	// 				" for " +
-	// 				JSON.stringify(ninja),
-	// 		);
-	// 		ninjaError = true;
+	// 	try {
+	// 		await db.insert(members).values(ninja).execute();
+	// 		// logs.push(`Inserted ninja ${ninja.id}`);
+	// 	} catch (error: any) {
+	// 		logs.push(`Error in ninja ${ninja.id}`);
+	// 		logs.push(`Insert: ${error.message}`);
+	// 		logs.push(JSON.stringify({ ninja }));
 	// 		break;
 	// 	}
 	// }
-	// if (!ninjaError) {
-	// 	logs.push(`Inserted ninjas`);
-	// }
 
+	// Copy all ninjas at once
+	logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
+	try {
+		await db.insert(members).values(newNinjas).execute();
+		logs.push(`Inserted ninjas`);
+	} catch (error: any) {
+		logs.push("Error in ninjas Insert: " + error.message);
+		return logs;
+	}
+
+	// Copy all adults at once
 	const oldAdults = await ReadAdults();
 	const newAdults = FromLegacyAdultEntities(oldAdults);
 	logs.push("Copying mebers table with " + oldAdults.length + " adults");
 
-	// Copy all at once
-	const { data: insertAdultData, error: insertAdultError } = await supabase
-		.from("members")
-		.insert(newAdults);
-	if (insertAdultError) {
-		logs.push("Error in adult Insert: " + insertAdultError.message);
-	} else {
+	try {
+		await db.insert(members).values(newAdults).execute();
 		logs.push(`Inserted adults`);
+	} catch (error: any) {
+		logs.push("Error in adults Insert: " + error.message);
 	}
-
-	// Copy one at a time
-	// let adultError: boolean = false;
-	// for (const adult of newAdults) {
-	// 	if (adult.id !== "5589A0CC-CA2D-415F-91FE-9EAAB56D4D65") {
-	// 		// todo - remove this
-	// 		continue;
-	// 	}
-
-	// 	const { data: insertAdultData, error: insertAdultError } =
-	// 		await supabase.from("members").insert(adult);
-	// 	if (insertAdultError) {
-	// 		logs.push(
-	// 			"Error in adult Insert: " +
-	// 				insertAdultError.message +
-	// 				" for " +
-	// 				JSON.stringify(adult),
-	// 		);
-	// 		adultError = true;
-	// 		break;
-	// 	}
-	// }
-	// if (!adultError) {
-	// 	logs.push(`Inserted adults`);
-	// }
 
 	return logs;
 }
 
-async function CopySessionsTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy sessions table
+ */
+async function CopySessionsTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "sessions")));
+	await db.delete(sessions).execute();
+
 	const oldEntities = await ReadSessions();
 	const newEntities = FromLegacySessionEntities(oldEntities);
 	logs.push("Copying Sessions table with " + oldEntities.length + " rows");
-	const { data: insertData, error: insertError } = await supabase
-		.from("sessions")
-		.insert(newEntities);
-
-	if (insertError) {
-		logs.push("Error in Sessions Insert: " + insertError.message);
-	} else {
-		logs.push(`Inserted Sessions`);
+	try {
+		await db.insert(sessions).values(newEntities).execute();
+		logs.push(`Inserted sessions`);
+	} catch (error: any) {
+		logs.push("Error in sessions Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyMemberBadgesTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy member badges table
+ */
+async function CopyMemberBadgesTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "member_badges")));
+	await db.delete(memberBadges).execute();
 
 	const oldEntities = await ReadMemberBadges();
 	const newEntities = FromLegacyMemberBadgeEntities(oldEntities);
 	logs.push(
 		"Copying Member Badges table with " + oldEntities.length + " rows",
 	);
-	const { data: insertData, error: insertError } = await supabase
-		.from("member_badges")
-		.insert(newEntities);
-
-	if (insertError) {
-		logs.push("Error in Member Badges Insert: " + insertError.message);
-	} else {
-		logs.push(`Inserted Member Badges`);
+	try {
+		await db.insert(memberBadges).values(newEntities).execute();
+		logs.push(`Inserted member badges`);
+	} catch (error: any) {
+		logs.push("Error in member badges Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyMemberBeltsTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy member belts table
+ */
+async function CopyMemberBeltsTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "member_belts")));
+	await db.delete(memberBelts).execute();
 
 	const oldEntities = await ReadMemberBelts();
 	const newEntities = FromLegacyMemberBeltEntities(oldEntities);
 	logs.push(
 		"Copying Member Belts table with " + oldEntities.length + " rows",
 	);
-	const { data: insertData, error: insertError } = await supabase
-		.from("member_belts")
-		.insert(newEntities);
-
-	if (insertError) {
-		logs.push("Error in Member Belts Insert: " + insertError.message);
-	} else {
-		logs.push(`Inserted Member Belts`);
+	try {
+		await db.insert(memberBelts).values(newEntities).execute();
+		logs.push(`Inserted member belts`);
+	} catch (error: any) {
+		logs.push("Error in member belts Insert: " + error.message);
 	}
 
 	return logs;
 }
 
+/**
+ * Copy member badge categories table
+ */
 async function CopyMemberBadgeCategoriesTable(
-	supabase: SupabaseClientType,
+	db: DrizzleType,
 ): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "member_badge_categories")));
+	await db.delete(memberBadgeCategories).execute();
 
 	const oldEntities = await ReadAdultBadgeCategories();
 	const newEntities = FromLegacyAdultBadgeCategoryEntities(oldEntities);
@@ -370,52 +326,46 @@ async function CopyMemberBadgeCategoriesTable(
 			oldEntities.length +
 			" rows",
 	);
-	const { data: insertData, error: insertError } = await supabase
-		.from("member_badge_categories")
-		.insert(newEntities);
-
-	if (insertError) {
-		logs.push(
-			"Error in Member Badge Categories Insert: " + insertError.message,
-		);
-	} else {
-		logs.push(`Inserted Member Badge Categories`);
+	try {
+		await db.insert(memberBadgeCategories).values(newEntities).execute();
+		logs.push(`Inserted member badge categories`);
+	} catch (error: any) {
+		logs.push("Error in member badge categories Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyMemberParentsTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * copy member parents table
+ */
+async function CopyMemberParentsTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "member_parents")));
+	await db.delete(memberParents).execute();
 
 	const oldEntities = await ReadMemberParents();
 	const newEntities = FromLegacyMemberParentEntities(oldEntities);
 	logs.push(
 		"Copying Member Parents table with " + oldEntities.length + " rows",
 	);
-	const { data: insertData, error: insertError } = await supabase
-		.from("member_parents")
-		.insert(newEntities);
-
-	if (insertError) {
-		logs.push("Error in Member Parents Insert: " + insertError.message);
-	} else {
-		logs.push(`Inserted Member Parents`);
+	try {
+		await db.insert(memberParents).values(newEntities).execute();
+		logs.push(`Inserted member parents`);
+	} catch (error: any) {
+		logs.push("Error in member parents Insert: " + error.message);
 	}
 
 	return logs;
 }
 
-async function CopyAttendanceTable(
-	supabase: SupabaseClientType,
-): Promise<string[]> {
+/**
+ * Copy the attendance table
+ */
+async function CopyAttendanceTable(db: DrizzleType): Promise<string[]> {
 	const logs: string[] = [];
 
-	logs.push(...(await PurgeTable(supabase, "member_attendances")));
+	await db.delete(memberAttendances).execute();
 
 	const oldMemberEntities = await ReadMemberAttendances();
 	let newEntities = FromLegacyMemberAttendanceEntities(oldMemberEntities);
@@ -424,15 +374,11 @@ async function CopyAttendanceTable(
 			oldMemberEntities.length +
 			" member rows",
 	);
-	const { data: insertMemberData, error: insertMemberError } = await supabase
-		.from("member_attendances")
-		.insert(newEntities);
-	if (insertMemberError) {
-		logs.push(
-			"Error in Member Attendances Insert: " + insertMemberError.message,
-		);
-	} else {
-		logs.push(`Inserted Member Attendances`);
+	try {
+		await db.insert(memberAttendances).values(newEntities).execute();
+		logs.push(`Inserted ninja attendances`);
+	} catch (error: any) {
+		logs.push("Error in ninja attendances Insert: " + error.message);
 	}
 
 	const oldAdultEntities = await ReadAdultAttendances();
@@ -442,15 +388,11 @@ async function CopyAttendanceTable(
 			oldAdultEntities.length +
 			" member rows",
 	);
-	const { data: insertAdultData, error: insertAdultError } = await supabase
-		.from("member_attendances")
-		.insert(newEntities);
-	if (insertAdultError) {
-		logs.push(
-			"Error in Adult Attendances Insert: " + insertAdultError.message,
-		);
-	} else {
-		logs.push(`Inserted Adult Attendances`);
+	try {
+		await db.insert(memberAttendances).values(newEntities).execute();
+		logs.push(`Inserted adult attendances`);
+	} catch (error: any) {
+		logs.push("Error in adult attendances Insert: " + error.message);
 	}
 
 	return logs;

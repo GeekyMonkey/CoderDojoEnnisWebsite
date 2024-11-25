@@ -1,3 +1,5 @@
+import { BeltEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Belt Entity
  */
@@ -15,9 +17,9 @@ export const FromLegacyBeltEntity = (legacy: LegacyBeltEntity): BeltEntity => {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
 		color: legacy.Color,
-		hex_code: legacy.HexCode,
+		hexCode: legacy.HexCode,
 		description: legacy.Description,
-		sort_order: legacy.SortOrder,
+		sortOrder: legacy.SortOrder,
 	};
 };
 

@@ -1,3 +1,5 @@
+import { MemberParentEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Member-Parent Entity
  */
@@ -12,8 +14,8 @@ export const FromLegacyMemberParentEntity = (
 ): MemberParentEntity => {
 	return {
 		id: legacy.Id,
-		member_id: legacy.MemberId,
-		parent_id: legacy.AdultId,
+		memberId: legacy.MemberId,
+		parentId: legacy.AdultId,
 	};
 };
 

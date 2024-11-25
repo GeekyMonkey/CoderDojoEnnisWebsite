@@ -1,3 +1,6 @@
+import { SessionEntity } from "~~/server/db/entities";
+import { NumberToDate, NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
+
 /**
  * SQL Server Session Entity
  */
@@ -17,13 +20,13 @@ export const FromLegacySessionEntity = (
 ): SessionEntity => {
 	return {
 		id: legacy.Id,
-		created_date: legacy.CreatedDate,
-		end_date: legacy.EndDate,
+		createdDate: NumberToDate(legacy.CreatedDate),
+		endDate: NumberToDateOrNull(legacy.EndDate),
 		url: legacy.Url,
 		topic: legacy.Topic,
-		adult_id: legacy.AdultId,
-		adult2_id: legacy.Adult2Id,
-		mentors_only: legacy.MentorsOnly,
+		adultId: legacy.AdultId,
+		adult2Id: legacy.Adult2Id,
+		mentorsOnly: legacy.MentorsOnly,
 	};
 };
 

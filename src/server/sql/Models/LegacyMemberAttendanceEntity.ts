@@ -1,3 +1,5 @@
+import { MemberAttendanceEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Member-Attendance Entity
  */
@@ -12,7 +14,7 @@ export const FromLegacyMemberAttendanceEntity = (
 ): MemberAttendanceEntity => {
 	return {
 		id: legacy.Id,
-		member_id: legacy.MemberId,
+		memberId: legacy.MemberId,
 		date: legacy.Date,
 	};
 };

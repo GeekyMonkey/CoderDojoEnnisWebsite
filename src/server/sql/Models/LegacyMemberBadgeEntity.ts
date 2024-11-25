@@ -1,3 +1,7 @@
+import { MemberBadgeEntity } from "~~/server/db/entities";
+import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
+import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+
 /**
  * SQL Server Member-Badge Entity
  */
@@ -21,17 +25,17 @@ export const FromLegacyMemberBadgeEntity = (
 ): MemberBadgeEntity => {
 	return {
 		id: legacy.Id,
-		member_id: legacy.MemberId,
-		badge_id: legacy.BadgeId,
-		awarded_by_adult_id: legacy.AwardedByAdultId,
-		application_notes: legacy.ApplicationNotes,
-		awarded_notes: legacy.AwardedNotes,
-		rejected_by_adult_id: legacy.RejectedByAdultId,
-		rejected_notes: legacy.RejectedNotes,
-		application_date: legacy.ApplicationDate,
-		awarded: legacy.Awarded,
-		rejected_date: legacy.RejectedDate,
-		goal_date: legacy.GoalDate,
+		memberId: legacy.MemberId,
+		badgeId: legacy.BadgeId,
+		awardedByAdultId: legacy.AwardedByAdultId,
+		applicationNotes: Utf8EncodeOrNull(legacy.ApplicationNotes),
+		awardedNotes: Utf8EncodeOrNull(legacy.AwardedNotes),
+		rejectedNotes: Utf8EncodeOrNull(legacy.RejectedNotes),
+		rejectedByAdultId: legacy.RejectedByAdultId,
+		applicationDate: NumberToDateOrNull(legacy.ApplicationDate),
+		awarded: NumberToDateOrNull(legacy.Awarded),
+		rejectedDate: NumberToDateOrNull(legacy.RejectedDate),
+		goalDate: NumberToDateOrNull(legacy.GoalDate),
 	};
 };
 

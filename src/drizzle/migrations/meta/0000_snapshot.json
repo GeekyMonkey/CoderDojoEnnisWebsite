@@ -309,12 +309,6 @@
 					"primaryKey": false,
 					"notNull": false
 				},
-				"password_hash1": {
-					"name": "password_hash1",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false
-				},
 				"phone": {
 					"name": "phone",
 					"type": "text",

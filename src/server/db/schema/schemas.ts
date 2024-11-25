@@ -74,11 +74,11 @@ export const members = coderdojo.table(
 		isNinja: boolean("is_ninja").default(false).notNull(),
 		isParent: boolean("is_parent").default(false).notNull(),
 		login: text(),
-		loginDate: timestamp("login_date", { mode: "string" }),
-		loginDatePrevious: timestamp("login_date_previous", { mode: "string" }),
+		loginDate: timestamp("login_date", { mode: "date" }),
+		loginDatePrevious: timestamp("login_date_previous", { mode: "date" }),
 		nameFirst: text("name_first"),
 		nameLast: text("name_last"),
-		passwordHash1: text("password_hash1"),
+		passwordHash: text("password_hash"),
 		phone: text(),
 		registeredCurrentTerm: boolean("registered_current_term")
 			.default(false)
@@ -86,7 +86,6 @@ export const members = coderdojo.table(
 		scratchName: text("scratch_name"),
 		teamId: uuid("team_id"),
 		xboxGamertag: text("xbox_gamertag"),
-		passwordHash: text("password_hash"),
 	},
 	(table) => {
 		return {
@@ -103,10 +102,10 @@ export const sessions = coderdojo.table(
 	"sessions",
 	{
 		id: uuid().primaryKey().notNull(),
-		createdDate: timestamp("created_date", { mode: "string" })
+		createdDate: timestamp("created_date", { mode: "date" })
 			.defaultNow()
 			.notNull(),
-		endDate: timestamp("end_date", { mode: "string" }),
+		endDate: timestamp("end_date", { mode: "date" }),
 		url: text(),
 		topic: text(),
 		adultId: uuid("adult_id"),
@@ -133,8 +132,8 @@ export const memberAttendances = coderdojo.table(
 	"member_attendances",
 	{
 		id: uuid().primaryKey().notNull(),
-		memberId: uuid("member_id"),
-		date: date(),
+		memberId: uuid("member_id").notNull(),
+		date: date({ mode: "date" }).notNull(),
 	},
 	(table) => {
 		return {
@@ -155,8 +154,8 @@ export const memberBadgeCategories = coderdojo.table(
 	"member_badge_categories",
 	{
 		id: uuid().primaryKey().notNull(),
-		memberId: uuid("member_id"),
-		badgeCategoryId: uuid("badge_category_id"),
+		memberId: uuid("member_id").notNull(),
+		badgeCategoryId: uuid("badge_category_id").notNull(),
 	},
 	(table) => {
 		return {
@@ -178,8 +177,8 @@ export const memberParents = coderdojo.table(
 	"member_parents",
 	{
 		id: uuid().primaryKey().notNull(),
-		memberId: uuid("member_id"),
-		parentId: uuid("parent_id"),
+		memberId: uuid("member_id").notNull(),
+		parentId: uuid("parent_id").notNull(),
 	},
 	(table) => {
 		return {
@@ -201,16 +200,16 @@ export const memberBelts = coderdojo.table(
 	"member_belts",
 	{
 		id: uuid().primaryKey().notNull(),
-		memberId: uuid("member_id"),
-		beltId: uuid("belt_id"),
+		memberId: uuid("member_id").notNull(),
+		beltId: uuid("belt_id").notNull(),
 		awardedByAdultId: uuid("awarded_by_adult_id"),
 		applicationNotes: text("application_notes"),
 		awardedNotes: text("awarded_notes"),
 		rejectedByAdultId: uuid("rejected_by_adult_id"),
 		rejectedNotes: text("rejected_notes"),
-		applicationDate: timestamp("application_date", { mode: "string" }),
-		awarded: timestamp({ mode: "string" }),
-		rejectedDate: timestamp("rejected_date", { mode: "string" }),
+		applicationDate: timestamp("application_date", { mode: "date" }),
+		awarded: timestamp({ mode: "date" }),
+		rejectedDate: timestamp("rejected_date", { mode: "date" }),
 	},
 	(table) => {
 		return {
@@ -242,17 +241,17 @@ export const memberBadges = coderdojo.table(
 	"member_badges",
 	{
 		id: uuid().primaryKey().notNull(),
-		memberId: uuid("member_id"),
-		badgeId: uuid("badge_id"),
+		memberId: uuid("member_id").notNull(),
+		badgeId: uuid("badge_id").notNull(),
 		awardedByAdultId: uuid("awarded_by_adult_id"),
 		applicationNotes: text("application_notes"),
 		awardedNotes: text("awarded_notes"),
 		rejectedByAdultId: uuid("rejected_by_adult_id"),
 		rejectedNotes: text("rejected_notes"),
-		applicationDate: timestamp("application_date", { mode: "string" }),
-		awarded: timestamp({ mode: "string" }),
-		rejectedDate: timestamp("rejected_date", { mode: "string" }),
-		goalDate: timestamp("goal_date", { mode: "string" }),
+		applicationDate: timestamp("application_date", { mode: "date" }),
+		awarded: timestamp({ mode: "date" }),
+		rejectedDate: timestamp("rejected_date", { mode: "date" }),
+		goalDate: timestamp("goal_date", { mode: "date" }),
 	},
 	(table) => {
 		return {

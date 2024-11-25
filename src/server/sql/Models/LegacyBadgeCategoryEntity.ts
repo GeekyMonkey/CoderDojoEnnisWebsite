@@ -1,3 +1,5 @@
+import { BadgeCategoryEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Badge Category Entity
  */
@@ -14,8 +16,8 @@ export const FromLegacyBadgeCategoryEntity = (
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
-		category_name: legacy.CategoryName,
-		category_description: legacy.CategoryDescription,
+		categoryName: legacy.CategoryName,
+		categoryDescription: legacy.CategoryDescription,
 	};
 };
 

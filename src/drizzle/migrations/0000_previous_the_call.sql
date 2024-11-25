@@ -54,13 +54,12 @@ CREATE TABLE IF NOT EXISTS "coderdojo"."members" (
 	"login_date_previous" timestamp,
 	"name_first" text,
 	"name_last" text,
-	"password_hash1" text,
+	"password_hash" text,
 	"phone" text,
 	"registered_current_term" boolean DEFAULT false NOT NULL,
 	"scratch_name" text,
 	"team_id" uuid,
-	"xbox_gamertag" text,
-	"password_hash" text
+	"xbox_gamertag" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "coderdojo"."sessions" (

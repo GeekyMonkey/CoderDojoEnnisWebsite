@@ -1,3 +1,7 @@
+import { MemberBeltEntity } from "~~/server/db/entities";
+import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
+import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+
 /**
  * SQL Server Member-Belt Entity
  */
@@ -20,16 +24,16 @@ export const FromLegacyMemberBeltEntity = (
 ): MemberBeltEntity => {
 	return {
 		id: legacy.Id,
-		member_id: legacy.MemberId,
-		belt_id: legacy.BeltId,
-		awarded_by_adult_id: legacy.AwardedByAdultId,
-		application_notes: legacy.ApplicationNotes,
-		awarded_notes: legacy.AwardedNotes,
-		rejected_by_adult_id: legacy.RejectedByAdultId,
-		rejected_notes: legacy.RejectedNotes,
-		application_date: legacy.ApplicationDate,
-		awarded: legacy.Awarded,
-		rejected_date: legacy.RejectedDate,
+		memberId: legacy.MemberId,
+		beltId: legacy.BeltId,
+		awardedByAdultId: legacy.AwardedByAdultId,
+		applicationNotes: Utf8EncodeOrNull(legacy.ApplicationNotes),
+		awardedNotes: Utf8EncodeOrNull(legacy.AwardedNotes),
+		rejectedNotes: Utf8EncodeOrNull(legacy.RejectedNotes),
+		rejectedByAdultId: legacy.RejectedByAdultId,
+		applicationDate: NumberToDateOrNull(legacy.ApplicationDate),
+		awarded: NumberToDateOrNull(legacy.Awarded),
+		rejectedDate: NumberToDateOrNull(legacy.RejectedDate),
 	};
 };
 

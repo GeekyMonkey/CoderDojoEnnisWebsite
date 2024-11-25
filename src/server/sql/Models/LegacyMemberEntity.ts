@@ -1,3 +1,7 @@
+import { MemberEntity } from "~~/server/db/entities";
+import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
+import { Utf8Encode, Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+
 /**
  * SQL Server Member Entity
  */
@@ -27,27 +31,27 @@ export const FromLegacyMemberEntity = (
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
-		birth_year: legacy.BirthYear,
+		birthYear: legacy.BirthYear,
 		email: null,
-		fingerprint_id: legacy.FingerprintId,
-		garda_vetted: false,
-		github_login: legacy.GithubLogin,
-		goal_long_term: legacy.GoalLongTerm,
-		goal_short_term: legacy.GoalShortTerm,
-		is_mentor: false,
-		is_ninja: true,
-		is_parent: false,
-		login_date_previous: legacy.LoginDatePrevious,
-		login_date: legacy.LoginDate,
-		login: legacy.Login,
-		name_first: legacy.FirstName,
-		name_last: legacy.LastName,
-		password_hash: EncodePasswordHash(legacy.PasswordHash),
+		fingerprintId: legacy.FingerprintId,
+		gardaVetted: false,
+		githubLogin: legacy.GithubLogin,
+		goalLongTerm: legacy.GoalLongTerm,
+		goalShortTerm: legacy.GoalShortTerm,
+		isMentor: false,
+		isNinja: true,
+		isParent: false,
+		loginDatePrevious: NumberToDateOrNull(legacy.LoginDatePrevious),
+		loginDate: NumberToDateOrNull(legacy.LoginDate),
+		login: Utf8EncodeOrNull(legacy.Login),
+		nameFirst: Utf8Encode(legacy.FirstName),
+		nameLast: Utf8Encode(legacy.LastName),
+		passwordHash: EncodePasswordHash(legacy.PasswordHash),
 		phone: null,
-		registered_current_term: legacy.RegisteredCurrentTerm,
-		scratch_name: legacy.ScratchName,
-		team_id: legacy.TeamId,
-		xbox_gamertag: legacy.XboxGamertag,
+		registeredCurrentTerm: legacy.RegisteredCurrentTerm,
+		scratchName: legacy.ScratchName,
+		teamId: legacy.TeamId,
+		xboxGamertag: legacy.XboxGamertag,
 	};
 };
 

@@ -1,3 +1,5 @@
+import { MemberBadgeCategoryEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Adult-BadgeCategory Entity
  */
@@ -12,8 +14,8 @@ export const FromLegacyAdultBadgeCategoryEntity = (
 ): MemberBadgeCategoryEntity => {
 	return {
 		id: legacy.Id,
-		member_id: legacy.MemberId,
-		badge_category_id: legacy.BadgeCategoryId,
+		memberId: legacy.MemberId,
+		badgeCategoryId: legacy.BadgeCategoryId,
 	};
 };
 
