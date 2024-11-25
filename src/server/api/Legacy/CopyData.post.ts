@@ -28,6 +28,8 @@ import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/Legac
 import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
 import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
 import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
+import { DB } from "~~/server/db";
+import { teams as teamsTable } from "~~/server/db/schema/schemas";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {};
@@ -74,16 +76,16 @@ async function CopyData(resp: ResponseBody): Promise<string[]> {
 		logs.push("Supabase client created");
 
 		logs.push(...(await CopyTeamsTable(supabase)));
-		logs.push(...(await CopyBadgeCategoriesTable(supabase)));
-		logs.push(...(await CopyBadgesTable(supabase)));
-		logs.push(...(await CopyBeltsTable(supabase)));
-		logs.push(...(await CopyMembersTable(supabase)));
-		logs.push(...(await CopySessionsTable(supabase)));
-		logs.push(...(await CopyAttendanceTable(supabase)));
-		logs.push(...(await CopyMemberBadgeCategoriesTable(supabase)));
-		logs.push(...(await CopyMemberParentsTable(supabase)));
-		logs.push(...(await CopyMemberBadgesTable(supabase)));
-		logs.push(...(await CopyMemberBeltsTable(supabase)));
+		// logs.push(...(await CopyBadgeCategoriesTable(supabase)));
+		// logs.push(...(await CopyBadgesTable(supabase)));
+		// logs.push(...(await CopyBeltsTable(supabase)));
+		// logs.push(...(await CopyMembersTable(supabase)));
+		// logs.push(...(await CopySessionsTable(supabase)));
+		// logs.push(...(await CopyAttendanceTable(supabase)));
+		// logs.push(...(await CopyMemberBadgeCategoriesTable(supabase)));
+		// logs.push(...(await CopyMemberParentsTable(supabase)));
+		// logs.push(...(await CopyMemberBadgesTable(supabase)));
+		// logs.push(...(await CopyMemberBeltsTable(supabase)));
 	} catch (error: any) {
 		console.error("Error copying data:", error);
 		logs.push("Error: " + error.message);

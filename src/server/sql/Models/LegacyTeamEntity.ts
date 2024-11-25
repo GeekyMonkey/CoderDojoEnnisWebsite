@@ -1,3 +1,5 @@
+import { TeamEntity } from "~~/server/db/entities";
+
 /**
  * SQL Server Team Entity
  */
@@ -17,7 +19,7 @@ export const FromLegacyTeamEntity = (legacy: LegacyTeamEntity): TeamEntity => {
 		goal: legacy.Goal,
 		hexcode: legacy.HexCode,
 		notes: legacy.Notes,
-		team_name: legacy.TeamName,
+		teamName: legacy.TeamName,
 	};
 };
 
