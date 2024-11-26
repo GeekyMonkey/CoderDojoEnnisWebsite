@@ -19,9 +19,7 @@ export default defineNuxtConfig({
 		pageTransition: false,
 	},
 
-	build: {
-		transpile: ["trpc-nuxt"],
-	},
+	build: {},
 
 	// builder: "vite",
 

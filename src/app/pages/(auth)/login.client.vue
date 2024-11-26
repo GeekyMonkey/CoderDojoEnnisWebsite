@@ -18,7 +18,6 @@
 	} from "@internationalized/date";
 	import type { Session } from "@supabase/gotrue-js";
 	import { createClient, SupabaseClient } from "@supabase/supabase-js";
-	import { UseTrpc } from "~/composables/UseTrpc";
 	import { useTeamsStore } from "~/composables/TeamsStore";
 
 	const supabase: SupabaseClient = useSupabaseClient();
@@ -27,16 +26,11 @@
 		layout: "auth",
 	});
 
-	const $trpc = UseTrpc();
-
-	const { data: hello } = await $trpc.hello.useQuery({
-		text: "sexy",
-	});
-
-	const { teams, isLoading, isError, error } = useTeamsStore();
+	const TeamsShow = ref(false);
+	const { TeamOptions, isLoading, isError, error } = useTeamsStore();
 
 	const teamCount = computed<number>(() => {
-		return teams.value?.length ?? 0;
+		return TeamOptions.value?.length ?? 0;
 	});
 
 	const showPassword = ref(false);
@@ -66,6 +60,7 @@
 	};
 
 	const bogus = async (num: number) => {
+		TeamsShow.value = true;
 		console.log("Bogus", num);
 		const result = await $fetch<{ session: Session }>("/api/Auth/Bogus", {
 			method: "POST",
@@ -89,8 +84,9 @@
 		<Card class="w-full max-w-md">
 			<CardHeader>
 				<CardTitle>{{ $t("login.title") }}</CardTitle>
-				<p>Yo: {{ hello?.greeting }}</p>
-				<p>{{ teamCount }} Teams: {{ teams }}</p>
+				<div v-if="TeamsShow">
+					<p>{{ teamCount }} Teams: {{ TeamOptions }}</p>
+				</div>
 			</CardHeader>
 			<CardContent>
 				<form @submit.prevent="handleLogin">

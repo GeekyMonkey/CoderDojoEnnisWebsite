@@ -1,24 +1,43 @@
 import { useQuery } from "@tanstack/vue-query";
-import { UseTrpc } from "./UseTrpc";
+import { computed } from "vue";
+import type { ApiResponse, SelectOption } from "~~/shared/types";
 
 export function useTeamsStore() {
-	const trpc = UseTrpc();
-
+	/**
+	 * Teams Query
+	 */
 	const {
-		data: teams,
+		data: Teams,
 		isLoading,
 		isError,
 		error,
 	} = useQuery({
 		queryKey: ["teams"],
 		queryFn: async () => {
-			const teams = await trpc.teams.query({});
-			return teams;
+			const includeDeleted: boolean = false;
+			const response = await $fetch<ApiResponse<TeamModel[]>>(
+				`/api/Teams/list?include_deleted=${includeDeleted}`,
+			);
+			if (!response.success) {
+				throw new Error(response.error || "api error");
+			}
+			return response.data;
 		},
 	});
 
+	/**
+	 * Dropdown Options for Teams
+	 */
+	const TeamOptions = computed<SelectOption[]>(() => {
+		return (Teams.value || []).map((team) => ({
+			value: team.id,
+			label: team.teamName,
+		}));
+	});
+
 	return {
-		teams,
+		Teams,
+		TeamOptions,
 		isLoading,
 		isError,
 		error,
