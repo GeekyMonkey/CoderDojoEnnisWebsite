@@ -37,5 +37,22 @@
   "SQL-Formatter-VSCode.dialect": "postgresql",
   "SQL-Formatter-VSCode.ignoreTabSettings": true,
   "SQL-Formatter-VSCode.insertSpacesOverride": true,
-  "editor.gotoLocation.multipleDefinitions": "goto"
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "folder-color.pathColors": [
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\app\\",
+      "color": "foldercolorizer.color_0066ff",
+      "badge": "🔵"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\server\\",
+      "color": "foldercolorizer.color_990033",
+      "badge": "🔴"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\shared\\",
+      "color": "foldercolorizer.color_6666ff",
+      "badge": "🟣"
+    }
+  ]
 }

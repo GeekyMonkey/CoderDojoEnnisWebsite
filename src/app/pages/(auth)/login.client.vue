@@ -18,11 +18,18 @@
 	} from "@internationalized/date";
 	import type { Session } from "@supabase/gotrue-js";
 	import { createClient, SupabaseClient } from "@supabase/supabase-js";
+	import { UseTrpc } from "~/composables/UseTrpc";
 
 	const supabase: SupabaseClient = useSupabaseClient();
 
 	definePageMeta({
 		layout: "auth",
+	});
+
+	const $trpc = UseTrpc();
+
+	const { data: hello } = await $trpc.hello.useQuery({
+		text: "sexy",
 	});
 
 	const showPassword = ref(false);
@@ -75,6 +82,7 @@
 		<Card class="w-full max-w-md">
 			<CardHeader>
 				<CardTitle>{{ $t("login.title") }}</CardTitle>
+				<p>Yo: {{ hello?.greeting }}</p>
 			</CardHeader>
 			<CardContent>
 				<form @submit.prevent="handleLogin">

@@ -19,6 +19,10 @@ export default defineNuxtConfig({
 		pageTransition: false,
 	},
 
+	build: {
+		transpile: ["trpc-nuxt"],
+	},
+
 	// builder: "vite",
 
 	colorMode: {
@@ -102,6 +106,7 @@ export default defineNuxtConfig({
 		// "@nuxt/image",
 		// "@primevue/nuxt-module",
 		// "@nuxt/scripts",
+		"@hebilicious/vue-query-nuxt",
 		"@nuxt/icon",
 		"@nuxtjs/color-mode",
 		"@nuxtjs/google-fonts",
