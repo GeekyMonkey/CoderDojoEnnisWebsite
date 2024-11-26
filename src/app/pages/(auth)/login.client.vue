@@ -17,22 +17,14 @@
 		today,
 	} from "@internationalized/date";
 	import type { Session } from "@supabase/gotrue-js";
-	import { createClient, SupabaseClient } from "@supabase/supabase-js";
-	import { useTeamsStore } from "~/composables/TeamsStore";
-
-	const supabase: SupabaseClient = useSupabaseClient();
+	import { SupabaseClient } from "@supabase/supabase-js";
+	import type { ApiResponse } from "~~/shared/types";
 
 	definePageMeta({
 		layout: "auth",
 	});
 
-	const TeamsShow = ref(false);
-	const { TeamOptions, isLoading, isError, error } = useTeamsStore();
-
-	const teamCount = computed<number>(() => {
-		return TeamOptions.value?.length ?? 0;
-	});
-
+	const supabase: SupabaseClient = useSupabaseClient();
 	const showPassword = ref(false);
 
 	// Form Validation & State
@@ -60,21 +52,26 @@
 	};
 
 	const bogus = async (num: number) => {
-		TeamsShow.value = true;
 		console.log("Bogus", num);
-		const result = await $fetch<{ session: Session }>("/api/Auth/Bogus", {
-			method: "POST",
-			body: { bogusIndex: num },
-		});
+		const result = await $fetch<ApiResponse<{ session: Session }>>(
+			"/api/Auth/Login",
+			{
+				method: "POST",
+				body: {
+					username: formState.username,
+					password: formState.password,
+				},
+			},
+		);
 		console.log("result:", result);
-		if (result) {
-			console.log("JWT:", { session: result.session });
+		if (result.success) {
+			console.log("JWT:", { session: result.data.session });
 
-			supabase.auth.setSession(result.session);
+			supabase.auth.setSession(result.data.session);
 
-			supabase.auth.getUser().then((user) => {
-				console.log("User:", user);
-			});
+			// supabase.auth.getUser().then((user) => {
+			// 	console.log("User:", user);
+			// });
 		}
 	};
 </script>
@@ -84,9 +81,6 @@
 		<Card class="w-full max-w-md">
 			<CardHeader>
 				<CardTitle>{{ $t("login.title") }}</CardTitle>
-				<div v-if="TeamsShow">
-					<p>{{ teamCount }} Teams: {{ TeamOptions }}</p>
-				</div>
 			</CardHeader>
 			<CardContent>
 				<form @submit.prevent="handleLogin">

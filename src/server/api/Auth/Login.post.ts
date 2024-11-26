@@ -1,28 +1,42 @@
 import { createClient, Session } from "@supabase/supabase-js";
 import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
+import {
+	AuthTokenResponse,
+	AuthTokenResponsePassword,
+} from "@supabase/gotrue-js";
 
 // Define interfaces for the request body and query parameters
-interface RequestBody {
-	bogusIndex: number;
-}
+type RequestBody = {
+	username: string;
+	password: string;
+};
 
+type ResponseBody = {
+	session: Session | null;
+};
+
+/**
+ * POST: /api/Auth/Login
+ */
 export default defineEventHandler(
-	async (event): Promise<{ session: Session | null }> => {
+	async (event): Promise<ApiResponse<ResponseBody>> => {
 		const { req } = event.node;
 
-		// Access request body
-		const body: RequestBody = await readBody(event);
+		const { username, password } = await readBody<RequestBody>(event);
 
-		const data = await authenticateUser();
+		const data = await authenticateUser(username, password);
 
 		const config = useRuntimeConfig();
-		const supabaseUrl = config.public.supabase.url;
-		const supabaseServiceRoleKey = config.private.supabase.password;
+		// const supabaseUrl = config.public.supabase.url;
+		// const supabaseServiceRoleKey = config.private.supabase.password;
 
 		return {
+			success: true,
+			data: {
+				session: data?.session ?? null,
+			},
 			// bi: body.bogusIndex,
 			// status: "k",
-			session: data?.session ?? null,
 			// user: data,
 			// supabaseUrl,
 			// supabaseServiceRoleKey,
@@ -31,7 +45,13 @@ export default defineEventHandler(
 	},
 );
 
-async function authenticateUser() {
+/**
+ * Authenticate login
+ */
+async function authenticateUser(
+	username: string,
+	password: string,
+): Promise<any | null> {
 	try {
 		// Get Supabase configuration from runtime config
 		const config = useRuntimeConfig();

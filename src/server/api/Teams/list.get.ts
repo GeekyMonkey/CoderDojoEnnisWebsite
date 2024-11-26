@@ -1,12 +1,8 @@
 import { defineEventHandler, readBody } from "#imports";
-import { asc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { TeamEntity, ToTeamModel, ToTeamModels } from "~~/server/db/entities";
 import { teams } from "~~/server/db/schema/schemas";
-import {
-	DrizzleTables,
-	DrizzleType,
-	UseDrizzle,
-} from "~~/server/db/UseDrizzle";
+import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
 import { ApiResponse } from "~~/shared/types/ApiResponse";
 import { TeamModel } from "~~/shared/types/models/TeamModel";
 

@@ -1,8 +1,4 @@
-import fs from "fs";
-import path from "path";
-// import { buildTime, version } from "./build/Version";
 import { defineNuxtConfig } from "nuxt/config";
-import { supabase } from "~/utils/supabaseClient";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
