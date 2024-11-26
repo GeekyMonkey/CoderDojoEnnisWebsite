@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { Icon } from "@iconify/vue";
-	import { reactive, ref, type Ref } from "vue";
+	import { computed, reactive, ref, type Ref } from "vue";
 	import { z } from "zod";
 	import {
 		Card,
@@ -19,6 +19,7 @@
 	import type { Session } from "@supabase/gotrue-js";
 	import { createClient, SupabaseClient } from "@supabase/supabase-js";
 	import { UseTrpc } from "~/composables/UseTrpc";
+	import { useTeamsStore } from "~/composables/TeamsStore";
 
 	const supabase: SupabaseClient = useSupabaseClient();
 
@@ -30,6 +31,12 @@
 
 	const { data: hello } = await $trpc.hello.useQuery({
 		text: "sexy",
+	});
+
+	const { teams, isLoading, isError, error } = useTeamsStore();
+
+	const teamCount = computed<number>(() => {
+		return teams.value?.length ?? 0;
 	});
 
 	const showPassword = ref(false);
@@ -83,6 +90,7 @@
 			<CardHeader>
 				<CardTitle>{{ $t("login.title") }}</CardTitle>
 				<p>Yo: {{ hello?.greeting }}</p>
+				<p>{{ teamCount }} Teams: {{ teams }}</p>
 			</CardHeader>
 			<CardContent>
 				<form @submit.prevent="handleLogin">

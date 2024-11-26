@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/vue-query";
-import { useTRPC } from "#app";
+import { UseTrpc } from "./UseTrpc";
 
 export function useTeamsStore() {
-	const trpc = useTRPC();
+	const trpc = UseTrpc();
 
 	const {
 		data: teams,
 		isLoading,
 		isError,
 		error,
-	} = useQuery(["teams"], async () => {
-		const { data } = await trpc.query("teams.getAll");
-		return data;
+	} = useQuery({
+		queryKey: ["teams"],
+		queryFn: async () => {
+			const teams = await trpc.teams.query({});
+			return teams;
+		},
 	});
 
 	return {

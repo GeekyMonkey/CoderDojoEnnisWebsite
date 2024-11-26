@@ -13,6 +13,12 @@ export const appRouter = router({
 				greeting: `hello ${input.text ?? "world"}`,
 			};
 		}),
+	teams: publicProcedure.input(z.object({})).query(() => {
+		return [
+			{ id: "1", name: "Team 1" },
+			{ id: "2", name: "Team 2" },
+		];
+	}),
 });
 
 // export type definition of API
