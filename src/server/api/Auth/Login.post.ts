@@ -4,6 +4,10 @@ import {
 	AuthTokenResponse,
 	AuthTokenResponsePassword,
 } from "@supabase/gotrue-js";
+import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
+import { members } from "~~/server/db/schema/schemas";
+import { and, eq, ilike, or } from "drizzle-orm";
+import { GeneratePasswordHash, MemberEntity } from "~~/server/db/entities";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {
@@ -13,6 +17,7 @@ type RequestBody = {
 
 type ResponseBody = {
 	session: Session | null;
+	logs: string[];
 };
 
 /**
@@ -24,16 +29,21 @@ export default defineEventHandler(
 
 		const { username, password } = await readBody<RequestBody>(event);
 
-		const data = await authenticateUser(username, password);
+		const logs: string[] = [];
 
-		const config = useRuntimeConfig();
+		const member = await findMember(username, password, logs);
+
+		// const data = await authenticateUser(username, password);
+
+		// const config = useRuntimeConfig();
 		// const supabaseUrl = config.public.supabase.url;
 		// const supabaseServiceRoleKey = config.private.supabase.password;
 
 		return {
 			success: true,
 			data: {
-				session: data?.session ?? null,
+				session: null, // data?.session ?? null,
+				logs,
 			},
 			// bi: body.bogusIndex,
 			// status: "k",
@@ -44,6 +54,62 @@ export default defineEventHandler(
 		};
 	},
 );
+
+/**
+ * Find a member with a matching username and password
+ */
+async function findMember(
+	username: string,
+	password: string,
+	logs: string[],
+): Promise<MemberEntity | null> {
+	const db: DrizzleType = UseDrizzle();
+
+	password = password.trim();
+	const salt = process.env.PASS_SALT || "_Salty!_";
+	const passwordHash: string | null = GeneratePasswordHash(password, salt);
+	logs.push("Hash: " + passwordHash);
+
+	const usernameLower = username.trim().toLowerCase();
+	const [usernameFirst, usernameLast] = usernameLower.split(" ");
+	logs.push("Username: " + usernameLower);
+	logs.push("First name: " + usernameFirst);
+	logs.push("Last name: " + usernameLast);
+
+	const memberLoginQuery = db
+		.select()
+		.from(members)
+		.where(
+			and(
+				eq(members.deleted, false),
+				eq(members.passwordHash, passwordHash ?? "_"),
+				or(
+					ilike(members.login, usernameLower),
+					ilike(members.email, usernameLower),
+					and(
+						ilike(members.nameFirst, usernameFirst),
+						ilike(members.nameLast, usernameLast),
+					),
+				),
+			),
+		);
+
+	const loginMatches = await memberLoginQuery.execute();
+	if (loginMatches.length === 0) {
+		logs.push("member not found");
+		return null;
+	}
+
+	if (loginMatches.length > 1) {
+		logs.push(
+			"Error: Multiple members found with the same login: " + username,
+		);
+	}
+
+	logs.push("member found: " + loginMatches[0].login);
+
+	return loginMatches?.[0] ?? null;
+}
 
 /**
  * Authenticate login

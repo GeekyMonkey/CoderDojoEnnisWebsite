@@ -38,21 +38,13 @@
 		password: "",
 	});
 
-	const dt = ref(today(getLocalTimeZone())) as Ref<DateValue>;
-
 	/** Show/Hide Password text */
 	const togglePasswordVisibility = (): void => {
 		showPassword.value = !showPassword.value;
 	};
 
-	const handleLogin = () => {
-		// Handle login logic here
-		console.log("Username:", formState.username);
-		console.log("Password:", formState.password);
-	};
-
-	const bogus = async (num: number) => {
-		console.log("Bogus", num);
+	/** Handle Login */
+	const handleLogin = async () => {
 		const result = await $fetch<ApiResponse<{ session: Session }>>(
 			"/api/Auth/Login",
 			{
@@ -66,7 +58,6 @@
 		console.log("result:", result);
 		if (result.success) {
 			console.log("JWT:", { session: result.data.session });
-
 			supabase.auth.setSession(result.data.session);
 
 			// supabase.auth.getUser().then((user) => {
@@ -130,13 +121,6 @@
 						{{ $t("login.loginButton") }}
 					</Button>
 				</form>
-
-				<div class="mt-4">
-					<h2>Delete Me</h2>
-					<Button @click="bogus(1)" variant="link" class="text-sm">
-						{{ $t("Bogus 1") }}
-					</Button>
-				</div>
 			</CardContent>
 		</Card>
 	</div>

@@ -5,11 +5,11 @@ meta {
 }
 
 get {
-  url: {{Host}}/api/Teams/list?deleted=true
+  url: {{Host}}/api/Teams/list?include_deleted=false
   body: none
   auth: none
 }
 
 params:query {
-  deleted: true
+  include_deleted: false
 }

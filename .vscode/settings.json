@@ -53,6 +53,11 @@
       "folderPath": "CoderDojoEnnisWebsite\\src\\shared\\",
       "color": "foldercolorizer.color_6666ff",
       "badge": "🟣"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\reference\\",
+      "color": "foldercolorizer.color_333333",
+      "badge": "⚫"
     }
   ]
 }

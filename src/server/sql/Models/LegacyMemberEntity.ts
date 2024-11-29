@@ -46,7 +46,7 @@ export const FromLegacyMemberEntity = (
 		login: Utf8EncodeOrNull(legacy.Login),
 		nameFirst: Utf8Encode(legacy.FirstName),
 		nameLast: Utf8Encode(legacy.LastName),
-		passwordHash: EncodePasswordHash(legacy.PasswordHash),
+		passwordHash: null,
 		phone: null,
 		registeredCurrentTerm: legacy.RegisteredCurrentTerm,
 		scratchName: legacy.ScratchName,

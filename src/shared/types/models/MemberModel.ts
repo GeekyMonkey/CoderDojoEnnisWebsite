@@ -1,3 +1,5 @@
+import { Base64Encode } from "~~/shared/utils/StringHelpers";
+
 /**
  * Member Model
  */
@@ -37,7 +39,7 @@ export const EncodePasswordHash = (
 		return null;
 	}
 	try {
-		const encoded: string = Buffer.from(passwordHash).toString("base64");
+		const encoded: string = Base64Encode(passwordHash);
 		return encoded;
 	} catch (err) {
 		throw new Error(

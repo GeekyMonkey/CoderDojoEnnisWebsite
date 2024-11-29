@@ -41,6 +41,7 @@ import {
 	sessions,
 	teams as teamsTable,
 } from "~~/server/db/schema/schemas";
+import { eq } from "drizzle-orm";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {};
@@ -81,11 +82,11 @@ async function CopyData(resp: ResponseBody): Promise<string[]> {
 		const db = UseDrizzle();
 		logs.push("Drizzle client created");
 
-		// Copy the data
-		logs.push(...(await CopyTeamsTable(db)));
-		logs.push(...(await CopyBadgeCategoriesTable(db)));
-		logs.push(...(await CopyBadgesTable(db)));
-		logs.push(...(await CopyBeltsTable(db)));
+		// Copy the data (order matters)
+		// logs.push(...(await CopyTeamsTable(db)));
+		// logs.push(...(await CopyBadgeCategoriesTable(db)));
+		// logs.push(...(await CopyBadgesTable(db)));
+		// logs.push(...(await CopyBeltsTable(db)));
 		logs.push(...(await CopyMembersTable(db)));
 		logs.push(...(await CopySessionsTable(db)));
 		logs.push(...(await CopyAttendanceTable(db)));
@@ -204,6 +205,9 @@ async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
 	const oldNinjas = await ReadNinjas();
 	const newNinjas = FromLegacyMemberEntities(oldNinjas);
 
+	const oldAdults = await ReadAdults();
+	const newAdults = FromLegacyAdultEntities(oldAdults);
+
 	// Copy ninjas one at a time
 	// for (const ninja of newNinjas) {
 	// 	try {
@@ -213,6 +217,19 @@ async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
 	// 		logs.push(`Error in ninja ${ninja.id}`);
 	// 		logs.push(`Insert: ${error.message}`);
 	// 		logs.push(JSON.stringify({ ninja }));
+	// 		break;
+	// 	}
+	// }
+
+	// Copy adults one at a time
+	// for (const adult of newAdults) {
+	// 	try {
+	// 		await db.insert(members).values(adult).execute();
+	// 		// logs.push(`Inserted ninja ${ninja.id}`);
+	// 	} catch (error: any) {
+	// 		logs.push(`Error in ninja ${adult.id}`);
+	// 		logs.push(`Insert: ${error.message}`);
+	// 		logs.push(JSON.stringify({ adult }));
 	// 		break;
 	// 	}
 	// }
@@ -228,10 +245,7 @@ async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
 	}
 
 	// Copy all adults at once
-	const oldAdults = await ReadAdults();
-	const newAdults = FromLegacyAdultEntities(oldAdults);
 	logs.push("Copying mebers table with " + oldAdults.length + " adults");
-
 	try {
 		await db.insert(members).values(newAdults).execute();
 		logs.push(`Inserted adults`);
@@ -386,7 +400,7 @@ async function CopyAttendanceTable(db: DrizzleType): Promise<string[]> {
 	logs.push(
 		"Copying Attendances table with " +
 			oldAdultEntities.length +
-			" member rows",
+			" adult rows",
 	);
 	try {
 		await db.insert(memberAttendances).values(newEntities).execute();

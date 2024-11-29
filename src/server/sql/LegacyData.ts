@@ -32,6 +32,14 @@ async function ReadTable<T>(tableName: string): Promise<T[]> {
 		let result = await pool
 			.request()
 			.query<T>(`SELECT * FROM ${tableName}`);
+
+		// Convert passwordHash field to byte array if it exists
+		result.recordset.forEach((record: any) => {
+			if (record.PasswordHash) {
+				// Manually convert legacy data reading here
+			}
+		});
+
 		return result.recordset;
 	} catch (err: any) {
 		throw new Error("SQL error: ", err.message);

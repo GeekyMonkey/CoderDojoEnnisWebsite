@@ -15,12 +15,25 @@ export const FromLegacyMemberAttendanceEntity = (
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
-		date: legacy.Date,
+		date: new Date(legacy.Date),
 	};
 };
 
 export const FromLegacyMemberAttendanceEntities = (
 	legacies: LegacyMemberAttendanceEntity[],
 ): MemberAttendanceEntity[] => {
-	return legacies.map(FromLegacyMemberAttendanceEntity);
+	let attendances = legacies.map(FromLegacyMemberAttendanceEntity);
+
+	// Remove duplicates
+	attendances = attendances.filter(
+		(attendance, index, self) =>
+			index ===
+			self.findIndex(
+				(t) =>
+					t.memberId === attendance.memberId &&
+					t.date === attendance.date,
+			),
+	);
+
+	return attendances;
 };

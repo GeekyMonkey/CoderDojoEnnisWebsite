@@ -1,6 +1,7 @@
 import { MemberModel } from "~~/shared/types/models/MemberModel";
 import { members } from "../schema/schemas";
 import { DateToNumberOrNull } from "~~/shared/utils/DateHelpers";
+import { createHash } from "crypto";
 
 export type MemberEntity = typeof members.$inferSelect;
 
@@ -20,4 +21,21 @@ export const ToMemberModel = (entity: MemberEntity): MemberModel => {
  */
 export const ToMemberModels = (entities: MemberEntity[]): MemberModel[] => {
 	return entities.map(ToMemberModel);
+};
+
+/**
+ * Generate a password hash
+ */
+export const GeneratePasswordHash = (
+	password: string,
+	salt: string,
+): string | null => {
+	if (!password) {
+		return null;
+	}
+	const passClean = (password || "").toLowerCase().trim();
+	const toHash = `${passClean}-${salt}`;
+	const hasher = createHash("md5");
+	hasher.update(toHash); // Simplify & hash
+	return hasher.digest("base64url");
 };
