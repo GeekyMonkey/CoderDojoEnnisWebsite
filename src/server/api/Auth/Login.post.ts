@@ -1,4 +1,10 @@
-import { createClient, Session } from "@supabase/supabase-js";
+import {
+	AuthError,
+	createClient,
+	Session,
+	User,
+	WeakPassword,
+} from "@supabase/supabase-js";
 import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
 import {
 	AuthTokenResponse,
@@ -33,24 +39,17 @@ export default defineEventHandler(
 
 		const member = await findMember(username, password, logs);
 
-		// const data = await authenticateUser(username, password);
-
-		// const config = useRuntimeConfig();
-		// const supabaseUrl = config.public.supabase.url;
-		// const supabaseServiceRoleKey = config.private.supabase.password;
+		let user = null;
+		if (member != null) {
+			user = await loginToSupabase(member, logs);
+		}
 
 		return {
 			success: true,
 			data: {
-				session: null, // data?.session ?? null,
+				session: user?.session ?? null,
 				logs,
 			},
-			// bi: body.bogusIndex,
-			// status: "k",
-			// user: data,
-			// supabaseUrl,
-			// supabaseServiceRoleKey,
-			// env: process.env,
 		};
 	},
 );
@@ -112,35 +111,91 @@ async function findMember(
 }
 
 /**
- * Authenticate login
+ * Member authenticated, now login to Supabase
  */
-async function authenticateUser(
-	username: string,
-	password: string,
+async function loginToSupabase(
+	member: MemberEntity,
+	logs: string[],
 ): Promise<any | null> {
 	try {
 		// Get Supabase configuration from runtime config
 		const config = useRuntimeConfig();
 		const supabaseUrl = config.public.supabase.url;
 		const supabaseServiceRoleKey = config.private.supabase.password;
-
-		// Create Supabase client
 		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-		const userId = "cc4c3811-7650-491e-942b-ffd68a6c34a6";
-		const { data: authTokenResponse, error } =
-			await supabase.auth.signInWithPassword({
-				email: "russ@coderdojoennis.com",
-				password: "plah",
-			});
+		const supabaseEmail = `${member.id}@coderdojoennis.com`;
+		const supabasePass = GeneratePasswordHash(
+			String(member.id),
+			process.env.PASS_SALT ?? "_Salty!_",
+		)!;
+		logs.push("Supabase email: " + supabaseEmail);
 
-		if (error) {
-			throw error;
+		// Try to sign in with the password
+		let authTokenResponse: {
+			user: User | null;
+			session: Session | null;
+			weakPassword?: WeakPassword | null | undefined;
+		} | null = null;
+		let error: AuthError | null = null;
+		try {
+			const signInResponse = await supabase.auth.signInWithPassword({
+				email: supabaseEmail,
+				password: supabasePass,
+			});
+			logs.push("Sign in response: " + JSON.stringify(signInResponse));
+			authTokenResponse = signInResponse.data;
+			error = signInResponse.error;
+			if (error) {
+				logs.push("Sign in error: " + JSON.stringify(error));
+				throw error;
+			}
+		} catch (error) {
+			// sign in failed, try creating user
+			logs.push("Create new supabase uer: " + supabaseEmail);
+			const signedUp = await supabase.auth.signUp({
+				email: supabaseEmail,
+				password: supabasePass,
+			});
+			if (signedUp.error) {
+				logs.push("SignUp error: " + signedUp.error.message);
+				throw signedUp.error;
+			}
+			if (signedUp.data.user) {
+				if (!signedUp.data.user!.confirmed_at) {
+					const now = new Date().toISOString();
+					signedUp.data.user.confirmed_at = now;
+					signedUp.data.user.email_confirmed_at = now;
+				}
+
+				await supabase.auth.updateUser(signedUp.data.user!);
+				logs.push("Confirmed new user");
+			}
+
+			if (signedUp.data.session) {
+				authTokenResponse = signedUp.data;
+				error = signedUp.error;
+			} else {
+				logs.push("Retry sign in");
+				const signInResponse = await supabase.auth.signInWithPassword({
+					email: supabaseEmail,
+					password: supabasePass,
+				});
+				logs.push(
+					"Sign in 2 response: " + JSON.stringify(signInResponse),
+				);
+				authTokenResponse = signInResponse.data;
+				error = signInResponse.error;
+				if (error) {
+					logs.push("Sign in 2 error: " + JSON.stringify(error));
+					throw error;
+				}
+			}
 		}
 
 		// Now that i have the auth token, i can use it to authenticate the user
 		const { user, session } = authTokenResponse;
-		console.log("User authenticated:", user, session);
+		console.log("User authenticated:", { user, session });
 
 		return authTokenResponse;
 	} catch (error) {
