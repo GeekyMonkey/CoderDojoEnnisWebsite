@@ -9,8 +9,11 @@ export type MemberEntity = typeof members.$inferSelect;
  * Convert a UI Model
  */
 export const ToMemberModel = (entity: MemberEntity): MemberModel => {
+	// Exclude private properties
+	const { passwordHash, ...rest } = entity;
+
 	return {
-		...entity,
+		...rest,
 		loginDate: DateToNumberOrNull(entity.loginDate),
 		loginDatePrevious: DateToNumberOrNull(entity.loginDatePrevious),
 	};

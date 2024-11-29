@@ -13,7 +13,13 @@ import {
 import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
 import { members } from "~~/server/db/schema/schemas";
 import { and, eq, ilike, or } from "drizzle-orm";
-import { GeneratePasswordHash, MemberEntity } from "~~/server/db/entities";
+import {
+	GeneratePasswordHash,
+	MemberEntity,
+	ToMemberModel,
+} from "~~/server/db/entities";
+import { MemberModel } from "~~/shared/types";
+import { FromLegacyMemberEntity } from "~~/server/sql/Models/LegacyMemberEntity";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {
@@ -22,8 +28,8 @@ type RequestBody = {
 };
 
 type ResponseBody = {
+	member: MemberModel | null;
 	session: Session | null;
-	logs: string[];
 };
 
 /**
@@ -37,20 +43,33 @@ export default defineEventHandler(
 
 		const logs: string[] = [];
 
-		const member = await findMember(username, password, logs);
+		const member: MemberEntity | null = await findMember(
+			username,
+			password,
+			logs,
+		);
 
 		let user = null;
 		if (member != null) {
 			user = await loginToSupabase(member, logs);
 		}
 
-		return {
-			success: true,
-			data: {
-				session: user?.session ?? null,
+		if (member && user) {
+			return {
+				success: true,
+				data: {
+					member: ToMemberModel(member!),
+					session: user?.session ?? null,
+				},
 				logs,
-			},
-		};
+			};
+		} else {
+			return {
+				success: false,
+				error: "Invalid login",
+				logs,
+			};
+		}
 	},
 );
 
@@ -67,13 +86,11 @@ async function findMember(
 	password = password.trim();
 	const salt = process.env.PASS_SALT || "_Salty!_";
 	const passwordHash: string | null = GeneratePasswordHash(password, salt);
-	logs.push("Hash: " + passwordHash);
+	// logs.push("Hash: " + passwordHash);
 
 	const usernameLower = username.trim().toLowerCase();
 	const [usernameFirst, usernameLast] = usernameLower.split(" ");
 	logs.push("Username: " + usernameLower);
-	logs.push("First name: " + usernameFirst);
-	logs.push("Last name: " + usernameLast);
 
 	const memberLoginQuery = db
 		.select()
@@ -86,8 +103,8 @@ async function findMember(
 					ilike(members.login, usernameLower),
 					ilike(members.email, usernameLower),
 					and(
-						ilike(members.nameFirst, usernameFirst),
-						ilike(members.nameLast, usernameLast),
+						ilike(members.nameFirst, usernameFirst ?? ""),
+						ilike(members.nameLast, usernameLast ?? ""),
 					),
 				),
 			),

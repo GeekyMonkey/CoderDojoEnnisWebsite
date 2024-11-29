@@ -21,12 +21,14 @@ export type MemberModel = {
 	loginDatePrevious: number | null;
 	nameFirst: string | null;
 	nameLast: string | null;
-	passwordHash: string | null;
 	phone: string | null;
 	registeredCurrentTerm: boolean;
 	scratchName: string | null;
 	teamId: string | null;
 	xboxGamertag: string | null;
+
+	// Private
+	// passwordHash: string | null;
 };
 
 /**

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { Icon } from "@iconify/vue";
-	import { computed, reactive, ref, type Ref } from "vue";
+	import { computed, reactive, ref, watch, type Ref } from "vue";
 	import { z } from "zod";
 	import {
 		Card,
@@ -18,14 +18,18 @@
 	} from "@internationalized/date";
 	import type { Session } from "@supabase/gotrue-js";
 	import { SupabaseClient } from "@supabase/supabase-js";
-	import type { ApiResponse } from "~~/shared/types";
+	import type { ApiResponse, MemberModel } from "~~/shared/types";
+	import { useRouter } from "nuxt/app";
+	import { Alert } from "@/components/ui/alert";
 
 	definePageMeta({
 		layout: "auth",
 	});
 
+	const router = useRouter();
 	const supabase: SupabaseClient = useSupabaseClient();
 	const showPassword = ref(false);
+	const errorMessage = ref<string | null>(null);
 
 	// Form Validation & State
 	const formSchema = z.object({
@@ -43,26 +47,52 @@
 		showPassword.value = !showPassword.value;
 	};
 
+	/** Clear the error message when changing inputs */
+	const clearErrorMessage = () => {
+		errorMessage.value = null;
+	};
+
+	/** When formState values change, clear the error message */
+	watch(formState, () => {
+		clearErrorMessage();
+	});
+
 	/** Handle Login */
 	const handleLogin = async () => {
-		const result = await $fetch<ApiResponse<{ session: Session }>>(
-			"/api/Auth/Login",
-			{
-				method: "POST",
-				body: {
-					username: formState.username,
-					password: formState.password,
-				},
+		clearErrorMessage();
+
+		const result = await $fetch<
+			ApiResponse<{ session: Session; member: MemberModel }>
+		>("/api/Auth/Login", {
+			method: "POST",
+			body: {
+				username: formState.username,
+				password: formState.password,
 			},
-		);
+		});
 		console.log("result:", result);
 		if (result.success) {
-			console.log("JWT:", { session: result.data.session });
+			// console.log("JWT:", { session: result.data.session });
 			supabase.auth.setSession(result.data.session);
 
-			// supabase.auth.getUser().then((user) => {
-			// 	console.log("User:", user);
-			// });
+			// todo - save member and session in the store
+
+			// Redirect to appropriate page
+			const member: MemberModel | null = result.data.member;
+			if (member.isMentor) {
+				// Redirect to Mentor Dashboard
+				router.push("/mentor");
+			} else if (member.isParent) {
+				// Redirect to Parent Dashboard
+				router.push("/parent");
+			} else {
+				// Redirect to Coder Dashboard
+				router.push("/coder");
+			}
+		} else if (result.error) {
+			// todo - show error message
+			console.error("Login Error:", result.error);
+			errorMessage.value = result.error || "Could Not Complete Login";
 		}
 	};
 </script>
@@ -82,6 +112,7 @@
 							id="username"
 							v-model="formState.username"
 							required
+							@onkeypress="clearErrorMessage()"
 						/>
 					</FormItem>
 
@@ -93,6 +124,7 @@
 								id="password"
 								v-model="formState.password"
 								required
+								@onkeypress="clearErrorMessage()"
 							/>
 							<Button
 								type="button"
@@ -120,6 +152,12 @@
 					>
 						{{ $t("login.loginButton") }}
 					</Button>
+
+					<div v-if="errorMessage" class="mt-2">
+						<Alert variant="destructive">
+							{{ errorMessage }}
+						</Alert>
+					</div>
 				</form>
 			</CardContent>
 		</Card>
