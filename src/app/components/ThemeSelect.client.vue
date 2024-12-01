@@ -21,6 +21,7 @@
 			});
 			return compare;
 		});
+		console.log("[ThemeSelect] themes", sorted);
 		return sorted;
 	});
 
@@ -37,7 +38,7 @@
 				:title="Translate('theme.select')"
 			>
 				<Icon
-					v-if="CurrentTheme.darkOrLight === 'dark'"
+					v-if="CurrentTheme?.darkOrLight === 'dark'"
 					icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition"
 					class="ToggleIcon w-5 h-5"
 				/>
@@ -66,7 +67,7 @@
 					<Button
 						class="ThemeButton w-full justify-between"
 						v-for="theme in themes"
-						:data-selected="CurrentTheme.id == theme.id"
+						:data-selected="CurrentTheme?.id == theme.id"
 						:key="theme.folder"
 						:title="
 							Translate('theme.author', {

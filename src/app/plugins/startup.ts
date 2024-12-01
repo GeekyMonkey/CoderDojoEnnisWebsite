@@ -13,10 +13,7 @@ export default defineNuxtPlugin({
 			const nuxtApp = useNuxtApp();
 			console.log("--Created CoderDojo Nuxt Website--");
 			console.log("Public Env Variables:", {
-				app: nuxtApp.$config.app,
 				public: nuxtApp.$config.public,
-				private: nuxtApp.$config.private,
-				supabase: nuxtApp.$config.supabase,
 			});
 			console.log("----------");
 		},

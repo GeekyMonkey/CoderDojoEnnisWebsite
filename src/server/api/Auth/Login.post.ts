@@ -37,21 +37,27 @@ type ResponseBody = {
  */
 export default defineEventHandler(
 	async (event): Promise<ApiResponse<ResponseBody>> => {
-		const { req } = event.node;
-
 		const { username, password } = await readBody<RequestBody>(event);
 
 		const logs: string[] = [];
 
-		const member: MemberEntity | null = await findMember(
-			username,
-			password,
-			logs,
-		);
+		let member: MemberEntity | null = null;
+		try {
+			member = await findMember(username, password, logs);
+			logs.push(
+				"Member found: " + JSON.stringify({ login: member?.login }),
+			);
+		} catch (error: any) {
+			logs.push("Error finding member:", error.message);
+		}
 
 		let user = null;
 		if (member != null) {
-			user = await loginToSupabase(member, logs);
+			try {
+				user = await loginToSupabase(member, logs);
+			} catch (error: any) {
+				logs.push("Error logging in to Supabase:", error.message);
+			}
 		}
 
 		if (member && user) {

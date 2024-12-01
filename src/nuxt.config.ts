@@ -15,13 +15,13 @@ export default defineNuxtConfig({
 				class: "",
 				style: "background-color:black;",
 			},
-			link: [
-				{
-					prefetch: "true",
-					rel: "stylesheet",
-					href: "/themes/themes.css",
-				},
-			],
+			// link: [
+			// 	{
+			// 		prefetch: "true",
+			// 		rel: "stylesheet",
+			// 		href: "/themes/Themes.css",
+			// 	},
+			// ],
 		},
 		layoutTransition: false,
 		pageTransition: false,
@@ -41,6 +41,7 @@ export default defineNuxtConfig({
 		"~/assets/css/tailwind.scss",
 		"~/assets/css/shadcn.scss",
 		"~/assets/css/app.scss",
+		"~/assets/themes/Themes.css",
 	],
 
 	devtools: { enabled: false },
@@ -245,6 +246,8 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+
+	watch: ["~/assets/**/*.ts", "~/assets/**/*.css"],
 
 	$development: {
 		app: {
