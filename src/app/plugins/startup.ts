@@ -1,5 +1,4 @@
 import { defineNuxtPlugin, useNuxtApp } from "nuxt/app";
-import { supabase } from "~/utils/supabaseClient";
 
 export default defineNuxtPlugin({
 	name: "startup-plugin",

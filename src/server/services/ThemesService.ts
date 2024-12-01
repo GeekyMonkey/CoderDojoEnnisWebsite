@@ -1,5 +1,6 @@
 import { ThemesConfig, ThemeModel } from "~~/shared/types/ThemeModel";
 import * as fs from "fs/promises";
+import { Dirent } from "fs";
 
 // Cache
 let themesConfig: ThemesConfig | null = null;
@@ -23,22 +24,31 @@ export class ThemesService {
 	 * Read all of the themes from the json files in the /public/themes folder
 	 */
 	ReadThemes = async (): Promise<ThemesConfig> => {
-		const themeFolders: string[] = await fs.readdir("public/themes");
+		const themesFolder: string = "public/themes";
+		console.log("Reading theme folder: ", themesFolder);
+		const themeFolders: Dirent[] = await fs.readdir(themesFolder, {
+			recursive: false,
+			withFileTypes: true,
+		});
 		const themesData: (ThemeModel | null)[] = await Promise.all(
-			themeFolders.map(async (themeFolder) => {
-				try {
-					const themeFileName: string = `public/themes/${themeFolder}/${themeFolder}.json`;
-					const themeJson = await fs.readFile(themeFileName);
-					const theme: ThemeModel = {
-						...(JSON.parse(themeJson.toString()) as ThemeModel),
-						id: themeFolder,
-					};
-					return theme;
-				} catch (e) {
-					console.error(`Error reading theme: ${themeFolder}`, e);
-					return null;
-				}
-			}),
+			themeFolders
+				.filter((f) => f.isDirectory())
+				.map(async (themeFolder) => {
+					try {
+						const themeId = themeFolder.name;
+						const themeFileName: string = `public/themes/${themeId}/${themeId}.json`;
+						console.log("Reading theme file: ", themeFileName);
+						const themeJson = await fs.readFile(themeFileName);
+						const theme: ThemeModel = {
+							...(JSON.parse(themeJson.toString()) as ThemeModel),
+							id: themeId,
+						};
+						return theme;
+					} catch (e) {
+						console.error(`Error reading theme: ${themeFolder}`, e);
+						return null;
+					}
+				}),
 		);
 		const themes: ThemeModel[] = themesData.filter(
 			(theme) => theme !== null,

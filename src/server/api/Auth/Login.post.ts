@@ -98,7 +98,7 @@ async function findMember(
 		.where(
 			and(
 				eq(members.deleted, false),
-				eq(members.passwordHash, passwordHash ?? "_"),
+				//todo				eq(members.passwordHash, passwordHash ?? "_"),
 				or(
 					ilike(members.login, usernameLower),
 					ilike(members.email, usernameLower),
