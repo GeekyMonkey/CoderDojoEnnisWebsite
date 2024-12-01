@@ -7,9 +7,16 @@ export default defineNuxtConfig({
 			title: "CoderDojo Ennis",
 			htmlAttrs: {},
 			bodyAttrs: {
-				class: "dark",
+				class: "",
 				style: "background-color:black;",
 			},
+			link: [
+				{
+					prefetch: "true",
+					rel: "stylesheet",
+					href: "/themes/themes.css",
+				},
+			],
 		},
 		layoutTransition: false,
 		pageTransition: false,
@@ -20,7 +27,7 @@ export default defineNuxtConfig({
 	// builder: "vite",
 
 	colorMode: {
-		preference: "dark",
+		preference: "neon",
 	},
 
 	compatibilityDate: "2024-08-01",

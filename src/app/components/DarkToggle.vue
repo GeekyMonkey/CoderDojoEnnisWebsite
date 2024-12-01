@@ -1,36 +1,34 @@
 <script setup lang="ts">
 	import { Button } from "@/components/ui/button";
 	import { Icon } from "@iconify/vue";
-	import { onMounted } from "vue";
+	import { useColorMode } from "@vueuse/core";
+	import { ref, watch } from "vue";
+	import { useUiConfig } from "~/composables/UiConfig";
+	import type { ThemeModel } from "~~/shared/types/ThemeModel";
 
-	const colorMode = useColorMode();
+	const { UiConfig, SetTheme, CurrentTheme } = useUiConfig();
+	let colorModeIndex = 0;
+	const themes = ref<ThemeModel[]>([]);
 
 	/**
 	 * Toggle the color mode
 	 */
 	const toggleColorMode = () => {
-		colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
-		setBodyClass();
+		const themes = UiConfig.value?.themesConfig.themes ?? [];
+		colorModeIndex = (colorModeIndex + 1) % themes.length;
+		const newColorMode: string = themes[colorModeIndex]?.folder!;
+		console.log(
+			"DarkToggle.vue: toggleColorMode: newColorMode:",
+			themes[colorModeIndex]?.themeName.fr,
+		);
+		SetTheme(newColorMode);
 	};
-
-	const setBodyClass = () => {
-		if (colorMode.preference === "dark") {
-			document.body.classList.add("dark");
-		} else {
-			document.body.classList.remove("dark");
-		}
-	};
-
-	// Start in the right mode
-	onMounted(() => {
-		setBodyClass();
-	});
 </script>
 
 <template>
 	<Button class="DarkToggleButton" variant="outline" @click="toggleColorMode">
 		<Icon
-			v-if="colorMode.preference === 'dark'"
+			v-if="CurrentTheme.value === 'neon'"
 			icon="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition"
 			class="ToggleIcon w-5 h-5"
 		/>
