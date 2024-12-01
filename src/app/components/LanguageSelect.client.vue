@@ -1,11 +1,18 @@
 <template>
 	<Dialog>
+		<!-- Button to open the dialog -->
 		<DialogTrigger as-child>
-			<Button class="DarkToggleButton" variant="outline">
+			<Button
+				class="LanguageButton"
+				variant="outline"
+				:title="`${currentLanguage} ?`"
+			>
 				<NuxtIcon name="Language" class="LanguageIcon w-5 h-5" />
 				<span class="sr-only">Language</span>
 			</Button>
 		</DialogTrigger>
+
+		<!-- Dialog -->
 		<DialogContent class="LanguageDialog">
 			<DialogHeader>
 				<VisuallyHidden>
@@ -36,9 +43,15 @@
 	import DialogHeader from "./ui/dialog/DialogHeader.vue";
 	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
 	import { VisuallyHidden } from "radix-vue";
+	import { computed } from "vue";
 
-	const { locale, setLocale, setLocaleCookie, locales, availableLocales } =
-		useI18n();
+	const { locale, setLocale, setLocaleCookie, locales } = useI18n();
+
+	const currentLanguage = computed<string>(() => {
+		return (
+			locales.value.find((l) => l.code === locale.value)?.language ?? ""
+		);
+	});
 
 	const setLang = (lang: string) => {
 		console.log("setLang", lang);

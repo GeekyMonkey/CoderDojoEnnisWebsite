@@ -31,7 +31,7 @@ export class ThemesService {
 					const themeJson = await fs.readFile(themeFileName);
 					const theme: ThemeModel = {
 						...(JSON.parse(themeJson.toString()) as ThemeModel),
-						folder: themeFolder,
+						id: themeFolder,
 					};
 					return theme;
 				} catch (e) {
@@ -43,19 +43,19 @@ export class ThemesService {
 		const themes: ThemeModel[] = themesData.filter(
 			(theme) => theme !== null,
 		);
-		const defaultDarkTheme =
-			themes.find((t) => t.folder === "neon")?.folder ??
-			themes.find((t) => t.darkOrLight == "dark")?.folder ??
+		const defaultDarkThemeId =
+			themes.find((t) => t.id === "neon")?.id ??
+			themes.find((t) => t.darkOrLight == "dark")?.id ??
 			"";
-		const defaultLightTheme =
-			themes.find((t) => t.folder === "bright")?.folder ??
-			themes.find((t) => t.darkOrLight == "light")?.folder ??
+		const defaultLightThemeId =
+			themes.find((t) => t.id === "bright")?.id ??
+			themes.find((t) => t.darkOrLight == "light")?.id ??
 			"";
 
 		return {
 			themes,
-			defaultDarkTheme,
-			defaultLightTheme,
+			defaultDarkThemeId,
+			defaultLightThemeId,
 		};
 	};
 }

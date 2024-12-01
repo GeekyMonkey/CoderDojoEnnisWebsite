@@ -15,7 +15,7 @@
 							<div style="flex-grow: 1">ToDo: menu stuff…</div>
 							<div class="SidebarFooter">
 								<Menubar class="bg-transparent border-0">
-									<DarkToggle />
+									<ThemeSelect />
 									<LanguageSelect />
 								</Menubar>
 							</div>

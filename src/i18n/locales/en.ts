@@ -5,5 +5,9 @@ export const en = {
 		password: "Password",
 		loginButton: "Login",
 	},
+	theme: {
+		author: "Created by {AuthorName}",
+		select: "Select Theme",
+	},
 };
 export type enMessagesType = typeof en;

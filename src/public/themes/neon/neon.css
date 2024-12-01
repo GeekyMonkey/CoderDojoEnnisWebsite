@@ -50,6 +50,12 @@
 			rgba(5, 5, 10, 1) 100%
 		);
 
+		.Button {
+			&[data-selected="true"] {
+				outline: solid 2px var(--hilight-color);
+			}
+		}
+
 		.Card {
 			.CardHeadder {
 				background: linear-gradient(

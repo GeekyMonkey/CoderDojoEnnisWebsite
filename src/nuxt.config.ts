@@ -80,9 +80,10 @@ export default defineNuxtConfig({
 	},
 
 	icon: {
+		// Icon Options: https://icones.js.org/
 		aliases: {
-			nuxt: "logos:nuxt-icon",
 			Language: "akar-icons:language", // or heroicons:globe-alt
+			Theme: "mdi:theme-light-dark",
 		},
 		componentName: "NuxtIcon",
 		// customCollections: [

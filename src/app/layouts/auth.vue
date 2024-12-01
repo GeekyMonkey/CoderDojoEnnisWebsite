@@ -5,7 +5,7 @@
 		</main>
 
 		<Menubar class="bg-transparent border-0">
-			<DarkToggle />
+			<ThemeSelect />
 			<LanguageSelect />
 		</Menubar>
 	</div>

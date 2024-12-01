@@ -4,9 +4,18 @@ import type { Translation } from "./Translation";
  * Description of a styling theme
  */
 export type ThemeModel = {
+	/** The folder name of the theme */
+	id: string;
+
+	// Valuse from the theme json file
+
+	/** Who created the theme */
 	author: string;
-	folder: string;
+
+	/** Multi-lingual theme name */
 	themeName: Translation;
+
+	/** Is this theme primarily dark or light? */
 	darkOrLight: "dark" | "light";
 };
 
@@ -15,6 +24,6 @@ export type ThemeModel = {
  */
 export type ThemesConfig = {
 	themes: ThemeModel[];
-	defaultDarkTheme: string;
-	defaultLightTheme: string;
+	defaultDarkThemeId: string;
+	defaultLightThemeId: string;
 };

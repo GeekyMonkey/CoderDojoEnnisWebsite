@@ -7,4 +7,8 @@ export const fr = {
 		password: "Mot de passe",
 		loginButton: "Connexion",
 	},
+	theme: {
+		author: "Créé par {AuthorName}",
+		select: "Sélectionnez le thème",
+	},
 };

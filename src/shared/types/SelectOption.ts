@@ -1,7 +1,7 @@
 /**
  * SelectOption type
  */
-export type SelectOption<T = string> = {
-	value: string;
-	label: T;
+export type SelectOption<ValueType = string> = {
+	value: ValueType;
+	label: string;
 };

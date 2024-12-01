@@ -1,8 +1,8 @@
 {
-	"author": "Anonymous",
-	"darkOrLight": "light",
 	"themeName": {
 		"en": "Bright",
 		"fr": "Lumineux"
-	}
+	},
+	"darkOrLight": "light",
+	"author": "Anonymous"
 }

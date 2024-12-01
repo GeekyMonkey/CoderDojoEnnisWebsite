@@ -41,6 +41,10 @@
 				box-shadow: none;
 			}
 		}
+
+		&[data-selected="true"] {
+			outline: solid 2px var(--hilight-color);
+		}
 	}
 
 	.InputWithButton {

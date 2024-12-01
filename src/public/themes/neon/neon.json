@@ -1,8 +1,8 @@
 {
-	"author": "Russ Painter",
-	"darkOrLight": "dark",
 	"themeName": {
 		"en": "Neon",
 		"fr": "Néon"
-	}
+	},
+	"darkOrLight": "dark",
+	"author": "Russ Painter"
 }

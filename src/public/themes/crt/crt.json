@@ -1,8 +1,8 @@
 {
-	"author": "Russ Painter",
-	"darkOrLight": "dark",
 	"themeName": {
 		"en": "Retrco CRT",
 		"fr": "Rétro CRT"
-	}
+	},
+	"darkOrLight": "dark",
+	"author": "Russ Painter"
 }

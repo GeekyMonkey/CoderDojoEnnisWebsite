@@ -11,11 +11,6 @@
 	import { Button } from "@/components/ui/button";
 	import { Input } from "@/components/ui/input";
 	import { Label } from "@/components/ui/label";
-	import {
-		type DateValue,
-		getLocalTimeZone,
-		today,
-	} from "@internationalized/date";
 	import type { Session } from "@supabase/gotrue-js";
 	import { SupabaseClient } from "@supabase/supabase-js";
 	import type { ApiResponse, MemberModel } from "~~/shared/types";
@@ -90,7 +85,6 @@
 				router.push("/coder");
 			}
 		} else if (result.error) {
-			// todo - show error message
 			console.error("Login Error:", result.error);
 			errorMessage.value = result.error || "Could Not Complete Login";
 		}
@@ -101,12 +95,16 @@
 	<div class="LoginComponent flex items-center justify-center">
 		<Card class="w-full max-w-md">
 			<CardHeader>
-				<CardTitle>{{ $t("login.title") }}</CardTitle>
+				<CardTitle>
+					<Translated t="login.title" />
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<form @submit.prevent="handleLogin">
 					<FormItem>
-						<Label for="username">{{ $t("login.username") }}</Label>
+						<Label for="username">
+							<Translated t="login.username" />
+						</Label>
 						<Input
 							type="text"
 							id="username"
@@ -117,7 +115,9 @@
 					</FormItem>
 
 					<FormItem>
-						<Label for="password">{{ $t("login.password") }}</Label>
+						<Label for="password">
+							<Translated t="login.password" />
+						</Label>
 						<div class="InputWithButton">
 							<Input
 								:type="showPassword ? 'text' : 'password'"

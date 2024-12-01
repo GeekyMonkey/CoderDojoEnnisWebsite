@@ -87,10 +87,10 @@ export function useUiConfig() {
 			switch (ColorModeService.value) {
 				case "auto":
 				case "dark":
-					SetTheme(configData.themesConfig.defaultDarkTheme);
+					SetTheme(configData.themesConfig.defaultDarkThemeId);
 					break;
 				case "light":
-					SetTheme(configData.themesConfig.defaultLightTheme);
+					SetTheme(configData.themesConfig.defaultLightThemeId);
 					break;
 				default:
 				// Stick with known theme
@@ -106,11 +106,15 @@ export function useUiConfig() {
 	};
 
 	/** Get the current theme */
-	const CurrentTheme = computed(() => {
+	const CurrentTheme = computed<ThemeModel | null>(() => {
 		if (ColorModeService) {
-			return ColorModeService.value;
+			const themeId = ColorModeService.value;
+			return (
+				data.value?.themesConfig.themes.find((t) => t.id === themeId) ??
+				null
+			);
 		}
-		return "unknown";
+		return null;
 	});
 
 	return {
@@ -120,5 +124,8 @@ export function useUiConfig() {
 		error,
 		CurrentTheme,
 		SetTheme,
+		ThemesConfig: computed<ThemesConfig | null>(() => {
+			return data.value?.themesConfig ?? null;
+		}),
 	};
 }
