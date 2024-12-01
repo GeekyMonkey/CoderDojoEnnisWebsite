@@ -12,6 +12,9 @@ export default defineNuxtPlugin({
 		"app:created"() {
 			const nuxtApp = useNuxtApp();
 			console.log("--Created CoderDojo Nuxt Website--");
+			console.log("Public Env Variables:");
+			console.log(nuxtApp.$config);
+			console.log("----------");
 		},
 	},
 	env: {

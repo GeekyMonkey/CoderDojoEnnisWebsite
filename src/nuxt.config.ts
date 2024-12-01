@@ -157,8 +157,8 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			supabase: {
-				url: process.env.NUXT_SUPABASE_URL,
-				key: process.env.NUXT_SUPABASE_KEY,
+				url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
+				key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
 			},
 			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
 			// buildTarget: buildTarget,
