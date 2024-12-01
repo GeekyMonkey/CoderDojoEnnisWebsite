@@ -138,6 +138,9 @@ export default defineNuxtConfig({
 		},
 		// middleware: {},
 		// plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
+		rollupConfig: {
+			external: ["postgres"],
+		},
 		static: false,
 	},
 
