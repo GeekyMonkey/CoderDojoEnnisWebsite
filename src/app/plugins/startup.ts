@@ -1,4 +1,5 @@
 import { defineNuxtPlugin, useNuxtApp } from "nuxt/app";
+import { supabase } from "~/utils/supabaseClient";
 
 export default defineNuxtPlugin({
 	name: "startup-plugin",
@@ -12,8 +13,12 @@ export default defineNuxtPlugin({
 		"app:created"() {
 			const nuxtApp = useNuxtApp();
 			console.log("--Created CoderDojo Nuxt Website--");
-			console.log("Public Env Variables:");
-			console.log(nuxtApp.$config);
+			console.log("Public Env Variables:", {
+				app: nuxtApp.$config.app,
+				public: nuxtApp.$config.public,
+				private: nuxtApp.$config.private,
+				supabase: nuxtApp.$config.supabase,
+			});
 			console.log("----------");
 		},
 	},

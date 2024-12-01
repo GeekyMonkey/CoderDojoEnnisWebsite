@@ -155,7 +155,13 @@ export default defineNuxtConfig({
 	},
 
 	runtimeConfig: {
+		rootTest: "rootTest1",
+		supabase: {
+			url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
+			key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
+		},
 		public: {
+			publicTest: "publicTest1",
 			supabase: {
 				url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
 				key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
@@ -168,6 +174,7 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
+			privateTest: "privateTest1",
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,
 				user: process.env.NUXT_LEGACY_DB_USER,
