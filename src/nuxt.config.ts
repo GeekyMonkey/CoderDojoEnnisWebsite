@@ -157,8 +157,8 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			supabase: {
-				url: process.env.SUPABASE_URL,
-				key: process.env.SUPABASE_KEY,
+				url: process.env.NUXT_SUPABASE_URL,
+				key: process.env.NUXT_SUPABASE_KEY,
 			},
 			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
 			// buildTarget: buildTarget,
@@ -169,17 +169,17 @@ export default defineNuxtConfig({
 		},
 		private: {
 			legacy_data: {
-				pass: process.env.LEGACY_DB_PASS,
-				user: process.env.LEGACY_DB_USER,
+				pass: process.env.NUXT_LEGACY_DB_PASS,
+				user: process.env.NUXT_LEGACY_DB_USER,
 			},
 			supabase: {
-				url: process.env.SUPABASE_URL,
-				key: process.env.SUPABASE_KEY,
-				password: process.env.SUPABASE_PASSWORD,
-				host: process.env.SUPABASE_HOST,
-				user: process.env.SUPABASE_USER,
-				userpass: process.env.SUPABASE_USERPASS,
-				port: process.env.SUPABASE_PORT,
+				url: process.env.NUXT_SUPABASE_URL,
+				key: process.env.NUXT_SUPABASE_KEY,
+				password: process.env.NUXT_SUPABASE_PASSWORD,
+				host: process.env.NUXT_SUPABASE_HOST,
+				user: process.env.NUXT_SUPABASE_USER,
+				userpass: process.env.NUXT_SUPABASE_USERPASS,
+				port: process.env.NUXT_SUPABASE_PORT,
 			},
 		},
 	},
