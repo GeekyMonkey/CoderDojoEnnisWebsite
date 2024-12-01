@@ -27,3 +27,12 @@ export type ThemesConfig = {
 	defaultDarkThemeId: string;
 	defaultLightThemeId: string;
 };
+
+/**
+ * Default configuration for the themes
+ */
+export const ThemesConfigDefault: ThemesConfig = {
+	themes: [],
+	defaultDarkThemeId: "dark",
+	defaultLightThemeId: "light",
+};
