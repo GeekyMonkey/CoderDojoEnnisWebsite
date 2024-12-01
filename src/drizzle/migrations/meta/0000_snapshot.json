@@ -1,0 +1,879 @@
+{
+	"id": "00000000-0000-0000-0000-000000000000",
+	"prevId": "",
+	"version": "7",
+	"dialect": "postgresql",
+	"tables": {
+		"coderdojo.belts": {
+			"name": "belts",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"deleted": {
+					"name": "deleted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"color": {
+					"name": "color",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"hex_code": {
+					"name": "hex_code",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"sort_order": {
+					"name": "sort_order",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"default": 0
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.badge_categories": {
+			"name": "badge_categories",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"deleted": {
+					"name": "deleted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"category_name": {
+					"name": "category_name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"category_description": {
+					"name": "category_description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.badges": {
+			"name": "badges",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"deleted": {
+					"name": "deleted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"achievement": {
+					"name": "achievement",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"badge_category_id": {
+					"name": "badge_category_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"badges_badge_category_id_fkey": {
+					"name": "badges_badge_category_id_fkey",
+					"tableFrom": "badges",
+					"tableTo": "badge_categories",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["badge_category_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.teams": {
+			"name": "teams",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"deleted": {
+					"name": "deleted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"goal": {
+					"name": "goal",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"hexcode": {
+					"name": "hexcode",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"notes": {
+					"name": "notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"team_name": {
+					"name": "team_name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.members": {
+			"name": "members",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"birth_year": {
+					"name": "birth_year",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"deleted": {
+					"name": "deleted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"email": {
+					"name": "email",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"fingerprint_id": {
+					"name": "fingerprint_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"garda_vetted": {
+					"name": "garda_vetted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"github_login": {
+					"name": "github_login",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"goal_long_term": {
+					"name": "goal_long_term",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"goal_short_term": {
+					"name": "goal_short_term",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"is_mentor": {
+					"name": "is_mentor",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"is_ninja": {
+					"name": "is_ninja",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"is_parent": {
+					"name": "is_parent",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"login": {
+					"name": "login",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"login_date": {
+					"name": "login_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"login_date_previous": {
+					"name": "login_date_previous",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"name_first": {
+					"name": "name_first",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"name_last": {
+					"name": "name_last",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"phone": {
+					"name": "phone",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"registered_current_term": {
+					"name": "registered_current_term",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"scratch_name": {
+					"name": "scratch_name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"team_id": {
+					"name": "team_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"xbox_gamertag": {
+					"name": "xbox_gamertag",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"password_hash": {
+					"name": "password_hash",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"members_team_id_fkey": {
+					"name": "members_team_id_fkey",
+					"tableFrom": "members",
+					"tableTo": "teams",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["team_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.sessions": {
+			"name": "sessions",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"created_date": {
+					"name": "created_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "now()"
+				},
+				"end_date": {
+					"name": "end_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"url": {
+					"name": "url",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"topic": {
+					"name": "topic",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"adult_id": {
+					"name": "adult_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"adult2_id": {
+					"name": "adult2_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"mentors_only": {
+					"name": "mentors_only",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"sessions_adult2_id_fkey": {
+					"name": "sessions_adult2_id_fkey",
+					"tableFrom": "sessions",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["adult2_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				},
+				"sessions_adult_id_fkey": {
+					"name": "sessions_adult_id_fkey",
+					"tableFrom": "sessions",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["adult_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.member_attendances": {
+			"name": "member_attendances",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"member_id": {
+					"name": "member_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"date": {
+					"name": "date",
+					"type": "date",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {
+				"member_attendances_date_idx": {
+					"name": "member_attendances_date_idx",
+					"columns": [
+						{
+							"expression": "date",
+							"asc": true,
+							"nulls": "last",
+							"opclass": "date_ops",
+							"isExpression": false
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				}
+			},
+			"foreignKeys": {
+				"member_attendances_member_id_fkey": {
+					"name": "member_attendances_member_id_fkey",
+					"tableFrom": "member_attendances",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["member_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.member_badge_categories": {
+			"name": "member_badge_categories",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"member_id": {
+					"name": "member_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"badge_category_id": {
+					"name": "badge_category_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"member_badge_categories_badge_category_id_fkey": {
+					"name": "member_badge_categories_badge_category_id_fkey",
+					"tableFrom": "member_badge_categories",
+					"tableTo": "badge_categories",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["badge_category_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_badge_categories_member_id_fkey": {
+					"name": "member_badge_categories_member_id_fkey",
+					"tableFrom": "member_badge_categories",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["member_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.member_parents": {
+			"name": "member_parents",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"member_id": {
+					"name": "member_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"parent_id": {
+					"name": "parent_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"member_parents_member_id_fkey": {
+					"name": "member_parents_member_id_fkey",
+					"tableFrom": "member_parents",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["member_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_parents_parent_id_fkey": {
+					"name": "member_parents_parent_id_fkey",
+					"tableFrom": "member_parents",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["parent_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.member_belts": {
+			"name": "member_belts",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"member_id": {
+					"name": "member_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"belt_id": {
+					"name": "belt_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded_by_adult_id": {
+					"name": "awarded_by_adult_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"application_notes": {
+					"name": "application_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded_notes": {
+					"name": "awarded_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_by_adult_id": {
+					"name": "rejected_by_adult_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_notes": {
+					"name": "rejected_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"application_date": {
+					"name": "application_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded": {
+					"name": "awarded",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_date": {
+					"name": "rejected_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"member_belts_awarded_by_adult_id_fkey": {
+					"name": "member_belts_awarded_by_adult_id_fkey",
+					"tableFrom": "member_belts",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["awarded_by_adult_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				},
+				"member_belts_belt_id_fkey": {
+					"name": "member_belts_belt_id_fkey",
+					"tableFrom": "member_belts",
+					"tableTo": "belts",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["belt_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_belts_member_id_fkey": {
+					"name": "member_belts_member_id_fkey",
+					"tableFrom": "member_belts",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["member_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_belts_rejected_by_adult_id_fkey": {
+					"name": "member_belts_rejected_by_adult_id_fkey",
+					"tableFrom": "member_belts",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["rejected_by_adult_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		},
+		"coderdojo.member_badges": {
+			"name": "member_badges",
+			"schema": "coderdojo",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "uuid",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"member_id": {
+					"name": "member_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"badge_id": {
+					"name": "badge_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded_by_adult_id": {
+					"name": "awarded_by_adult_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"application_notes": {
+					"name": "application_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded_notes": {
+					"name": "awarded_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_by_adult_id": {
+					"name": "rejected_by_adult_id",
+					"type": "uuid",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_notes": {
+					"name": "rejected_notes",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"application_date": {
+					"name": "application_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"awarded": {
+					"name": "awarded",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"rejected_date": {
+					"name": "rejected_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"goal_date": {
+					"name": "goal_date",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"member_badges_awarded_by_adult_id_fkey": {
+					"name": "member_badges_awarded_by_adult_id_fkey",
+					"tableFrom": "member_badges",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["awarded_by_adult_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				},
+				"member_badges_badge_id_fkey": {
+					"name": "member_badges_badge_id_fkey",
+					"tableFrom": "member_badges",
+					"tableTo": "badges",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["badge_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_badges_member_id_fkey": {
+					"name": "member_badges_member_id_fkey",
+					"tableFrom": "member_badges",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["member_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "no action"
+				},
+				"member_badges_rejected_by_adult_id_fkey": {
+					"name": "member_badges_rejected_by_adult_id_fkey",
+					"tableFrom": "member_badges",
+					"tableTo": "members",
+					"schemaTo": "coderdojo",
+					"columnsFrom": ["rejected_by_adult_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {},
+			"policies": {},
+			"isRLSEnabled": false
+		}
+	},
+	"enums": {},
+	"schemas": {
+		"coderdojo": "coderdojo"
+	},
+	"sequences": {},
+	"roles": {},
+	"policies": {},
+	"views": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	},
+	"internal": {
+		"tables": {}
+	}
+}

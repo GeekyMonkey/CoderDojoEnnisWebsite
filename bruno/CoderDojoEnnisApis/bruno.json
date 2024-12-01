@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "CoderDojo Ennis Website",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

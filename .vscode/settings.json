@@ -1,14 +1,19 @@
 {
-  "terminal.integrated.cwd": "${workspaceFolder}/src",
+  "editor.detectIndentation": true,
+  "editor.insertSpaces": false,
+  "editor.tabSize": 4,
+  "files.autoSave": "onFocusChange",
   "files.defaultLanguage": "typescript",
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/bower_components": true
-  },
   "files.watcherExclude": {
     "**/node_modules": true,
     "**/bower_components": true
   },
+  "peacock.color": "#040d09",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true
+  },
+  "terminal.integrated.cwd": "${workspaceFolder}/src",
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#103424",
     "activityBar.background": "#103424",
@@ -28,8 +33,31 @@
     "titleBar.inactiveBackground": "#040d0999",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#040d09",
-  "files.autoSave": "onFocusChange",
-  "editor.tabSize": 4,
-  "editor.detectIndentation": true
+  "SQL-Formatter-VSCode.dataTypeCase": "upper",
+  "SQL-Formatter-VSCode.dialect": "postgresql",
+  "SQL-Formatter-VSCode.ignoreTabSettings": true,
+  "SQL-Formatter-VSCode.insertSpacesOverride": true,
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "folder-color.pathColors": [
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\app\\",
+      "color": "foldercolorizer.color_0066ff",
+      "badge": "🔵"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\server\\",
+      "color": "foldercolorizer.color_990033",
+      "badge": "🔴"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\src\\shared\\",
+      "color": "foldercolorizer.color_6666ff",
+      "badge": "🟣"
+    },
+    {
+      "folderPath": "CoderDojoEnnisWebsite\\reference\\",
+      "color": "foldercolorizer.color_333333",
+      "badge": "⚫"
+    }
+  ]
 }

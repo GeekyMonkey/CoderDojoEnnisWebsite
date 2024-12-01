@@ -2,102 +2,252 @@ import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  app: {
-    head: {
-      title: "CoderDojo Ennis",
-      htmlAttrs: { lang: "en", class: "dark" },
-      bodyAttrs: { class: "dark" },
-    },
-    layoutTransition: false,
-    pageTransition: false,
-  },
+	app: {
+		head: {
+			title: "CoderDojo Ennis",
+			htmlAttrs: {},
+			bodyAttrs: {
+				class: "",
+				style: "background-color:black;",
+			},
+			link: [
+				{
+					prefetch: "true",
+					rel: "stylesheet",
+					href: "/themes/themes.css",
+				},
+			],
+		},
+		layoutTransition: false,
+		pageTransition: false,
+	},
 
-  compatibilityDate: "2024-07-19",
+	build: {},
 
-  devtools: { enabled: false },
+	// builder: "vite",
 
-  future: {
-    compatibilityVersion: 4,
-  },
+	colorMode: {
+		preference: "neon",
+	},
 
-  imports: {
-    // dirs: ["~~/models"],
-  },
+	compatibilityDate: "2024-08-01",
 
-  modules: [
-    // "@nuxt/icon",
-    // "@nuxt/image",
-    // "@primevue/nuxt-module",
-    // "@nuxt/scripts",
-    // "@nuxtjs/supabase",
-    "@nuxtjs/tailwindcss",
-    "@vueuse/nuxt",
-  ],
+	css: [
+		"~/assets/css/tailwind.scss",
+		"~/assets/css/shadcn.scss",
+		"~/assets/css/app.scss",
+	],
 
-  nitro: {
-    esbuild: {
-      options: {
-        target: "esnext",
-      },
-    },
-    experimental: {
-      asyncContext: true,
-      openAPI: false,
-      // openAPI: {
-      //   meta: {
-      //     title: "My Awesome Project",
-      //     description: "This might become the next big thing.",
-      //     version: "1.0",
-      //   },
-      // }
-    },
-    // middleware: {},
-    // plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
-    static: false,
-  },
+	devtools: { enabled: false },
 
-  // plugins: [],
+	experimental: {
+		scanPageMeta: "after-resolve",
+	},
 
-  router: {
-    options: {
-      scrollBehaviorType: "smooth",
-    },
-  },
+	future: {
+		compatibilityVersion: 4,
+	},
 
-  runtimeConfig: {
-    private: {},
-    public: {},
-  },
+	googleFonts: {
+		download: true,
+		families: {
+			"Nunito Sans": {
+				wght: "200..900",
+				ital: "200..700",
+			},
+		},
+	},
 
-  // serverMiddleware: [],
+	i18n: {
+		detectBrowserLanguage: {
+			alwaysRedirect: false,
+			cookieCrossOrigin: true,
+			cookieKey: "i18n_redirected",
+			cookieSecure: false,
+			fallbackLocale: "en",
+			redirectOn: "all",
+			useCookie: true,
+		},
+		experimental: {
+			localeDetector: "../i18n/localeDetector.ts",
+		},
+		locales: [
+			{ code: "en", language: "English" },
+			{ code: "fr", language: "Français" },
+		],
+		strategy: "no_prefix",
+		vueI18n: "../i18n/i18n.config.ts",
+	},
 
-  ssr: false,
+	icon: {
+		// Icon Options: https://icones.js.org/
+		aliases: {
+			Language: "akar-icons:language", // or heroicons:globe-alt
+			Theme: "mdi:theme-light-dark",
+		},
+		componentName: "NuxtIcon",
+		// customCollections: [
+		//   {
+		//     prefix: "asset-icon",
+		//     dir: "./assets/icons",
+		//   },
+		// ],
+		serverBundle: {
+			collections: ["heroicons", "logos", "mdi", "util"],
+		},
+		size: "24px", // default <Icon> size applied
+		class: "icon", // default <Icon> class applied
+		mode: "css", // default <Icon> mode applied
+	},
 
-  vite: {
-    css: {
-      preprocessorOptions: {
-        sass: {},
-      },
-    },
-  },
+	imports: {
+		// dirs: ["~~/models"],
+	},
 
-  $development: {
-    app: {
-      head: {
-        titleTemplate: "%s : DEV",
-      },
-    },
-    runtimeConfig: {
-      public: {
-        baseUrl: "",
-      },
-    },
-  },
+	modules: [
+		// "@nuxt/image",
+		// "@primevue/nuxt-module",
+		// "@nuxt/scripts",
+		"@hebilicious/vue-query-nuxt",
+		"@nuxt/icon",
+		"@nuxtjs/color-mode",
+		"@nuxtjs/google-fonts",
+		"@nuxtjs/i18n",
+		"@nuxtjs/supabase",
+		"@nuxtjs/tailwindcss",
+		"@vueuse/nuxt",
+		"shadcn-nuxt",
+	],
 
-  devServer: {
-    https: {
-      key: "certs/mylocalhost.key",
-      cert: "certs/mylocalhost.crt",
-    },
-  },
+	nitro: {
+		esbuild: {
+			options: {
+				target: "esnext",
+			},
+		},
+		experimental: {
+			asyncContext: true,
+			openAPI: false,
+			// openAPI: {
+			//   meta: {
+			//     title: "My Awesome Project",
+			//     description: "This might become the next big thing.",
+			//     version: "1.0",
+			//   },
+			// }
+		},
+		// middleware: {},
+		// plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
+		static: false,
+	},
+
+	// plugins: [],
+
+	// redirectOptions: {
+	// 	login: "/auth",
+	// 	enabled: true,
+	// },
+
+	router: {
+		options: {
+			scrollBehaviorType: "smooth",
+		},
+	},
+
+	runtimeConfig: {
+		public: {
+			supabase: {
+				url: process.env.SUPABASE_URL,
+				key: process.env.SUPABASE_KEY,
+			},
+			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
+			// buildTarget: buildTarget,
+			// buildTimeString: String(buildTime),
+			// isIonic: isIonic,
+			// isPwa: isPwa,
+			// version: version,
+		},
+		private: {
+			legacy_data: {
+				pass: process.env.LEGACY_DB_PASS,
+				user: process.env.LEGACY_DB_USER,
+			},
+			supabase: {
+				url: process.env.SUPABASE_URL,
+				key: process.env.SUPABASE_KEY,
+				password: process.env.SUPABASE_PASSWORD,
+				host: process.env.SUPABASE_HOST,
+				user: process.env.SUPABASE_USER,
+				userpass: process.env.SUPABASE_USERPASS,
+				port: process.env.SUPABASE_PORT,
+			},
+		},
+	},
+	// serverMiddleware: [],
+
+	shadcn: {
+		/**
+		 * Prefix for all the imported component
+		 */
+		prefix: "",
+
+		/**
+		 * Directory that the component lives in.
+		 */
+		componentDir: "./app/components/ui",
+	},
+
+	ssr: false,
+
+	supabase: {
+		redirectOptions: {
+			login: "/login",
+			callback: "/logged_in",
+			include: [
+				// Secured paths
+				"/coder(/*)?",
+				"/mentor(/*)?",
+				"/parent(/*)?",
+				"/debug(/*)?",
+			],
+			exclude: [],
+			cookieRedirect: true,
+		},
+	},
+
+	typescript: {
+		tsConfig: {
+			compilerOptions: {
+				baseUrl: ".",
+			},
+		},
+	},
+
+	vite: {
+		css: {
+			preprocessorOptions: {
+				sass: {},
+			},
+		},
+	},
+
+	$development: {
+		app: {
+			head: {
+				titleTemplate: "%s : DEV",
+			},
+		},
+		runtimeConfig: {
+			public: {
+				baseUrl: "",
+			},
+		},
+	},
+
+	devServer: {
+		https: {
+			key: "certs/server.key",
+			cert: "certs/server.cert",
+		},
+	},
 });

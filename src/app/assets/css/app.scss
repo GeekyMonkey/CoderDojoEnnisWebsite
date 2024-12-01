@@ -1,0 +1,20 @@
+:root {
+	--card-border-color: #0a0;
+	--border-radius: 10px;
+}
+
+body {
+	text-wrap: balance;
+	color: var(--foreground-color);
+	background-color: var(--background-color);
+	transition:
+		background-color 1s,
+		color 0.5s;
+}
+
+form {
+	border: solid 1px pink;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #8888880f;
+}
