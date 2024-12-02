@@ -6,10 +6,6 @@ import {
 	WeakPassword,
 } from "@supabase/supabase-js";
 import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
-import {
-	AuthTokenResponse,
-	AuthTokenResponsePassword,
-} from "@supabase/gotrue-js";
 import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
 import { members } from "~~/server/db/schema/schemas";
 import { and, eq, ilike, or } from "drizzle-orm";

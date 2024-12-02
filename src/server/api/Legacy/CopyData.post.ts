@@ -55,8 +55,6 @@ type ResponseBody = {
  * POST: api/Legacy/CopyData
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
-	const { req } = event.node;
-
 	// Access request body
 	const body: RequestBody = await readBody(event);
 	const resp: ResponseBody = {

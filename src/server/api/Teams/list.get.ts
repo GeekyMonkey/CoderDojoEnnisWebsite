@@ -9,11 +9,9 @@ import { TeamModel } from "~~/shared/types/models/TeamModel";
 type ResponseBody = ApiResponse<TeamModel[]>;
 
 /**
- * GET: api/Teams
+ * GET: api/Teams/list
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
-	const { req } = event.node;
-
 	const { include_deleted, blank } = getQuery(event);
 	const logs: string[] = [];
 	let resp: ResponseBody = {
