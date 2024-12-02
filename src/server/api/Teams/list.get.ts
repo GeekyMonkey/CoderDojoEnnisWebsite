@@ -14,15 +14,23 @@ type ResponseBody = ApiResponse<TeamModel[]>;
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const { req } = event.node;
 
-	const { include_deleted } = getQuery(event);
+	const { include_deleted, blank } = getQuery(event);
+	const logs: string[] = [];
 	let resp: ResponseBody = {
 		data: [],
 		success: true,
+		logs,
 	};
+
+	if (blank) {
+		logs.push("Blank request");
+		return resp;
+	}
 
 	try {
 		const db: DrizzleType = UseDrizzle();
 		const includeDeleted: boolean = include_deleted === "true";
+		logs.push(`Include deleted: ${includeDeleted}`);
 
 		const teamsListQuery = db.select().from(teams).orderBy(teams.teamName);
 
@@ -36,6 +44,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		resp = {
 			success: false,
 			error: error.message,
+			logs,
 		};
 	}
 
