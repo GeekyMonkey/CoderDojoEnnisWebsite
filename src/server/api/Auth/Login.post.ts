@@ -19,7 +19,6 @@ import {
 	ToMemberModel,
 } from "~~/server/db/entities";
 import { MemberModel } from "~~/shared/types";
-import { FromLegacyMemberEntity } from "~~/server/sql/Models/LegacyMemberEntity";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {
@@ -37,43 +36,57 @@ type ResponseBody = {
  */
 export default defineEventHandler(
 	async (event): Promise<ApiResponse<ResponseBody>> => {
-		const { username, password } = await readBody<RequestBody>(event);
-
 		const logs: string[] = [];
 
-		let member: MemberEntity | null = null;
 		try {
-			member = await findMember(username, password, logs);
-			logs.push(
-				"Member found: " + JSON.stringify({ login: member?.login }),
-			);
-		} catch (error: any) {
-			logs.push("Error finding member:", error.message);
-		}
+			const { username, password } = await readBody<RequestBody>(event);
+			logs.push("Login: " + JSON.stringify({ username }));
 
-		let user = null;
-		if (member != null) {
+			let memberEntity: MemberEntity | null = null;
+			let member: MemberModel | null = null;
 			try {
-				user = await loginToSupabase(member, logs);
+				memberEntity = await findMember(username, password, logs);
+				logs.push(
+					"Member found: " +
+						JSON.stringify({ login: memberEntity?.login }),
+				);
+				if (memberEntity) {
+					member = ToMemberModel(memberEntity);
+				}
 			} catch (error: any) {
-				logs.push("Error logging in to Supabase:", error.message);
+				logs.push("Error finding member:", error.message);
 			}
-		}
 
-		if (member && user) {
-			return {
-				success: true,
-				data: {
-					member: ToMemberModel(member!),
-					session: user?.session ?? null,
-				},
-				logs,
-			};
-		} else {
+			let user = null;
+			if (memberEntity != null) {
+				try {
+					user = await loginToSupabase(memberEntity, logs);
+				} catch (error: any) {
+					logs.push("Error logging in to Supabase:", error.message);
+				}
+			}
+
+			if (memberEntity && user) {
+				return {
+					success: true,
+					data: {
+						member,
+						session: user?.session ?? null,
+					},
+					logs,
+				};
+			} else {
+				return {
+					success: false,
+					error: "Invalid login",
+					logs,
+				};
+			}
+		} catch (error: any) {
 			return {
 				success: false,
-				error: "Invalid login",
-				logs,
+				error: "[Login] POST error: " + error.message,
+				logs: [error.message],
 			};
 		}
 	},
@@ -96,7 +109,7 @@ async function findMember(
 
 	const usernameLower = username.trim().toLowerCase();
 	const [usernameFirst, usernameLast] = usernameLower.split(" ");
-	logs.push("Username: " + usernameLower);
+	logs.push("Find Member: " + usernameLower);
 
 	const memberLoginQuery = db
 		.select()
