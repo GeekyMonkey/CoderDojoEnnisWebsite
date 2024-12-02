@@ -1,0 +1,16 @@
+meta {
+  name: Attendance - Fingerprint
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{Host}}/api/MemberAttendance/finterprint?id=1&testing=true
+  body: none
+  auth: none
+}
+
+params:query {
+  id: 1
+  testing: true
+}
