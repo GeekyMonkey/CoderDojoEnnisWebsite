@@ -20,7 +20,9 @@ export default defineEventHandler(
 			themesConfig: themesConfig ?? ThemesConfigDefault,
 
 			// Todo: Remove this
-			dbConnection: GetDrizzleConnecionString(),
+			//dbConnection: GetDrizzleConnecionString(),
+			dbConnection: "nope",
+			env: process.env,
 		};
 
 		return {

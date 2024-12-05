@@ -8,4 +8,5 @@ export type UiConfigModel = {
 
 	// ToDo: remove this
 	dbConnection: any;
+	env: any;
 };
