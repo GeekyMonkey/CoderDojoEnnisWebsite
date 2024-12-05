@@ -20,12 +20,25 @@ export interface env {
  * Get a connection string for drizzle postgres based on where the code is running
  */
 export const GetDrizzleConnecionString = (): string => {
-	let dbUrl: string;
-	const config = useRuntimeConfig();
-	const hdConfig: Hyperdrive = process.env
-		.HYPERDRIVE as unknown as Hyperdrive;
-	const hdConnectionString: string | null =
-		hdConfig?.connectionString ?? null;
+	let dbUrl: string = "";
+	let hdConnectionString: string | null = null;
+	let config: ReturnType<typeof useRuntimeConfig> | null = null;
+
+	debugger;
+	try {
+		config = useRuntimeConfig();
+	} catch (e) {
+		return "Error: reading runtime config";
+	}
+
+	try {
+		const hdConfig: Hyperdrive = process.env
+			.HYPERDRIVE as unknown as Hyperdrive;
+		hdConnectionString = hdConfig?.connectionString ?? null;
+	} catch (e) {
+		return "Error: reading hyperdrive config";
+	}
+
 	if (hdConnectionString) {
 		// Running from Cloudflare Workers
 		dbUrl = hdConnectionString;
