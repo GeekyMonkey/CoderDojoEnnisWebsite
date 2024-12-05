@@ -1,4 +1,5 @@
 import { defineEventHandler } from "h3";
+import { GetDrizzleConnecionString } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
 import { ThemesConfig, ThemesConfigDefault } from "~~/shared/types/ThemeModel";
 import { UiConfigModel } from "~~/shared/types/UiConfigModel";
@@ -17,6 +18,9 @@ export default defineEventHandler(
 
 		const uiConfig: UiConfigModel = {
 			themesConfig: themesConfig ?? ThemesConfigDefault,
+
+			// Todo: Remove this
+			dbConnection: GetDrizzleConnecionString(),
 		};
 
 		return {

@@ -5,4 +5,7 @@ import type { ThemesConfig } from "./ThemeModel";
  */
 export type UiConfigModel = {
 	themesConfig: ThemesConfig;
+
+	// ToDo: remove this
+	dbConnection: any;
 };

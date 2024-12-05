@@ -1,4 +1,10 @@
 {
   "compatibility_date": "2024-11-06",
-  "compatibility_flags": ["nodejs_compat_v2"]
+  "compatibility_flags": ["nodejs_compat_v2"],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "2f892ad1b83e4bcfa9f630e27780b193"
+    }
+  ]
 }
