@@ -165,6 +165,9 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
+			environment: {
+				runtime: process.env.NUXT_ENV_RUNTIME || "development", // "cloudflare" | "development"
+			},
 			supabase: {
 				url: process.env.NUXT_SUPABASE_URL,
 				key: process.env.NUXT_SUPABASE_KEY_PUBLIC,
@@ -177,9 +180,6 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
-			environment: {
-				runtime: process.env.NUXT_ENV_RUNTIME || "development", // "cloudflare" | "development"
-			},
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,
 				user: process.env.NUXT_LEGACY_DB_USER,

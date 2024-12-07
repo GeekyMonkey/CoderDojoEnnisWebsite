@@ -43,7 +43,7 @@ export default defineEventHandler(
 			try {
 				memberEntity = await findMember(username, password, logs);
 				logs.push(
-					"Member found: " +
+					"Member found with matching password: " +
 						JSON.stringify({ login: memberEntity?.login }),
 				);
 				if (memberEntity) {
@@ -129,20 +129,25 @@ async function findMember(
 		);
 
 	const loginMatches = await memberLoginQuery.execute();
+
 	if (loginMatches.length === 0) {
 		logs.push("member not found");
 		return null;
 	}
 
-	if (loginMatches.length > 1) {
+	// Check password hash
+	logs.push("Login matches: " + loginMatches.length);
+	const loginMatchesChecked = loginMatches.filter(
+		(member) => member.passwordHash === passwordHash,
+	);
+
+	if (loginMatchesChecked.length == 0) {
 		logs.push(
-			"Error: Multiple members found with the same login: " + username,
+			"Error: member found, but password doesn't match: " + username,
 		);
 	}
 
-	logs.push("member found: " + loginMatches[0].login);
-
-	return loginMatches?.[0] ?? null;
+	return loginMatchesChecked?.[0] ?? null;
 }
 
 /**
@@ -160,11 +165,16 @@ async function loginToSupabase(
 		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 		const supabaseEmail = `${member.id}@coderdojoennis.com`;
+		logs.push("Supabase email: " + supabaseEmail);
+
 		const supabasePass = await GeneratePasswordHash(
 			String(member.id),
 			process.env.PASS_SALT ?? "_Salty!_",
 		)!;
-		logs.push("Supabase email: " + supabaseEmail);
+		if (!supabasePass) {
+			logs.push("Error generating password hash");
+			return null;
+		}
 
 		// Try to sign in with the password
 		let authTokenResponse: {

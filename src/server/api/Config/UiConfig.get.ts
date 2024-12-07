@@ -24,10 +24,10 @@ export default defineEventHandler(
 		};
 
 		// Temporarily output debugging info
-		logs.push(`config.private: ${JSON.stringify(config.private)}`);
+		// logs.push(`config.private: ${JSON.stringify(config.private)}`);
 		logs.push(`config.public: ${JSON.stringify(config.public)}`);
 		logs.push(
-			`isCloudflare: ${config.private.environment == "cloudflare"}`,
+			`isCloudflare: ${config.public.environment.runtime == "cloudflare"}`,
 		);
 
 		return {

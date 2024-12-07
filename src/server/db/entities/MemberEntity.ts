@@ -8,7 +8,7 @@ export type MemberEntity = typeof members.$inferSelect;
 
 // Runtime differences between Cloudflare Workers and Node.js
 const isCloudflare =
-	useRuntimeConfig().private.environment.runtime == "cloudflare";
+	useRuntimeConfig().public.environment.runtime == "cloudflare";
 
 let getMd5Hash;
 if (isCloudflare) {
