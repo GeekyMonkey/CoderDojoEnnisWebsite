@@ -1,5 +1,7 @@
-import { createHash } from "crypto";
-import { md5 } from "cf-workers-hash";
+// import { createHash } from "crypto";
+// import { md5 } from "cf-workers-hash";
+import md5 from "crypto-js/md5";
+import CryptoJS from "crypto-js";
 
 /**
  * Generate a password hash
@@ -16,21 +18,25 @@ export const GeneratePasswordHash = async (
 	const toHash = `${passClean}-${salt}`;
 	console.log("toHash", toHash);
 
-	let hashBuffer: Buffer;
-	if (isCloudflare ?? IsCloudflare()) {
-		const myDigest = await md5(toHash);
-		hashBuffer = Buffer.from(myDigest, "binary");
-	} else {
-		hashBuffer = createHash("md5").update(toHash).digest();
-	}
+	// let hashBuffer: Buffer;
+	// if (isCloudflare ?? IsCloudflare()) {
+	// 	const myDigest = await md5(toHash);
+	// 	hashBuffer = Buffer.from(myDigest, "binary");
+	// } else {
+	// 	hashBuffer = createHash("md5").update(toHash).digest();
+	// }
 
-	const hash64 = hashBuffer.toString("base64");
-	console.log("hash64", hash64);
+	const hash64: string = md5(toHash).toString(CryptoJS.enc.Base64);
+
+	// const hash64 = hashBuffer.toString("base64");
+	// console.log("hash64", hash64);
 
 	const base64String = hash64
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_")
 		.replace(/=+$/, "");
+	console.log("hashed", base64String);
+
 	return base64String;
 };
 
