@@ -31,12 +31,16 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		logs.push(`Include deleted: ${includeDeleted}`);
 
 		const teamsListQuery = db.select().from(teams).orderBy(teams.teamName);
+		logs.push(`Created query obj`);
 
 		if (!includeDeleted) {
 			teamsListQuery.where(eq(teams.deleted, false));
+			logs.push(`applied filter`);
 		}
 
-		const teamsList: TeamEntity[] = await teamsListQuery;
+		const teamsList: TeamEntity[] = await teamsListQuery.execute();
+		logs.push(`executed query`);
+
 		resp.data = ToTeamModels(teamsList);
 	} catch (error: any) {
 		resp = {
