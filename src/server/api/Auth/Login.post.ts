@@ -140,11 +140,10 @@ async function findMember(
 
 	if (loginMatchesChecked.length == 0) {
 		logs.push(
-			"Error: member found, but password doesn't match: " +
-				{
-					username: loginMatches[0].login,
-					hash: loginMatches[0].passwordHash,
-				},
+			`Error: member found, but password doesn't match: ${JSON.stringify({
+				username: loginMatches[0].login,
+				hash: loginMatches[0].passwordHash,
+			})}`,
 		);
 	}
 

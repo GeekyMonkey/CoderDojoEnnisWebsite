@@ -16,14 +16,15 @@ export const GeneratePasswordHash = async (
 	const toHash = `${passClean}-${salt}`;
 	console.log("toHash", toHash);
 
-	let hash64: string;
+	let hashBuffer: Buffer;
 	if (isCloudflare ?? IsCloudflare()) {
 		const myDigest = await md5(toHash);
-		hash64 = Buffer.from(myDigest, "binary").toString("base64");
+		hashBuffer = Buffer.from(myDigest, "binary");
 	} else {
-		hash64 = createHash("md5").update(toHash).digest("base64");
+		hashBuffer = createHash("md5").update(toHash).digest();
 	}
 
+	const hash64 = hashBuffer.toString("base64");
 	console.log("hash64", hash64);
 
 	const base64String = hash64
