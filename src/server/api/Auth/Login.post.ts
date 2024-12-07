@@ -104,7 +104,7 @@ async function findMember(
 		password,
 		salt,
 	);
-	// logs.push("Hash: " + passwordHash);
+	logs.push("Hash: " + passwordHash);
 
 	const usernameLower = username.trim().toLowerCase();
 	const [usernameFirst, usernameLast] = usernameLower.split(" ");
@@ -143,7 +143,11 @@ async function findMember(
 
 	if (loginMatchesChecked.length == 0) {
 		logs.push(
-			"Error: member found, but password doesn't match: " + username,
+			"Error: member found, but password doesn't match: " +
+				{
+					username: loginMatches[0].login,
+					hash: loginMatches[0].passwordHash,
+				},
 		);
 	}
 
@@ -169,7 +173,7 @@ async function loginToSupabase(
 
 		const supabasePass = await GeneratePasswordHash(
 			String(member.id),
-			process.env.PASS_SALT ?? "_Salty!_",
+			process.env.PASS_SALT || "_Salty!_",
 		)!;
 		if (!supabasePass) {
 			logs.push("Error generating password hash");
