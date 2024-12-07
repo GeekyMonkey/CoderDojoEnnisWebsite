@@ -8,6 +8,8 @@ import { UiConfigModel } from "~~/shared/types/UiConfigModel";
 export default defineEventHandler(
 	async (event): Promise<ApiResponse<UiConfigModel>> => {
 		const errors: string[] = [];
+		const logs: string[] = [];
+		const config = useRuntimeConfig();
 
 		let themesConfig: ThemesConfig | null = null;
 		try {
@@ -20,10 +22,21 @@ export default defineEventHandler(
 			themesConfig: themesConfig ?? ThemesConfigDefault,
 		};
 
+		// Temporarily output debugging info
+		logs.push(
+			`hyperdrive.cs: ${config.private.hyperdrive?.connectionString || "--"}`,
+		);
+		logs.push(`hyperdrive.cs: ${config.private.hyperdrive ?? null}`);
+
+		logs.push(`env_NH: ${process.env?.NUXT_HYPERDRIVE || "--"}`);
+		logs.push(
+			`env_NH_CS: ${(process.env?.NUXT_HYPERDRIVE as any)?.connectionString || "--"}`,
+		);
+
 		return {
 			data: uiConfig,
 			success: true,
-			logs: errors,
+			logs: [...errors, ...logs],
 		};
 	},
 );

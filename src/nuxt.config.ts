@@ -177,6 +177,9 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
+			hyperdrive: {
+				connectionString: process.env.NUXT_HYPERDRIVE_URL,
+			},
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,
 				user: process.env.NUXT_LEGACY_DB_USER,
