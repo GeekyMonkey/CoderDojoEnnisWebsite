@@ -100,7 +100,10 @@ async function findMember(
 
 	password = password.trim();
 	const salt = process.env.PASS_SALT || "_Salty!_";
-	const passwordHash: string | null = GeneratePasswordHash(password, salt);
+	const passwordHash: string | null = await GeneratePasswordHash(
+		password,
+		salt,
+	);
 	// logs.push("Hash: " + passwordHash);
 
 	const usernameLower = username.trim().toLowerCase();
@@ -157,7 +160,7 @@ async function loginToSupabase(
 		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 		const supabaseEmail = `${member.id}@coderdojoennis.com`;
-		const supabasePass = GeneratePasswordHash(
+		const supabasePass = await GeneratePasswordHash(
 			String(member.id),
 			process.env.PASS_SALT ?? "_Salty!_",
 		)!;

@@ -27,6 +27,7 @@
 		"@vee-validate/zod": "4.14.7",
 		"@vueuse/core": "12.0.0",
 		"@vueuse/nuxt": "12.0.0",
+		"cf-workers-hash": "1.0.3",
 		"class-variance-authority": "0.7.1",
 		"drizzle-orm": "0.37.0",
 		"hyperdrive": "11.13.3",
