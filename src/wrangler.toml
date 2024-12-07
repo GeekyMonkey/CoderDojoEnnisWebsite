@@ -3,4 +3,3 @@ compatibility_flags = ["nodejs_compat_v2"]
 hyperdrive = []
 name = "coderdojoennis"
 pages_build_output_dir = ".output/public"
-main = ".output/server/index.js"
