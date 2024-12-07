@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schemas from "./schema/schemas";
 import { relations } from "drizzle-orm";
-import { Hyperdrive } from "@cloudflare/workers-types";
+// import { Hyperdrive } from "@cloudflare/workers-types";
 
 /**
  * Import the generated drizzle tables
@@ -30,10 +30,11 @@ export function UseDrizzle() {
 	}
 
 	let connectionString: string = config.private.postgres.url;
-	if (config.private.hyperdrive?.connectionString) {
-		connectionString =
-			config.private.hyperdrive.connectionString || connectionString;
-	}
+
+	// if (config.private.hyperdrive?.connectionString) {
+	// 	connectionString =
+	// 		config.private.hyperdrive.connectionString || connectionString;
+	// }
 
 	const driz = drizzle(connectionString, {
 		schema: { ...DrizzleTables, ...relations },

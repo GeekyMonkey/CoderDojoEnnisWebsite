@@ -177,8 +177,8 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
-			hyperdrive: {
-				connectionString: process.env.NUXT_HYPERDRIVE_URL,
+			environment: {
+				runtime: process.env.NUXT_ENV_RUNTIME || "development", // "cloudflare" | "development"
 			},
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,

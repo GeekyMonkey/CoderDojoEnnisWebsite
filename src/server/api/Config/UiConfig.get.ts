@@ -1,3 +1,4 @@
+import { log } from "console";
 import { defineEventHandler } from "h3";
 import { GetDrizzleConnecionString } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
@@ -23,14 +24,10 @@ export default defineEventHandler(
 		};
 
 		// Temporarily output debugging info
+		logs.push(`config.private: ${JSON.stringify(config.private)}`);
+		logs.push(`config.public: ${JSON.stringify(config.public)}`);
 		logs.push(
-			`hyperdrive.cs: ${config.private.hyperdrive?.connectionString || "--"}`,
-		);
-		logs.push(`hyperdrive.cs: ${config.private.hyperdrive ?? null}`);
-
-		logs.push(`env_NH: ${process.env?.NUXT_HYPERDRIVE || "--"}`);
-		logs.push(
-			`env_NH_CS: ${(process.env?.NUXT_HYPERDRIVE as any)?.connectionString || "--"}`,
+			`isCloudflare: ${config.private.environment == "cloudflare"}`,
 		);
 
 		return {
