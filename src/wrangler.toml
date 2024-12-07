@@ -1,4 +1,3 @@
-account_id = "1cd3673f9c14e7189278999490fe56f2"
 compatibility_date = "2024-11-06"
 compatibility_flags = ["nodejs_compat_v2"]
 hyperdrive = []
