@@ -18,11 +18,6 @@ export default defineEventHandler(
 
 		const uiConfig: UiConfigModel = {
 			themesConfig: themesConfig ?? ThemesConfigDefault,
-
-			// Todo: Remove this
-			//dbConnection: GetDrizzleConnecionString(),
-			dbConnection: "nope",
-			env: process.env,
 		};
 
 		return {

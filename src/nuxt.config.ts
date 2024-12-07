@@ -164,16 +164,10 @@ export default defineNuxtConfig({
 	},
 
 	runtimeConfig: {
-		rootTest: "rootTest2",
-		supabase: {
-			url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
-			key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
-		},
 		public: {
-			publicTest: "publicTest2",
 			supabase: {
-				url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
-				key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
+				url: process.env.NUXT_SUPABASE_URL,
+				key: process.env.NUXT_SUPABASE_KEY_PUBLIC,
 			},
 			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
 			// buildTarget: buildTarget,
@@ -183,19 +177,17 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
-			privateTest: "privateTest2",
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,
 				user: process.env.NUXT_LEGACY_DB_USER,
 			},
+			postgres: {
+				url: process.env.NUXT_POSTGRES_URL,
+			},
 			supabase: {
 				url: process.env.NUXT_SUPABASE_URL,
-				key: process.env.NUXT_SUPABASE_KEY,
-				password: process.env.NUXT_SUPABASE_PASSWORD,
-				host: process.env.NUXT_SUPABASE_HOST,
-				user: process.env.NUXT_SUPABASE_USER,
-				userpass: process.env.NUXT_SUPABASE_USERPASS,
-				port: process.env.NUXT_SUPABASE_PORT,
+				key: process.env.NUXT_SUPABASE_KEY_PUBLIC,
+				key_private: process.env.NUXT_SUPABASE_KEY_PRIVATE,
 			},
 		},
 	},

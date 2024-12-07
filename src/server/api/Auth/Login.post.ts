@@ -153,7 +153,7 @@ async function loginToSupabase(
 		// Get Supabase configuration from runtime config
 		const config = useRuntimeConfig();
 		const supabaseUrl = config.public.supabase.url;
-		const supabaseServiceRoleKey = config.private.supabase.password;
+		const supabaseServiceRoleKey = config.private.supabase.key_private;
 		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 		const supabaseEmail = `${member.id}@coderdojoennis.com`;

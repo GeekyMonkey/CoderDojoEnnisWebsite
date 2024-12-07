@@ -2,3 +2,4 @@ node_modules
 .nuxt
 .idea
 reference
+src/.yarn/install-state.gz
