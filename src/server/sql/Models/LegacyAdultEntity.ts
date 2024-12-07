@@ -1,4 +1,5 @@
-import { GeneratePasswordHash, MemberEntity } from "~~/server/db/entities";
+import { MemberEntity } from "~~/server/db/entities";
+import { GeneratePasswordHash } from "~~/server/utils/authUtils";
 import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 import { Utf8Encode, Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
 

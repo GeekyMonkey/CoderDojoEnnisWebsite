@@ -9,12 +9,9 @@ import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
 import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
 import { members } from "~~/server/db/schema/schemas";
 import { and, eq, ilike, or } from "drizzle-orm";
-import {
-	GeneratePasswordHash,
-	MemberEntity,
-	ToMemberModel,
-} from "~~/server/db/entities";
+import { MemberEntity, ToMemberModel } from "~~/server/db/entities";
 import { MemberModel } from "~~/shared/types";
+import { GeneratePasswordHash } from "~~/server/utils/authUtils";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {
