@@ -196,16 +196,32 @@ async function loginToSupabase(
 				throw error;
 			}
 		} catch (error) {
+			// Delete the old user if it exists so they can be recreated
+			const { data } = await supabase.auth.admin.listUsers();
+			const oldUser = data.users.find((user) => {
+				return user.email === supabaseEmail;
+			});
+			if (oldUser) {
+				supabase.auth.admin.deleteUser(oldUser.id);
+			}
+
 			// sign in failed, try creating user
-			logs.push("Create new supabase uer: " + supabaseEmail);
-			const signedUp = await supabase.auth.signUp({
+			logs.push("Create new supabase user: " + supabaseEmail);
+			let signedUp = await supabase.auth.signUp({
 				email: supabaseEmail,
 				password: supabasePass,
 			});
 			if (signedUp.error) {
-				logs.push("SignUp error: " + signedUp.error.message);
+				logs.push(
+					"SignUp error: " +
+						JSON.stringify({
+							error: signedUp.error,
+							data: signedUp.data,
+						}),
+				);
 				throw signedUp.error;
 			}
+
 			if (signedUp.data.user) {
 				if (!signedUp.data.user!.confirmed_at) {
 					const now = new Date().toISOString();
