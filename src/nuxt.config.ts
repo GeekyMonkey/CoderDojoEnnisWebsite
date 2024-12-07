@@ -180,6 +180,9 @@ export default defineNuxtConfig({
 			// version: version,
 		},
 		private: {
+			auth: {
+				pass_salt: process.env.NUXT_PASS_SALT,
+			},
 			legacy_data: {
 				pass: process.env.NUXT_LEGACY_DB_PASS,
 				user: process.env.NUXT_LEGACY_DB_USER,

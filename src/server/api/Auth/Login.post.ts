@@ -96,7 +96,7 @@ async function findMember(
 	const db: DrizzleType = UseDrizzle();
 
 	password = password.trim();
-	const salt = process.env.PASS_SALT || "_Salty!_";
+	const salt = useRuntimeConfig().private.auth.pass_salt;
 	const passwordHash: string | null = await GeneratePasswordHash(
 		password,
 		salt,
@@ -169,7 +169,7 @@ async function loginToSupabase(
 
 		const supabasePass = await GeneratePasswordHash(
 			String(member.id),
-			process.env.PASS_SALT || "_Salty!_",
+			config.private.auth.pass_salt,
 		)!;
 		if (!supabasePass) {
 			logs.push("Error generating password hash");
