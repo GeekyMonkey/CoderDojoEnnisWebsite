@@ -1,6 +1,6 @@
 // import { createHash } from "crypto";
 // import { md5 } from "cf-workers-hash";
-import md5 from "crypto-js/md5";
+import hasher from "crypto-js/sha256";
 import CryptoJS from "crypto-js";
 
 /**
@@ -26,7 +26,11 @@ export const GeneratePasswordHash = async (
 	// 	hashBuffer = createHash("md5").update(toHash).digest();
 	// }
 
-	const hash64: string = md5(toHash).toString(CryptoJS.enc.Base64);
+	const hash = hasher(toHash);
+	const hash64: string =
+		hash.toString(CryptoJS.enc.Base64) +
+		"__" +
+		hash.toString(CryptoJS.enc.Hex);
 
 	// const hash64 = hashBuffer.toString("base64");
 	// console.log("hash64", hash64);

@@ -86,12 +86,12 @@ async function CopyData(resp: ResponseBody): Promise<string[]> {
 		// logs.push(...(await CopyBadgesTable(db)));
 		// logs.push(...(await CopyBeltsTable(db)));
 		logs.push(...(await CopyMembersTable(db)));
-		logs.push(...(await CopySessionsTable(db)));
-		logs.push(...(await CopyAttendanceTable(db)));
-		logs.push(...(await CopyMemberBadgeCategoriesTable(db)));
-		logs.push(...(await CopyMemberParentsTable(db)));
-		logs.push(...(await CopyMemberBadgesTable(db)));
-		logs.push(...(await CopyMemberBeltsTable(db)));
+		// logs.push(...(await CopySessionsTable(db)));
+		// logs.push(...(await CopyAttendanceTable(db)));
+		// logs.push(...(await CopyMemberBadgeCategoriesTable(db)));
+		// logs.push(...(await CopyMemberParentsTable(db)));
+		// logs.push(...(await CopyMemberBadgesTable(db)));
+		// logs.push(...(await CopyMemberBeltsTable(db)));
 	} catch (error: any) {
 		console.error("Error copying data:", error);
 		logs.push("Error: " + error.message);
@@ -233,14 +233,14 @@ async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
 	// }
 
 	// Copy all ninjas at once
-	logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
-	try {
-		await db.insert(members).values(newNinjas).execute();
-		logs.push(`Inserted ninjas`);
-	} catch (error: any) {
-		logs.push("Error in ninjas Insert: " + error.message);
-		return logs;
-	}
+	// logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
+	// try {
+	// 	await db.insert(members).values(newNinjas).execute();
+	// 	logs.push(`Inserted ninjas`);
+	// } catch (error: any) {
+	// 	logs.push("Error in ninjas Insert: " + error.message);
+	// 	return logs;
+	// }
 
 	// Copy all adults at once
 	logs.push("Copying mebers table with " + oldAdults.length + " adults");
