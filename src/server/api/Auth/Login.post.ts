@@ -11,7 +11,10 @@ import { members } from "~~/server/db/schema/schemas";
 import { and, eq, ilike, or } from "drizzle-orm";
 import { MemberEntity, ToMemberModel } from "~~/server/db/entities";
 import { MemberModel } from "~~/shared/types";
-import { GeneratePasswordHash } from "~~/server/utils/authUtils";
+import {
+	GeneratePasswordHash,
+	LoginToSupabase,
+} from "~~/server/utils/authUtils";
 
 // Define interfaces for the request body and query parameters
 type RequestBody = {
@@ -53,7 +56,7 @@ export default defineEventHandler(
 			let user = null;
 			if (memberEntity != null) {
 				try {
-					user = await loginToSupabase(memberEntity, logs);
+					user = await LoginToSupabase(memberEntity, logs);
 				} catch (error: any) {
 					logs.push("Error logging in to Supabase:", error.message);
 				}
@@ -148,119 +151,4 @@ async function findMember(
 	}
 
 	return loginMatchesChecked?.[0] ?? null;
-}
-
-/**
- * Member authenticated, now login to Supabase
- */
-async function loginToSupabase(
-	member: MemberEntity,
-	logs: string[],
-): Promise<any | null> {
-	try {
-		// Get Supabase configuration from runtime config
-		const config = useRuntimeConfig();
-		const supabaseUrl = config.public.supabase.url;
-		const supabaseServiceRoleKey = config.private.supabase.key_private;
-		const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
-		const supabaseEmail = `${member.id}@coderdojoennis.com`;
-		logs.push("Supabase email: " + supabaseEmail);
-
-		const supabasePass = await GeneratePasswordHash(
-			String(member.id),
-			config.private.auth.pass_salt,
-		)!;
-		if (!supabasePass) {
-			logs.push("Error generating password hash");
-			return null;
-		}
-
-		// Try to sign in with the password
-		let authTokenResponse: {
-			user: User | null;
-			session: Session | null;
-			weakPassword?: WeakPassword | null | undefined;
-		} | null = null;
-		let error: AuthError | null = null;
-		try {
-			const signInResponse = await supabase.auth.signInWithPassword({
-				email: supabaseEmail,
-				password: supabasePass,
-			});
-			logs.push("Sign in response: " + JSON.stringify(signInResponse));
-			authTokenResponse = signInResponse.data;
-			error = signInResponse.error;
-			if (error) {
-				logs.push("Sign in error: " + JSON.stringify(error));
-				throw error;
-			}
-		} catch (error) {
-			// Delete the old user if it exists so they can be recreated
-			const { data } = await supabase.auth.admin.listUsers();
-			const oldUser = data.users.find((user) => {
-				return user.email === supabaseEmail;
-			});
-			if (oldUser) {
-				supabase.auth.admin.deleteUser(oldUser.id);
-			}
-
-			// sign in failed, try creating user
-			logs.push("Create new supabase user: " + supabaseEmail);
-			let signedUp = await supabase.auth.signUp({
-				email: supabaseEmail,
-				password: supabasePass,
-			});
-			if (signedUp.error) {
-				logs.push(
-					"SignUp error: " +
-						JSON.stringify({
-							error: signedUp.error,
-							data: signedUp.data,
-						}),
-				);
-				throw signedUp.error;
-			}
-
-			if (signedUp.data.user) {
-				if (!signedUp.data.user!.confirmed_at) {
-					const now = new Date().toISOString();
-					signedUp.data.user.confirmed_at = now;
-					signedUp.data.user.email_confirmed_at = now;
-				}
-
-				await supabase.auth.updateUser(signedUp.data.user!);
-				logs.push("Confirmed new user");
-			}
-
-			if (signedUp.data.session) {
-				authTokenResponse = signedUp.data;
-				error = signedUp.error;
-			} else {
-				logs.push("Retry sign in");
-				const signInResponse = await supabase.auth.signInWithPassword({
-					email: supabaseEmail,
-					password: supabasePass,
-				});
-				logs.push(
-					"Sign in 2 response: " + JSON.stringify(signInResponse),
-				);
-				authTokenResponse = signInResponse.data;
-				error = signInResponse.error;
-				if (error) {
-					logs.push("Sign in 2 error: " + JSON.stringify(error));
-					throw error;
-				}
-			}
-		}
-
-		// Now that i have the auth token, i can use it to authenticate the user
-		const { user, session } = authTokenResponse;
-		console.log("User authenticated:", { user, session });
-
-		return authTokenResponse;
-	} catch (error) {
-		console.error("Error generating JWT:", error);
-		return null;
-	}
 }

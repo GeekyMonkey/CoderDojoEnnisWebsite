@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/vue-query";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import type { ApiResponse, SelectOption } from "~~/shared/types";
 
 export function useTeamsStore() {
+	console.log("[TeamsStore] Initializing");
+
 	/**
 	 * Teams Query
 	 */
@@ -11,9 +13,10 @@ export function useTeamsStore() {
 		isLoading,
 		isError,
 		error,
-	} = useQuery({
+	} = useQuery<TeamModel[]>({
 		queryKey: ["teams"],
 		queryFn: async () => {
+			console.log("[TeamsStore] Fetching Teams");
 			const includeDeleted: boolean = false;
 			const response = await $fetch<ApiResponse<TeamModel[]>>(
 				`/api/Teams/list?include_deleted=${includeDeleted}`,
@@ -21,7 +24,11 @@ export function useTeamsStore() {
 			if (!response.success) {
 				throw new Error(response.error || "api error");
 			}
-			return response.data;
+			const teamsSorted = response.data.sort((a, b) =>
+				a.teamName.localeCompare(b.teamName),
+			);
+
+			return teamsSorted;
 		},
 	});
 

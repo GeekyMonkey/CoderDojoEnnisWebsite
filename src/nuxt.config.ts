@@ -150,7 +150,7 @@ export default defineNuxtConfig({
 		static: false,
 	},
 
-	// plugins: [],
+	plugins: [],
 
 	// redirectOptions: {
 	// 	login: "/auth",
@@ -243,6 +243,30 @@ export default defineNuxtConfig({
 				sass: {},
 			},
 		},
+	},
+
+	vueQuery: {
+		// useState key used by nuxt for the vue query state.
+		// stateKey: "vue-query-nuxt", // default
+		// If you only want to import some functions, specify them here.
+		// You can pass false or an empty array to disable this feature.
+		// default: ["useQuery", "useQueries", "useInfiniteQuery", "useMutation", "useIsFetching", "useIsMutating", "useQueryClient"]
+		// autoImports: ["useQuery"],
+		// Pass the vue query client options here ...
+		queryClientOptions: {
+			// defaultOptions: { queries: { staleTime: 5000 } }, // default
+			defaultOptions: {
+				queries: {
+					refetchOnReconnect: "always",
+					refetchOnWindowFocus: true,
+					refetchOnMount: false,
+					staleTime: 10000,
+					placeholderData: [],
+				},
+			},
+		},
+		// Pass the vue query plugin options here ....
+		vueQueryPluginOptions: {},
 	},
 
 	watch: ["~/assets/**/*.ts", "~/assets/**/*.css"],

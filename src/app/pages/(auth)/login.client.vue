@@ -65,27 +65,27 @@
 				password: formState.password,
 			},
 		});
-		console.log("result:", result);
+		console.log("[Login] result:", result);
 		if (result.success) {
 			// console.log("JWT:", { session: result.data.session });
-			supabase.auth.setSession(result.data.session);
+			await supabase.auth.setSession(result.data.session);
 
 			// todo - save member and session in the store
 
 			// Redirect to appropriate page
 			const member: MemberModel | null = result.data.member;
+			let newRoute: string;
 			if (member.isMentor) {
-				// Redirect to Mentor Dashboard
-				router.push("/mentor");
+				newRoute = "/mentor";
 			} else if (member.isParent) {
-				// Redirect to Parent Dashboard
-				router.push("/parent");
+				newRoute = "/parent";
 			} else {
-				// Redirect to Coder Dashboard
-				router.push("/coder");
+				newRoute = "/coder";
 			}
+			console.log("[Login] Redirecting to:", newRoute);
+			router.push(newRoute);
 		} else if (result.error) {
-			console.error("Login Error:", result.error);
+			console.error("[Login] Error:", result.error);
 			errorMessage.value = result.error || "Could Not Complete Login";
 		}
 	};

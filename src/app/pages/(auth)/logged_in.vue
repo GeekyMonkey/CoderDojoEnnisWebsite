@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-	// import type { UserRoles } from "~~/shared/types/UserRoles";
-
 	const router = useRouter();
 	const user = useSupabaseUser();
 
