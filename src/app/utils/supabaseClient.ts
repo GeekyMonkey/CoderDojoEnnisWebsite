@@ -15,3 +15,4 @@ const supabaseKey: string =
 
 // ToDo: pass schema name as a parameter
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+export const coderdojoData = supabase.schema("coderdojo");

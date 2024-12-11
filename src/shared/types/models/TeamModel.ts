@@ -1,11 +1,17 @@
+import { z } from "zod";
+
 /**
  * Team Model
  */
-export type TeamModel = {
-	id: string;
-	deleted: boolean;
-	goal: string | null;
-	hexcode: string | null;
-	notes: string | null;
-	teamName: string;
-};
+export const TeamModelSchema = z
+	.object({
+		id: z.string(),
+		deleted: z.boolean(),
+		goal: z.string().nullable(),
+		hexcode: z.string().nullable(),
+		notes: z.string().nullable(),
+		teamName: z.string(),
+	})
+	.strict();
+
+export type TeamModel = z.infer<typeof TeamModelSchema>;
