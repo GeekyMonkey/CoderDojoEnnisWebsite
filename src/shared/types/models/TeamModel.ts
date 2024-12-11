@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Team Model
+ * Team Model Schema
  */
 export const TeamModelSchema = z
 	.object({
@@ -14,4 +14,7 @@ export const TeamModelSchema = z
 	})
 	.strict();
 
+/**
+ * Team Model
+ */
 export type TeamModel = z.infer<typeof TeamModelSchema>;

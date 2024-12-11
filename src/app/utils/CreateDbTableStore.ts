@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import { computed } from "vue";
+import { computed, type Ref } from "vue";
 import type { ApiResponse, SelectOption } from "~~/shared/types";
 import { UseSupabaseRealtimeTable } from "../composables/UseSupabaseRealtimeTable";
 
@@ -36,7 +36,7 @@ export function CreateDbTableStore<T extends BaseModel>({
 			console.log(`[${tableName}Store] Fetching ${tableName}`);
 			const includeDeleted: boolean = false;
 			const response = await $fetch<ApiResponse<T[]>>(
-				`/api/tables/${tableName}/list?include_deleted=${includeDeleted}`,
+				`/api/${tableName}/list?include_deleted=${includeDeleted}`,
 			);
 			if (!response.success) {
 				throw new Error(response.error || "api error");
@@ -61,15 +61,15 @@ export function CreateDbTableStore<T extends BaseModel>({
 
 	const Options = computed<SelectOption[]>(() => {
 		return (Items.value || [])
-			.filter((item) => !item.deleted && getLabel(item) !== null)
-			.map((item) => ({
+			.filter((item: T) => !item.deleted)
+			.map((item: T) => ({
 				value: item.id,
 				label: getLabel(item) ?? "",
 			}));
 	});
 
 	return {
-		Items,
+		Items: Items as Ref<T[]>,
 		Options,
 		isLoading,
 		isError,
