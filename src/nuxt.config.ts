@@ -257,11 +257,14 @@ export default defineNuxtConfig({
 			// defaultOptions: { queries: { staleTime: 5000 } }, // default
 			defaultOptions: {
 				queries: {
+					// behavior: // todo (what are the options?)
+					gcTime: 1000 * 60 * 60 * 24, // 24 hours
+					placeholderData: [],
 					refetchOnReconnect: "always",
 					refetchOnWindowFocus: true,
 					refetchOnMount: false,
+					retry: 3,
 					staleTime: 10000,
-					placeholderData: [],
 				},
 			},
 		},

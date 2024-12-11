@@ -12,17 +12,17 @@
 	import { Input } from "@/components/ui/input";
 	import { Label } from "@/components/ui/label";
 	import type { Session } from "@supabase/gotrue-js";
-	import { SupabaseClient } from "@supabase/supabase-js";
 	import type { ApiResponse, MemberModel } from "~~/shared/types";
 	import { useRouter } from "nuxt/app";
 	import { Alert } from "@/components/ui/alert";
+	import { UseSupabaseClient } from "~/composables/UseSupabaseClient";
 
 	definePageMeta({
 		layout: "auth",
 	});
 
 	const router = useRouter();
-	const supabase: SupabaseClient = useSupabaseClient();
+	const { supabaseClient } = UseSupabaseClient();
 	const showPassword = ref(false);
 	const errorMessage = ref<string | null>(null);
 
@@ -68,7 +68,7 @@
 		console.log("[Login] result:", result);
 		if (result.success) {
 			// console.log("JWT:", { session: result.data.session });
-			await supabase.auth.setSession(result.data.session);
+			await supabaseClient.auth.setSession(result.data.session);
 
 			// todo - save member and session in the store
 

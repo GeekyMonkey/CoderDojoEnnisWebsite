@@ -1,11 +1,16 @@
-import { useQuery } from "@tanstack/vue-query";
-import { computed, ref } from "vue";
-import { coderdojoData } from "~/utils/supabaseClient";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
+import { computed } from "vue";
 import type { ApiResponse, SelectOption } from "~~/shared/types";
-import { TeamModelSchema } from "~~/shared/types/models/TeamModel";
+import { UseSupabaseRealtimeTable } from "./UseSupabaseRealtimeTable";
 
+/**
+ * Auto-updaing store of Teams data
+ */
 export function useTeamsStore() {
 	console.log("[TeamsStore] Initializing");
+
+	const queryClient = useQueryClient();
+	const tableName: string = "teams";
 
 	/**
 	 * Teams Query
@@ -16,7 +21,7 @@ export function useTeamsStore() {
 		isError,
 		error,
 	} = useQuery<TeamModel[]>({
-		queryKey: ["teams"],
+		queryKey: [tableName],
 		queryFn: async () => {
 			console.log("[TeamsStore] Fetching Teams");
 			const includeDeleted: boolean = false;
@@ -29,6 +34,20 @@ export function useTeamsStore() {
 
 			return response.data;
 		},
+	});
+
+	const { events } = UseSupabaseRealtimeTable({ table: "teams" });
+	events?.on("INSERT", (data) => {
+		queryClient.invalidateQueries({ queryKey: [tableName] });
+	});
+	events?.on("UPDATE", (data) => {
+		queryClient.invalidateQueries({ queryKey: [tableName] });
+	});
+	events?.on("DELETE", (data) => {
+		// Update the cached data to filter out the team that was deleted
+		queryClient.setQueryData<TeamModel[]>([tableName], (Teams) =>
+			Teams?.filter((team) => team.id !== data.id),
+		);
 	});
 
 	/**

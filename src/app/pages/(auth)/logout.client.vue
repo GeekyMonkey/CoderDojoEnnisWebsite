@@ -1,15 +1,16 @@
 <script setup lang="ts">
-	import { SupabaseClient } from "@supabase/supabase-js";
+	import { useRouter } from "nuxt/app";
+	import { UseSupabaseClient } from "~/composables/UseSupabaseClient";
 
 	const router = useRouter();
 
-	const supabase: SupabaseClient = useSupabaseClient();
+	const { supabaseClient } = UseSupabaseClient();
 
 	definePageMeta({
 		layout: "auth",
 	});
 
-	supabase.auth.signOut({});
+	supabaseClient.auth.signOut({});
 
 	router.replace("/login");
 </script>

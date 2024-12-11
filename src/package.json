@@ -32,6 +32,7 @@
 		"drizzle-orm": "0.38.0",
 		"hyperdrive": "11.13.3",
 		"lucide-vue-next": "0.468.0",
+		"mitt": "3.0.1",
 		"mssql": "11.0.1",
 		"nuxt": "^3.14.1592",
 		"postgres": "3.4.5",
