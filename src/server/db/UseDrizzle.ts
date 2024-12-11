@@ -21,6 +21,14 @@ export const DrizzleTables = schemas;
  * Create a drizzle instance for type-safe database access
  */
 export function UseDrizzle() {
+	const connectionString: string = GetDrizzleConnecionString();
+	const driz = drizzle(connectionString, {
+		schema: { ...DrizzleTables, ...relations },
+	});
+	return driz;
+}
+
+export function GetDrizzleConnecionString(): string {
 	let config: ReturnType<typeof useRuntimeConfig> | null = null;
 
 	try {
@@ -34,11 +42,7 @@ export function UseDrizzle() {
 	if (config.private.postgres.hyperdrive) {
 		connectionString = config.private.postgres.hyperdrive;
 	}
-
-	const driz = drizzle(connectionString, {
-		schema: { ...DrizzleTables, ...relations },
-	});
-	return driz;
+	return connectionString;
 }
 
 export type DrizzleType = ReturnType<typeof UseDrizzle>;

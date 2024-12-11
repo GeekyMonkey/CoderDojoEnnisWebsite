@@ -32,11 +32,12 @@ export function CreateDbTableStore<T extends BaseModel>({
 		error,
 	} = useQuery<T[]>({
 		queryKey: [tableName],
-		queryFn: async () => {
+		queryFn: async ({ signal }) => {
 			console.log(`[${tableName}Store] Fetching ${tableName}`);
 			const includeDeleted: boolean = false;
 			const response = await $fetch<ApiResponse<T[]>>(
 				`/api/${tableName}/list?include_deleted=${includeDeleted}`,
+				{ signal },
 			);
 			if (!response.success) {
 				throw new Error(response.error || "api error");

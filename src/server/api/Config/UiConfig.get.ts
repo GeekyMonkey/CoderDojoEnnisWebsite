@@ -30,6 +30,10 @@ export default defineEventHandler(
 			`isCloudflare: ${config.public.environment.runtime == "cloudflare"}`,
 		);
 
+		logs.push(`PG: ${config.private.postgres.url}`);
+		logs.push(`HD: ${config.private.postgres.hyperdrive}`);
+		logs.push(`Drizzle connection string: ${GetDrizzleConnecionString()}`);
+
 		return {
 			data: uiConfig,
 			success: true,

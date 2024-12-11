@@ -18,13 +18,13 @@ export function useUiConfig() {
 	 */
 	const { data, isLoading, isError, error } = useQuery({
 		queryKey: ["UiConfig"],
-		queryFn: async () => {
+		queryFn: async ({ signal }) => {
 			console.log("Loading UiConfig");
 			try {
-				const response =
-					await $fetch<ApiResponse<UiConfigModel>>(
-						`/api/Config/UiConfig`,
-					);
+				const response = await $fetch<ApiResponse<UiConfigModel>>(
+					`/api/Config/UiConfig`,
+					{ signal },
+				);
 				if (!response.success) {
 					debugger;
 					throw new Error(response.error || "api error");
