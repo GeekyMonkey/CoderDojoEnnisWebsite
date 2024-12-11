@@ -6,7 +6,7 @@
 	import { useTeamsStore } from "~/composables/TeamsStore";
 
 	const { Teams, Options, isLoading, error } = useTeamsStore();
-	const { Badges, BadgeCategories, BadgesByCategory } = useBadgesStore();
+	const { BadgeCategories, BadgesByCategory } = useBadgesStore();
 	const { Belts } = useBeltsStore();
 
 	onMounted(() => {
@@ -42,13 +42,14 @@
 	<h1>Badge Categories</h1>
 	<div class="TeamsList">
 		<div v-for="badgeCategory in BadgeCategories">
-			{{ badgeCategory.categoryName }}
+			<div style="margin-top: 5px">{{ badgeCategory.categoryName }}</div>
 			<ul>
 				<li
 					v-for="badge in BadgesByCategory[badgeCategory.id]"
 					:title="badge.description"
+					style="margin-left: 20px"
 				>
-					{{ "  * " }} {{ badge.achievement }}
+					{{ badge.achievement }}
 				</li>
 			</ul>
 		</div>

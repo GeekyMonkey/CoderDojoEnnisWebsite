@@ -13,6 +13,8 @@ type ResponseBody = ApiResponse<TeamModel[]>;
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const { include_deleted } = getQuery(event);
+	const includeDeleted: boolean = include_deleted === "true";
+
 	const logs: string[] = [];
 	let resp: ResponseBody = {
 		data: [],
@@ -20,17 +22,20 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		logs,
 	};
 
+	logs.push("api/teams/list: " + JSON.stringify({ include_deleted }));
 	try {
 		const db: DrizzleType = UseDrizzle();
-		const includeDeleted: boolean = include_deleted === "true";
+		logs.push("Got drizzle");
 
 		const teamsListQuery = db.select().from(teams).orderBy(teams.teamName);
 
 		if (!includeDeleted) {
 			teamsListQuery.where(eq(teams.deleted, false));
 		}
+		logs.push("Built query");
 
 		const teamsList: TeamEntity[] = await teamsListQuery.execute();
+		logs.push("ran query");
 
 		resp.data = ToTeamModels(teamsList);
 	} catch (error: any) {
