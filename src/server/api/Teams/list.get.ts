@@ -41,7 +41,9 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		const teamsList: TeamEntity[] = await teamsListQuery.execute();
 		logs.push(`executed query`);
 
-		resp.data = ToTeamModels(teamsList);
+		resp.data = ToTeamModels(teamsList).sort((a, b) =>
+			a.teamName.localeCompare(b.teamName),
+		);
 	} catch (error: any) {
 		resp = {
 			success: false,
