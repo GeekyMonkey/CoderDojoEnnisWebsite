@@ -31,10 +31,9 @@ export function UseDrizzle() {
 
 	let connectionString: string = config.private.postgres.url;
 
-	// if (config.private.hyperdrive?.connectionString) {
-	// 	connectionString =
-	// 		config.private.hyperdrive.connectionString || connectionString;
-	// }
+	if (config.private.postgres.hyperdrive) {
+		connectionString = config.private.postgres.hyperdrive;
+	}
 
 	const driz = drizzle(connectionString, {
 		schema: { ...DrizzleTables, ...relations },

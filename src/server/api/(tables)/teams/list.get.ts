@@ -14,6 +14,7 @@ type ResponseBody = ApiResponse<TeamModel[]>;
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const { include_deleted } = getQuery(event);
 	const includeDeleted: boolean = include_deleted === "true";
+	const config = useRuntimeConfig();
 
 	const logs: string[] = [];
 	let resp: ResponseBody = {
@@ -26,6 +27,14 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	try {
 		const db: DrizzleType = UseDrizzle();
 		logs.push("Got drizzle");
+
+		// ToDo: remove
+		logs.push(`pg=${config.private.postgres.url}`);
+		logs.push(`hd=${config.private.postgres.hyperdrive}`);
+
+		// ToDo: RemoveSleep for 1 second
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		logs.push("Did nap (ToDo: Remove)");
 
 		const teamsListQuery = db.select().from(teams).orderBy(teams.teamName);
 
