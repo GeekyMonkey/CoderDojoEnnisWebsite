@@ -3,7 +3,7 @@
 	import { useTeamsStore } from "~/composables/TeamsStore";
 	import type { TeamModel } from "~~/shared/types";
 
-	const { Teams, isLoading, error } = useTeamsStore();
+	const { Items: Teams, Options, isLoading, error } = useTeamsStore();
 
 	onMounted(() => {
 		console.log("TeamsList Component Mounted");
@@ -16,6 +16,8 @@
 			{{ team.teamName }}
 		</p>
 	</div>
+	<h2>Options</h2>
+	<p>{{ Options }}</p>
 </template>
 
 <style lang="scss">
