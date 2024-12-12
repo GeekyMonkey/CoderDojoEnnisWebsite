@@ -34,9 +34,9 @@ export default defineEventHandler(
 		);
 
 		try {
-			// logs.push(
-			// 	`Drizzle connection string: ${GetDrizzleConnecionString()}`,
-			// );
+			logs.push(
+				`Drizzle connection string: ${GetDrizzleConnecionString(event)}`,
+			);
 			// logs.push(
 			// 	`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
 			// );
