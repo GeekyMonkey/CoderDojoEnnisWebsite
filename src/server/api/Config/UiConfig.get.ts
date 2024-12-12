@@ -40,12 +40,13 @@ export default defineEventHandler(
 				`Drizzle connection string: ${GetDrizzleConnecionString()}`,
 			);
 			logs.push(
-				`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString}`,
+				`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
 			);
 			logs.push(
-				`HYPERDRIVE: ${JSON.stringify(ServerContext?.cloudflare?.env?.HYPERDRIVE)}`,
+				`HYPERDRIVE: ${JSON.stringify(ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE)}`,
 			);
-			logs.push(`Ctx: ${JSON.stringify(event.context)}`);
+			logs.push(`Ctx1: ${JSON.stringify(ServerContext)}`);
+			logs.push(`Ctx2: ${JSON.stringify(event.context)}`);
 			logs.push(`Env: ${JSON.stringify(process.env)}`);
 		} catch (error: any) {
 			errors.push(`Error: ${error.message}`);
