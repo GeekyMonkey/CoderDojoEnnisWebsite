@@ -1,13 +1,16 @@
 import { log } from "console";
-import { defineEventHandler } from "h3";
-import { GetDrizzleConnecionString } from "~~/server/db/UseDrizzle";
+import { defineEventHandler, H3Event } from "h3";
+import {
+	GetDrizzleConnecionString,
+	ServerContext,
+} from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
 import { ThemesConfig, ThemesConfigDefault } from "~~/shared/types/ThemeModel";
 import { UiConfigModel } from "~~/shared/types/UiConfigModel";
 
 // GET: /Config/UiConfig
 export default defineEventHandler(
-	async (event): Promise<ApiResponse<UiConfigModel>> => {
+	async (event: H3Event): Promise<ApiResponse<UiConfigModel>> => {
 		const errors: string[] = [];
 		const logs: string[] = [];
 		const config = useRuntimeConfig();
@@ -36,14 +39,14 @@ export default defineEventHandler(
 			logs.push(
 				`Drizzle connection string: ${GetDrizzleConnecionString()}`,
 			);
+			logs.push(
+				`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString}`,
+			);
+			logs.push(
+				`HYPERDRIVE: ${JSON.stringify(ServerContext?.cloudflare?.env?.HYPERDRIVE)}`,
+			);
 			logs.push(`Ctx: ${JSON.stringify(event.context)}`);
 			logs.push(`Env: ${JSON.stringify(process.env)}`);
-			logs.push(
-				`HYPERDRIVE Cs: ${event.context.env?.HYPERDRIVE?.connectionString}`,
-			);
-			logs.push(
-				`HYPERDRIVE: ${JSON.stringify(event.context.env?.HYPERDRIVE)}`,
-			);
 		} catch (error: any) {
 			errors.push(`Error: ${error.message}`);
 		}

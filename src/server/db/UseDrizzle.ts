@@ -1,12 +1,21 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schemas from "./schema/schemas";
 import { relations } from "drizzle-orm";
+import { type H3EventContext } from "h3";
 // import { Hyperdrive } from "@cloudflare/workers-types";
 
 /**
  * Import the generated drizzle tables
  */
 export const DrizzleTables = schemas;
+
+/**
+ * Remember the event context for later use
+ */
+export let ServerContext: H3EventContext | null = null;
+export function SetServerContext(ctx: H3EventContext) {
+	ServerContext = ctx;
+}
 
 /**
  * Extend the environment with the Hyperdrive binding
@@ -39,8 +48,9 @@ export function GetDrizzleConnecionString(): string {
 
 	let connectionString: string = config.private.postgres.url;
 
-	if (config.private.postgres.hyperdrive) {
-		connectionString = config.private.postgres.hyperdrive;
+	if (ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString) {
+		connectionString =
+			ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString;
 	}
 	return connectionString;
 }
