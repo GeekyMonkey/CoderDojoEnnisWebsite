@@ -46,11 +46,14 @@ export function GetDrizzleConnecionString(): string {
 		throw Error("[UseDrizzle] Error: reading runtime config");
 	}
 
+	// Local development
 	let connectionString: string = config.private.postgres.url;
 
-	if (ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString) {
-		connectionString =
-			ServerContext?.cloudflare?.env?.HYPERDRIVE?.connectionString;
+	// Cloudflare Workers - use hyperdrive proxy
+	const hyperdriveConnectionString =
+		ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString;
+	if (!!hyperdriveConnectionString) {
+		connectionString = hyperdriveConnectionString;
 	}
 	return connectionString;
 }

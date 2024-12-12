@@ -28,10 +28,6 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		const db: DrizzleType = UseDrizzle();
 		logs.push("Got drizzle");
 
-		// ToDo: remove
-		logs.push(`pg=${config.private.postgres.url}`);
-		logs.push(`hd=${config.private.postgres.hyperdrive}`);
-
 		// ToDo: RemoveSleep for 1 second
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 		logs.push("Did nap (ToDo: Remove)");

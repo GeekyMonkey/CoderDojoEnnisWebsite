@@ -189,9 +189,7 @@ export default defineNuxtConfig({
 			},
 			postgres: {
 				url: process.env.NUXT_POSTGRES_URL,
-				hyperdrive:
-					process.env.NUXT_HYPERDRIVE ||
-					(process.env as any).HYPERDRIVE?.connectionString,
+				// hyperdrive: ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString
 			},
 			supabase: {
 				url: process.env.NUXT_SUPABASE_URL,

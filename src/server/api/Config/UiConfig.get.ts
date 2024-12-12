@@ -34,20 +34,17 @@ export default defineEventHandler(
 		);
 
 		try {
-			logs.push(`PG: ${config.private.postgres.url}`);
-			logs.push(`HD: ${config.private.postgres.hyperdrive}`);
 			logs.push(
 				`Drizzle connection string: ${GetDrizzleConnecionString()}`,
 			);
-			logs.push(
-				`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
-			);
-			logs.push(
-				`HYPERDRIVE: ${JSON.stringify(ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE)}`,
-			);
-			logs.push(`Ctx1: ${JSON.stringify(ServerContext)}`);
-			logs.push(`Ctx2: ${JSON.stringify(event.context)}`);
-			logs.push(`Env: ${JSON.stringify(process.env)}`);
+			// logs.push(
+			// 	`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
+			// );
+			// logs.push(
+			// 	`HYPERDRIVE Stuff: ${JSON.stringify(ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE)}`,
+			// );
+			// logs.push(`ServerContext: ${JSON.stringify(ServerContext)}`);
+			// logs.push(`event.context: ${JSON.stringify(event.context)}`);
 		} catch (error: any) {
 			errors.push(`Error: ${error.message}`);
 		}
