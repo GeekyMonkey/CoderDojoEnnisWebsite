@@ -30,9 +30,21 @@ export default defineEventHandler(
 			`isCloudflare: ${config.public.environment.runtime == "cloudflare"}`,
 		);
 
-		logs.push(`PG: ${config.private.postgres.url}`);
-		logs.push(`HD: ${config.private.postgres.hyperdrive}`);
-		logs.push(`Drizzle connection string: ${GetDrizzleConnecionString()}`);
+		try {
+			logs.push(`PG: ${config.private.postgres.url}`);
+			logs.push(`HD: ${config.private.postgres.hyperdrive}`);
+			logs.push(
+				`Drizzle connection string: ${GetDrizzleConnecionString()}`,
+			);
+			logs.push(
+				`HYPERDRIVE Cs: ${event.context.env.HYPERDRIVE?.connectionString}`,
+			);
+			logs.push(
+				`HYPERDRIVE: ${JSON.stringify(event.context.env.HYPERDRIVE)}`,
+			);
+		} catch (error: any) {
+			errors.push(`Error: ${error.message}`);
+		}
 
 		return {
 			data: uiConfig,
