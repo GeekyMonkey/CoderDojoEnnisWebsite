@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { Icon } from "@iconify/vue";
-	import { computed, reactive, ref, watch, type Ref } from "vue";
+	import { nextTick, reactive, ref, watch } from "vue";
 	import { z } from "zod";
 	import {
 		Card,
@@ -8,13 +8,13 @@
 		CardTitle,
 		CardContent,
 	} from "@/components/ui/card";
+	import { Alert } from "@/components/ui/alert";
 	import { Button } from "@/components/ui/button";
 	import { Input } from "@/components/ui/input";
 	import { Label } from "@/components/ui/label";
 	import type { Session } from "@supabase/gotrue-js";
 	import type { ApiResponse, MemberModel } from "~~/shared/types";
 	import { useRouter } from "nuxt/app";
-	import { Alert } from "@/components/ui/alert";
 	import { UseSupabaseClient } from "~/composables/UseSupabaseClient";
 
 	definePageMeta({
@@ -82,6 +82,7 @@
 			} else {
 				newRoute = "/coder";
 			}
+			await nextTick();
 			console.log("[Login] Redirecting to:", newRoute);
 			router.push(newRoute);
 		} else if (result.error) {

@@ -19,5 +19,22 @@
 		"titleBar.inactiveForeground": "#e7e7e799"
 	},
 	"peacock.color": "#040d09",
-	"editor.gotoLocation.multipleDefinitions": "goto"
+	"editor.gotoLocation.multipleDefinitions": "goto",
+	"folder-color.pathColors": [
+		{
+			"folderPath": "src\\server\\",
+			"color": "foldercolorizer.color_990033",
+			"badge": "🔴"
+		},
+		{
+			"folderPath": "src\\app\\",
+			"color": "foldercolorizer.color_0066cc",
+			"badge": "🔵"
+		},
+		{
+			"folderPath": "src\\shared\\",
+			"color": "foldercolorizer.color_6600ff",
+			"badge": "🟣"
+		}
+	]
 }
