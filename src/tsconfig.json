@@ -1,6 +1,6 @@
 {
-	"extends": "./.nuxt/tsconfig.server.json",
-
+	// https://nuxt.com/docs/guide/concepts/typescript
+	"extends": "./.nuxt/tsconfig.json",
 	"compilerOptions": {
 		// Base
 		"esModuleInterop": true,
@@ -21,6 +21,9 @@
 		"noEmit": true,
 
 		// If your code doesn't run in the DOM
-		"lib": ["es2022"]
+		"lib": ["es2022"],
+
+		// Cloudflare Workers
+		"types": ["@cloudflare/workers-types/2023-07-01"]
 	}
 }

@@ -122,6 +122,7 @@ export default defineNuxtConfig({
 		"@nuxtjs/supabase",
 		"@nuxtjs/tailwindcss",
 		"@vueuse/nuxt",
+		"nitro-cloudflare-dev",
 		"shadcn-nuxt",
 	],
 
@@ -144,6 +145,7 @@ export default defineNuxtConfig({
 		},
 		// middleware: {},
 		// plugins: [{ src: "~~/plugins/nitro/startup.ts", mode: "server" }],
+		preset: "cloudflare-pages",
 		rollupConfig: {
 			external: ["postgres"],
 		},

@@ -1,8 +1,0 @@
-compatibility_date = "2024-11-06"
-compatibility_flags = ["nodejs_compat", "nodejs_compat_v2"]
-name = "coderdojoennis"
-pages_build_output_dir = "./dist"
-
-[[hyperdrive]]
-binding = "HYPERDRIVE"
-id = "846c2c4f9fec4b3cb01151835478541e"
