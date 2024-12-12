@@ -1,10 +1,10 @@
-import { CreateDbTableStore } from "../utils/CreateDbTableStore";
+import baseDbTableStore from "./baseDbTableStore";
 
 /**
  * Auto-updating store of BadgeCategories data
  */
 export function useBadgeCategoriesStore() {
-	const badgeCategoriesStore = CreateDbTableStore<BadgeCategoryModel>({
+	const badgeCategoriesStore = baseDbTableStore<BadgeCategoryModel>({
 		tableName: "badgeCategories",
 		getLabel: (badgeCategory: BadgeCategoryModel) => {
 			return badgeCategory.categoryName;

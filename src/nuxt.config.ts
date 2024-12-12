@@ -37,6 +37,8 @@ export default defineNuxtConfig({
 
 	compatibilityDate: "2024-08-01",
 
+	components: true,
+
 	css: [
 		"~/assets/css/tailwind.scss",
 		"~/assets/css/shadcn.scss",
@@ -107,7 +109,17 @@ export default defineNuxtConfig({
 	},
 
 	imports: {
-		// dirs: ["~~/models"],
+		dirs: [
+			// "~~/src/app/components",
+			// "~/stores",
+		],
+		autoImport: true,
+		imports: [
+			{
+				from: "zod",
+				name: "z",
+			},
+		],
 	},
 
 	modules: [

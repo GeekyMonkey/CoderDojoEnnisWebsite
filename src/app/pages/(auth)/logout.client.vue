@@ -1,7 +1,4 @@
 <script setup lang="ts">
-	import { useRouter } from "nuxt/app";
-	import { UseSupabaseClient } from "~/composables/UseSupabaseClient";
-
 	const router = useRouter();
 
 	const { supabaseClient } = UseSupabaseClient();

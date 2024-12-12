@@ -1,9 +1,3 @@
-<template>
-	<div>
-		<!-- Nothing to see here. Redirecting -->
-	</div>
-</template>
-
 <script setup lang="ts">
 	const router = useRouter();
 	const user = useSupabaseUser();
@@ -43,3 +37,9 @@
 		}
 	}
 </script>
+
+<template>
+	<div>
+		<!-- Nothing to see here. Redirecting -->
+	</div>
+</template>

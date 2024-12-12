@@ -1,11 +1,6 @@
 <script setup lang="ts">
-	import { computed, onMounted } from "vue";
-	import { Icon } from "@iconify/vue";
-	import DialogHeader from "./ui/dialog/DialogHeader.vue";
 	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
-	import { useUiConfig } from "@/composables/UiConfig";
-	import type { ThemeModel } from "../../shared/types/ThemeModel";
-	import { useTranslation } from "~/composables/UseTranslation";
+	import { Icon } from "@iconify/vue";
 
 	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
 	const { Translate, TranslateOrDefault } = useTranslation();

@@ -8,7 +8,7 @@
   "projectStructure": {
     "mentorPage": "src/app/pages/mentor/index.client.vue",
     "teamsListComponent": "src/app/components/TeamsList.client.vue",
-    "teamsStoreComposable": "src/app/composables/TeamsStore.ts",
+    "teamsStoreComposable": "src/app/stores/TeamsStore.ts",
     "vueQueryPlugin": "src/plugins/vue-query.ts",
     "nuxtConfig": "src/nuxt.config.ts"
   },

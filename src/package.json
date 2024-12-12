@@ -77,6 +77,7 @@
 	},
 	"packageManager": "yarn@1.22.22",
 	"prettier": {
+		"bracketSameLine": false,
 		"endOfLine": "lf",
 		"semi": true,
 		"singleQuote": false,

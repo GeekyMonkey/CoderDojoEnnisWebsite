@@ -1,9 +1,7 @@
 <script setup lang="ts">
-	import { onMounted } from "vue";
-	import { useBadgeCategoriesStore } from "~/composables/BadgeCategoriesStore";
-	import { useBadgesStore } from "~/composables/BadgesStore";
-	import { useBeltsStore } from "~/composables/BeltsStore";
-	import { useTeamsStore } from "~/composables/TeamsStore";
+	import { useBadgesStore } from "~/stores/useBadgesStore";
+	import { useBeltsStore } from "~/stores/useBeltsStore";
+	import { useTeamsStore } from "~/stores/useTeamsStore";
 
 	const { Teams, Options, isLoading, error } = useTeamsStore();
 	const { BadgeCategories, BadgesByCategory } = useBadgesStore();

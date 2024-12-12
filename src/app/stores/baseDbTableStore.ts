@@ -1,8 +1,3 @@
-import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import { computed, type Ref } from "vue";
-import type { ApiResponse, SelectOption } from "~~/shared/types";
-import { UseSupabaseRealtimeTable } from "../composables/UseSupabaseRealtimeTable";
-
 /**
  * Common to all db models
  */
@@ -14,7 +9,7 @@ export type BaseModel = {
 /**
  * Create a DB store client with auto-updating data
  */
-export function CreateDbTableStore<T extends BaseModel>({
+export default function baseDbTableStore<T extends BaseModel>({
 	tableName,
 	getLabel,
 }: {

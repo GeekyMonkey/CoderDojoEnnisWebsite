@@ -1,3 +1,7 @@
+<script setup lang="ts">
+	const currentPage = ref("ToDo: currentPage");
+</script>
+
 <template>
 	<div class="flex h-screen w-full">
 		<div class="flex flex-col flex-1 overflow-hidden">
@@ -31,12 +35,6 @@
 		</div>
 	</div>
 </template>
-
-<script setup lang="ts">
-	import LanguageSelect from "~/components/LanguageSelect.client.vue";
-
-	const currentPage = ref("ToDo: currentPage");
-</script>
 
 <style lang="scss">
 	.Sidebar {

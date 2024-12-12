@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
 	<div class="AuthLayout flex min-h-screen w-full">
 		<main class="flex-1 overflow-auto p-4 width-full flex-grow">
@@ -10,10 +12,6 @@
 		</Menubar>
 	</div>
 </template>
-
-<script setup lang="ts">
-	import LanguageSelect from "~/components/LanguageSelect.client.vue";
-</script>
 
 <style lang="scss">
 	.AuthLayout {

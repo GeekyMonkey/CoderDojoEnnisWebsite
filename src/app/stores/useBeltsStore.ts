@@ -1,10 +1,10 @@
-import { CreateDbTableStore } from "../utils/CreateDbTableStore";
+import baseDbTableStore from "./baseDbTableStore";
 
 /**
  * Auto-updating store of Belts data
  */
 export function useBeltsStore() {
-	const beltsStore = CreateDbTableStore<BeltModel>({
+	const beltsStore = baseDbTableStore<BeltModel>({
 		tableName: "belts",
 		getLabel: (belt: BeltModel) => belt.color,
 	});

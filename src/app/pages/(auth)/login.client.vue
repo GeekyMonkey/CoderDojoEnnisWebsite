@@ -1,21 +1,6 @@
 <script setup lang="ts">
 	import { Icon } from "@iconify/vue";
-	import { nextTick, reactive, ref, watch } from "vue";
-	import { z } from "zod";
-	import {
-		Card,
-		CardHeader,
-		CardTitle,
-		CardContent,
-	} from "@/components/ui/card";
-	import { Alert } from "@/components/ui/alert";
-	import { Button } from "@/components/ui/button";
-	import { Input } from "@/components/ui/input";
-	import { Label } from "@/components/ui/label";
 	import type { Session } from "@supabase/gotrue-js";
-	import type { ApiResponse, MemberModel } from "~~/shared/types";
-	import { useRouter } from "nuxt/app";
-	import { UseSupabaseClient } from "~/composables/UseSupabaseClient";
 
 	definePageMeta({
 		layout: "auth",

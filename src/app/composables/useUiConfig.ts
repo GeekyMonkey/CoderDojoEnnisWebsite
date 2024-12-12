@@ -1,9 +1,4 @@
-import { useQuery } from "@tanstack/vue-query";
-import { computed, watch } from "vue";
 import { useColorMode, type UseColorModeReturn } from "@vueuse/core";
-import type { ApiResponse, SelectOption } from "~~/shared/types";
-import type { UiConfigModel } from "~~/shared/types/UiConfigModel";
-import type { ThemeModel } from "~~/shared/types/ThemeModel";
 
 let ColorModeService: UseColorModeReturn<string> | null = null;
 
@@ -11,8 +6,6 @@ let ColorModeService: UseColorModeReturn<string> | null = null;
  * Load the UI Config from the server
  */
 export function useUiConfig() {
-	console.log("Use UiConfig");
-
 	/**
 	 * UI Config Query
 	 */
@@ -66,14 +59,16 @@ export function useUiConfig() {
 		}
 	});
 
-	/** Set the color mode */
+	/**
+	 * Set the color mode
+	 */
 	const InitColorMode = (configData: UiConfigModel) => {
 		const themes = configData.themesConfig.themes || [];
 		if (themes.length > 0) {
 			// Custom color modes = themes
 			const colorModesObj = themes.reduce(
 				(acc: Record<string, string>, mode: ThemeModel) => {
-					acc[mode.folder] = mode.folder;
+					acc[mode.id] = mode.id;
 					return acc;
 				},
 				{},
@@ -98,14 +93,18 @@ export function useUiConfig() {
 		}
 	};
 
-	/** Set the theme */
+	/**
+	 * Set the theme
+	 */
 	const SetTheme = (themeName: string) => {
 		if (ColorModeService) {
 			ColorModeService.value = themeName;
 		}
 	};
 
-	/** Get the current theme */
+	/**
+	 * Get the current theme
+	 */
 	const CurrentTheme = computed<ThemeModel | null>(() => {
 		if (ColorModeService) {
 			const themeId = ColorModeService.value;
@@ -118,14 +117,14 @@ export function useUiConfig() {
 	});
 
 	return {
-		UiConfig: data,
+		CurrentTheme,
 		isLoading,
 		isError,
 		error,
-		CurrentTheme,
 		SetTheme,
 		ThemesConfig: computed<ThemesConfig | null>(() => {
 			return data.value?.themesConfig ?? null;
 		}),
+		UiConfig: data,
 	};
 }

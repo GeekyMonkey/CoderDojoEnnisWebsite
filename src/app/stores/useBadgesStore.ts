@@ -1,6 +1,5 @@
-import { computed } from "vue";
-import { CreateDbTableStore } from "../utils/CreateDbTableStore";
-import { useBadgeCategoriesStore } from "./BadgeCategoriesStore";
+import baseDbTableStore from "./baseDbTableStore";
+import { useBadgeCategoriesStore } from "./useBadgeCategoriesStore";
 
 /**
  * Auto-updating store of Badges data
@@ -8,7 +7,7 @@ import { useBadgeCategoriesStore } from "./BadgeCategoriesStore";
 export function useBadgesStore() {
 	const { BadgeCategories } = useBadgeCategoriesStore();
 
-	const badgesStore = CreateDbTableStore<BadgeModel>({
+	const badgesStore = baseDbTableStore<BadgeModel>({
 		tableName: "badges",
 		getLabel: (badge: BadgeModel) => {
 			return badge.description;

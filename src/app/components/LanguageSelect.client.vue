@@ -1,3 +1,31 @@
+<script setup lang="ts">
+	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
+	import { VisuallyHidden } from "radix-vue";
+
+	const { locale, setLocale, setLocaleCookie, locales } = useI18n();
+
+	const currentLanguage = computed<string>(() => {
+		return (
+			locales.value.find((l) => l.code === locale.value)?.language ?? ""
+		);
+	});
+
+	const setLang = (lang: string) => {
+		console.log("setLang", lang);
+		setLocale(lang);
+		setLocaleCookie(lang);
+		setHtmlLangAttribute(lang);
+	};
+
+	const setHtmlLangAttribute = (lang: string) => {
+		document.documentElement.setAttribute("lang", lang);
+	};
+
+	onMounted(() => {
+		setHtmlLangAttribute(locale.value);
+	});
+</script>
+
 <template>
 	<Dialog>
 		<!-- Button to open the dialog -->
@@ -37,37 +65,6 @@
 		</DialogContent>
 	</Dialog>
 </template>
-
-<script setup lang="ts">
-	import { onMounted } from "vue";
-	import DialogHeader from "./ui/dialog/DialogHeader.vue";
-	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
-	import { VisuallyHidden } from "radix-vue";
-	import { computed } from "vue";
-
-	const { locale, setLocale, setLocaleCookie, locales } = useI18n();
-
-	const currentLanguage = computed<string>(() => {
-		return (
-			locales.value.find((l) => l.code === locale.value)?.language ?? ""
-		);
-	});
-
-	const setLang = (lang: string) => {
-		console.log("setLang", lang);
-		setLocale(lang);
-		setLocaleCookie(lang);
-		setHtmlLangAttribute(lang);
-	};
-
-	const setHtmlLangAttribute = (lang: string) => {
-		document.documentElement.setAttribute("lang", lang);
-	};
-
-	onMounted(() => {
-		setHtmlLangAttribute(locale.value);
-	});
-</script>
 
 <style lang="scss">
 	.LanguageDialog {
