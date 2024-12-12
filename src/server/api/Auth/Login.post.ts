@@ -41,7 +41,12 @@ export default defineEventHandler(
 			let memberEntity: MemberEntity | null = null;
 			let member: MemberModel | null = null;
 			try {
-				memberEntity = await findMember(username, password, logs);
+				memberEntity = await findMember({
+					username,
+					password,
+					logs,
+					event,
+				});
 				logs.push(
 					"Member found with matching password: " +
 						JSON.stringify({ login: memberEntity?.login }),
@@ -91,12 +96,18 @@ export default defineEventHandler(
 /**
  * Find a member with a matching username and password
  */
-async function findMember(
-	username: string,
-	password: string,
-	logs: string[],
-): Promise<MemberEntity | null> {
-	const db: DrizzleType = UseDrizzle();
+async function findMember({
+	username,
+	password,
+	logs,
+	event,
+}: {
+	username: string;
+	password: string;
+	logs: string[];
+	event: H3Event<EventHandlerRequest>;
+}): Promise<MemberEntity | null> {
+	const db: DrizzleType = UseDrizzle(event);
 
 	password = password.trim();
 	const salt = useRuntimeConfig().private.auth.pass_salt;

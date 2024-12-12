@@ -1,8 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schemas from "./schema/schemas";
 import { relations } from "drizzle-orm";
-import { type H3EventContext } from "h3";
-// import { Hyperdrive } from "@cloudflare/workers-types";
+import { EventHandlerRequest, type H3EventContext } from "h3";
 
 /**
  * Import the generated drizzle tables
@@ -29,15 +28,18 @@ export function SetServerContext(ctx: H3EventContext) {
 /**
  * Create a drizzle instance for type-safe database access
  */
-export function UseDrizzle() {
-	const connectionString: string = GetDrizzleConnecionString();
+export function UseDrizzle(event: H3Event<EventHandlerRequest> | null) {
+	const ctx: H3EventContext | null = event?.context;
+	const connectionString: string = GetDrizzleConnecionString(
+		ctx ?? ServerContext,
+	);
 	const driz = drizzle(connectionString, {
 		schema: { ...DrizzleTables, ...relations },
 	});
 	return driz;
 }
 
-export function GetDrizzleConnecionString(): string {
+export function GetDrizzleConnecionString(ctx: H3EventContext | null): string {
 	let config: ReturnType<typeof useRuntimeConfig> | null = null;
 
 	try {
@@ -51,10 +53,12 @@ export function GetDrizzleConnecionString(): string {
 
 	// Cloudflare Workers - use hyperdrive proxy
 	const hyperdriveConnectionString =
-		ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString;
+		ctx?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString;
 	if (!!hyperdriveConnectionString) {
 		connectionString = hyperdriveConnectionString;
 	}
+
+	console.log("[UseDrizzle] Connection string: " + connectionString);
 	return connectionString;
 }
 

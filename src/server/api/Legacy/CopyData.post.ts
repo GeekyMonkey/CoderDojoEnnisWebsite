@@ -62,7 +62,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		success: false,
 	};
 
-	resp.logs.push(...(await CopyData(resp)));
+	resp.logs.push(...(await CopyData(resp, event)));
 
 	return {
 		...resp,
@@ -73,11 +73,14 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 /**
  * Copy the SQL Server data to Supabase
  */
-async function CopyData(resp: ResponseBody): Promise<string[]> {
+async function CopyData(
+	resp: ResponseBody,
+	event: H3Event<EventHandlerRequest>,
+): Promise<string[]> {
 	const logs: string[] = [];
 	try {
 		// Get a DB connection
-		const db = UseDrizzle();
+		const db = UseDrizzle(event);
 		logs.push("Drizzle client created");
 
 		// Copy the data (order matters)

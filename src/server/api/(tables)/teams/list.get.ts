@@ -25,7 +25,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 
 	logs.push("api/teams/list: " + JSON.stringify({ include_deleted }));
 	try {
-		const db: DrizzleType = UseDrizzle();
+		const db: DrizzleType = UseDrizzle(event);
 		logs.push("Got drizzle");
 
 		// ToDo: RemoveSleep for 1 second

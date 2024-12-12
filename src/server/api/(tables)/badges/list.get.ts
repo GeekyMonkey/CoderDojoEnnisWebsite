@@ -21,7 +21,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	};
 
 	try {
-		const db: DrizzleType = UseDrizzle();
+		const db: DrizzleType = UseDrizzle(event);
 		const includeDeleted: boolean = include_deleted === "true";
 
 		const badgesListQuery = db
