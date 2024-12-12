@@ -52,7 +52,9 @@
 		clearErrorMessage();
 	});
 
-	/** Handle Login */
+	/**
+	 * Handle Login
+	 */
 	const handleLogin = async () => {
 		clearErrorMessage();
 
@@ -68,23 +70,21 @@
 		console.log("[Login] result:", result);
 		if (result.success) {
 			// console.log("JWT:", { session: result.data.session });
-			await supabaseClient.auth.setSession(result.data.session);
+			const authResponse = await supabaseClient.auth.setSession(
+				result.data.session,
+			);
+			console.log("[Login] Auth Response:", authResponse);
 
-			// todo - save member and session in the store
-
-			// Redirect to appropriate page
-			const member: MemberModel | null = result.data.member;
-			let newRoute: string;
-			if (member.isMentor) {
-				newRoute = "/mentor";
-			} else if (member.isParent) {
-				newRoute = "/parent";
+			const userRef = useSupabaseUser();
+			const user = waitForRefValue(userRef, 5000);
+			if (!!user) {
+				// todo - save member and session in the store?
+				// This will continue with a redirect to the /logged_in page
+				console.log("[Login] User:", user);
+				router.replace("/logged_in");
 			} else {
-				newRoute = "/coder";
+				errorMessage.value = "Could Not Complete Login";
 			}
-			await nextTick();
-			console.log("[Login] Redirecting to:", newRoute);
-			router.push(newRoute);
 		} else if (result.error) {
 			console.error("[Login] Error:", result.error);
 			errorMessage.value = result.error || "Could Not Complete Login";

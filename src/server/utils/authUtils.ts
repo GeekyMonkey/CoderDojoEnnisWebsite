@@ -10,20 +10,6 @@ import {
 } from "@supabase/supabase-js";
 
 /**
- * Supabase user metadata
- */
-export type SupabaseUserMetaType =
-	| {
-			memberId: string;
-			isMentor: boolean;
-			isNinja: boolean;
-			isParent: boolean;
-			nameFirst: string;
-			nameLast: string;
-	  }
-	| Record<string, any>;
-
-/**
  * Generate a password hash
  */
 export const GeneratePasswordHash = async (
@@ -206,7 +192,12 @@ export async function LoginToSupabase(
 		}
 
 		// Now that i have the auth token, i can use it to authenticate the user
-		const { user, session } = authTokenResponse;
+		let user: User | null = null;
+		let session: Session | null = null;
+		if (authTokenResponse) {
+			user = authTokenResponse.user;
+			session = authTokenResponse.session;
+		}
 		console.log("User authenticated:", { user, session });
 
 		// Update the user metadata if it changed, or if it's a new user
