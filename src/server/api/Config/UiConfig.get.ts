@@ -36,11 +36,13 @@ export default defineEventHandler(
 			logs.push(
 				`Drizzle connection string: ${GetDrizzleConnecionString()}`,
 			);
+			logs.push(`Ctx: ${JSON.stringify(event.context)}`);
+			logs.push(`Env: ${JSON.stringify(process.env)}`);
 			logs.push(
-				`HYPERDRIVE Cs: ${event.context.env.HYPERDRIVE?.connectionString}`,
+				`HYPERDRIVE Cs: ${event.context.env?.HYPERDRIVE?.connectionString}`,
 			);
 			logs.push(
-				`HYPERDRIVE: ${JSON.stringify(event.context.env.HYPERDRIVE)}`,
+				`HYPERDRIVE: ${JSON.stringify(event.context.env?.HYPERDRIVE)}`,
 			);
 		} catch (error: any) {
 			errors.push(`Error: ${error.message}`);
