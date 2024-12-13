@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { Icon } from "@iconify/vue";
 	import type { Session } from "@supabase/gotrue-js";
+	import { z } from "zod";
 
 	definePageMeta({
 		layout: "auth",
@@ -50,6 +51,7 @@
 			body: {
 				username: formState.username,
 				password: formState.password,
+				credentials: "include", // Ensure cookies are included in the request
 			},
 		});
 		console.log("[Login] result:", result);
@@ -61,7 +63,8 @@
 			console.log("[Login] Auth Response:", authResponse);
 
 			const userRef = useSupabaseUser();
-			const user = waitForRefValue(userRef, 5000);
+			const user = await waitForRefValue(userRef, 5000);
+
 			if (!!user) {
 				// todo - save member and session in the store?
 				// This will continue with a redirect to the /logged_in page

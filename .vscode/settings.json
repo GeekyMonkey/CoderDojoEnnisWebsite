@@ -59,5 +59,6 @@
       "color": "foldercolorizer.color_333333",
       "badge": "⚫"
     }
-  ]
+  ],
+  "git.blame.statusBarItem.enabled": true
 }

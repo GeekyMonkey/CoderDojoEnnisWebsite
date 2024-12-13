@@ -17,10 +17,12 @@ export const waitForRefValue = async <T extends Ref>(
 
 	while (elapsedMs < timeoutMs) {
 		if (ref.value) {
+			console.log("Waited for ref value...", elapsedMs);
 			return ref.value;
 		}
 		await sleep(intervalMs);
 		elapsedMs += intervalMs;
+		console.log("Waiting for ref value...", elapsedMs);
 	}
 
 	return null;
