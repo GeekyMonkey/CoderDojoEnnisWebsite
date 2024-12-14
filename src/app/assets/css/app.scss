@@ -3,7 +3,18 @@
 	--border-radius: 10px;
 }
 
+html {
+	height: 100%;
+}
+
+* {
+	box-sizing: border-box;
+	text-wrap: balance;
+}
+
 body {
+	min-height: 100%;
+	position: relative;
 	text-wrap: balance;
 	color: var(--foreground-color);
 	background-color: var(--background-color);
@@ -17,4 +28,8 @@ form {
 	padding: 10px;
 	border-radius: 10px;
 	background-color: #8888880f;
+}
+
+a {
+	user-select: none;
 }

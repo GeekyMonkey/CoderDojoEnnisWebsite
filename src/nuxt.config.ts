@@ -15,6 +15,12 @@ export default defineNuxtConfig({
 				class: "",
 				style: "background-color:black;",
 			},
+			meta: [
+				{
+					name: "viewport",
+					content: "width=device-width, initial-scale=1.0",
+				},
+			],
 			// link: [
 			// 	{
 			// 		prefetch: "true",
@@ -106,6 +112,10 @@ export default defineNuxtConfig({
 		size: "24px", // default <Icon> size applied
 		class: "icon", // default <Icon> class applied
 		mode: "css", // default <Icon> mode applied
+	},
+
+	image: {
+		quality: 90,
 	},
 
 	imports: {

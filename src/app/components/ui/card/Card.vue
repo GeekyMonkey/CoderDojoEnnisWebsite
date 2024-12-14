@@ -31,7 +31,7 @@
 			box-shadow: 0 0 13px var(--hilight-color);
 		}
 
-		.CardHeadder {
+		.CardHeader {
 			border-radius: var(--border-radius);
 			border-bottom-left-radius: 0;
 			border-bottom-right-radius: 0;
