@@ -45,12 +45,7 @@ export default defineNuxtConfig({
 
 	components: true,
 
-	css: [
-		"~/assets/css/tailwind.scss",
-		"~/assets/css/shadcn.scss",
-		"~/assets/css/app.scss",
-		"~/assets/themes/Themes.css",
-	],
+	css: ["~/assets/css/app.scss", "~/assets/themes/Themes.css"],
 
 	devtools: { enabled: false },
 
@@ -114,10 +109,6 @@ export default defineNuxtConfig({
 		mode: "css", // default <Icon> mode applied
 	},
 
-	image: {
-		quality: 90,
-	},
-
 	imports: {
 		dirs: [
 			// "~~/src/app/components",
@@ -142,10 +133,8 @@ export default defineNuxtConfig({
 		"@nuxtjs/google-fonts",
 		"@nuxtjs/i18n",
 		"@nuxtjs/supabase",
-		"@nuxtjs/tailwindcss",
 		"@vueuse/nuxt",
 		"nitro-cloudflare-dev",
-		"shadcn-nuxt",
 	],
 
 	nitro: {
@@ -223,18 +212,6 @@ export default defineNuxtConfig({
 		},
 	},
 	// serverMiddleware: [],
-
-	shadcn: {
-		/**
-		 * Prefix for all the imported component
-		 */
-		prefix: "",
-
-		/**
-		 * Directory that the component lives in.
-		 */
-		componentDir: "./app/components/ui",
-	},
 
 	ssr: false,
 
