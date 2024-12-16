@@ -82,5 +82,8 @@
 		"useTabs": true,
 		"vueIndentScriptAndStyle": true
 	},
+	"resolutions": {
+		"@supabase/supabase-js": "2.47.5"
+	},
 	"version": "0.1.0"
 }
