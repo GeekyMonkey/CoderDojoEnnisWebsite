@@ -8,7 +8,7 @@ let coderdojoData: PostgrestClient<any, "coderdojo", any>;
 /**
  * Supabase Client Composable
  */
-export const UseSupabaseClient = (tables: string[] = ["teams"]) => {
+export const useSupabase = (tables: string[] = ["teams"]) => {
 	const config = useRuntimeConfig();
 
 	if (!supabaseClient || !coderdojoData) {

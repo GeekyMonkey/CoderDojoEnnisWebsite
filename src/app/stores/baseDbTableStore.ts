@@ -42,7 +42,7 @@ export default function baseDbTableStore<T extends BaseModel>({
 		},
 	});
 
-	const { events } = UseSupabaseRealtimeTable({ table: tableName });
+	const { events } = useSupabaseRealtimeTable({ table: tableName });
 	events?.on("INSERT", () => {
 		queryClient.invalidateQueries({ queryKey: [tableName] });
 	});

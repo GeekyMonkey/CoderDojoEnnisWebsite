@@ -8,7 +8,7 @@
 	});
 
 	const router = useRouter();
-	const { supabaseClient } = UseSupabaseClient();
+	const { supabaseClient } = useSupabase();
 	const showPassword = ref(false);
 	const errorMessage = ref<string | null>(null);
 
@@ -115,32 +115,21 @@
 								required
 								@onkeypress="clearErrorMessage()"
 							/>
-							<Button
-								type="button"
-								@click="togglePasswordVisibility"
-								variant="icon"
-								icon
-							>
+							<UiButton @click="togglePasswordVisibility">
 								<Icon
 									:icon="
 										showPassword
 											? 'mdi:show'
 											: 'mdi-show-outline'
 									"
-									class="ToggleIcon w-5 h-5"
 								/>
-							</Button>
+							</UiButton>
 						</div>
 					</FormItem>
 
-					<Button
-						type="submit"
-						class="w-full"
-						variant="default"
-						size="lg"
-					>
+					<UiButton type="submit">
 						{{ $t("login.loginButton") }}
-					</Button>
+					</UiButton>
 
 					<div v-if="errorMessage" class="mt-2">
 						<Alert variant="destructive">

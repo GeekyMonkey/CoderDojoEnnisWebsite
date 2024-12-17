@@ -566,14 +566,6 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workerd-windows-64/-/workerd-windows-64-1.20241205.0.tgz#a2a15eef4d154076527ccb9049d216b4c80717fe"
   integrity sha512-BEab+HiUgCdl6GXAT7EI2yaRtDPiRJlB94XLvRvXi1ZcmQqsrq6awGo6apctFo4WUL29V7c09LxmN4HQ3X2Tvg==
 
-"@cloudflare/workers-shared@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-shared/-/workers-shared-0.11.0.tgz#e08c21e0634d54f9dbb32c0ffaa9b27119b59a9c"
-  integrity sha512-A+lQ8xp7992qSeMmuQ0ssL6CPmm+ZmAv6Ddikan0n1jjpMAic+97l7xtVIsswSn9iLMFPYQ9uNN/8Fl0AgARIQ==
-  dependencies:
-    mime "^3.0.0"
-    zod "^3.22.3"
-
 "@cloudflare/workers-types@4.20241205.0":
   version "4.20241205.0"
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20241205.0.tgz#210d532063d9a11e91ee9c8615f9a666674e08d6"
@@ -1269,17 +1261,17 @@
     timeout-refresh "^2.0.0"
     unslab "^1.3.0"
 
-"@iconify-json/radix-icons@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@iconify-json/radix-icons/-/radix-icons-1.2.1.tgz#67e11482ad8665e577f0c6a6bdb4246961a883f4"
-  integrity sha512-glzHFq3Sj9QKUQG7u2dnlC+KPJGpGM1GhyUIrFFWhXqr9CZgkUPnF5n/6YlbCkYGMa+feSwdhwroLTfKvaAaVA==
+"@iconify-json/radix-icons@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@iconify-json/radix-icons/-/radix-icons-1.2.2.tgz#9ffbe51a7387c993cd6c2dfe03aa4893922feedf"
+  integrity sha512-+PPmKWDP7pfJMcEc9Ty1zyo/zzq+9rfKW4EGb2HSZcPu1VUhothDLFzWvBqQNoFIOYCJ2nm0Vmf8kVyYhq9G0Q==
   dependencies:
     "@iconify/types" "*"
 
-"@iconify/collections@^1.0.492":
-  version "1.0.493"
-  resolved "https://registry.yarnpkg.com/@iconify/collections/-/collections-1.0.493.tgz#51c4f311a8ad67b94b2b2e97f9487a55da6fb9e3"
-  integrity sha512-xK9A6I6v+QbyKAWhhhTxE/4qptAANaBeERew3+yZ4sfMOxuAaGXAdKskNLrJeKe7tBT2yQSYSztPE+AJyG+4ZA==
+"@iconify/collections@^1.0.493":
+  version "1.0.495"
+  resolved "https://registry.yarnpkg.com/@iconify/collections/-/collections-1.0.495.tgz#86f4e502a4ba9a7f312bdec1ce0654299055e137"
+  integrity sha512-dp6IA0JbwkEVrHieLM0an1Wsnknqk9vXiiHPx/fdfeIw3yEnomMNZyrnnqheoNiEfRpnId/rfIlRGDmoNCDzKw==
   dependencies:
     "@iconify/types" "*"
 
@@ -1774,7 +1766,7 @@
     "@nuxt/schema" "^3.14.1592"
     execa "^7.2.0"
 
-"@nuxt/devtools-kit@^1.6.3":
+"@nuxt/devtools-kit@^1.6.4":
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/@nuxt/devtools-kit/-/devtools-kit-1.6.4.tgz#23b678cfc0929c22c6544b2b69bff28b510925ce"
   integrity sha512-jpLYrXFm8T74j8ZjU6lheghe3gdr7PcNluvh/KOl+t6l7AtsQilkTmCZ4YoaiaWLM+5c5mkc72qd7ECgZb0tCw==
@@ -1842,16 +1834,16 @@
     which "^3.0.1"
     ws "^8.18.0"
 
-"@nuxt/icon@1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@nuxt/icon/-/icon-1.10.1.tgz#2e338d6971f9354c2528d1fff0c6ef5bab0efd60"
-  integrity sha512-w0TbE0GWF5eqYS9KlkHyaHd64hFNEU1IkehfnmEtKwCPkOev/zKoZIbY2Zqa1qo+mhRM8nP3DVGNBCkpl9azww==
+"@nuxt/icon@1.10.2":
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/@nuxt/icon/-/icon-1.10.2.tgz#ec8d1642379d151723c0526617174235e4b20152"
+  integrity sha512-cqxDX8aldvXz2phQdot6aHzkoRqxaWSUTkmn8lL1LzuytjsQ8QZLlaRRz4iUsU5sASAWZfT7POpr8JMvoaAS2w==
   dependencies:
-    "@iconify/collections" "^1.0.492"
+    "@iconify/collections" "^1.0.493"
     "@iconify/types" "^2.0.0"
     "@iconify/utils" "^2.2.0"
     "@iconify/vue" "^4.2.0"
-    "@nuxt/devtools-kit" "^1.6.3"
+    "@nuxt/devtools-kit" "^1.6.4"
     "@nuxt/kit" "^3.14.1592"
     consola "^3.2.3"
     local-pkg "^0.5.1"
@@ -2376,10 +2368,10 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@supabase/auth-js@2.67.1":
-  version "2.67.1"
-  resolved "https://registry.yarnpkg.com/@supabase/auth-js/-/auth-js-2.67.1.tgz#b72217136df61d645dcfb7b12c7db8cbb7875a4c"
-  integrity sha512-1SRZG9VkLFz4rtiyEc1l49tMq9jTYu4wJt3pMQEWi7yshZFIBdVH1o5sshk1plQd5LY6GcrPIpCydM2gGDxchA==
+"@supabase/auth-js@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-js/-/auth-js-2.66.1.tgz#40d9e7d98206123afc169877ecfe3fea33a4a0ae"
+  integrity sha512-kOW+04SuDXmP2jRX9JL1Rgzduj8BcOG1qC3RaWdZsxnv89svNCdLRv8PfXW3QPKJdw0k1jF30OlQDPkzbDEL9w==
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
@@ -2390,10 +2382,10 @@
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
-"@supabase/gotrue-js@2.67.1":
-  version "2.67.1"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.67.1.tgz#6a412de36b997e7cce4792dafcc16073157d5712"
-  integrity sha512-qNYhNe3wZCUM4Jnqps0dBhpv5OrgT4Ru3t/KYi7CJJj7ZiXtJTH/91tIsfwMaZNrIebcMf6Hp4Jv9GdI05yQxQ==
+"@supabase/gotrue-js@2.67.2":
+  version "2.67.2"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.67.2.tgz#550d9c59a932a76a2212af9f074524b0b66088bf"
+  integrity sha512-12fSiHXAz8WWoAss/Gw1PM6HUgzqHBxrrauYcOPmOzw7a9Yp2OpjcykuatUsZVTob5ZowOXJCHyQ/WZrDsIi0w==
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
@@ -2436,12 +2428,12 @@
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
-"@supabase/supabase-js@^2.47.3":
-  version "2.47.7"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-2.47.7.tgz#ebfd8b88b47963e05b4ec57c8640dc28e040635a"
-  integrity sha512-ZhAiboKRo4rclM98PWu+6DjrHyYnF5Dzy10dNSdOalxYvcYjYS4Gf1JbVZeofgyXweepWEJd3diwoW1v1OroDw==
+"@supabase/supabase-js@2.47.5", "@supabase/supabase-js@^2.47.3":
+  version "2.47.5"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-2.47.5.tgz#4b4fce9a36f7c27b2990017e6000fb175acba70a"
+  integrity sha512-Xd4L2HR0pdZ+rBnoIi33CJ0K0q9BU9b42NaR13jDkiSYGbxJlZdYtXkTEhyVMQBXnYVvUHXM53q54iw/lgFrHA==
   dependencies:
-    "@supabase/auth-js" "2.67.1"
+    "@supabase/auth-js" "2.66.1"
     "@supabase/functions-js" "2.4.3"
     "@supabase/node-fetch" "2.6.15"
     "@supabase/postgrest-js" "1.16.3"
@@ -3538,6 +3530,11 @@ buffer@^6.0.3:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.2.1"
+
+bulma@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-1.0.2.tgz#47395a660755c9566db3cf981fd4e3a2b637af19"
+  integrity sha512-D7GnDuF6seb6HkcnRMM9E739QpEY9chDzzeFrHMyEns/EXyDJuQ0XA0KxbBl/B2NTsKSoDomW61jFGFaAxhK5A==
 
 bundle-name@^4.1.0:
   version "4.1.0"
@@ -9260,13 +9257,12 @@ workerd@1.20241205.0:
     "@cloudflare/workerd-linux-arm64" "1.20241205.0"
     "@cloudflare/workerd-windows-64" "1.20241205.0"
 
-wrangler@3.95.0:
-  version "3.95.0"
-  resolved "https://registry.yarnpkg.com/wrangler/-/wrangler-3.95.0.tgz#920af5dba125263ab58f4bf9affc01bf425f0dda"
-  integrity sha512-3w5852i3FNyDz421K2Qk4v5L8jjwegO5O8E1+VAQmjnm82HFNxpIRUBq0bmM7CTLvOPI/Jjcmj/eAWjQBL7QYg==
+wrangler@3.96.0:
+  version "3.96.0"
+  resolved "https://registry.yarnpkg.com/wrangler/-/wrangler-3.96.0.tgz#d62b11bd2968f44a1705706dc3ceac27137915c6"
+  integrity sha512-KjbHTUnwTa5eKl3hzv2h6nHBfAsbUkdurL7f6Y288/Bdn6tcEis13jLVR/nw/eWa3tNCBG1xOMZJboUyzWcC1g==
   dependencies:
     "@cloudflare/kv-asset-handler" "0.3.4"
-    "@cloudflare/workers-shared" "0.11.0"
     "@esbuild-plugins/node-globals-polyfill" "^0.2.3"
     "@esbuild-plugins/node-modules-polyfill" "^0.2.2"
     blake3-wasm "^2.1.5"

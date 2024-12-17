@@ -1,15 +1,15 @@
 <script setup lang="ts"></script>
 
 <template>
-	<div class="AuthLayout flex min-h-screen w-full">
-		<main class="flex-1 overflow-auto p-4 width-full flex-grow">
+	<div class="AuthLayout">
+		<main>
 			<slot />
 		</main>
 
-		<Menubar class="bg-transparent border-0">
-			<ThemeSelect />
+		<div class="Footer">
+			<ThemesSelect />
 			<LanguageSelect />
-		</Menubar>
+		</div>
 	</div>
 </template>
 
@@ -17,9 +17,23 @@
 	.AuthLayout {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
+		min-height: 100vh;
 
 		main {
+			flex: 1;
+			padding: 1rem;
+			width: 100%;
+			flex-grow: 1;
 			align-content: center;
+			justify-items: center;
+		}
+
+		.Footer {
+			display: flex;
+			padding: 1rem;
+			gap: 1rem;
+			width: 100%;
 		}
 	}
 </style>

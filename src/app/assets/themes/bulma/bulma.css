@@ -1,0 +1,9 @@
+@layer theme {
+	[theme="bulma"] body {
+		min-height: 100%;
+		/*
+		 * This is the default bulma styling
+		 * So nothing should be added here
+		 */
+	}
+}

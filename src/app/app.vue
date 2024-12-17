@@ -7,7 +7,7 @@
 	<NuxtLayout>
 		<NuxtPage />
 	</NuxtLayout>
-	<ThemesThemeFooter />
+	<ThemesLayoutFooter />
 </template>
 
 <style lang="scss"></style>

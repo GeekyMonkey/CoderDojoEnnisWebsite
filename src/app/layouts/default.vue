@@ -10,9 +10,9 @@
 			>
 				<Sheet>
 					<SheetTrigger asChild>
-						<Button>
-							<NuxtIcon name="line-md:menu" />
-						</Button>
+						<UiButton>
+							<UiIcon icon="line-md:menu" />
+						</UiButton>
 					</SheetTrigger>
 					<SheetContent side="left" class="Sidebar">
 						<div class="SidebarPanel">

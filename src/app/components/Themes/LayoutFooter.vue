@@ -7,14 +7,15 @@
 
 <template>
 	<Teleport to="body">
-		<div id="ThemeFooter" :data-theme="currentThemeName">
+		<!-- Specialty Themes with HTML/Script needs go here -->
+		<div id="ThemeLayoutFooter" :data-theme="currentThemeName">
 			<ThemesTheme_crt v-if="currentThemeName === 'crt'" />
 		</div>
 	</Teleport>
 </template>
 
 <style lang="scss">
-	#ThemeFooter {
+	#ThemeLayoutFooter {
 		z-index: 60; // Appear above sidebar
 		position: absolute;
 		inset: 0;

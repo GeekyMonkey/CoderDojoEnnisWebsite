@@ -1,35 +1,51 @@
-:root {
-	--card-border-color: #0a0;
-	--border-radius: 10px;
+// Layer order
+@layer base, app, theme;
+
+// Import Bulma
+@import "../../../node_modules/bulma/css/bulma.css" layer(base);
+
+// App overrides of Bulma styles
+@layer app {
+	// Resets & common styles
+	html {
+		height: 100%;
+	}
+
+	* {
+		box-sizing: border-box;
+		text-wrap: balance;
+	}
+
+	a {
+		user-select: none;
+	}
+
+	body {
+		min-height: 100%;
+		position: relative;
+		transition:
+			background-color 1s,
+			color 0.5s;
+	}
+
+	.button {
+		.iconify {
+			margin: 0;
+		}
+	}
+
+	// Override variables
+	.modal {
+		--bulma-modal-card-head-padding: 1rem 0.5rem;
+
+		.modal-card-head {
+			gap: 0.5rem;
+		}
+	}
 }
 
-html {
-	height: 100%;
-}
-
-* {
-	box-sizing: border-box;
-	text-wrap: balance;
-}
-
-body {
-	min-height: 100%;
-	position: relative;
-	text-wrap: balance;
-	color: var(--foreground-color);
-	background-color: var(--background-color);
-	transition:
-		background-color 1s,
-		color 0.5s;
-}
-
-form {
-	border: solid 1px pink;
-	padding: 10px;
-	border-radius: 10px;
-	background-color: #8888880f;
-}
-
-a {
-	user-select: none;
-}
+// @layer theme {
+// 	:root {
+// 		--bulma-modal-card-head-padding: 0.7rem;
+// 	}
+// }

@@ -45,7 +45,11 @@ export default defineNuxtConfig({
 
 	components: true,
 
-	css: ["~/assets/css/app.scss", "~/assets/themes/Themes.css"],
+	css: [
+		//"bulma/css/bulma.css",
+		"~/assets/css/app.scss",
+		"~/assets/themes/Themes.css",
+	],
 
 	devtools: { enabled: false },
 

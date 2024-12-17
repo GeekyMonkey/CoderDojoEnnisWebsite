@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	const router = useRouter();
 
-	const { supabaseClient } = UseSupabaseClient();
+	const { supabaseClient } = useSupabase();
 
 	definePageMeta({
 		layout: "auth",

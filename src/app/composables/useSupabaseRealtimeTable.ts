@@ -1,5 +1,5 @@
 import { RealtimeChannel } from "@supabase/supabase-js";
-import { UseSupabaseClient } from "./UseSupabaseClient";
+import { useSupabase } from "./useSupabase";
 import mitt, { type Emitter } from "mitt";
 
 type DbEventTypes = "INSERT" | "UPDATE" | "DELETE";
@@ -16,14 +16,14 @@ let eventEmitters: Map<string, Emitter<DbEvents>> = new Map();
 /**
  * Supabase Client Composable
  */
-export const UseSupabaseRealtimeTable = ({
+export const useSupabaseRealtimeTable = ({
 	table,
 	forceResubscribe = false,
 }: {
 	table: string;
 	forceResubscribe?: boolean;
 }) => {
-	const { supabaseClient } = UseSupabaseClient();
+	const { supabaseClient } = useSupabase();
 
 	// Do we already have this subscription?
 	const existingChannel = realtimeChannels.get(table);
@@ -43,7 +43,7 @@ export const UseSupabaseRealtimeTable = ({
 
 	// Subscribe to changes in the specified table
 	console.log(
-		`[UseSupabaseClient] Subscribing to changes in the ${table} table`,
+		`[useSupabaseRealtime] Subscribing to changes in the ${table} table`,
 	);
 	const channel = supabaseClient
 		.channel(`coderdojo:${table}`)
