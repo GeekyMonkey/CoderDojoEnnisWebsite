@@ -1,7 +1,7 @@
 import { log } from "console";
 import { defineEventHandler, H3Event } from "h3";
 import {
-	GetDrizzleConnecionString,
+	GetDrizzleConnectionString,
 	ServerContext,
 } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";

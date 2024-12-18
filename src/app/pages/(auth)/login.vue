@@ -1,7 +1,8 @@
 <script setup lang="ts">
-	import { Icon } from "@iconify/vue";
 	import type { Session } from "@supabase/gotrue-js";
 	import { z } from "zod";
+
+	const { Translate } = useTranslation();
 
 	definePageMeta({
 		layout: "auth",
@@ -81,69 +82,65 @@
 </script>
 
 <template>
-	<div class="LoginComponent flex items-center justify-center">
-		<Card class="w-full max-w-md">
-			<CardHeader>
-				<CardTitle>
-					<Translated t="login.title" />
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<form @submit.prevent="handleLogin">
-					<FormItem>
-						<Label for="username">
-							<Translated t="login.username" />
-						</Label>
-						<Input
-							type="text"
-							id="username"
-							v-model="formState.username"
-							required
-							@onkeypress="clearErrorMessage()"
-						/>
-					</FormItem>
+	<div class="LoginComponent">
+		<UiCard class="is-primary">
+			<template #heading>
+				<Translated t="login.title" />
+			</template>
 
-					<FormItem>
-						<Label for="password">
-							<Translated t="login.password" />
-						</Label>
-						<div class="InputWithButton">
-							<Input
-								:type="showPassword ? 'text' : 'password'"
-								id="password"
-								v-model="formState.password"
-								required
-								@onkeypress="clearErrorMessage()"
-							/>
-							<UiButton @click="togglePasswordVisibility">
-								<Icon
-									:icon="
-										showPassword
-											? 'mdi:show'
-											: 'mdi-show-outline'
-									"
-								/>
-							</UiButton>
-						</div>
-					</FormItem>
+			<form id="LoginForm" @submit.prevent="handleLogin">
+				<UiFormTextInput
+					:label="Translate('login.username')"
+					type="text"
+					id="username"
+					v-model="formState.username"
+					required
+					@onkeypress="clearErrorMessage()"
+					validation="This login is invalid"
+				>
+				</UiFormTextInput>
 
-					<UiButton type="submit">
+				<UiFormTextInput
+					:label="Translate('login.password')"
+					:type="showPassword ? 'text' : 'password'"
+					id="password"
+					v-model="formState.password"
+					required
+					@onkeypress="clearErrorMessage()"
+					:valid="true"
+					validation="This password is invalid"
+				>
+					<template #right>
+						<UiIcon
+							class="is-small clickable"
+							:icon="
+								showPassword ? 'mdi:show' : 'mdi-show-outline'
+							"
+							@click="togglePasswordVisibility"
+						></UiIcon>
+					</template>
+				</UiFormTextInput>
+			</form>
+
+			pw={{ formState.password }}
+
+			<template #footer>
+				<div class="buttons" style="width: 100%">
+					<UiButton type="submit" form="LoginForm" class="is-primary">
 						{{ $t("login.loginButton") }}
 					</UiButton>
-
-					<div v-if="errorMessage" class="mt-2">
-						<Alert variant="destructive">
-							{{ errorMessage }}
-						</Alert>
+				</div>
+				<div v-if="errorMessage">
+					<div class="notification is-danger is-width-full">
+						{{ errorMessage }}
 					</div>
-				</form>
-			</CardContent>
-		</Card>
+				</div>
+			</template>
+		</UiCard>
 	</div>
 </template>
 
 <style scoped lang="scss">
 	.LoginComponent {
-		flex-grow: 1;
 	}
 </style>

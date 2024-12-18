@@ -22,10 +22,10 @@
 		"@nuxtjs/color-mode": "3.5.2",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "8.5.6",
-		"@nuxtjs/supabase": "1.4.4",
+		"@nuxtjs/supabase": "1.4.5",
 		"@radix-icons/vue": "1.0.0",
-		"@supabase/gotrue-js": "2.67.2",
-		"@tanstack/vue-query": "5.62.7",
+		"@supabase/gotrue-js": "2.67.3",
+		"@tanstack/vue-query": "5.62.8",
 		"@vee-validate/zod": "4.14.7",
 		"@vueuse/core": "12.0.0",
 		"@vueuse/nuxt": "12.0.0",
@@ -47,7 +47,7 @@
 		"zod": "3.24.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20241205.0",
+		"@cloudflare/workers-types": "4.20241218.0",
 		"@iconify-json/radix-icons": "1.2.2",
 		"@iconify/vue": "4.2.0",
 		"@nuxt/icon": "1.10.2",
@@ -72,7 +72,7 @@
 		"vitest": "2.1.8",
 		"wrangler": "3.96.0"
 	},
-	"packageManager": "yarn@1.22.22",
+	"packageManager": "yarn@4.5.3",
 	"prettier": {
 		"bracketSameLine": false,
 		"endOfLine": "lf",
@@ -82,9 +82,6 @@
 		"trailingComma": "all",
 		"useTabs": true,
 		"vueIndentScriptAndStyle": true
-	},
-	"resolutions": {
-		"@supabase/supabase-js": "2.47.5"
 	},
 	"version": "0.1.0"
 }

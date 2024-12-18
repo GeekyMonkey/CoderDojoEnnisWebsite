@@ -30,7 +30,7 @@ export function SetServerContext(ctx: H3EventContext) {
  */
 export function UseDrizzle(event: H3Event<EventHandlerRequest> | null) {
 	const ctx: H3EventContext | null = event?.context;
-	const connectionString: string = GetDrizzleConnecionString(
+	const connectionString: string = GetDrizzleConnectionString(
 		ctx ?? ServerContext,
 	);
 	const driz = drizzle(connectionString, {
@@ -39,7 +39,7 @@ export function UseDrizzle(event: H3Event<EventHandlerRequest> | null) {
 	return driz;
 }
 
-export function GetDrizzleConnecionString(ctx: H3EventContext | null): string {
+export function GetDrizzleConnectionString(ctx: H3EventContext | null): string {
 	let config: ReturnType<typeof useRuntimeConfig> | null = null;
 
 	try {

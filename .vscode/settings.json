@@ -60,5 +60,20 @@
       "badge": "⚫"
     }
   ],
-  "git.blame.statusBarItem.enabled": true
+  "git.blame.statusBarItem.enabled": true,
+  "cSpell.words": [
+    "bulma",
+    "coderdojo",
+    "gotrue",
+    "hebilicious",
+    "hyperdrive",
+    "iconify",
+    "neondatabase",
+    "nuxt",
+    "nuxtjs",
+    "sonner",
+    "supabase",
+    "vaul",
+    "vueuse"
+  ]
 }

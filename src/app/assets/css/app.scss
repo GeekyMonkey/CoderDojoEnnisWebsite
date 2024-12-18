@@ -34,14 +34,19 @@
 		}
 	}
 
-	// Override variables
-	.modal {
-		--bulma-modal-card-head-padding: 1rem 0.5rem;
-
-		.modal-card-head {
-			gap: 0.5rem;
-		}
+	.clickable {
+		cursor: pointer;
 	}
+
+	/* Declare app variables */
+	:root {
+		--input-radius: 0.25rem;
+		--input-border-width: 1px;
+		--input-border-style: solid;
+		--input-font-size: 1.2rem;
+	}
+
+	// Override bulma variables
 }
 
 // @layer theme {

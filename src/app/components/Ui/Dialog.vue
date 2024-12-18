@@ -67,34 +67,34 @@
 		<!-- Dialog Background + Card -->
 		<div :class="`modal ${isOpen ? 'is-active' : ''}`">
 			<div class="modal-background" @click="close"></div>
-			<Uibutton
+			<UiButton
 				v-if="showTopCloseButton"
 				class="modal-close is-large"
 				aria-label="close"
 				@click="close"
-			></Uibutton>
+			></UiButton>
 
 			<div class="modal-card" v-bind="$attrs">
 				<!-- Dialog Heading -->
 				<div v-if="hasHeadingSlot" class="modal-card-head">
 					<p class="modal-card-title"><slot name="heading"></slot></p>
-					<Uibutton
+					<UiButton
 						v-if="showHeadingCloseButton"
 						class="delete"
 						aria-label="close"
 						@click="close"
-					></Uibutton>
+					></UiButton>
 				</div>
 				<div v-else-if="title || icon" class="modal-card-head">
 					<UiIcon v-if="icon" :icon="icon" />
 
 					<p class="modal-card-title" v-if="title">{{ title }}</p>
-					<Uibutton
+					<UiButton
 						v-if="showHeadingCloseButton"
 						class="delete"
 						aria-label="close"
 						@click="close"
-					></Uibutton>
+					></UiButton>
 				</div>
 
 				<!-- Dialog Content -->
@@ -111,10 +111,20 @@
 	</div>
 </template>
 
-<style lang="scss" scoped>
-	.UiDialog {
-		.TriggerContainer:empty {
-			display: none;
+<style lang="scss">
+	@layer app {
+		.UiDialog {
+			.TriggerContainer:empty {
+				display: none;
+			}
+		}
+
+		.modal {
+			--bulma-modal-card-head-padding: 1rem 0.5rem;
+
+			.modal-card-head {
+				gap: 0.5rem;
+			}
 		}
 	}
 </style>
