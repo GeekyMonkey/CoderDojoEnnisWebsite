@@ -55,7 +55,7 @@ export default defineEventHandler(
 					member = ToMemberModel(memberEntity);
 				}
 			} catch (error: any) {
-				logs.push("Error finding member:", error.message);
+				logs.push("Error finding member:" + error.message);
 			}
 
 			let user = null;
@@ -115,11 +115,11 @@ async function findMember({
 		password,
 		salt,
 	);
-	logs.push("Hash: " + passwordHash);
+	logs.push("[Login.post] Hash: " + passwordHash);
 
 	const usernameLower = username.trim().toLowerCase();
 	const [usernameFirst, usernameLast] = usernameLower.split(" ");
-	logs.push("Find Member: " + usernameLower);
+	logs.push("[Login.post] Find Member: " + usernameLower);
 
 	const memberLoginQuery = db
 		.select()

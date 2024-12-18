@@ -1,4 +1,5 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
+import { drizzle as drizzleLocal } from "drizzle-orm/postgres-js";
 import * as schemas from "./schema/schemas";
 import { relations } from "drizzle-orm";
 import { EventHandlerRequest, type H3EventContext } from "h3";
@@ -30,13 +31,23 @@ export function SetServerContext(ctx: H3EventContext) {
  */
 export function UseDrizzle(event: H3Event<EventHandlerRequest> | null) {
 	const ctx: H3EventContext | null = event?.context;
+	const config = useRuntimeConfig();
 	const connectionString: string = GetDrizzleConnectionString(
 		ctx ?? ServerContext,
 	);
-	const driz = drizzle(connectionString, {
-		schema: { ...DrizzleTables, ...relations },
-	});
-	return driz;
+	if (config.public.environment.runtime === "development") {
+		console.log("[UseDrizzle] Using local drizzle");
+		const driz = drizzleLocal(connectionString, {
+			schema: { ...DrizzleTables, ...relations },
+		});
+		return driz;
+	} else {
+		console.log("[UseDrizzle] Using cloudflare drizzle");
+		const driz = drizzle(connectionString, {
+			schema: { ...DrizzleTables, ...relations },
+		});
+		return driz;
+	}
 }
 
 export function GetDrizzleConnectionString(ctx: H3EventContext | null): string {

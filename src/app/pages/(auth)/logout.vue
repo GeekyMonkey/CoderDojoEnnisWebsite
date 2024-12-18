@@ -1,15 +1,16 @@
 <script setup lang="ts">
 	const router = useRouter();
-
-	const { supabaseClient } = useSupabase();
+	const { Logout } = useAuthState();
 
 	definePageMeta({
 		layout: "auth",
 	});
 
-	supabaseClient.auth.signOut({});
+	onMounted(async () => {
+		await Logout();
 
-	router.replace("/login");
+		router.replace("/login");
+	});
 </script>
 
 <template>

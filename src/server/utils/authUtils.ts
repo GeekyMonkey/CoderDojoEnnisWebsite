@@ -21,7 +21,7 @@ export const GeneratePasswordHash = async (
 	}
 	const passClean = (password || "").toLowerCase().trim();
 	const toHash = `${passClean}-${salt}`;
-	console.log("toHash", toHash);
+	console.log("[AuthUtils.GeneratePasswordHash] toHash", toHash);
 
 	const hash = hasher(toHash);
 	const hash64: string = hash.toString(CryptoJS.enc.Hex);
@@ -31,7 +31,7 @@ export const GeneratePasswordHash = async (
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_")
 		.replace(/=+$/, "");
-	console.log("hashed", base64String);
+	console.log("[AuthUtils.GeneratePasswordHash] hashed", base64String);
 
 	return base64String;
 };

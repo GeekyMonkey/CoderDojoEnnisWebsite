@@ -129,7 +129,6 @@ export default defineNuxtConfig({
 
 	modules: [
 		// "@nuxt/image",
-		// "@primevue/nuxt-module",
 		// "@nuxt/scripts",
 		"@hebilicious/vue-query-nuxt",
 		"@nuxt/icon",
@@ -220,19 +219,20 @@ export default defineNuxtConfig({
 	ssr: false,
 
 	supabase: {
-		redirectOptions: {
-			login: "/login",
-			callback: "/logged_in",
-			include: [
-				// Secured paths
-				"/coder(/*)?",
-				"/mentor(/*)?",
-				"/parent(/*)?",
-				"/debug(/*)?",
-			],
-			exclude: [],
-			cookieRedirect: true,
-		},
+		redirect: false,
+		// redirectOptions: {
+		// 	login: "/login",
+		// 	callback: "/logged_in",
+		// 	include: [
+		// 		// Secured paths
+		// 		"/coder(/*)?",
+		// 		"/mentor(/*)?",
+		// 		"/parent(/*)?",
+		// 		"/debug(/*)?",
+		// 	],
+		// 	exclude: [],
+		// 	cookieRedirect: true,
+		// },
 	},
 
 	typescript: {
