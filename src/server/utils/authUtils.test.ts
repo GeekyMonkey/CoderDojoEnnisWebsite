@@ -13,7 +13,7 @@ describe("GeneratePasswordHash", () => {
 
 	it("should generate a hash for a given password", async () => {
 		const password = "password123";
-		const expectedHash = "iLSac0sNdXZ6-S4VUYGi6g"; // Example hash, replace with actual expected hash
+		const expectedHash = "bb66d4e66d707fbc22c4490c50a063fe0bc4ba0b6ce72703378d45725ee28f93"; // Example hash, replace with actual expected hash
 		const hash = await GeneratePasswordHash(password, salt1);
 		expect(hash).toBe(expectedHash);
 	});
