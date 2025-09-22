@@ -9,13 +9,13 @@ Feel free to edit the content and make a pull request. Or even better, convert f
 ### One time setup
 
 In the _src_ folder: Setup with
-`yarn install`
+`pnpm install`
 
 
 ### Running locally
 
 In the _src_ folder: Run with
-`yarn dev`
+`pnpm dev`
 
 ## Deploying
 

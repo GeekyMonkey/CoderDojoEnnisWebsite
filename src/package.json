@@ -6,8 +6,8 @@
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
-		"dev": "cls && yarn install && nuxt dev",
-		"dev-unix": "clear && yarn install && nuxt dev",
+		"dev": "cls && pnpm install && nuxt dev",
+		"dev-unix": "clear && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
@@ -77,7 +77,7 @@
 		"vitest": "2.1.8",
 		"wrangler": "3.95.0"
 	},
-	"packageManager": "yarn@1.22.22",
+	"packageManager": "pnpm@10.17.1",
 	"prettier": {
 		"bracketSameLine": false,
 		"endOfLine": "lf",

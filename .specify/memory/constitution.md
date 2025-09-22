@@ -6,7 +6,7 @@
 All new features MUST be implemented as Vue/Nuxt components unless static content is required. The project is built on Nuxt 4 (Vue 3), with static HTML content in `src/public` and a structure ready for future expansion using Vue/Nuxt components.
 
 ### II. CLI & Automation
-Development and deployment MUST be managed via CLI commands (`yarn install`, `yarn dev`, `yarn build`, etc.). Automated deployment occurs on commit to master.
+Development and deployment MUST be managed via CLI commands (`pnpm install`, `pnpm dev`, `pnpm build`, etc.). Automated deployment occurs on commit to master.
 
 ### III. Test-First Discipline (NON-NEGOTIABLE)
 Testing MUST be enforced via `vitest`. TDD is optional per feature phase: tests MUST be written before implementation. Red-Green-Refactor cycle strictly enforced.
