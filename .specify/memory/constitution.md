@@ -1,50 +1,52 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# CoderDojo Ennis Website Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Framework-First
+All new features MUST be implemented as Vue/Nuxt components unless static content is required. The project is built on Nuxt 4 (Vue 3), with static HTML content in `src/public` and a structure ready for future expansion using Vue/Nuxt components.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. CLI & Automation
+Development and deployment MUST be managed via CLI commands (`yarn install`, `yarn dev`, `yarn build`, etc.). Automated deployment occurs on commit to master.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First Discipline (NON-NEGOTIABLE)
+Testing MUST be enforced via `vitest`. TDD is optional per feature phase: tests MUST be written before implementation. Red-Green-Refactor cycle strictly enforced.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Integration & Contracts
+Integration with Supabase, Cloudflare Workers, and other services MUST be managed via configuration files and environment variables. API contracts and data models MUST be defined in the backend and shared via TypeScript interfaces.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Observability & Versioning
+Logging and error handling MUST be present in the Nuxt config and backend. Semantic versioning MUST be used for constitution and package releases.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Simplicity & Maintainability
+Code MUST be clean, well-documented, and follow best practices. Complexity MUST be minimized; features should be as simple as possible while meeting requirements. Code reviews MUST focus on maintainability and readability. Care should be taken to avoid duplicate solutions to the same problem. Code reuse is important.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Additional Constraints
+Technology Stack: Nuxt 4, Vue 3, TailwindCSS, Supabase, Cloudflare Workers, Drizzle ORM, TypeScript.
+Compliance: MIT license, public contributions via PR.
+Deployment: Static hosting via Cloudflare Pages, automated on master branch commit.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+Code Review: PRs required for changes, with review and approval.
+Quality Gates: Linting, formatting, and tests MUST pass before merge.
+Continuous Integration: Automated build and deploy pipeline.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices. Amendments require documentation, approval, and a migration plan. All PRs/reviews MUST verify compliance with principles. Versioning follows semantic rules (major/minor/patch).
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+<!--
+Sync Impact Report
+Version change: 1.0.0 → 1.1.0
+Modified principles: All principle names and descriptions updated for project context
+Added sections: Additional Constraints, Development Workflow
+Removed sections: None
+Templates requiring updates:
+	✅ plan-template.md
+	✅ spec-template.md
+	✅ tasks-template.md
+	⚠ commands/ (directory missing, manual check required)
+Follow-up TODOs:
+	TODO(RATIFICATION_DATE): Original adoption date required
+-->
+
+**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): Original adoption date required | **Last Amended**: 2025-09-22
