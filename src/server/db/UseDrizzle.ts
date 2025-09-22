@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schemas from "./schema/schemas";
 import { relations } from "drizzle-orm";
-import { EventHandlerRequest, type H3EventContext } from "h3";
+import { EventHandlerRequest, H3Event, type H3EventContext } from "h3";
 
 /**
  * Import the generated drizzle tables
@@ -29,7 +29,7 @@ export function SetServerContext(ctx: H3EventContext) {
  * Create a drizzle instance for type-safe database access
  */
 export function UseDrizzle(event: H3Event<EventHandlerRequest> | null) {
-	const ctx: H3EventContext | null = event?.context;
+	const ctx: H3EventContext | null = event?.context ?? null;
 	const connectionString: string = GetDrizzleConnecionString(
 		ctx ?? ServerContext,
 	);
