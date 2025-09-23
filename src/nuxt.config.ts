@@ -41,7 +41,7 @@ export default defineNuxtConfig({
 		preference: "neon",
 	},
 
-	compatibilityDate: "2024-08-01",
+	compatibilityDate: "2025-05-15",
 
 	components: true,
 
@@ -155,7 +155,7 @@ export default defineNuxtConfig({
 			},
 		},
 		experimental: {
-			asyncContext: true,
+			// asyncContext: true,
 			openAPI: false,
 			// openAPI: {
 			//   meta: {
@@ -260,41 +260,6 @@ export default defineNuxtConfig({
 				baseUrl: ".",
 			},
 		},
-	},
-
-	vite: {
-		css: {
-			preprocessorOptions: {
-				sass: {},
-			},
-		},
-	},
-
-	vueQuery: {
-		// useState key used by nuxt for the vue query state.
-		// stateKey: "vue-query-nuxt", // default
-		// If you only want to import some functions, specify them here.
-		// You can pass false or an empty array to disable this feature.
-		// default: ["useQuery", "useQueries", "useInfiniteQuery", "useMutation", "useIsFetching", "useIsMutating", "useQueryClient"]
-		// autoImports: ["useQuery"],
-		// Pass the vue query client options here ...
-		queryClientOptions: {
-			// defaultOptions: { queries: { staleTime: 5000 } }, // default
-			defaultOptions: {
-				queries: {
-					// behavior: // todo (what are the options?)
-					gcTime: 1000 * 60 * 60 * 24, // 24 hours
-					placeholderData: [],
-					refetchOnReconnect: "always",
-					refetchOnWindowFocus: true,
-					refetchOnMount: false,
-					retry: 3,
-					staleTime: 10000,
-				},
-			},
-		},
-		// Pass the vue query plugin options here ....
-		vueQueryPluginOptions: {},
 	},
 
 	watch: ["~/assets/**/*.ts", "~/assets/**/*.css"],
