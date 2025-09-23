@@ -114,9 +114,9 @@ export default defineNuxtConfig({
 		mode: "css", // default <Icon> mode applied
 	},
 
-	image: {
-		quality: 90,
-	},
+	// image: {
+	// 	quality: 90,
+	// },
 
 	imports: {
 		dirs: [
@@ -136,7 +136,7 @@ export default defineNuxtConfig({
 		// "@nuxt/image",
 		// "@primevue/nuxt-module",
 		// "@nuxt/scripts",
-		"@hebilicious/vue-query-nuxt",
+		// "@hebilicious/vue-query-nuxt",
 		"@nuxt/icon",
 		"@nuxtjs/color-mode",
 		"@nuxtjs/google-fonts",
