@@ -1,11 +1,3 @@
-// import { defineEventHandler, readBody } from "#imports";
-// import { eq } from "drizzle-orm";
-// import { TeamEntity, ToTeamModels } from "~~/server/db/entities";
-// import { teams } from "~~/server/db/schema/schemas";
-// import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
-// import { ApiResponse } from "~~/shared/types/ApiResponse";
-// import { TeamModel } from "~~/shared/types/models/TeamModel";
-
 import { TeamsData } from "~~/server/db/TeamsData";
 
 type ResponseBody = ApiResponse<TeamModel[]>;

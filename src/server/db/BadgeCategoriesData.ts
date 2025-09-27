@@ -8,11 +8,20 @@ export type BadgeCategoryRecord = Database["coderdojo"]["Tables"]["badge_categor
 export const BadgeCategoriesData = {
 	GetBadgeCategories: async (
 		event: H3Event<EventHandlerRequest>,
+		includeDeleted: boolean,
 	): Promise<BadgeCategoryModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("badge_categories").select("*");
+			const query = supabase
+				.schema("coderdojo")
+				.from("badge_categories")
+				.select("*")
+				.order("category_name", { ascending: true });
+			if (!includeDeleted) {
+				query.eq("deleted", false);
+			}
+			const { data, error } = await query;
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching badge categories:", error);
 				return [];
@@ -22,6 +31,7 @@ export const BadgeCategoriesData = {
 			throw new Error(`Error fetching badge categories: ${error?.message}`);
 		}
 	},
+
 	SaveBadgeCategory: async (
 		event: H3Event<EventHandlerRequest>,
 		category: BadgeCategoryModel
@@ -29,6 +39,7 @@ export const BadgeCategoriesData = {
 		const all = await BadgeCategoriesData.SaveBadgeCategories(event, [category]);
 		return all[0] || null;
 	},
+
 	SaveBadgeCategories: async (
 		event: H3Event<EventHandlerRequest>,
 		categories: BadgeCategoryModel[]
@@ -46,6 +57,7 @@ export const BadgeCategoriesData = {
 			throw new Error(`Error saving badge categories: ${error?.message}`);
 		}
 	},
+
 	DeleteBadgeCategory: async (
 		event: H3Event<EventHandlerRequest>,
 		categoryId: string

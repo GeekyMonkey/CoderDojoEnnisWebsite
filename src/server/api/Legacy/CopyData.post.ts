@@ -314,7 +314,7 @@ async function CopyBadgeCategoriesTable(event: H3Event<EventHandlerRequest>, db:
 		readLegacy: ReadLegacyBadgeCategories,
 		transform: FromLegacyBadgeCategoryEntities as any,
 		save: (e, rows) => BadgeCategoriesData.SaveBadgeCategories(e, rows as any),
-		getAll: (e) => BadgeCategoriesData.GetBadgeCategories(e),
+		getAll: (e) => BadgeCategoriesData.GetBadgeCategories(e, true),
 		fields: ["deleted","categoryName","categoryDescription"] as any,
 	});
 }
@@ -329,7 +329,8 @@ async function CopyBadgesTable(event: H3Event<EventHandlerRequest>, db: Supabase
 		readLegacy: ReadLegacyBadges,
 		transform: FromLegacyBadgeEntities as any,
 		save: (e, rows) => BadgesData.SaveBadges(e, rows as any),
-		getAll: (e) => BadgesData.GetBadges(e),
+		// includeDeleted passed true to ensure full table copy including soft-deleted rows
+		getAll: (e) => BadgesData.GetBadges(e, true),
 		fields: ["deleted","achievement","badgeCategoryId","description"] as any,
 	});
 }
@@ -344,7 +345,7 @@ async function CopyBeltsTable(event: H3Event<EventHandlerRequest>, db: SupabaseC
 		readLegacy: ReadLegacyBelts,
 		transform: FromLegacyBeltEntities as any,
 		save: (e, rows) => BeltsData.SaveBelts(e, rows as any),
-		getAll: (e) => BeltsData.GetBelts(e),
+		getAll: (e) => BeltsData.GetBelts(e, true),
 		fields: ["deleted","color","hexCode","description","sortOrder"] as any,
 	});
 }

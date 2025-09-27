@@ -8,11 +8,21 @@ export type BeltRecord = Database["coderdojo"]["Tables"]["belts"]["Row"];
 export const BeltsData = {
 	GetBelts: async (
 		event: H3Event<EventHandlerRequest>,
+		includeDeleted: boolean,
 	): Promise<BeltModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("belts").select("*");
+			const query = supabase
+				.schema("coderdojo")
+				.from("belts")
+				.select("*")
+				.order("sort_order", { ascending: true })
+				.order("color", { ascending: true });
+			if (!includeDeleted) {
+				query.eq("deleted", false);
+			}
+			const { data, error } = await query;
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching belts:", error);
 				return [];

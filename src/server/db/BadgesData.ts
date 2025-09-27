@@ -8,11 +8,20 @@ export type BadgeRecord = Database["coderdojo"]["Tables"]["badges"]["Row"];
 export const BadgesData = {
 	GetBadges: async (
 		event: H3Event<EventHandlerRequest>,
+		includeDeleted: boolean,
 	): Promise<BadgeModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("badges").select("*");
+			const query = supabase
+				.schema("coderdojo")
+				.from("badges")
+				.select("*")
+				.order("achievement", { ascending: true });
+			if (!includeDeleted) {
+				query.eq("deleted", false);
+			}
+			const { data, error } = await query;
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching badges:", error);
 				return [];

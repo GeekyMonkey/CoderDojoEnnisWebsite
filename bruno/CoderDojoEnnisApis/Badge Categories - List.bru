@@ -1,0 +1,15 @@
+meta {
+  name: Badge Categories - List
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{Host}}/api/badgeCategories/list?include_deleted=true
+  body: none
+  auth: none
+}
+
+params:query {
+  include_deleted: true
+}

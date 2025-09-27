@@ -1,0 +1,15 @@
+meta {
+  name: Belts - List
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{Host}}/api/belts/list?include_deleted=false
+  body: none
+  auth: none
+}
+
+params:query {
+  include_deleted: false
+}
