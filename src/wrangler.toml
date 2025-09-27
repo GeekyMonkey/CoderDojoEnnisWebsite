@@ -81,7 +81,7 @@ NUXT_PUBLIC_SUPABASE_S3_ROOT="https://newsofwpimzmfbqsooka.supabase.co/storage/v
 NUXT_PUBLIC_SUPABASE_URL="https://newsofwpimzmfbqsooka.supabase.co"
 NUXT_ENV_RUNTIME="cloudflare"
 NUXT_SUPABASE_KEY_PUBLIC="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubm1naHZ3Y2x6dm9hbWJzaHpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYyOTU1OTIsImV4cCI6MjA0MTg3MTU5Mn0.rM6m9Vy6nd1dyYHnrQfj75VZ0EepHwxzvUNNQx22wX4"
-NUXT_SUPABASE_URL="https://qnnmghvwclzvoambshzb.supabase.co"
+NUXT_SUPABASE_URL="https://newsofwpimzmfbqsooka.supabase.co"
 
 # [[env.preview.kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
@@ -93,7 +93,7 @@ NUXT_SUPABASE_URL="https://qnnmghvwclzvoambshzb.supabase.co"
 
 NUXT_ENV_RUNTIME="cloudflare"
 NUXT_SUPABASE_KEY_PUBLIC="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubm1naHZ3Y2x6dm9hbWJzaHpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYyOTU1OTIsImV4cCI6MjA0MTg3MTU5Mn0.rM6m9Vy6nd1dyYHnrQfj75VZ0EepHwxzvUNNQx22wX4"
-NUXT_SUPABASE_URL="https://qnnmghvwclzvoambshzb.supabase.co"
+NUXT_SUPABASE_URL="https://newsofwpimzmfbqsooka.supabase.co"
 
 
 # [[env.production.kv_namespaces]]
