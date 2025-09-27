@@ -33,6 +33,8 @@ export const MemberModelSchema = z
 
 export type MemberModel = z.infer<typeof MemberModelSchema>;
 
+export type MemberSupabaseModel = {memberId: string} & Pick<MemberModel, "isMentor" | "isNinja" | "isParent" | "nameFirst" | "nameLast">;
+
 /**
  * Base64 encode the password hash for storage in Supabase
  */

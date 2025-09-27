@@ -1,4 +1,8 @@
 import { GeneratePasswordHash } from "./authUtils";
+import { describe, it, expect } from "vitest";
+
+// Test suite for GeneratePasswordHash. Uses Vitest globals; importing explicitly
+// prevents ReferenceError: describe is not defined when tsconfig/types isn't set.
 
 describe("GeneratePasswordHash", () => {
 	const pass1 = "password-123";
@@ -13,7 +17,8 @@ describe("GeneratePasswordHash", () => {
 
 	it("should generate a hash for a given password", async () => {
 		const password = "password123";
-		const expectedHash = "bb66d4e66d707fbc22c4490c50a063fe0bc4ba0b6ce72703378d45725ee28f93"; // Example hash, replace with actual expected hash
+		// Precomputed: sha256("password123-_Salty_")
+		const expectedHash = "bb66d4e66d707fbc22c4490c50a063fe0bc4ba0b6ce72703378d45725ee28f93";
 		const hash = await GeneratePasswordHash(password, salt1);
 		expect(hash).toBe(expectedHash);
 	});

@@ -78,7 +78,9 @@ export const MembersData = {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;
 		try {
-			const salt = saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
+			//const salt = saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
+			const runtime = useRuntimeConfig();
+			const salt = runtime.private.auth.pass_salt;
 			const hash = await GeneratePasswordHash(plainPassword, salt);
 			if (!hash) return false;
 			const { error } = await supabase
@@ -99,7 +101,7 @@ export const MembersData = {
 
 	/**
 	 * Bulk deterministic legacy password migration.
-	 * Rule (revised): Generate a deterministic password for any non-deleted mentor (fingerprint no longer required).
+	 * Rule (revised): Generate a deterministic password for any non-deleted member.
 	 * Seed pattern (lowercased, trimmed): firstInitial + lastName + shortId
 	 * Where shortId = first 8 chars of UUID (fallback to full if cannot slice).
 	 * Skips existing hashes unless force = true.
@@ -118,11 +120,13 @@ export const MembersData = {
 	): Promise<{ updated: number; skipped: number; errors: number }> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return { updated: 0, skipped: 0, errors: 0 };
-		const salt = options?.saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
+		// const salt = options?.saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
+		const runtime = useRuntimeConfig();
+		const salt = runtime.private.auth.pass_salt;
 		let updated = 0, skipped = 0, errors = 0;
 
 		for (const m of legacyMembers) {
-			const shouldGenerate = m.isMentor && !m.deleted; // fingerprint no longer required
+			const shouldGenerate = m.isMentor && !m.deleted;
 			if (!shouldGenerate) { skipped++; continue; }
 			const firstInitial = (m.nameFirst || "").trim().substring(0, 1);
 			const last = (m.nameLast || "").trim();

@@ -490,7 +490,7 @@ async function CopyMembersTable(event: H3Event<EventHandlerRequest>, db: Supabas
 						isMentor: m.isMentor,
 						deleted: m.deleted,
 					})),
-					{ force: false },
+					{ force: true },
 				);
 				logs.push(`Password migration: updated=${passwordResult.updated} skipped=${passwordResult.skipped} errors=${passwordResult.errors}`);
 			} catch (pwErr: any) {

@@ -1,6 +1,5 @@
 import hasher from "crypto-js/sha256";
 import CryptoJS from "crypto-js";
-import { MemberEntity } from "../db/entities";
 import {
 	AuthError,
 	createClient,
@@ -8,6 +7,9 @@ import {
 	User,
 	WeakPassword,
 } from "@supabase/supabase-js";
+import { MemberModel, MemberSupabaseModel } from "~~/shared/types/models/MemberModel";
+// import { GetSupabaseAdminClient } from "../db/DatabaseClient"; // Using local admin client to avoid divergence
+import type { H3Event, EventHandlerRequest } from "h3";
 
 /**
  * Generate a password hash
@@ -46,25 +48,25 @@ export const IsCloudflare = (): boolean => {
 /**
  * Set supabase user metadata
  */
-export const SetSupabaseUserMetadata = async (member: MemberEntity) => {};
+export const SetSupabaseUserMetadata = async (member: Partial<MemberModel>) => {};
 
 /**
  * Generate a Supabase email address for a member
  */
 export const GenerateSupabaseEmailAddressForMember = (
-	member: MemberEntity,
+	member: MemberSupabaseModel,
 ): string => {
-	return `${member.id}@coderdojoennis.com`;
+	return `${member.memberId}@coderdojoennis.com`;
 };
 
 /**
  * Generate Supabase user metadata for a member
  */
 export const GenerateSupabaseUserMetaForMember = (
-	member: MemberEntity,
+	member: MemberSupabaseModel,
 ): SupabaseUserMetaType => {
 	return {
-		memberId: member.id,
+		memberId: member.memberId,
 		isMentor: member.isMentor,
 		isNinja: member.isNinja,
 		isParent: member.isParent,
@@ -96,25 +98,27 @@ export const IsSupabaseMetaSame = (
  * Member authenticated, now login to Supabase
  */
 export async function LoginToSupabase(
-	member: MemberEntity,
+	event: H3Event<EventHandlerRequest>,
+	member: MemberSupabaseModel,
 	logs: string[],
 ): Promise<any | null> {
 	try {
 		// Get Supabase configuration from runtime config
 		const config = useRuntimeConfig();
-		const supabase = CreateSupabaseAdminClient();
+		const supabase = await CreateSupabaseAdminClient();
 
 		const supabaseEmail = GenerateSupabaseEmailAddressForMember(member);
 		logs.push("Supabase email: " + supabaseEmail);
 
 		const supabasePass = await GeneratePasswordHash(
-			String(member.id),
+			String(member.memberId),
 			config.private.auth.pass_salt,
 		)!;
 		if (!supabasePass) {
 			logs.push("Error generating password hash");
 			return null;
 		}
+		// (debug removed) Avoid logging supabasePass
 
 		// Try to sign in with the password
 		let authTokenResponse: {
@@ -124,10 +128,13 @@ export async function LoginToSupabase(
 		} | null = null;
 		let error: AuthError | null = null;
 		try {
+			logs.push("Attempting sign in to supabase for " + supabaseEmail);
+
 			const signInResponse = await supabase.auth.signInWithPassword({
 				email: supabaseEmail,
 				password: supabasePass,
 			});
+
 			logs.push("Sign in response: " + JSON.stringify(signInResponse));
 			authTokenResponse = signInResponse.data;
 			error = signInResponse.error;
@@ -136,58 +143,34 @@ export async function LoginToSupabase(
 				throw error;
 			}
 		} catch (error) {
-			// Delete the old user if it exists so they can be recreated
+			// Attempt cleanup & admin-based creation (email auto-confirmed)
 			const oldUser = await FindSupabaseUserByEmail(supabaseEmail);
 			if (oldUser) {
-				supabase.auth.admin.deleteUser(oldUser.id);
+				logs.push("Deleting existing Supabase user before admin create: " + oldUser.id);
+				await supabase.auth.admin.deleteUser(oldUser.id);
 			}
-
-			// sign in failed, try creating user
-			logs.push("Create new supabase user: " + supabaseEmail);
-			let signedUp = await supabase.auth.signUp({
+			logs.push("Admin create user: " + supabaseEmail);
+			const createRes = await supabase.auth.admin.createUser({
+				email: supabaseEmail,
+				email_confirm: true,
+				password: supabasePass,
+				user_metadata: GenerateSupabaseUserMetaForMember(member),
+			});
+			if (createRes.error) {
+				logs.push("Admin create error: " + JSON.stringify(createRes.error));
+				throw createRes.error;
+			}
+			// Explicit sign-in after admin creation (admin.createUser does not return a session)
+			const signInResponse = await supabase.auth.signInWithPassword({
 				email: supabaseEmail,
 				password: supabasePass,
 			});
-			if (signedUp.error) {
-				logs.push(
-					"SignUp error: " +
-						JSON.stringify({
-							error: signedUp.error,
-							data: signedUp.data,
-						}),
-				);
-				throw signedUp.error;
-			}
-
-			if (signedUp.data.user) {
-				if (!signedUp.data.user!.confirmed_at) {
-					const now = new Date().toISOString();
-					signedUp.data.user.confirmed_at = now;
-					signedUp.data.user.email_confirmed_at = now;
-				}
-
-				await supabase.auth.updateUser(signedUp.data.user!);
-				logs.push("Confirmed new user");
-			}
-
-			if (signedUp.data.session) {
-				authTokenResponse = signedUp.data;
-				error = signedUp.error;
-			} else {
-				logs.push("Retry sign in");
-				const signInResponse = await supabase.auth.signInWithPassword({
-					email: supabaseEmail,
-					password: supabasePass,
-				});
-				logs.push(
-					"Sign in 2 response: " + JSON.stringify(signInResponse),
-				);
-				authTokenResponse = signInResponse.data;
-				error = signInResponse.error;
-				if (error) {
-					logs.push("Sign in 2 error: " + JSON.stringify(error));
-					throw error;
-				}
+			logs.push("Post-create sign in response: " + JSON.stringify({ status: signInResponse.error?.status, hasSession: !!signInResponse.data.session }));
+			authTokenResponse = signInResponse.data;
+			error = signInResponse.error;
+			if (error) {
+				logs.push("Post-create sign in error: " + JSON.stringify(error));
+				throw error;
 			}
 		}
 
@@ -206,8 +189,9 @@ export async function LoginToSupabase(
 		}
 
 		return authTokenResponse;
-	} catch (error) {
-		console.error("Error generating JWT:", error);
+	} catch (error: any) {
+		logs.push("LoginToSupabase error: " + JSON.stringify(error.message));
+		console.error("Error generating JWT:", logs);
 		return null;
 	}
 }
@@ -216,7 +200,7 @@ export async function LoginToSupabase(
  * Update the metadata values on the Supabase user based on the member values IF they are different
  */
 async function UpdateSupabaseUserMetadata(
-	member: MemberEntity,
+	member: MemberSupabaseModel,
 	user: User | null,
 ): Promise<void> {
 	const supabase_meta = GenerateSupabaseUserMetaForMember(member);
@@ -230,7 +214,7 @@ async function UpdateSupabaseUserMetadata(
 		userToUpdate != null &&
 		!IsSupabaseMetaSame(userToUpdate.user_metadata, supabase_meta)
 	) {
-		const supabase = CreateSupabaseAdminClient();
+		const supabase = await CreateSupabaseAdminClient();
 		await supabase.auth.admin.updateUserById(userToUpdate.id, {
 			user_metadata: supabase_meta,
 		});
@@ -241,23 +225,41 @@ async function UpdateSupabaseUserMetadata(
  * Find a Supabase user by email
  */
 async function FindSupabaseUserByEmail(email: string): Promise<User | null> {
-	const supabase = CreateSupabaseAdminClient();
-	const { data: user, error } = await supabase.auth.api.getUserByEmail(email);
-	if (error) {
-		console.error("Error finding user by email:", error);
+	// Supabase JS v2 removed auth.api.getUserByEmail; emulate via admin.listUsers pagination
+	const supabase = await CreateSupabaseAdminClient();
+	const target = email.toLowerCase();
+	let page = 1;
+	const perPage = 100;
+	try {
+		while (true) {
+			const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
+			if (error) {
+				console.error("listUsers error", { error, page });
+				return null;
+			}
+			const match = (data.users as User[]).find((u: User) => (u.email || "").toLowerCase() === target);
+			if (match) return match;
+			if (data.users.length < perPage) break; // last page
+			page++;
+		}
+		return null;
+	} catch (err) {
+		console.error("Error scanning users for email", err);
 		return null;
 	}
-
-	return user;
 }
 
 /**
  * Create a Supabase admin client
  */
-function CreateSupabaseAdminClient(): any {
+async function CreateSupabaseAdminClient(): Promise<any> {
 	const config = useRuntimeConfig();
-	const supabaseUrl = config.public.supabase.url;
-	const supabaseServiceRoleKey = config.private.supabase.key_private;
-	const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-	return supabase;
+	const supabaseUrl = config.public.supabase?.url || process.env.NUXT_PUBLIC_SUPABASE_URL || process.env.NUXT_SUPABASE_URL;
+	const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || config.private.supabase.key_private || process.env.NUXT_SUPABASE_KEY_PRIVATE;
+	if (!supabaseUrl) throw new Error("Supabase URL not configured");
+	if (!serviceRoleKey) {
+		console.error("Service role key missing (set SUPABASE_SERVICE_ROLE_KEY or NUXT_SUPABASE_KEY_PRIVATE)");
+		throw new Error("Supabase service role key missing");
+	}
+	return createClient(supabaseUrl, serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
 }
