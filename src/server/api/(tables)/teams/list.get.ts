@@ -6,50 +6,33 @@
 // import { ApiResponse } from "~~/shared/types/ApiResponse";
 // import { TeamModel } from "~~/shared/types/models/TeamModel";
 
-// type ResponseBody = ApiResponse<TeamModel[]>;
+import { TeamsData } from "~~/server/db/TeamsData";
 
-// /**
-//  * GET: api/teams/list
-//  */
-// export default defineEventHandler(async (event): Promise<ResponseBody> => {
-// 	const { include_deleted } = getQuery(event);
-// 	const includeDeleted: boolean = include_deleted === "true";
-// 	const config = useRuntimeConfig();
+type ResponseBody = ApiResponse<TeamModel[]>;
 
-// 	const logs: string[] = [];
-// 	let resp: ResponseBody = {
-// 		data: [],
-// 		success: true,
-// 		logs,
-// 	};
+/**
+ * GET: api/teams/list
+ */
+export default defineEventHandler(async (event): Promise<ResponseBody> => {
+	const { include_deleted } = getQuery(event);
+	const includeDeleted: boolean = include_deleted === "true";
 
-// 	logs.push("api/teams/list: " + JSON.stringify({ include_deleted }));
-// 	try {
-// 		const db: DrizzleType = UseDrizzle(event);
-// 		logs.push("Got drizzle");
+	const logs: string[] = [];
+	let resp: ResponseBody = {
+		data: [],
+		success: true,
+		logs,
+	};
 
-// 		// ToDo: RemoveSleep for 1 second
-// 		await new Promise((resolve) => setTimeout(resolve, 1000));
-// 		logs.push("Did nap (ToDo: Remove)");
+	try {
+		resp.data = await TeamsData.GetTeams(event, includeDeleted);
+	} catch (error: any) {
+		resp = {
+			success: false,
+			error: error.message,
+			logs,
+		};
+	}
 
-// 		const teamsListQuery = db.select().from(teams).orderBy(teams.teamName);
-
-// 		if (!includeDeleted) {
-// 			teamsListQuery.where(eq(teams.deleted, false));
-// 		}
-// 		logs.push("Built query");
-
-// 		const teamsList: TeamEntity[] = await teamsListQuery.execute();
-// 		logs.push("ran query");
-
-// 		resp.data = ToTeamModels(teamsList);
-// 	} catch (error: any) {
-// 		resp = {
-// 			success: false,
-// 			error: error.message,
-// 			logs,
-// 		};
-// 	}
-
-// 	return resp;
-// });
+	return resp;
+});

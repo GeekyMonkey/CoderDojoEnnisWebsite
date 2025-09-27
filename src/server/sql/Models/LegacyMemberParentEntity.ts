@@ -1,4 +1,4 @@
-import { MemberParentEntity } from "~~/server/db/entities";
+import { type MemberParentModel } from "~~/shared/types/models/MemberParentModel";
 
 /**
  * SQL Server Member-Parent Entity
@@ -11,7 +11,7 @@ export type LegacyMemberParentEntity = {
 
 export const FromLegacyMemberParentEntity = (
 	legacy: LegacyMemberParentEntity,
-): MemberParentEntity => {
+): MemberParentModel => {
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
@@ -21,6 +21,6 @@ export const FromLegacyMemberParentEntity = (
 
 export const FromLegacyMemberParentEntities = (
 	legacies: LegacyMemberParentEntity[],
-): MemberParentEntity[] => {
+): MemberParentModel[] => {
 	return legacies.map(FromLegacyMemberParentEntity);
 };

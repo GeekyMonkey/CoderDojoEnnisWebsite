@@ -1,414 +1,900 @@
-// import { defineEventHandler, readBody } from "#imports";
-// import {
-// 	ReadAdultAttendances,
-// 	ReadAdultBadgeCategories,
-// 	ReadAdults,
-// 	ReadBadgeCategories,
-// 	ReadBadges,
-// 	ReadBelts,
-// 	ReadMemberAttendances,
-// 	ReadMemberBadges,
-// 	ReadMemberBelts,
-// 	ReadMemberParents,
-// 	ReadNinjas,
-// 	ReadSessions,
-// 	ReadTeams,
-// } from "~~/server/sql/LegacyData";
-// import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
-// import { FromLegacyBadgeCategoryEntities } from "~~/server/sql/Models/LegacyBadgeCategoryEntity";
-// import { FromLegacyBadgeEntities } from "~~/server/sql/Models/LegacyBadgeEntity";
-// import { FromLegacyBeltEntities } from "~~/server/sql/Models/LegacyBeltEntity";
-// import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
-// import { FromLegacyAdultEntities } from "~~/server/sql/Models/LegacyAdultEntity";
-// import { FromLegacySessionEntities } from "~~/server/sql/Models/LegacySessionEntity";
-// import { FromLegacyMemberAttendanceEntities } from "~~/server/sql/Models/LegacyMemberAttendanceEntity";
-// import { FromLegacyAdultAttendanceEntities } from "~~/server/sql/Models/LegacyAdultAttendanceEntity";
-// import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/LegacyAdultBadgeCategoryEntity";
-// import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
-// import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
-// import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
-// import { DrizzleType, UseDrizzle } from "~~/server/db/UseDrizzle";
-// import {
-// 	badgeCategories,
-// 	badges,
-// 	belts,
-// 	memberAttendances,
-// 	memberBadgeCategories,
-// 	memberBadges,
-// 	memberBelts,
-// 	memberParents,
-// 	members,
-// 	sessions,
-// 	teams as teamsTable,
-// } from "~~/server/db/schema/schemas";
-// import { eq } from "drizzle-orm";
+import { defineEventHandler, readBody } from "#imports";
+import {
+	ReadLegacyAdultAttendances,
+	ReadLegacyAdultBadgeCategories,
+	ReadLegacyAdults,
+	ReadLegacyBadgeCategories,
+	ReadLegacyBadges,
+	ReadLegacyBelts,
+	ReadLegacyMemberAttendances,
+	ReadLegacyMemberBadges,
+	ReadLegacyMemberBelts,
+	ReadLegacyMemberParents,
+	ReadLegacyNinjas,
+	ReadLegacySessions,
+	ReadLegacyTeams,
+} from "~~/server/sql/LegacyData";
+import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
+import { FromLegacyBadgeCategoryEntities } from "~~/server/sql/Models/LegacyBadgeCategoryEntity";
+import { FromLegacyBadgeEntities } from "~~/server/sql/Models/LegacyBadgeEntity";
+import { FromLegacyBeltEntities } from "~~/server/sql/Models/LegacyBeltEntity";
+import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
+import { FromLegacyAdultEntities } from "~~/server/sql/Models/LegacyAdultEntity";
+import { FromLegacySessionEntities } from "~~/server/sql/Models/LegacySessionEntity";
+import { FromLegacyMemberAttendanceEntities } from "~~/server/sql/Models/LegacyMemberAttendanceEntity";
+import { FromLegacyAdultAttendanceEntities } from "~~/server/sql/Models/LegacyAdultAttendanceEntity";
+import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/LegacyAdultBadgeCategoryEntity";
+import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
+import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
+import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
+import { GetSupabaseAdminClient } from "~~/server/db/DatabaseClient";
+import type { H3Event, EventHandlerRequest } from "h3";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { TeamsData } from "~~/server/db/TeamsData";
+import { MembersData } from "~~/server/db/MembersData";
+import { BadgeCategoriesData } from "~~/server/db/BadgeCategoriesData";
+import { BadgesData } from "~~/server/db/BadgesData";
+import { BeltsData } from "~~/server/db/BeltsData";
+import { memberFromRecords } from "~~/shared/types/models/MemberModel";
 
-// // Define interfaces for the request body and query parameters
-// type RequestBody = {};
+// Global tolerance constants
+const TIME_TOLERANCE_MS = 6 * 60 * 60 * 1000; // 6 hours tolerance for loginDate comparisons
 
-// type ResponseBody = {
-// 	logs: string[];
-// 	success: boolean;
-// };
+// Define interfaces for the request body and query parameters
+type RequestBody = {};
 
-// /**
-//  * POST: api/Legacy/CopyData
-//  */
-// export default defineEventHandler(async (event): Promise<ResponseBody> => {
-// 	// Access request body
-// 	const body: RequestBody = await readBody(event);
-// 	const resp: ResponseBody = {
-// 		logs: [],
-// 		success: false,
-// 	};
+type ResponseBody = {
+	logs: string[];
+	success: boolean;
+};
 
-// 	resp.logs.push(...(await CopyData(resp, event)));
+/**
+ * POST: api/Legacy/CopyData
+ */
+export default defineEventHandler(async (event): Promise<ResponseBody> => {
+	// Access request body
+	const body: RequestBody = await readBody(event);
+	const resp: ResponseBody = {
+		logs: [],
+		success: false,
+	};
 
-// 	return {
-// 		...resp,
-// 		success: !resp.logs.find((e) => e.toLowerCase().startsWith("error")),
-// 	};
-// });
+	resp.logs.push(...(await CopyData(resp, event)));
 
-// /**
-//  * Copy the SQL Server data to Supabase
-//  */
-// async function CopyData(
-// 	resp: ResponseBody,
-// 	event: H3Event<EventHandlerRequest>,
-// ): Promise<string[]> {
-// 	const logs: string[] = [];
-// 	try {
-// 		// Get a DB connection
-// 		const db = UseDrizzle(event);
-// 		logs.push("Drizzle client created");
+	return {
+		...resp,
+		success: !resp.logs.find((e) => e.toLowerCase().startsWith("error")),
+	};
+});
 
-// 		// Copy the data (order matters)
-// 		// logs.push(...(await CopyTeamsTable(db)));
-// 		// logs.push(...(await CopyBadgeCategoriesTable(db)));
-// 		// logs.push(...(await CopyBadgesTable(db)));
-// 		// logs.push(...(await CopyBeltsTable(db)));
-// 		logs.push(...(await CopyMembersTable(db)));
-// 		// logs.push(...(await CopySessionsTable(db)));
-// 		// logs.push(...(await CopyAttendanceTable(db)));
-// 		// logs.push(...(await CopyMemberBadgeCategoriesTable(db)));
-// 		// logs.push(...(await CopyMemberParentsTable(db)));
-// 		// logs.push(...(await CopyMemberBadgesTable(db)));
-// 		// logs.push(...(await CopyMemberBeltsTable(db)));
-// 	} catch (error: any) {
-// 		console.error("Error copying data:", error);
-// 		logs.push("Error: " + error.message);
-// 	}
-// 	return logs;
-// }
+/**
+ * Copy the SQL Server data to Supabase
+ */
+async function CopyData(
+	resp: ResponseBody,
+	event: H3Event<EventHandlerRequest>,
+): Promise<string[]> {
+	const logs: string[] = [];
+	try {
+		// Get a DB connection
+		const db: SupabaseClient | null = await GetSupabaseAdminClient(event);
+		if (!db) {
+			console.error("Failed to initialize Supabase client");
+			return [];
+		}
+		logs.push("DB client created");
 
-// /**
-//  * Copy the teams table
-//  */
-// async function CopyTeamsTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+ 		// Copy the data (order matters)
+ 		logs.push(...(await CopyTeamsTable(event, db)));
+		logs.push(...(await CopyBadgeCategoriesTable(event, db)));
+		logs.push(...(await CopyBadgesTable(event, db)));
+		logs.push(...(await CopyBeltsTable(event, db))); 
+		logs.push(...(await CopyMembersTable(event, db)));
+		logs.push(...(await CopySessionsTable(event, db)));
+		logs.push(...(await CopyAttendanceTable(event, db)));
+		logs.push(...(await CopyMemberBadgeCategoriesTable(event, db)));
+		logs.push(...(await CopyMemberParentsTable(event, db)));
+		logs.push(...(await CopyMemberBadgesTable(event, db)));
+		logs.push(...(await CopyMemberBeltsTable(event, db)));
+	} catch (error: any) {
+		console.error("Error copying data:", error);
+		logs.push("Error: " + error.message);
+	}
+	return logs;
+}
 
-// 	logs.push("Purging teams");
-// 	await db.delete(teamsTable).execute();
+/**
+ * Copy the teams table
+ */
+async function CopyTeamsTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
 
-// 	logs.push("Reading teams");
-// 	const teams = await ReadTeams();
+	const { error } = await db.schema("coderdojo").from("teams").delete().not("id", "is", null);
+	if (error) {
+		logs.push("Error deleting teams: " + error.message);
+	} else {
+		logs.push("Teams deleted successfully");
+	}
 
-// 	logs.push("Copying teams table with " + teams.length + " rows");
-// 	const newTeams = FromLegacyTeamEntities(teams);
+	logs.push("Reading teams");
+	const legacyTeams = await ReadLegacyTeams();
 
-// 	try {
-// 		await db.insert(teamsTable).values(newTeams).execute();
-// 		logs.push(`Inserted teams`);
-// 	} catch (error: any) {
-// 		logs.push("Error in Teams Insert: " + error.message);
-// 	}
+	logs.push("Copying teams table with " + legacyTeams.length + " rows");
+	const newTeams = FromLegacyTeamEntities(legacyTeams);
 
-// 	return logs;
-// }
+	try {
+		await TeamsData.SaveTeams(event, newTeams);
+		logs.push(`Inserted teams`);
 
-// /**
-//  * Copy badge categories table
-//  */
-// async function CopyBadgeCategoriesTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+		// Verification: re-read teams and compare (case-insensitive UUIDs)
+		const savedTeams = await TeamsData.GetTeams(event, true);
 
-// 	await db.delete(badgeCategories).execute();
+		// Build lookup maps using lowercase UUID keys so case differences don't cause false negatives
+		const sourceById = new Map(
+			newTeams.map((t) => [t.id.toLowerCase(), t]),
+		);
+		const savedById = new Map(
+			savedTeams.map((t) => [t.id.toLowerCase(), t]),
+		);
 
-// 	const oldEntities = await ReadBadgeCategories();
-// 	const newEntities = FromLegacyBadgeCategoryEntities(oldEntities);
-// 	logs.push(
-// 		"Copying badge cateogires table with " + oldEntities.length + " rows",
-// 	);
+		const missingInDb: string[] = [];
+		const extraInDb: string[] = [];
+		const fieldMismatches: string[] = [];
 
-// 	try {
-// 		await db.insert(badgeCategories).values(newEntities).execute();
-// 		logs.push(`Inserted badge cateogires`);
-// 	} catch (error: any) {
-// 		logs.push("Error in badge cateogires Insert: " + error.message);
-// 	}
+		// Fields to compare (exclude id because it's only a key and case-normalized already)
+		const fields: (keyof typeof newTeams[number])[] = [
+			"deleted",
+			"goal",
+			"hexcode",
+			"notes",
+			"teamName",
+		];
 
-// 	return logs;
-// }
+		for (const [lcId, src] of sourceById.entries()) {
+			const dest = savedById.get(lcId);
+			if (!dest) {
+				missingInDb.push(src.id); // use original casing from source
+				continue;
+			}
+			for (const f of fields) {
+				const sv = (src as any)[f];
+				const dv = (dest as any)[f];
+				// Treat undefined and null as equivalent empty states; also normalise trimming for strings
+				const norm = (v: any) => {
+					if (v === null || v === undefined) return "";
+					if (typeof v === "string") return v.trim();
+					return v;
+				};
+				if (norm(sv) !== norm(dv)) {
+					fieldMismatches.push(
+						`${src.id}:${String(f)} expected='${sv}' actual='${dv}'`,
+					);
+				}
+			}
+		}
 
-// /**
-//  * Copy badges table
-//  */
-// async function CopyBadgesTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+		for (const [lcId, dest] of savedById.entries()) {
+			if (!sourceById.has(lcId)) extraInDb.push(dest.id);
+		}
 
-// 	await db.delete(badges).execute();
+		if (
+			missingInDb.length === 0 &&
+			extraInDb.length === 0 &&
+			fieldMismatches.length === 0
+		) {
+			logs.push(
+				`Teams verification passed: ${savedTeams.length} rows match source exactly (UUID case ignored)`,
+			);
+		} else {
+			if (missingInDb.length)
+				logs.push(`Verification missing in DB: ${missingInDb.join(",")}`);
+			if (extraInDb.length)
+				logs.push(`Verification extra in DB: ${extraInDb.join(",")}`);
+			if (fieldMismatches.length) {
+				logs.push(
+					`Verification field mismatches (${fieldMismatches.length}):`,
+				);
+				for (const mm of fieldMismatches.slice(0, 25))
+					logs.push("  " + mm);
+				if (fieldMismatches.length > 25)
+					logs.push(
+						`  ... ${fieldMismatches.length - 25} more (showing first 25)`,
+					);
+			}
+		}
+	} catch (error: any) {
+		logs.push("Error in Teams Insert: " + error.message);
+	}
 
-// 	const oldEntities = await ReadBadges();
-// 	const newEntities = FromLegacyBadgeEntities(oldEntities);
-// 	logs.push("Copying badges table with " + oldEntities.length + " rows");
+	return logs;
+}
 
-// 	try {
-// 		await db.insert(badges).values(newEntities).execute();
-// 		logs.push(`Inserted badges`);
-// 	} catch (error: any) {
-// 		logs.push("Error in badges Insert: " + error.message);
-// 	}
+/**
+ * Generic helper for simple tables that follow the pattern:
+ *  - delete all rows
+ *  - read legacy rows
+ *  - transform rows
+ *  - save via *Data.SaveX(event, rows)
+ *  - verify round-trip (case-insensitive id, selected fields)
+ */
+async function CopySimpleTable<TLegacy, TModel>(
+	event: H3Event<EventHandlerRequest>,
+	db: SupabaseClient,
+	options: {
+	label: string; // human readable e.g. "Badge Categories"
+	tableName: string; // Supabase table name
+	readLegacy: () => Promise<TLegacy[]>;
+	transform: (legacy: TLegacy[]) => TModel[];
+	save: (event: H3Event<EventHandlerRequest>, models: TModel[]) => Promise<TModel[]>; // returns saved rows
+	getAll: (event: H3Event<EventHandlerRequest>) => Promise<TModel[]>; // read back for verification
+	fields: (keyof TModel)[]; // fields (excluding id) to compare
+	}
+): Promise<string[]> {
+	const logs: string[] = [];
 
-// 	return logs;
-// }
+	// Delete existing
+	const { error: delError } = await db.schema("coderdojo").from(options.tableName).delete().not("id", "is", null);
+	if (delError) logs.push(`Error deleting ${options.label.toLowerCase()}: ${delError.message}`);
+	else logs.push(`${options.label} deleted successfully`);
 
-// /**
-//  * Copy belts table
-//  */
-// async function CopyBeltsTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+	logs.push(`Reading ${options.label.toLowerCase()}`);
+	const legacy = await options.readLegacy();
+	logs.push(`Copying ${options.label.toLowerCase()} table with ${legacy.length} rows`);
+	const models = options.transform(legacy);
 
-// 	await db.delete(belts).execute();
+	try {
+		await options.save(event, models);
+		logs.push(`Inserted ${options.label.toLowerCase()}`);
 
-// 	const oldEntities = await ReadBelts();
-// 	const newEntities = FromLegacyBeltEntities(oldEntities);
-// 	logs.push("Copying belts table with " + oldEntities.length + " rows");
+		// Verification
+		const saved = await options.getAll(event);
+		const srcById = new Map<any, any>(models.map((m: any) => [String(m.id).toLowerCase(), m]));
+		const destById = new Map<any, any>(saved.map((m: any) => [String(m.id).toLowerCase(), m]));
 
-// 	try {
-// 		await db.insert(belts).values(newEntities).execute();
-// 		logs.push(`Inserted belts`);
-// 	} catch (error: any) {
-// 		logs.push("Error in belts Insert: " + error.message);
-// 	}
+		const missing: string[] = [];
+		const extra: string[] = [];
+		const mismatches: string[] = [];
 
-// 	return logs;
-// }
+		const norm = (v: any) => {
+			if (v === null || v === undefined) return "";
+			if (typeof v === "string") return v.trim();
+			return v;
+		};
 
-// /**
-//  * Copy the members table
-//  */
-// async function CopyMembersTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+		for (const [id, src] of srcById.entries()) {
+			const dest = destById.get(id);
+			if (!dest) { missing.push((src as any).id); continue; }
+			for (const f of options.fields) {
+				const rawSv = (src as any)[f];
+				const rawDv = (dest as any)[f];
+				let sv = norm(rawSv);
+				let dv = norm(rawDv);
+				const fieldName = String(f);
+				// If this looks like an ID field (ends with 'id') or both strings are UUID-like, compare case-insensitively
+				if (typeof rawSv === "string" && typeof rawDv === "string") {
+					const isIdField = fieldName.toLowerCase().endsWith("id");
+					const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+					if (isIdField || (uuidRegex.test(rawSv) && uuidRegex.test(rawDv))) {
+						if (rawSv.toLowerCase() === rawDv.toLowerCase()) continue; // treat as equal ignoring case
+						// else keep original values for mismatch report (uncommon different IDs)
+					}
+				}
+				if (sv !== dv) mismatches.push(`${(src as any).id}:${fieldName} expected='${rawSv}' actual='${rawDv}'`);
+			}
+		}
+		for (const [id, dest] of destById.entries()) {
+			if (!srcById.has(id)) extra.push((dest as any).id);
+		}
 
-// 	await db.delete(members).execute();
+		if (!missing.length && !extra.length && !mismatches.length) {
+			logs.push(`${options.label} verification passed: ${saved.length} rows match source exactly (UUID case ignored)`);
+		} else {
+			if (missing.length) logs.push(`${options.label} verification missing in DB: ${missing.join(",")}`);
+			if (extra.length) logs.push(`${options.label} verification extra in DB: ${extra.join(",")}`);
+			if (mismatches.length) {
+				logs.push(`${options.label} verification field mismatches (${mismatches.length}):`);
+				for (const mm of mismatches.slice(0,25)) logs.push("  "+mm);
+				if (mismatches.length > 25) logs.push(`  ... ${mismatches.length-25} more (showing first 25)`);
+			}
+		}
+	} catch (error: any) {
+		logs.push(`Error in ${options.label} insert: ${error.message}`);
+	}
 
-// 	const oldNinjas = await ReadNinjas();
-// 	const newNinjas = FromLegacyMemberEntities(oldNinjas);
+	return logs;
+}
 
-// 	const oldAdults = await ReadAdults();
-// 	const newAdults = FromLegacyAdultEntities(oldAdults);
+/**
+ * Copy badge categories table
+ */
+async function CopyBadgeCategoriesTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	return CopySimpleTable(event, db, {
+		label: "Badge Categories",
+		tableName: "badge_categories",
+		readLegacy: ReadLegacyBadgeCategories,
+		transform: FromLegacyBadgeCategoryEntities as any,
+		save: (e, rows) => BadgeCategoriesData.SaveBadgeCategories(e, rows as any),
+		getAll: (e) => BadgeCategoriesData.GetBadgeCategories(e),
+		fields: ["deleted","categoryName","categoryDescription"] as any,
+	});
+}
 
-// 	// Copy ninjas one at a time
-// 	// for (const ninja of newNinjas) {
-// 	// 	try {
-// 	// 		await db.insert(members).values(ninja).execute();
-// 	// 		// logs.push(`Inserted ninja ${ninja.id}`);
-// 	// 	} catch (error: any) {
-// 	// 		logs.push(`Error in ninja ${ninja.id}`);
-// 	// 		logs.push(`Insert: ${error.message}`);
-// 	// 		logs.push(JSON.stringify({ ninja }));
-// 	// 		break;
-// 	// 	}
-// 	// }
+/**
+ * Copy badges table
+ */
+async function CopyBadgesTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	return CopySimpleTable(event, db, {
+		label: "Badges",
+		tableName: "badges",
+		readLegacy: ReadLegacyBadges,
+		transform: FromLegacyBadgeEntities as any,
+		save: (e, rows) => BadgesData.SaveBadges(e, rows as any),
+		getAll: (e) => BadgesData.GetBadges(e),
+		fields: ["deleted","achievement","badgeCategoryId","description"] as any,
+	});
+}
 
-// 	// Copy adults one at a time
-// 	// for (const adult of newAdults) {
-// 	// 	try {
-// 	// 		await db.insert(members).values(adult).execute();
-// 	// 		// logs.push(`Inserted ninja ${ninja.id}`);
-// 	// 	} catch (error: any) {
-// 	// 		logs.push(`Error in ninja ${adult.id}`);
-// 	// 		logs.push(`Insert: ${error.message}`);
-// 	// 		logs.push(JSON.stringify({ adult }));
-// 	// 		break;
-// 	// 	}
-// 	// }
+/**
+ * Copy belts table
+ */
+async function CopyBeltsTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	return CopySimpleTable(event, db, {
+		label: "Belts",
+		tableName: "belts",
+		readLegacy: ReadLegacyBelts,
+		transform: FromLegacyBeltEntities as any,
+		save: (e, rows) => BeltsData.SaveBelts(e, rows as any),
+		getAll: (e) => BeltsData.GetBelts(e),
+		fields: ["deleted","color","hexCode","description","sortOrder"] as any,
+	});
+}
 
-// 	// Copy all ninjas at once
-// 	// logs.push("Copying mebers table with " + oldNinjas.length + " ninjas");
-// 	// try {
-// 	// 	await db.insert(members).values(newNinjas).execute();
-// 	// 	logs.push(`Inserted ninjas`);
-// 	// } catch (error: any) {
-// 	// 	logs.push("Error in ninjas Insert: " + error.message);
-// 	// 	return logs;
-// 	// }
+/**
+ * Copy members (combining legacy ninjas and adults)
+ * Password hashes are NOT migrated here (MemberModel excludes them). A separate
+ * process can call MembersData.BulkMigrateLegacyPasswords afterwards if desired.
+ */
+async function CopyMembersTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	// Delete existing members
+	const { error: delError } = await db.schema("coderdojo").from("members").delete().not("id", "is", null);
+	if (delError) logs.push(`Error deleting members: ${delError.message}`); else logs.push("Members deleted successfully");
 
-// 	// Copy all adults at once
-// 	logs.push("Copying mebers table with " + oldAdults.length + " adults");
-// 	try {
-// 		await db.insert(members).values(newAdults).execute();
-// 		logs.push(`Inserted adults`);
-// 	} catch (error: any) {
-// 		logs.push("Error in adults Insert: " + error.message);
-// 	}
+	logs.push("Reading legacy ninjas and adults");
+	const ninjas = await ReadLegacyNinjas();
+	const adults = await ReadLegacyAdults();
+	logs.push(`Copying members table with ${ninjas.length} ninjas and ${adults.length} adults`);
 
-// 	return logs;
-// }
+	const ninjaModels = FromLegacyMemberEntities(ninjas);
+	const adultModels = FromLegacyAdultEntities(adults);
+	const allModels = [...ninjaModels, ...adultModels];
 
-// /**
-//  * Copy sessions table
-//  */
-// async function CopySessionsTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+	// Summary metrics
+	const ninjaCount = ninjaModels.length;
+	const adultCount = adultModels.length;
+	const mentorCount = adultModels.filter(a => a.isMentor).length;
+	logs.push(`Members source metrics: ninjas=${ninjaCount} adults=${adultCount} mentors=${mentorCount} total=${allModels.length}`);
 
-// 	await db.delete(sessions).execute();
+	try {
+		// Supabase has a practical limit (~1000 rows) per upsert call. Batch to ensure all members insert first.
+		const batchSize = 500;
+		let insertedTotal = 0;
+		for (let i = 0; i < allModels.length; i += batchSize) {
+			const batch = allModels.slice(i, i + batchSize);
+			const savedBatch = await MembersData.SaveMembers(event, batch);
+			insertedTotal += savedBatch.length;
+			logs.push(`Inserted member batch ${i / batchSize + 1} size=${batch.length} returned=${savedBatch.length}`);
+			if (savedBatch.length !== batch.length) {
+				logs.push(`Warning: batch mismatch expected=${batch.length} got=${savedBatch.length}`);
+			}
+		}
+		logs.push(`Inserted members total=${insertedTotal} expected=${allModels.length}`);
 
-// 	const oldEntities = await ReadSessions();
-// 	const newEntities = FromLegacySessionEntities(oldEntities);
-// 	logs.push("Copying Sessions table with " + oldEntities.length + " rows");
-// 	try {
-// 		await db.insert(sessions).values(newEntities).execute();
-// 		logs.push(`Inserted sessions`);
-// 	} catch (error: any) {
-// 		logs.push("Error in sessions Insert: " + error.message);
-// 	}
+		// Brief delay to mitigate any read-after-write lag
+		await new Promise((res) => setTimeout(res, 250));
+		// Verification (paged fetch to avoid row limits ~1000 per request)
+		const dbClient = await GetSupabaseAdminClient(event);
+		let saved: any[] = [];
+		if (dbClient) {
+			const pageSize = 1000;
+			let from = 0;
+			let page = 0;
+			while (true) {
+				const { data, error } = await dbClient
+					.schema('coderdojo')
+					.from('members')
+					.select('*')
+					.range(from, from + pageSize - 1);
+				if (error) { logs.push(`Verification fetch error page ${page}: ${error.message}`); break; }
+				if (data && data.length) {
+					saved.push(...data);
+					logs.push(`Verification fetched page ${page+1} size=${data.length}`);
+					if (data.length < pageSize) break; // last page
+					from += pageSize;
+					page++;
+				} else {
+					break;
+				}
+			}
+			// Map raw records to MemberModel shape via shared helper
+			saved = memberFromRecords(saved as any);
+		} else {
+			logs.push('Verification aborted: no DB client');
+			return logs;
+		}
+		const srcById = new Map<any, any>(allModels.map(m => [m.id.toLowerCase(), m]));
+		const destById = new Map<any, any>(saved.map(m => [m.id.toLowerCase(), m]));
 
-// 	return logs;
-// }
+		const missing: string[] = [];
+		const extra: string[] = [];
+		const mismatches: string[] = [];
+		// No diagnostics; tolerance handles acceptable differences
 
-// /**
-//  * Copy member badges table
-//  */
-// async function CopyMemberBadgesTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+		const fields: (keyof typeof allModels[number])[] = [
+			"deleted","birthYear","email","fingerprintId","gardaVetted","githubLogin","goalLongTerm","goalShortTerm","isMentor","isNinja","isParent","login","loginDate","loginDatePrevious","nameFirst","nameLast","phone","registeredCurrentTerm","scratchName","teamId","xboxGamertag"
+		];
+		const norm = (v: any) => {
+			if (v === null || v === undefined) return "";
+			if (typeof v === "string") return v.trim();
+			return v;
+		};
+		for (const [id, src] of srcById.entries()) {
+			const dest = destById.get(id);
+			if (!dest) { missing.push(src.id); continue; }
+			for (const f of fields) {
+				const rawSv = (src as any)[f];
+				const rawDv = (dest as any)[f];
+				let sv = norm(rawSv); let dv = norm(rawDv);
+				const fieldName = String(f);
+				if (typeof rawSv === "string" && typeof rawDv === "string" && fieldName.toLowerCase().endsWith("id")) {
+					if (rawSv.toLowerCase() === rawDv.toLowerCase()) continue;
+				}
+				if (sv !== dv) {
+					if ((fieldName === 'loginDate' || fieldName === 'loginDatePrevious') && typeof rawSv === 'number' && typeof rawDv === 'number') {
+						const diff = Math.abs(rawDv - rawSv);
+						if (diff <= TIME_TOLERANCE_MS) continue; // tolerate within 6 hours
+					}
+					mismatches.push(`${src.id}:${fieldName} expected='${rawSv}' actual='${rawDv}'`);
+				}
+			}
+		}
+		for (const [id, dest] of destById.entries()) if (!srcById.has(id)) extra.push(dest.id);
 
-// 	await db.delete(memberBadges).execute();
+		let verificationPassed = false;
+		if (!missing.length && !extra.length && !mismatches.length) {
+			logs.push(`Members verification passed: ${saved.length} rows match source exactly (UUID case ignored)`);
+			verificationPassed = true;
+		} else {
+			if (missing.length) logs.push(`Members verification missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Members verification extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) {
+				logs.push(`Members verification field mismatches (${mismatches.length}):`);
+				for (const mm of mismatches.slice(0,25)) logs.push('  '+mm);
+				if (mismatches.length > 25) logs.push(`  ... ${mismatches.length-25} more (showing first 25)`);
+			}
+			// (Probe diagnostics removed for cleaner logs)
+		}
 
-// 	const oldEntities = await ReadMemberBadges();
-// 	const newEntities = FromLegacyMemberBadgeEntities(oldEntities);
-// 	logs.push(
-// 		"Copying Member Badges table with " + oldEntities.length + " rows",
-// 	);
-// 	try {
-// 		await db.insert(memberBadges).values(newEntities).execute();
-// 		logs.push(`Inserted member badges`);
-// 	} catch (error: any) {
-// 		logs.push("Error in member badges Insert: " + error.message);
-// 	}
+		// Bulk password migration AFTER verification so it cannot affect field comparison above
+		if (verificationPassed) {
+			try {
+				logs.push("Migrating legacy member passwords (mentors)...");
+				const passwordResult = await MembersData.BulkMigrateLegacyPasswords(
+					event,
+					allModels.map((m) => ({
+						id: m.id,
+						nameFirst: m.nameFirst,
+						nameLast: m.nameLast,
+						fingerprintId: m.fingerprintId,
+						isMentor: m.isMentor,
+						deleted: m.deleted,
+					})),
+					{ force: false },
+				);
+				logs.push(`Password migration: updated=${passwordResult.updated} skipped=${passwordResult.skipped} errors=${passwordResult.errors}`);
+			} catch (pwErr: any) {
+				logs.push(`Error migrating passwords: ${pwErr.message || pwErr}`);
+			}
+		} else {
+			logs.push("Skipping password migration due to failed member verification");
+		}
+	} catch (error: any) {
+		logs.push(`Error in Members insert: ${error.message}`);
+	}
+	return logs;
+}
 
-// 	return logs;
-// }
+/**
+ * Copy sessions table with pagination verification
+ */
+async function CopySessionsTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('sessions').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting sessions: ${delError.message}`); else logs.push('Sessions deleted successfully');
+	const legacy = await ReadLegacySessions();
+	logs.push(`Copying sessions table with ${legacy.length} rows`);
+	const models = FromLegacySessionEntities(legacy);
+	try {
+		// bulk upsert (assume existing Save not present -> direct upsert)
+		const pageSize = 500;
+		for (let i=0;i<models.length;i+=pageSize) {
+			const batch = models.slice(i,i+pageSize);
+			const { data, error } = await db.schema('coderdojo').from('sessions').upsert(batch.map(m => ({
+				id: m.id,
+				created_date: new Date(m.createdDate).toISOString(),
+				end_date: m.endDate ? new Date(m.endDate).toISOString(): null,
+				url: m.url,
+				topic: m.topic,
+				adult_id: m.adultId,
+				adult2_id: m.adult2Id,
+				mentors_only: m.mentorsOnly,
+			})), { onConflict: 'id' }).select();
+			if (error) { logs.push(`Error inserting sessions batch ${i/pageSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted sessions');
+		await new Promise(r=>setTimeout(r,200));
+		// verification paged
+		const fetched: any[] = [];
+		let from=0; const fetchSize=1000; let page=0;
+		while (true) {
+			const { data, error } = await db.schema('coderdojo').from('sessions').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`Sessions verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); logs.push(`Sessions verification fetched page ${page+1} size=${data.length}`); if (data.length < fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		// map for compare
+		const srcById = new Map(models.map(m=>[m.id.toLowerCase(), m]));
+		const destById = new Map(fetched.map(r=>[String(r.id).toLowerCase(), r]));
+		const missing: string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcById.entries()) {
+			const dest = destById.get(id);
+			if (!dest) { missing.push(src.id); continue; }
+				// Generic compare with optional case-insensitive handling for UUID/id fields
+				const compare = (field: string, sv: any, dv: any, opts?: { caseInsensitive?: boolean }) => {
+					// Treat null and undefined as equivalent
+					if (sv == null && dv == null) return;
+					if (opts?.caseInsensitive && typeof sv === 'string' && typeof dv === 'string') {
+						if (sv.toLowerCase() === dv.toLowerCase()) return; // equal ignoring case
+					} else {
+						if (sv === dv) return;
+					}
+					mismatches.push(`${src.id}:${field} exp='${sv}' act='${dv}'`);
+				};
+				// Date comparisons with tolerance for possible timezone/hour shifts
+				const destCreated = dest.created_date ? Date.parse(dest.created_date) : null;
+				const destEnd = dest.end_date ? Date.parse(dest.end_date) : null;
+				if (!(src.createdDate == null && destCreated == null)) {
+					const diff = (src.createdDate != null && destCreated != null) ? Math.abs(destCreated - src.createdDate) : NaN;
+					if (!(diff <= TIME_TOLERANCE_MS)) compare('createdDate', src.createdDate, destCreated);
+				}
+				if (!(src.endDate == null && destEnd == null)) {
+					const diff = (src.endDate != null && destEnd != null) ? Math.abs(destEnd - src.endDate) : NaN;
+					if (!(diff <= TIME_TOLERANCE_MS)) compare('endDate', src.endDate, destEnd);
+				}
+				compare('url', src.url, dest.url);
+				compare('topic', src.topic, dest.topic);
+				// Compare adultId / adult2Id case-insensitively because Supabase may normalise UUID case
+				compare('adultId', src.adultId, dest.adult_id, { caseInsensitive: true });
+				compare('adult2Id', src.adult2Id, dest.adult2_id, { caseInsensitive: true });
+				compare('mentorsOnly', src.mentorsOnly, dest.mentors_only);
+		}
+		for (const [id, dest] of destById.entries()) if (!srcById.has(id)) extra.push(dest.id);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Sessions verification passed: ${fetched.length} rows match source exactly (UUID case ignored)`);
+		else {
+			if (missing.length) logs.push(`Sessions verification missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Sessions verification extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Sessions verification mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch (e:any) { logs.push(`Error in Sessions insert: ${e.message}`); }
+	return logs;
+}
 
-// /**
-//  * Copy member belts table
-//  */
-// async function CopyMemberBeltsTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
+/**
+ * Copy member attendance (member + adult) with de-dup and pagination verification
+ */
+async function CopyAttendanceTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('member_attendances').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting attendances: ${delError.message}`); else logs.push('Attendances deleted successfully');
+	const legacyMember = await ReadLegacyMemberAttendances();
+	const legacyAdult = await ReadLegacyAdultAttendances();
+	logs.push(`Copying attendance table with memberRows=${legacyMember.length} adultRows=${legacyAdult.length}`);
+	let memberModels = FromLegacyMemberAttendanceEntities(legacyMember);
+	let adultModels = FromLegacyAdultAttendanceEntities(legacyAdult);
+	const all = [...memberModels, ...adultModels];
+	try {
+		const pageSize = 1000;
+		for (let i=0;i<all.length;i+=pageSize) {
+			const batch = all.slice(i,i+pageSize);
+			const { error } = await db.schema('coderdojo').from('member_attendances').upsert(batch.map(a=>({ id:a.id, member_id:a.memberId, date:a.date })), { onConflict: 'id' });
+			if (error) { logs.push(`Error inserting attendance batch ${i/pageSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted attendances');
+		await new Promise(r=>setTimeout(r,200));
+		const fetched: any[] = [];
+		let from=0; const fetchSize=1000; let page=0;
+		while (true) {
+			const { data, error } = await db.schema('coderdojo').from('member_attendances').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`Attendance verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); logs.push(`Attendance verification fetched page ${page+1} size=${data.length}`); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		const srcById = new Map(all.map(a=>[a.id.toLowerCase(), a]));
+		const badSourceIds: any[] = [];
+		const safeSourceEntries: [string, any][] = [];
+		for (const a of all) {
+			if (!a || !a.id) { badSourceIds.push(a); continue; }
+			try { safeSourceEntries.push([String(a.id).toLowerCase(), a]); } catch { badSourceIds.push(a); }
+		}
+		const srcByIdSafe = new Map(safeSourceEntries);
+		const badDestIds: any[] = [];
+		const safeDestEntries: [string, any][] = [];
+		for (const r of fetched) {
+			if (!r || !r.id) { badDestIds.push(r); continue; }
+			try { safeDestEntries.push([String(r.id).toLowerCase(), r]); } catch { badDestIds.push(r); }
+		}
+		const destById = new Map(safeDestEntries);
+		const missing: string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcByIdSafe.entries()) {
+			const dest = destById.get(id);
+			if (!dest) { missing.push(src.id); continue; }
+				if (src.memberId && dest.member_id && src.memberId.toLowerCase() !== String(dest.member_id).toLowerCase()) mismatches.push(`${src.id}:memberId exp='${src.memberId}' act='${dest.member_id}'`);
+			if (src.date !== dest.date) mismatches.push(`${src.id}:date exp='${src.date}' act='${dest.date}'`);
+		}
+		for (const [id, dest] of destById.entries()) if (!srcById.has(id)) extra.push(dest.id);
+		if (badSourceIds.length) logs.push(`Attendance skipped invalid source rows=${badSourceIds.length}`);
+		if (badDestIds.length) logs.push(`Attendance encountered invalid fetched rows=${badDestIds.length}`);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Attendance verification passed: ${fetched.length} rows match source exactly (UUID case ignored)`); else {
+			if (missing.length) logs.push(`Attendance verification missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Attendance verification extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Attendance verification mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch (e:any) { logs.push(`Error in Attendance insert: ${e.message}`); }
+	return logs;
+}
 
-// 	await db.delete(memberBelts).execute();
+/**
+ * Copy member badge categories relationship table (adult badge categories in legacy)
+ */
+async function CopyMemberBadgeCategoriesTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('member_badge_categories').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting member_badge_categories: ${delError.message}`); else logs.push('Member badge categories deleted successfully');
+	const legacy = await ReadLegacyAdultBadgeCategories();
+	const models = FromLegacyAdultBadgeCategoryEntities(legacy);
+	logs.push(`Copying member_badge_categories with ${models.length} rows`);
+	try {
+		// upsert in batches
+		const batchSize = 1000;
+		for (let i=0;i<models.length;i+=batchSize) {
+			const batch = models.slice(i,i+batchSize);
+			const { error } = await db.schema('coderdojo').from('member_badge_categories').upsert(batch.map(m=>({ id:m.id, member_id:m.memberId, badge_category_id:m.badgeCategoryId })), { onConflict: 'id' });
+			if (error) { logs.push(`Error inserting member_badge_categories batch ${i/batchSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted member badge categories');
+		await new Promise(r=>setTimeout(r,150));
+		// verification
+		const fetched: any[] = [];
+		let from=0; const fetchSize=1000; let page=0;
+		while (true) {
+			const { data, error } = await db.schema('coderdojo').from('member_badge_categories').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`member_badge_categories verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		const srcById = new Map(models.map(m=>[m.id.toLowerCase(), m]));
+		const destById = new Map(fetched.map(r=>[String(r.id).toLowerCase(), r]));
+		const missing:string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcById.entries()) {
+			const dest = destById.get(id);
+			if (!dest) { missing.push(src.id); continue; }
+			if (src.memberId.toLowerCase() !== String(dest.member_id).toLowerCase()) mismatches.push(`${src.id}:memberId exp='${src.memberId}' act='${dest.member_id}'`);
+			if (src.badgeCategoryId.toLowerCase() !== String(dest.badge_category_id).toLowerCase()) mismatches.push(`${src.id}:badgeCategoryId exp='${src.badgeCategoryId}' act='${dest.badge_category_id}'`);
+		}
+		for (const [id,dest] of destById.entries()) if (!srcById.has(id)) extra.push(dest.id);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Member badge categories verification passed: ${fetched.length} rows match source (UUID case ignored)`);
+		else {
+			if (missing.length) logs.push(`Member badge categories missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Member badge categories extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Member badge categories mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch (e:any) { logs.push(`Error in member_badge_categories insert: ${e.message}`); }
+	return logs;
+}
 
-// 	const oldEntities = await ReadMemberBelts();
-// 	const newEntities = FromLegacyMemberBeltEntities(oldEntities);
-// 	logs.push(
-// 		"Copying Member Belts table with " + oldEntities.length + " rows",
-// 	);
-// 	try {
-// 		await db.insert(memberBelts).values(newEntities).execute();
-// 		logs.push(`Inserted member belts`);
-// 	} catch (error: any) {
-// 		logs.push("Error in member belts Insert: " + error.message);
-// 	}
+/**
+ * Copy member parents relationship table
+ */
+async function CopyMemberParentsTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('member_parents').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting member_parents: ${delError.message}`); else logs.push('Member parents deleted successfully');
+	const legacy = await ReadLegacyMemberParents();
+	const models = FromLegacyMemberParentEntities(legacy);
+	logs.push(`Copying member_parents with ${models.length} rows`);
+	try {
+		const batchSize=1000;
+		for (let i=0;i<models.length;i+=batchSize) {
+			const batch=models.slice(i,i+batchSize);
+			const { error } = await db.schema('coderdojo').from('member_parents').upsert(batch.map(m=>({ id:m.id, member_id:m.memberId, parent_id:m.parentId })), { onConflict:'id' });
+			if (error) { logs.push(`Error inserting member_parents batch ${i/batchSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted member parents');
+		await new Promise(r=>setTimeout(r,150));
+		const fetched:any[]=[]; let from=0; const fetchSize=1000; let page=0;
+		while(true){
+			const { data, error } = await db.schema('coderdojo').from('member_parents').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`member_parents verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		const srcById=new Map(models.map(m=>[m.id.toLowerCase(),m]));
+		const destById=new Map(fetched.map(r=>[String(r.id).toLowerCase(), r]));
+		const missing:string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcById.entries()) {
+			const dest=destById.get(id); if(!dest){ missing.push(src.id); continue; }
+			if (src.memberId.toLowerCase() !== String(dest.member_id).toLowerCase()) mismatches.push(`${src.id}:memberId exp='${src.memberId}' act='${dest.member_id}'`);
+			if (src.parentId.toLowerCase() !== String(dest.parent_id).toLowerCase()) mismatches.push(`${src.id}:parentId exp='${src.parentId}' act='${dest.parent_id}'`);
+		}
+		for (const [id,dest] of destById.entries()) if(!srcById.has(id)) extra.push(dest.id);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Member parents verification passed: ${fetched.length} rows match source (UUID case ignored)`);
+		else {
+			if (missing.length) logs.push(`Member parents missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Member parents extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Member parents mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch(e:any) { logs.push(`Error in member_parents insert: ${e.message}`); }
+	return logs;
+}
 
-// 	return logs;
-// }
+// Helper: compare dates with tolerance
+function datesEqualWithTolerance(a:number|null, b:number|null): boolean {
+	if (a == null && b == null) return true;
+	if (a == null || b == null) return false;
+	return Math.abs(a - b) <= TIME_TOLERANCE_MS;
+}
 
-// /**
-//  * Copy member badge categories table
-//  */
-// async function CopyMemberBadgeCategoriesTable(
-// 	db: DrizzleType,
-// ): Promise<string[]> {
-// 	const logs: string[] = [];
+/**
+ * Copy member badges table
+ */
+async function CopyMemberBadgesTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('member_badges').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting member_badges: ${delError.message}`); else logs.push('Member badges deleted successfully');
+	const legacy = await ReadLegacyMemberBadges();
+	const models = FromLegacyMemberBadgeEntities(legacy);
+	logs.push(`Copying member_badges with ${models.length} rows`);
+	try {
+		const batchSize=500;
+		for (let i=0;i<models.length;i+=batchSize) {
+			const batch=models.slice(i,i+batchSize);
+			const { error } = await db.schema('coderdojo').from('member_badges').upsert(batch.map(m=>({
+				id:m.id,
+				member_id:m.memberId,
+				badge_id:m.badgeId,
+				awarded_by_adult_id:m.awardedByAdultId,
+				application_notes:m.applicationNotes,
+				awarded_notes:m.awardedNotes,
+				rejected_notes:m.rejectedNotes,
+				rejected_by_adult_id:m.rejectedByAdultId,
+				application_date: m.applicationDate ? new Date(m.applicationDate).toISOString() : null,
+				awarded: m.awarded ? new Date(m.awarded).toISOString() : null,
+				rejected_date: m.rejectedDate ? new Date(m.rejectedDate).toISOString() : null,
+				goal_date: m.goalDate ? new Date(m.goalDate).toISOString() : null,
+			})), { onConflict: 'id' });
+			if (error) { logs.push(`Error inserting member_badges batch ${i/batchSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted member badges');
+		await new Promise(r=>setTimeout(r,150));
+		// verification
+		const fetched:any[]=[]; let from=0; const fetchSize=1000; let page=0;
+		while(true){
+			const { data, error } = await db.schema('coderdojo').from('member_badges').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`member_badges verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		const srcById=new Map(models.map(m=>[m.id.toLowerCase(), m]));
+		const destById=new Map(fetched.map(r=>[String(r.id).toLowerCase(), r]));
+		const missing:string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcById.entries()) {
+			const dest=destById.get(id); if(!dest){ missing.push(src.id); continue; }
+			// Case-insensitive UUID comparisons
+			const ci = (a:string|null, b:string|null, field:string) => { if (a==null && b==null) return; if (a==null || b==null) { mismatches.push(`${src.id}:${field} exp='${a}' act='${b}'`); return; } if (a.toLowerCase()!==b.toLowerCase()) mismatches.push(`${src.id}:${field} exp='${a}' act='${b}'`); };
+			ci(src.memberId, String(dest.member_id), 'memberId');
+			ci(src.badgeId, String(dest.badge_id), 'badgeId');
+			ci(src.awardedByAdultId, dest.awarded_by_adult_id, 'awardedByAdultId');
+			ci(src.rejectedByAdultId, dest.rejected_by_adult_id, 'rejectedByAdultId');
+			// Notes - trim compare
+			const trimEq = (a:any,b:any,f:string) => { const ta = (a??'').toString().trim(); const tb=(b??'').toString().trim(); if(ta!==tb) mismatches.push(`${src.id}:${f} exp='${a}' act='${b}'`); };
+			trimEq(src.applicationNotes, dest.application_notes, 'applicationNotes');
+			trimEq(src.awardedNotes, dest.awarded_notes, 'awardedNotes');
+			trimEq(src.rejectedNotes, dest.rejected_notes, 'rejectedNotes');
+			// Dates with tolerance
+			const parseOrNull = (v:any) => v ? Date.parse(v) : null;
+			const dApp = parseOrNull(dest.application_date);
+			const dAwd = parseOrNull(dest.awarded);
+			const dRej = parseOrNull(dest.rejected_date);
+			const dGoal = parseOrNull(dest.goal_date);
+			if(!datesEqualWithTolerance(src.applicationDate, dApp)) mismatches.push(`${src.id}:applicationDate exp='${src.applicationDate}' act='${dApp}'`);
+			if(!datesEqualWithTolerance(src.awarded, dAwd)) mismatches.push(`${src.id}:awarded exp='${src.awarded}' act='${dAwd}'`);
+			if(!datesEqualWithTolerance(src.rejectedDate, dRej)) mismatches.push(`${src.id}:rejectedDate exp='${src.rejectedDate}' act='${dRej}'`);
+			if(!datesEqualWithTolerance(src.goalDate, dGoal)) mismatches.push(`${src.id}:goalDate exp='${src.goalDate}' act='${dGoal}'`);
+		}
+		for (const [id,dest] of destById.entries()) if(!srcById.has(id)) extra.push(dest.id);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Member badges verification passed: ${fetched.length} rows match source (UUID case + date tolerance)`);
+		else {
+			if (missing.length) logs.push(`Member badges missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Member badges extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Member badges mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch(e:any) { logs.push(`Error in member_badges insert: ${e.message}`); }
+	return logs;
+}
 
-// 	await db.delete(memberBadgeCategories).execute();
-
-// 	const oldEntities = await ReadAdultBadgeCategories();
-// 	const newEntities = FromLegacyAdultBadgeCategoryEntities(oldEntities);
-// 	logs.push(
-// 		"Copying Member Badge Categories table with " +
-// 			oldEntities.length +
-// 			" rows",
-// 	);
-// 	try {
-// 		await db.insert(memberBadgeCategories).values(newEntities).execute();
-// 		logs.push(`Inserted member badge categories`);
-// 	} catch (error: any) {
-// 		logs.push("Error in member badge categories Insert: " + error.message);
-// 	}
-
-// 	return logs;
-// }
-
-// /**
-//  * copy member parents table
-//  */
-// async function CopyMemberParentsTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
-
-// 	await db.delete(memberParents).execute();
-
-// 	const oldEntities = await ReadMemberParents();
-// 	const newEntities = FromLegacyMemberParentEntities(oldEntities);
-// 	logs.push(
-// 		"Copying Member Parents table with " + oldEntities.length + " rows",
-// 	);
-// 	try {
-// 		await db.insert(memberParents).values(newEntities).execute();
-// 		logs.push(`Inserted member parents`);
-// 	} catch (error: any) {
-// 		logs.push("Error in member parents Insert: " + error.message);
-// 	}
-
-// 	return logs;
-// }
-
-// /**
-//  * Copy the attendance table
-//  */
-// async function CopyAttendanceTable(db: DrizzleType): Promise<string[]> {
-// 	const logs: string[] = [];
-
-// 	await db.delete(memberAttendances).execute();
-
-// 	const oldMemberEntities = await ReadMemberAttendances();
-// 	let newEntities = FromLegacyMemberAttendanceEntities(oldMemberEntities);
-// 	logs.push(
-// 		"Copying Attendances table with " +
-// 			oldMemberEntities.length +
-// 			" member rows",
-// 	);
-// 	try {
-// 		await db.insert(memberAttendances).values(newEntities).execute();
-// 		logs.push(`Inserted ninja attendances`);
-// 	} catch (error: any) {
-// 		logs.push("Error in ninja attendances Insert: " + error.message);
-// 	}
-
-// 	const oldAdultEntities = await ReadAdultAttendances();
-// 	newEntities = FromLegacyAdultAttendanceEntities(oldAdultEntities);
-// 	logs.push(
-// 		"Copying Attendances table with " +
-// 			oldAdultEntities.length +
-// 			" adult rows",
-// 	);
-// 	try {
-// 		await db.insert(memberAttendances).values(newEntities).execute();
-// 		logs.push(`Inserted adult attendances`);
-// 	} catch (error: any) {
-// 		logs.push("Error in adult attendances Insert: " + error.message);
-// 	}
-
-// 	return logs;
-// }
+/**
+ * Copy member belts table
+ */
+async function CopyMemberBeltsTable(event: H3Event<EventHandlerRequest>, db: SupabaseClient): Promise<string[]> {
+	const logs: string[] = [];
+	const { error: delError } = await db.schema('coderdojo').from('member_belts').delete().not('id','is',null);
+	if (delError) logs.push(`Error deleting member_belts: ${delError.message}`); else logs.push('Member belts deleted successfully');
+	const legacy = await ReadLegacyMemberBelts();
+	const models = FromLegacyMemberBeltEntities(legacy);
+	logs.push(`Copying member_belts with ${models.length} rows`);
+	try {
+		const batchSize=500;
+		for (let i=0;i<models.length;i+=batchSize) {
+			const batch=models.slice(i,i+batchSize);
+			const { error } = await db.schema('coderdojo').from('member_belts').upsert(batch.map(m=>({
+				id:m.id,
+				member_id:m.memberId,
+				belt_id:m.beltId,
+				awarded_by_adult_id:m.awardedByAdultId,
+				application_notes:m.applicationNotes,
+				awarded_notes:m.awardedNotes,
+				rejected_notes:m.rejectedNotes,
+				rejected_by_adult_id:m.rejectedByAdultId,
+				application_date: m.applicationDate ? new Date(m.applicationDate).toISOString() : null,
+				awarded: m.awarded ? new Date(m.awarded).toISOString() : null,
+				rejected_date: m.rejectedDate ? new Date(m.rejectedDate).toISOString() : null,
+			})), { onConflict: 'id' });
+			if (error) { logs.push(`Error inserting member_belts batch ${i/batchSize+1}: ${error.message}`); return logs; }
+		}
+		logs.push('Inserted member belts');
+		await new Promise(r=>setTimeout(r,150));
+		// verification
+		const fetched:any[]=[]; let from=0; const fetchSize=1000; let page=0;
+		while(true){
+			const { data, error } = await db.schema('coderdojo').from('member_belts').select('*').range(from, from+fetchSize-1);
+			if (error) { logs.push(`member_belts verification fetch error page ${page}: ${error.message}`); break; }
+			if (data && data.length) { fetched.push(...data); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
+		}
+		const srcById=new Map(models.map(m=>[m.id.toLowerCase(), m]));
+		const destById=new Map(fetched.map(r=>[String(r.id).toLowerCase(), r]));
+		const missing:string[]=[]; const extra:string[]=[]; const mismatches:string[]=[];
+		for (const [id, src] of srcById.entries()) {
+			const dest=destById.get(id); if(!dest){ missing.push(src.id); continue; }
+			const ci = (a:string|null, b:string|null, field:string) => { if (a==null && b==null) return; if (a==null || b==null) { mismatches.push(`${src.id}:${field} exp='${a}' act='${b}'`); return; } if (a.toLowerCase()!==b.toLowerCase()) mismatches.push(`${src.id}:${field} exp='${a}' act='${b}'`); };
+			ci(src.memberId, String(dest.member_id), 'memberId');
+			ci(src.beltId, String(dest.belt_id), 'beltId');
+			ci(src.awardedByAdultId, dest.awarded_by_adult_id, 'awardedByAdultId');
+			ci(src.rejectedByAdultId, dest.rejected_by_adult_id, 'rejectedByAdultId');
+			const trimEq = (a:any,b:any,f:string) => { const ta=(a??'').toString().trim(); const tb=(b??'').toString().trim(); if(ta!==tb) mismatches.push(`${src.id}:${f} exp='${a}' act='${b}'`); };
+			trimEq(src.applicationNotes, dest.application_notes, 'applicationNotes');
+			trimEq(src.awardedNotes, dest.awarded_notes, 'awardedNotes');
+			trimEq(src.rejectedNotes, dest.rejected_notes, 'rejectedNotes');
+			// Dates with tolerance
+			const parseOrNull = (v:any) => v ? Date.parse(v) : null;
+			const dApp = parseOrNull(dest.application_date);
+			const dAwd = parseOrNull(dest.awarded);
+			const dRej = parseOrNull(dest.rejected_date);
+			if(!datesEqualWithTolerance(src.applicationDate, dApp)) mismatches.push(`${src.id}:applicationDate exp='${src.applicationDate}' act='${dApp}'`);
+			if(!datesEqualWithTolerance(src.awarded, dAwd)) mismatches.push(`${src.id}:awarded exp='${src.awarded}' act='${dAwd}'`);
+			if(!datesEqualWithTolerance(src.rejectedDate, dRej)) mismatches.push(`${src.id}:rejectedDate exp='${src.rejectedDate}' act='${dRej}'`);
+		}
+		for (const [id,dest] of destById.entries()) if(!srcById.has(id)) extra.push(dest.id);
+		if (!missing.length && !extra.length && !mismatches.length) logs.push(`Member belts verification passed: ${fetched.length} rows match source (UUID case + date tolerance)`);
+		else {
+			if (missing.length) logs.push(`Member belts missing in DB: ${missing.join(',')}`);
+			if (extra.length) logs.push(`Member belts extra in DB: ${extra.join(',')}`);
+			if (mismatches.length) { logs.push(`Member belts mismatches (${mismatches.length}):`); for (const mm of mismatches.slice(0,25)) logs.push('  '+mm); if (mismatches.length>25) logs.push(`  ... ${mismatches.length-25} more`); }
+		}
+	} catch(e:any) { logs.push(`Error in member_belts insert: ${e.message}`); }
+	return logs;
+}

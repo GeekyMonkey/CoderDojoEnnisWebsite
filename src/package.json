@@ -14,7 +14,8 @@
 		"preview2": "npm run build && wrangler pages dev",
 		"postinstall": "nuxt prepare",
 		"start": "node .output/server/index.mjs",
-		"migrate_db": "supabase db push",
+		"supabase-migrate": "supabase db push",
+		"supabase-types": "supabase gen types typescript --project-id newsofwpimzmfbqsooka --schema coderdojo > types/supabase.ts",
 		"test": "cls && vitest",
 		"test-unix": "clear && vitest"
 	},

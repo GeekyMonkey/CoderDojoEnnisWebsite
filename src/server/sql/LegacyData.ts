@@ -26,7 +26,7 @@ const sqlConfig: config = {
 	},
 };
 
-async function ReadTable<T>(tableName: string): Promise<T[]> {
+async function ReadLegacyTable<T>(tableName: string): Promise<T[]> {
 	try {
 		let pool = await sql.connect(sqlConfig);
 		let result = await pool
@@ -46,64 +46,64 @@ async function ReadTable<T>(tableName: string): Promise<T[]> {
 	}
 }
 
-export async function ReadAdults(): Promise<LegacyAdultEntity[]> {
-	return await ReadTable<LegacyAdultEntity>("Adults");
+export async function ReadLegacyAdults(): Promise<LegacyAdultEntity[]> {
+	return await ReadLegacyTable<LegacyAdultEntity>("Adults");
 }
 
-export async function ReadAdultAttendances(): Promise<
+export async function ReadLegacyAdultAttendances(): Promise<
 	LegacyAdultAttendanceEntity[]
 > {
-	return await ReadTable<LegacyAdultAttendanceEntity>("AdultAttendance");
+	return await ReadLegacyTable<LegacyAdultAttendanceEntity>("AdultAttendance");
 }
 
-export async function ReadAdultBadgeCategories(): Promise<
+export async function ReadLegacyAdultBadgeCategories(): Promise<
 	LegacyAdultBadgeCategoryEntity[]
 > {
-	return await ReadTable<LegacyAdultBadgeCategoryEntity>(
+	return await ReadLegacyTable<LegacyAdultBadgeCategoryEntity>(
 		"AdultBadgeCategory",
 	);
 }
 
-export async function ReadBadgeCategories(): Promise<
+export async function ReadLegacyBadgeCategories(): Promise<
 	LegacyBadgeCategoryEntity[]
 > {
-	return await ReadTable<LegacyBadgeCategoryEntity>("BadgeCategories");
+	return await ReadLegacyTable<LegacyBadgeCategoryEntity>("BadgeCategories");
 }
 
-export async function ReadBadges(): Promise<LegacyBadgeEntity[]> {
-	return await ReadTable<LegacyBadgeEntity>("Badges");
+export async function ReadLegacyBadges(): Promise<LegacyBadgeEntity[]> {
+	return await ReadLegacyTable<LegacyBadgeEntity>("Badges");
 }
 
-export async function ReadBelts(): Promise<LegacyBeltEntity[]> {
-	return await ReadTable<LegacyBeltEntity>("Belts");
+export async function ReadLegacyBelts(): Promise<LegacyBeltEntity[]> {
+	return await ReadLegacyTable<LegacyBeltEntity>("Belts");
 }
 
-export async function ReadNinjas(): Promise<LegacyMemberEntity[]> {
-	return await ReadTable<LegacyMemberEntity>("Members");
+export async function ReadLegacyNinjas(): Promise<LegacyMemberEntity[]> {
+	return await ReadLegacyTable<LegacyMemberEntity>("Members");
 }
 
-export async function ReadMemberAttendances(): Promise<
+export async function ReadLegacyMemberAttendances(): Promise<
 	LegacyMemberAttendanceEntity[]
 > {
-	return await ReadTable<LegacyMemberAttendanceEntity>("MemberAttendance");
+	return await ReadLegacyTable<LegacyMemberAttendanceEntity>("MemberAttendance");
 }
 
-export async function ReadMemberBadges(): Promise<LegacyMemberBadgeEntity[]> {
-	return await ReadTable<LegacyMemberBadgeEntity>("MemberBadges");
+export async function ReadLegacyMemberBadges(): Promise<LegacyMemberBadgeEntity[]> {
+	return await ReadLegacyTable<LegacyMemberBadgeEntity>("MemberBadges");
 }
 
-export async function ReadMemberBelts(): Promise<LegacyMemberBeltEntity[]> {
-	return await ReadTable<LegacyMemberBeltEntity>("MemberBelts");
+export async function ReadLegacyMemberBelts(): Promise<LegacyMemberBeltEntity[]> {
+	return await ReadLegacyTable<LegacyMemberBeltEntity>("MemberBelts");
 }
 
-export async function ReadMemberParents(): Promise<LegacyMemberParentEntity[]> {
-	return await ReadTable<LegacyMemberParentEntity>("MemberParent");
+export async function ReadLegacyMemberParents(): Promise<LegacyMemberParentEntity[]> {
+	return await ReadLegacyTable<LegacyMemberParentEntity>("MemberParent");
 }
 
-export async function ReadSessions(): Promise<LegacySessionEntity[]> {
-	return await ReadTable<LegacySessionEntity>("Sessions");
+export async function ReadLegacySessions(): Promise<LegacySessionEntity[]> {
+	return await ReadLegacyTable<LegacySessionEntity>("Sessions");
 }
 
-export async function ReadTeams(): Promise<LegacyTeamEntity[]> {
-	return await ReadTable<LegacyTeamEntity>("Teams");
+export async function ReadLegacyTeams(): Promise<LegacyTeamEntity[]> {
+	return await ReadLegacyTable<LegacyTeamEntity>("Teams");
 }

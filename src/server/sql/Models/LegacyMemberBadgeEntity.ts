@@ -1,4 +1,4 @@
-import { MemberBadgeEntity } from "~~/server/db/entities";
+import { type MemberBadgeModel } from "~~/shared/types/models/MemberBadgeModel";
 import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
 
@@ -22,7 +22,11 @@ export type LegacyMemberBadgeEntity = {
 
 export const FromLegacyMemberBadgeEntity = (
 	legacy: LegacyMemberBadgeEntity,
-): MemberBadgeEntity => {
+): MemberBadgeModel => {
+	const application = NumberToDateOrNull(legacy.ApplicationDate);
+	const awarded = NumberToDateOrNull(legacy.Awarded);
+	const rejected = NumberToDateOrNull(legacy.RejectedDate);
+	const goal = NumberToDateOrNull(legacy.GoalDate);
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
@@ -32,15 +36,15 @@ export const FromLegacyMemberBadgeEntity = (
 		awardedNotes: Utf8EncodeOrNull(legacy.AwardedNotes),
 		rejectedNotes: Utf8EncodeOrNull(legacy.RejectedNotes),
 		rejectedByAdultId: legacy.RejectedByAdultId,
-		applicationDate: NumberToDateOrNull(legacy.ApplicationDate),
-		awarded: NumberToDateOrNull(legacy.Awarded),
-		rejectedDate: NumberToDateOrNull(legacy.RejectedDate),
-		goalDate: NumberToDateOrNull(legacy.GoalDate),
+		applicationDate: application ? application.getTime() : null,
+		awarded: awarded ? awarded.getTime() : null,
+		rejectedDate: rejected ? rejected.getTime() : null,
+		goalDate: goal ? goal.getTime() : null,
 	};
 };
 
 export const FromLegacyMemberBadgeEntities = (
 	legacies: LegacyMemberBadgeEntity[],
-): MemberBadgeEntity[] => {
+): MemberBadgeModel[] => {
 	return legacies.map(FromLegacyMemberBadgeEntity);
 };

@@ -1,15 +1,15 @@
 meta {
   name: Teams - List
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{Host}}/api/teams/list?include_deleted=false
+  url: {{Host}}/api/teams/list?include_deleted=true
   body: none
   auth: none
 }
 
 params:query {
-  include_deleted: false
+  include_deleted: true
 }

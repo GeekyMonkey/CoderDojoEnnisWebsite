@@ -1,4 +1,4 @@
-import { MemberBadgeCategoryEntity } from "~~/server/db/entities";
+import { MemberBadgeCategoryModel } from "~~/shared/types/models/MemberBadgeCategoryModel";
 
 /**
  * SQL Server Adult-BadgeCategory Entity
@@ -11,7 +11,7 @@ export type LegacyAdultBadgeCategoryEntity = {
 
 export const FromLegacyAdultBadgeCategoryEntity = (
 	legacy: LegacyAdultBadgeCategoryEntity,
-): MemberBadgeCategoryEntity => {
+): MemberBadgeCategoryModel => {
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
@@ -21,6 +21,6 @@ export const FromLegacyAdultBadgeCategoryEntity = (
 
 export const FromLegacyAdultBadgeCategoryEntities = (
 	legacies: LegacyAdultBadgeCategoryEntity[],
-): MemberBadgeCategoryEntity[] => {
+): MemberBadgeCategoryModel[] => {
 	return legacies.map(FromLegacyAdultBadgeCategoryEntity);
 };

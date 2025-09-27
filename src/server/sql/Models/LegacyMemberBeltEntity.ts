@@ -1,4 +1,4 @@
-import { MemberBeltEntity } from "~~/server/db/entities";
+import { type MemberBeltModel } from "~~/shared/types/models/MemberBeltModel";
 import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
 
@@ -21,7 +21,10 @@ export type LegacyMemberBeltEntity = {
 
 export const FromLegacyMemberBeltEntity = (
 	legacy: LegacyMemberBeltEntity,
-): MemberBeltEntity => {
+): MemberBeltModel => {
+	const application = NumberToDateOrNull(legacy.ApplicationDate);
+	const awarded = NumberToDateOrNull(legacy.Awarded);
+	const rejected = NumberToDateOrNull(legacy.RejectedDate);
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
@@ -31,14 +34,14 @@ export const FromLegacyMemberBeltEntity = (
 		awardedNotes: Utf8EncodeOrNull(legacy.AwardedNotes),
 		rejectedNotes: Utf8EncodeOrNull(legacy.RejectedNotes),
 		rejectedByAdultId: legacy.RejectedByAdultId,
-		applicationDate: NumberToDateOrNull(legacy.ApplicationDate),
-		awarded: NumberToDateOrNull(legacy.Awarded),
-		rejectedDate: NumberToDateOrNull(legacy.RejectedDate),
+		applicationDate: application ? application.getTime() : null,
+		awarded: awarded ? awarded.getTime() : null,
+		rejectedDate: rejected ? rejected.getTime() : null,
 	};
 };
 
 export const FromLegacyMemberBeltEntities = (
 	legacies: LegacyMemberBeltEntity[],
-): MemberBeltEntity[] => {
+): MemberBeltModel[] => {
 	return legacies.map(FromLegacyMemberBeltEntity);
 };

@@ -1,4 +1,4 @@
-import { TeamEntity } from "~~/server/db/entities";
+import { TeamModel } from "~~/shared/types/models/TeamModel";
 
 /**
  * SQL Server Team Entity
@@ -12,7 +12,7 @@ export type LegacyTeamEntity = {
 	TeamName: string;
 };
 
-export const FromLegacyTeamEntity = (legacy: LegacyTeamEntity): TeamEntity => {
+export const FromLegacyTeamEntity = (legacy: LegacyTeamEntity): TeamModel => {
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
@@ -25,6 +25,6 @@ export const FromLegacyTeamEntity = (legacy: LegacyTeamEntity): TeamEntity => {
 
 export const FromLegacyTeamEntities = (
 	legacies: LegacyTeamEntity[],
-): TeamEntity[] => {
+): TeamModel[] => {
 	return legacies.map(FromLegacyTeamEntity);
 };

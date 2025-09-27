@@ -1,4 +1,4 @@
-import { BadgeEntity } from "~~/server/db/entities";
+import { type BadgeModel } from "~~/shared/types/models/BadgeModel";
 
 /**
  * SQL Server Badge Entity
@@ -13,7 +13,7 @@ export type LegacyBadgeEntity = {
 
 export const FromLegacyBadgeEntity = (
 	legacy: LegacyBadgeEntity,
-): BadgeEntity => {
+): BadgeModel => {
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
@@ -25,6 +25,6 @@ export const FromLegacyBadgeEntity = (
 
 export const FromLegacyBadgeEntities = (
 	legacies: LegacyBadgeEntity[],
-): BadgeEntity[] => {
+): BadgeModel[] => {
 	return legacies.map(FromLegacyBadgeEntity);
 };

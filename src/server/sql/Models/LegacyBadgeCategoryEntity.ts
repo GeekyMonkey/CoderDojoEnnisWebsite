@@ -1,4 +1,4 @@
-import { BadgeCategoryEntity } from "~~/server/db/entities";
+import { type BadgeCategoryModel } from "~~/shared/types/models/BadgeCategoryModel";
 
 /**
  * SQL Server Badge Category Entity
@@ -12,7 +12,7 @@ export type LegacyBadgeCategoryEntity = {
 
 export const FromLegacyBadgeCategoryEntity = (
 	legacy: LegacyBadgeCategoryEntity,
-): BadgeCategoryEntity => {
+): BadgeCategoryModel => {
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
@@ -23,6 +23,6 @@ export const FromLegacyBadgeCategoryEntity = (
 
 export const FromLegacyBadgeCategoryEntities = (
 	legacies: LegacyBadgeCategoryEntity[],
-): BadgeCategoryEntity[] => {
+): BadgeCategoryModel[] => {
 	return legacies.map(FromLegacyBadgeCategoryEntity);
 };

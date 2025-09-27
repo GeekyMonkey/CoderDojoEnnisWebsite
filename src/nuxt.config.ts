@@ -239,19 +239,7 @@ export default defineNuxtConfig({
 	ssr: false,
 
 	supabase: {
-		redirectOptions: {
-			login: "/login",
-			callback: "/logged_in",
-			include: [
-				// Secured paths
-				"/coder(/*)?",
-				"/mentor(/*)?",
-				"/parent(/*)?",
-				"/debug(/*)?",
-			],
-			exclude: [],
-			cookieRedirect: true,
-		},
+		redirect: false,
 	},
 
 	typescript: {

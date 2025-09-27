@@ -1,4 +1,4 @@
-import { MemberEntity } from "~~/server/db/entities";
+import { type MemberModel } from "~~/shared/types/models/MemberModel";
 import { GeneratePasswordHash } from "~~/server/utils/authUtils";
 import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 import { Utf8Encode, Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
@@ -31,8 +31,13 @@ export type LegacyAdultEntity = {
  */
 export const FromLegacyAdultEntity = (
 	legacy: LegacyAdultEntity,
-): MemberEntity => {
-	const member: MemberEntity = {
+): MemberModel => {
+	const loginDatePrev = NumberToDateOrNull(legacy.LoginDatePrevious);
+	const loginDate = NumberToDateOrNull(legacy.LoginDate);
+	// Use raw millisecond values (no timezone/DST adjustment; verification layer handles tolerance)
+	const adjPrev = loginDatePrev ? loginDatePrev.getTime() : null;
+	const adjDate = loginDate ? loginDate.getTime() : null;
+	const member: MemberModel = {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
 		birthYear: null,
@@ -45,12 +50,11 @@ export const FromLegacyAdultEntity = (
 		isMentor: legacy.IsMentor,
 		isNinja: false,
 		isParent: legacy.IsParent,
-		loginDatePrevious: NumberToDateOrNull(legacy.LoginDatePrevious),
-		loginDate: NumberToDateOrNull(legacy.LoginDate),
+		loginDatePrevious: adjPrev,
+		loginDate: adjDate,
 		login: Utf8EncodeOrNull(legacy.Login),
 		nameFirst: Utf8Encode(legacy.FirstName),
 		nameLast: Utf8Encode(legacy.LastName),
-		passwordHash: null,
 		phone: legacy.Phone,
 		registeredCurrentTerm: false,
 		scratchName: legacy.ScratchName,
@@ -58,18 +62,7 @@ export const FromLegacyAdultEntity = (
 		xboxGamertag: legacy.XboxGamertag,
 	};
 
-	const autoConvertPassword =
-		member.isMentor &&
-		member.deleted == false &&
-		member.fingerprintId != null;
-	if (autoConvertPassword) {
-		const salt = process.env.PASSWORD_SALT || "_Salty!_";
-		const password =
-			(member.nameFirst || "").substring(0, 1) +
-			member.nameLast +
-			String(member.fingerprintId);
-		member.passwordHash = GeneratePasswordHash(password, salt);
-	}
+// password hashing intentionally omitted (passwordHash not in MemberModel schema)
 
 	return member;
 };
@@ -79,6 +72,6 @@ export const FromLegacyAdultEntity = (
  */
 export const FromLegacyAdultEntities = (
 	legacies: LegacyAdultEntity[],
-): MemberEntity[] => {
+): MemberModel[] => {
 	return legacies.map(FromLegacyAdultEntity);
 };

@@ -1,4 +1,4 @@
-import { MemberEntity } from "~~/server/db/entities";
+import { type MemberModel } from "~~/shared/types/models/MemberModel";
 import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 import { Utf8Encode, Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
 
@@ -27,7 +27,12 @@ export type LegacyMemberEntity = {
 
 export const FromLegacyMemberEntity = (
 	legacy: LegacyMemberEntity,
-): MemberEntity => {
+): MemberModel => {
+	const loginDatePrev = NumberToDateOrNull(legacy.LoginDatePrevious);
+	const loginDate = NumberToDateOrNull(legacy.LoginDate);
+	// Use raw millisecond values (no timezone/DST adjustment; verification layer handles tolerance)
+	const adjPrev = loginDatePrev ? loginDatePrev.getTime() : null;
+	const adjDate = loginDate ? loginDate.getTime() : null;
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
@@ -41,12 +46,11 @@ export const FromLegacyMemberEntity = (
 		isMentor: false,
 		isNinja: true,
 		isParent: false,
-		loginDatePrevious: NumberToDateOrNull(legacy.LoginDatePrevious),
-		loginDate: NumberToDateOrNull(legacy.LoginDate),
+		loginDatePrevious: adjPrev,
+		loginDate: adjDate,
 		login: Utf8EncodeOrNull(legacy.Login),
 		nameFirst: Utf8Encode(legacy.FirstName),
 		nameLast: Utf8Encode(legacy.LastName),
-		passwordHash: null,
 		phone: null,
 		registeredCurrentTerm: legacy.RegisteredCurrentTerm,
 		scratchName: legacy.ScratchName,
@@ -57,6 +61,6 @@ export const FromLegacyMemberEntity = (
 
 export const FromLegacyMemberEntities = (
 	legacies: LegacyMemberEntity[],
-): MemberEntity[] => {
+): MemberModel[] => {
 	return legacies.map(FromLegacyMemberEntity);
 };

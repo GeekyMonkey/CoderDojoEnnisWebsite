@@ -1,4 +1,4 @@
-import { SessionEntity } from "~~/server/db/entities";
+import { type SessionModel } from "~~/shared/types/models/SessionModel";
 import { NumberToDate, NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
 
 /**
@@ -17,11 +17,13 @@ export type LegacySessionEntity = {
 
 export const FromLegacySessionEntity = (
 	legacy: LegacySessionEntity,
-): SessionEntity => {
+): SessionModel => {
+	const created = NumberToDate(legacy.CreatedDate);
+	const end = NumberToDateOrNull(legacy.EndDate);
 	return {
 		id: legacy.Id,
-		createdDate: NumberToDate(legacy.CreatedDate),
-		endDate: NumberToDateOrNull(legacy.EndDate),
+		createdDate: created.getTime(),
+		endDate: end ? end.getTime() : null,
 		url: legacy.Url,
 		topic: legacy.Topic,
 		adultId: legacy.AdultId,
@@ -32,6 +34,6 @@ export const FromLegacySessionEntity = (
 
 export const FromLegacySessionEntities = (
 	legacies: LegacySessionEntity[],
-): SessionEntity[] => {
+): SessionModel[] => {
 	return legacies.map(FromLegacySessionEntity);
 };

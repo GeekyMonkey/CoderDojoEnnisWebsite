@@ -1,4 +1,4 @@
-import { BeltEntity } from "~~/server/db/entities";
+import { type BeltModel } from "~~/shared/types/models/BeltModel";
 
 /**
  * SQL Server Belt Entity
@@ -12,7 +12,7 @@ export type LegacyBeltEntity = {
 	SortOrder: number;
 };
 
-export const FromLegacyBeltEntity = (legacy: LegacyBeltEntity): BeltEntity => {
+export const FromLegacyBeltEntity = (legacy: LegacyBeltEntity): BeltModel => {
 	return {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
@@ -25,6 +25,6 @@ export const FromLegacyBeltEntity = (legacy: LegacyBeltEntity): BeltEntity => {
 
 export const FromLegacyBeltEntities = (
 	legacies: LegacyBeltEntity[],
-): BeltEntity[] => {
+): BeltModel[] => {
 	return legacies.map(FromLegacyBeltEntity);
 };

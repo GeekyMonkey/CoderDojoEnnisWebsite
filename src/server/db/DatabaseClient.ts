@@ -1,0 +1,314 @@
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { H3Event, EventHandlerRequest } from "h3";
+
+/**
+ * Database access mode type
+ * - 'anon': Uses anon key (default), respects RLS policies
+ * - 'admin': Uses service_role key to bypass RLS
+ */
+export type DatabaseMode = "anon" | "admin";
+
+// Environment variables
+const supabaseUrl = process.env.NUXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NUXT_PUBLIC_SUPABASE_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+	console.error("Missing required Supabase environment variables");
+	process.exit(1);
+}
+
+if (!supabaseServiceKey) {
+	console.warn(
+		"SUPABASE_SERVICE_ROLE_KEY is not set. Admin mode will not be available."
+	);
+}
+
+// Symbol used to store client cache on event object
+const CLIENT_CACHE_KEY_anon = Symbol("supabaseClientCache_anon");
+const CLIENT_CACHE_KEY_admin = Symbol("supabaseClientCache_admin");
+
+/**
+ * Gets a client cache for the current request
+ * This keeps the cache scoped to the request lifecycle
+ */
+function getEventCache(
+	event: H3Event<EventHandlerRequest>,
+	mode: DatabaseMode
+): Map<string, SupabaseClient> {
+	// Cast to any to allow adding properties
+	const eventObj = event as any;
+	const cacheKey =
+		mode === "admin" ? CLIENT_CACHE_KEY_admin : CLIENT_CACHE_KEY_anon;
+
+	// Create cache if it doesn't exist
+	if (!eventObj[cacheKey]) {
+		eventObj[cacheKey] = new Map<string, SupabaseClient>();
+	}
+
+	return eventObj[cacheKey];
+}
+
+/**
+ * Get a Supabase public access client
+ */
+export async function GetSupabaseClient(
+	event: H3Event<EventHandlerRequest>,
+	mode: DatabaseMode = "anon"
+): Promise<SupabaseClient | null> {
+	try {
+		// Get cache for this specific request
+		const cache = getEventCache(event, mode);
+
+		// Create a simple cache key based just on the mode
+		// Since cache is per-request, we don't need more complexity
+		const cacheKey = mode;
+
+		// Check if we already have a client for this request+mode
+		if (cache.has(cacheKey)) {
+			return cache.get(cacheKey) || null;
+		}
+
+		// Choose the appropriate API key based on mode
+		let apiKey: string;
+
+		if (mode === "admin") {
+			// Use service role key to bypass RLS
+			if (!supabaseServiceKey) {
+				console.error(
+					"Cannot use admin mode: SUPABASE_SERVICE_ROLE_KEY is not set"
+				);
+				return null;
+			}
+			apiKey = supabaseServiceKey;
+			console.log("Using admin mode with service role key");
+		} else {
+			// Use anon key for regular access
+			if (!supabaseAnonKey) {
+				console.error(
+					"Cannot use anon mode: NUXT_PUBLIC_SUPABASE_KEY is not set"
+				);
+				return null;
+			}
+			apiKey = supabaseAnonKey;
+		}
+
+		// Create a Supabase client with the selected API key
+		const client = createClient(supabaseUrl as string, apiKey, {
+			auth: {
+				persistSession: false,
+				autoRefreshToken: false,
+			},
+		});
+
+		// Cache the client for future use within this request
+		cache.set(cacheKey, client);
+
+		return client;
+	} catch (error) {
+		console.error("Error initializing Supabase client:", error);
+		return null;
+	}
+}
+
+/**
+ * Get a Supabase read-write client with admin privileges (bypasses RLS)
+ * Uses the same caching mechanism as GetSupabaseClient
+ */
+export async function GetSupabaseAdminClient(
+	event: H3Event<EventHandlerRequest>
+): Promise<SupabaseClient | null> {
+	return GetSupabaseClient(event, "admin");
+}
+
+/**
+ * Get MIME type from file extension
+ */
+export const GetMimeTypeFromExtension = (ext: string): string => {
+	switch (ext.toLowerCase()) {
+		case "png":
+			return "image/png";
+		case "gif":
+			return "image/gif";
+		case "webp":
+			return "image/webp";
+		case "jpg":
+		case "jpeg":
+		default:
+			return "image/jpeg";
+	}
+};
+
+/**
+ * Format an image file name (relative to storage root)
+ */
+export const FormatImageFileName = (
+	ownerType: string,
+	ownerId: string,
+	imageId: string,
+	ext: string
+): string => {
+	return `${ownerType}/${ownerId}/${imageId}.${ext}`.replace(/-/g, "");
+};
+
+/**
+ * Save a file to supabase storage
+ */
+export const SaveFile = async ({
+	event,
+	filePath,
+	file,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	filePath: string;
+	file: File;
+}): Promise<boolean> => {
+	// Use admin client to bypass RLS
+	const supabase = await GetSupabaseAdminClient(event);
+	if (!supabase) {
+		console.error("Supabase client is not initialized.");
+		return false;
+	}
+
+	const { data, error } = await supabase.storage
+		.from("coderdojo")
+		.upload(filePath, file, {
+			upsert: true,
+			metadata: {
+				ownerType: filePath.split("/")[0],
+				ownerId: filePath.split("/")[1],
+			},
+		});
+
+	if (error) {
+		console.error("Error saving file:", error);
+		return false;
+	}
+
+	return true;
+};
+
+/**
+ * Save a base64 image string to Supabase storage
+ */
+export const SaveBase64Image = async ({
+	event,
+	filePath,
+	base64String,
+	ext,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	filePath: string;
+	base64String: string;
+	ext: string;
+}): Promise<boolean> => {
+	// Use admin client to bypass RLS
+	const supabase = await GetSupabaseAdminClient(event);
+	if (!supabase) {
+		console.error("Supabase client is not initialized.");
+		return false;
+	}
+
+	try {
+		// Get content type from extension
+		const contentType = GetMimeTypeFromExtension(ext);
+
+		// Remove data URL prefix if present (e.g., "data:image/jpeg;base64,")
+		const base64Data = base64String.replace(
+			/^data:image\/[a-z]+;base64,/,
+			""
+		);
+
+		// Convert base64 to Uint8Array
+		const binaryString = atob(base64Data);
+		const bytes = new Uint8Array(binaryString.length);
+		for (let i = 0; i < binaryString.length; i++) {
+			bytes[i] = binaryString.charCodeAt(i);
+		}
+
+		// Create a Blob from the bytes
+		const blob = new Blob([bytes], { type: contentType });
+
+		const { data, error } = await supabase.storage
+			.from("coderdojo")
+			.upload(filePath, blob, {
+				upsert: true,
+				contentType,
+				metadata: {
+					ownerType: filePath.split("/")[0],
+					ownerId: filePath.split("/")[1],
+				},
+			});
+
+		if (error) {
+			console.error("Error saving base64 image:", error);
+			return false;
+		}
+
+		return true;
+	} catch (error) {
+		console.error("Error processing base64 image:", error);
+		return false;
+	}
+};
+
+/**
+ * Delete a file from storage
+ */
+export const DeleteFile = async ({
+	event,
+	filePath,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	filePath: string;
+}): Promise<boolean> => {
+	// Use admin client to bypass RLS
+	const supabase = await GetSupabaseAdminClient(event);
+	if (!supabase) {
+		console.error("Supabase client is not initialized.");
+		return false;
+	}
+
+	const { data, error } = await supabase.storage
+		.from("coderdojo")
+		.remove([filePath]);
+
+	if (error) {
+		console.error("Error deleting file:", error);
+		return false;
+	}
+
+	return true;
+};
+
+/**
+ * Get a supabase storage image URL
+ */
+export const GetImageUrl = async ({
+	event,
+	filePath,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	filePath: string;
+}): Promise<string | null> => {
+	const bucketName: string = "coderdojo";
+	const filePathClean = filePath.replace(/-/g, "");
+
+	// Use default client mode for public storage operations (RLS applies)
+	const supabase = await GetSupabaseClient(event);
+	if (!supabase) {
+		console.error("Supabase client is not initialized.");
+		return null;
+	}
+
+	try {
+		const { data } = supabase.storage
+			.from(bucketName)
+			.getPublicUrl(filePathClean);
+
+		return data?.publicUrl ?? null;
+	} catch (error) {
+		console.error("Error getting image URL:", error);
+		return null;
+	}
+};

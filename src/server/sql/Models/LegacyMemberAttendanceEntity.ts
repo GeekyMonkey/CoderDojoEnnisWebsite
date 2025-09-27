@@ -1,4 +1,4 @@
-import { MemberAttendanceEntity } from "~~/server/db/entities";
+import { type MemberAttendanceModel } from "~~/shared/types/models/MemberAttendanceModel";
 
 /**
  * SQL Server Member-Attendance Entity
@@ -11,17 +11,18 @@ export type LegacyMemberAttendanceEntity = {
 
 export const FromLegacyMemberAttendanceEntity = (
 	legacy: LegacyMemberAttendanceEntity,
-): MemberAttendanceEntity => {
+): MemberAttendanceModel => {
+	const d = new Date(legacy.Date);
 	return {
 		id: legacy.Id,
 		memberId: legacy.MemberId,
-		date: new Date(legacy.Date),
+		date: d.toISOString().substring(0, 10),
 	};
 };
 
 export const FromLegacyMemberAttendanceEntities = (
 	legacies: LegacyMemberAttendanceEntity[],
-): MemberAttendanceEntity[] => {
+): MemberAttendanceModel[] => {
 	let attendances = legacies.map(FromLegacyMemberAttendanceEntity);
 
 	// Remove duplicates
