@@ -3,15 +3,19 @@ import type { Database } from "../../../types/supabase";
 
 export type MemberAttendanceRecord = Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
 
+import { IsYYYY_MM_dd } from '../../utils/DateHelpers';
+
 export const MemberAttendanceModelSchema = z
 	.object({
 		id: z.string(),
 		memberId: z.string(),
-		date: z.string(),
+		date: z.string().refine(IsYYYY_MM_dd, { message: 'date must be YYYY-MM-DD' }),
 	})
 	.strict();
+export const MemberAttendanceModelArraySchema = z.array(MemberAttendanceModelSchema);
 
 export type MemberAttendanceModel = z.infer<typeof MemberAttendanceModelSchema>;
+export type MemberAttendanceModelArray = z.infer<typeof MemberAttendanceModelArraySchema>;
 
 export function memberAttendanceFromRecord(record: MemberAttendanceRecord): MemberAttendanceModel {
 	return MemberAttendanceModelSchema.parse({
@@ -29,10 +33,10 @@ export function memberAttendanceToRecord(model: MemberAttendanceModel): MemberAt
 	} as MemberAttendanceRecord;
 }
 
-export function memberAttendanceFromRecords(records: MemberAttendanceRecord[]): MemberAttendanceModel[] {
+export function memberAttendanceFromRecords(records: MemberAttendanceRecord[]): MemberAttendanceModelArray {
 	return records.map(memberAttendanceFromRecord);
 }
 
-export function memberAttendanceToRecords(models: MemberAttendanceModel[]): MemberAttendanceRecord[] {
+export function memberAttendanceToRecords(models: MemberAttendanceModelArray): MemberAttendanceRecord[] {
 	return models.map(memberAttendanceToRecord);
 }

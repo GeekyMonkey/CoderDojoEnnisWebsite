@@ -30,10 +30,21 @@ export const MemberModelSchema = z
 		xboxGamertag: z.string().nullable(),
 	})
 	.strict();
+export const MemberModelArraySchema = z.array(MemberModelSchema);
 
 export type MemberModel = z.infer<typeof MemberModelSchema>;
+export type MemberModelArray = z.infer<typeof MemberModelArraySchema>;
 
 export type MemberSupabaseModel = {memberId: string} & Pick<MemberModel, "isMentor" | "isNinja" | "isParent" | "nameFirst" | "nameLast">;
+
+/**
+ * Adjust the member login date and previous login date
+ */
+export const Member_SetLoginDate = (member: MemberModel): MemberModel => {
+	member.loginDatePrevious = member.loginDate;
+	member.loginDate = Date.now();
+	return member;	
+};
 
 /**
  * Base64 encode the password hash for storage in Supabase

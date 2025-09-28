@@ -6,6 +6,9 @@ import { sessionFromRecords, sessionToRecords, type SessionModel } from "~~/shar
 export type SessionRecord = Database["coderdojo"]["Tables"]["sessions"]["Row"];
 
 export const SessionsData = {
+	/**
+	 * Get all sessions from the sessions table
+	 */
 	GetSessions: async (
 		event: H3Event<EventHandlerRequest>,
 	): Promise<SessionModel[]> => {
@@ -22,6 +25,10 @@ export const SessionsData = {
 			throw new Error(`Error fetching sessions: ${error?.message}`);
 		}
 	},
+
+	/**
+	 * Save a session to the sessions table
+	 */
 	SaveSession: async (
 		event: H3Event<EventHandlerRequest>,
 		session: SessionModel
@@ -29,6 +36,10 @@ export const SessionsData = {
 		const all = await SessionsData.SaveSessions(event, [session]);
 		return all[0] || null;
 	},
+
+	/**
+	 * Save an array of sessions to the sessions table
+	 */
 	SaveSessions: async (
 		event: H3Event<EventHandlerRequest>,
 		sessions: SessionModel[]
@@ -46,6 +57,10 @@ export const SessionsData = {
 			throw new Error(`Error saving sessions: ${error?.message}`);
 		}
 	},
+
+	/**
+	 * Delete a session by ID
+	 */
 	DeleteSession: async (
 		event: H3Event<EventHandlerRequest>,
 		sessionId: string

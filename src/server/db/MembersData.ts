@@ -1,12 +1,15 @@
 import type { H3Event, EventHandlerRequest } from "h3";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 import type { Database } from "../../types/supabase";
-import { memberFromRecords, memberToRecords, type MemberModel } from "~~/shared/types/models/MemberModel";
+import { memberFromRecords, MemberModelArray, MemberModelArraySchema, memberToRecords, type MemberModel } from "~~/shared/types/models/MemberModel";
 import { GeneratePasswordHash } from "../utils/authUtils";
 
 export type MemberRecord = Database["coderdojo"]["Tables"]["members"]["Row"];
 
 export const MembersData = {
+	/**
+	 * Get all members
+	 */
 	GetMembers: async (
 		event: H3Event<EventHandlerRequest>,
 	): Promise<MemberModel[]> => {
@@ -23,6 +26,64 @@ export const MembersData = {
 			throw new Error(`Error fetching members: ${error?.message}`);
 		}
 	},
+
+	/**
+	 * Get one member by ID
+	 */
+	GetMemberById: async (
+		event: H3Event<EventHandlerRequest>,
+		memberId: string,
+	): Promise<MemberModel | null> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) return null;
+
+		try {
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*")
+				.eq("id", memberId)
+				.single();
+			if (error || !data) {
+				console.error("Error fetching member by ID:", error);
+				return null;
+			}
+			return memberFromRecords([data])[0];
+		} catch (error: any) {
+			throw new Error(`Error fetching member by ID: ${error?.message}`);
+		}
+	},
+
+	/**
+	 * Get one member by fingerprint ID
+	 */
+	GetMemberByFingerprintId: async (
+		event: H3Event<EventHandlerRequest>,
+		fingerprintId: number
+	): Promise<MemberModel | null> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) return null;
+
+		try {
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*")
+				.eq("fingerprint_id", fingerprintId)
+				.single();
+			if (error || !data) {
+				console.error("Error fetching member by fingerprint ID:", error);
+				return null;
+			}
+			return memberFromRecords([data])[0];
+		} catch (error: any) {
+			throw new Error(`Error fetching member by fingerprint ID: ${error?.message}`);
+		}
+	},
+
+	/**
+	 * Save changes to a member
+	 */
 	SaveMember: async (
 		event: H3Event<EventHandlerRequest>,
 		member: MemberModel
@@ -30,14 +91,26 @@ export const MembersData = {
 		const all = await MembersData.SaveMembers(event, [member]);
 		return all[0] || null;
 	},
+
 	SaveMembers: async (
 		event: H3Event<EventHandlerRequest>,
-		members: MemberModel[]
+		members: MemberModelArray
 	): Promise<MemberModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("members").upsert(memberToRecords(members) as any, { onConflict: "id" }).select();
+			// Use zod validation on model before saving (Excludes password_hash)
+			const { success, error: validationError, data: validMembers } =
+				MemberModelArraySchema.safeParse(members);
+			if (!success) {
+				console.error("Validation error:", validationError);
+				return [];
+			}
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.upsert(memberToRecords(validMembers) as any, { onConflict: "id" })
+				.select();
 			if (error || !data || data.length === 0) {
 				console.error("Error saving members:", error);
 				return [];
@@ -47,6 +120,10 @@ export const MembersData = {
 			throw new Error(`Error saving members: ${error?.message}`);
 		}
 	},
+
+	/**
+	 * Delete a member by ID
+	 */
 	DeleteMember: async (
 		event: H3Event<EventHandlerRequest>,
 		memberId: string
@@ -73,7 +150,7 @@ export const MembersData = {
 		event: H3Event<EventHandlerRequest>,
 		memberId: string,
 		plainPassword: string,
-		saltOverride?: string,
+		// saltOverride?: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;

@@ -5,7 +5,7 @@ import { type MemberAttendanceModel } from "~~/shared/types/models/MemberAttenda
  */
 export type LegacyAdultAttendanceEntity = {
 	Id: string;
-	MemberId: string;
+	AdultId: string;
 	Date: string;
 };
 
@@ -15,7 +15,7 @@ export const FromLegacyAdultAttendanceEntity = (
 	const d = new Date(legacy.Date);
 	return {
 		id: legacy.Id,
-		memberId: legacy.MemberId,
+		memberId: legacy.AdultId,
 		date: d.toISOString().substring(0, 10),
 	};
 };

@@ -599,13 +599,13 @@ async function CopyAttendanceTable(event: H3Event<EventHandlerRequest>, db: Supa
 	const legacyMember = await ReadLegacyMemberAttendances();
 	const legacyAdult = await ReadLegacyAdultAttendances();
 	logs.push(`Copying attendance table with memberRows=${legacyMember.length} adultRows=${legacyAdult.length}`);
-	let memberModels = FromLegacyMemberAttendanceEntities(legacyMember);
-	let adultModels = FromLegacyAdultAttendanceEntities(legacyAdult);
-	const all = [...memberModels, ...adultModels];
+	let memberModels: MemberAttendanceModel[] = FromLegacyMemberAttendanceEntities(legacyMember);
+	let adultModels: MemberAttendanceModel[] = FromLegacyAdultAttendanceEntities(legacyAdult);
+	const allAttendance: MemberAttendanceModel[] = [...memberModels, ...adultModels].sort((a,b) => a.date.localeCompare(b.date));
 	try {
 		const pageSize = 1000;
-		for (let i=0;i<all.length;i+=pageSize) {
-			const batch = all.slice(i,i+pageSize);
+		for (let i=0;i<allAttendance.length;i+=pageSize) {
+			const batch = allAttendance.slice(i,i+pageSize);
 			const { error } = await db.schema('coderdojo').from('member_attendances').upsert(batch.map(a=>({ id:a.id, member_id:a.memberId, date:a.date })), { onConflict: 'id' });
 			if (error) { logs.push(`Error inserting attendance batch ${i/pageSize+1}: ${error.message}`); return logs; }
 		}
@@ -618,10 +618,10 @@ async function CopyAttendanceTable(event: H3Event<EventHandlerRequest>, db: Supa
 			if (error) { logs.push(`Attendance verification fetch error page ${page}: ${error.message}`); break; }
 			if (data && data.length) { fetched.push(...data); logs.push(`Attendance verification fetched page ${page+1} size=${data.length}`); if (data.length<fetchSize) break; from+=fetchSize; page++; } else break;
 		}
-		const srcById = new Map(all.map(a=>[a.id.toLowerCase(), a]));
+		const srcById = new Map(allAttendance.map(a=>[a.id.toLowerCase(), a]));
 		const badSourceIds: any[] = [];
 		const safeSourceEntries: [string, any][] = [];
-		for (const a of all) {
+		for (const a of allAttendance) {
 			if (!a || !a.id) { badSourceIds.push(a); continue; }
 			try { safeSourceEntries.push([String(a.id).toLowerCase(), a]); } catch { badSourceIds.push(a); }
 		}
