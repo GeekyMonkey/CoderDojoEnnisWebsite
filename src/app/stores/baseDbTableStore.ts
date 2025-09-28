@@ -1,4 +1,5 @@
 import { useQueryClient, useQuery } from "@tanstack/vue-query";
+import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtimeAllTables";
 
 /**
  * Common to all db models
@@ -44,16 +45,20 @@ export default function baseDbTableStore<T extends BaseModel>({
 		},
 	});
 
-	const { events } = UseSupabaseRealtimeTable({ table: tableName });
-	events?.on("INSERT", () => {
+	// Subscribe to realtime changes via global all-tables channel (single WS)
+	const { events: allEvents } = UseSupabaseRealtimeAllTables();
+	allEvents.on("INSERT", (evt) => {
+		if (evt.table !== tableName) return;
 		queryClient.invalidateQueries({ queryKey: [tableName] });
 	});
-	events?.on("UPDATE", () => {
+	allEvents.on("UPDATE", (evt) => {
+		if (evt.table !== tableName) return;
 		queryClient.invalidateQueries({ queryKey: [tableName] });
 	});
-	events?.on("DELETE", (data) => {
+	allEvents.on("DELETE", (evt) => {
+		if (evt.table !== tableName) return;
 		queryClient.setQueryData<T[]>([tableName], (items) =>
-			items?.filter((item) => item.id !== data.id),
+			items?.filter((item) => item.id !== evt.id),
 		);
 	});
 
