@@ -2,7 +2,8 @@ import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
 
 type ResponseBody = ApiResponse<{
 	sessionCount: number,
-	sessionDates: string[]
+	sessionStats: { date: string, mentor_count: number, ninja_count: number, total_count: number }[],
+	attendance_total: number
 }>;
 
 /**
@@ -12,17 +13,19 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const logs: string[] = [];
 	let resp: ResponseBody = {
 		data: {
+			attendance_total: 0,
 			sessionCount: 0,
-			sessionDates: []
+			sessionStats: []
 		},
 		success: true,
 		logs,
 	};
 
 	try {
-		const sessions = await MemberAttendancesData.GetAttendanceSessionDates(event);
-		resp.data.sessionDates = sessions;
-		resp.data.sessionCount = resp.data.sessionDates.length;
+	const sessions = await MemberAttendancesData.GetAttendanceSessionStats(event);
+	resp.data.sessionStats = sessions;
+	resp.data.sessionCount = resp.data.sessionStats.length;
+	resp.data.attendance_total = resp.data.sessionStats.reduce((total, stat) => total + (stat.total_count || 0), 0);
 	} catch (error: any) {
 		resp = {
 			success: false,

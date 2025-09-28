@@ -1,11 +1,11 @@
 meta {
-  name: Auth - Login
+  name: Attendance - SignIn Username
   type: http
-  seq: 5
+  seq: 3
 }
 
 post {
-  url: {{Host}}/api/Auth/Login
+  url: {{Host}}/api/MemberAttendance/SignIn
   body: json
   auth: none
 }
@@ -13,6 +13,5 @@ post {
 body:json {
   {
     "username": "Russ Painter",
-    "password": "12345"
   }
 }

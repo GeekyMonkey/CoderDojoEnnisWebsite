@@ -5,6 +5,10 @@ export const en = {
 		password: "Password",
 		loginButton: "Login",
 	},
+	signIn: {
+		title: "CoderDojo Ennis Session Sign In",
+		signInButton: "Sign In",
+	},
 	theme: {
 		author: "Created by {AuthorName}",
 		select: "Select Theme",

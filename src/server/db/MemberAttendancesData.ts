@@ -99,6 +99,38 @@ export const MemberAttendancesData = {
 	},
 
 	/**
+	 * Get attendance stats per session date (date + attendance_count)
+	 */
+	GetAttendanceSessionStats: async (
+		event: H3Event<EventHandlerRequest>
+	): Promise<{ date: DateString; mentor_count: number; ninja_count: number; total_count: number }[]> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) return [];
+		try {
+			const { data, error: rpcError } = await supabase
+				.schema('coderdojo')
+				.rpc('get_attendance_stats_split');
+
+			if (rpcError) {
+				console.error('Error fetching split attendance stats via RPC:', rpcError);
+				return [];
+			}
+
+			const stats = (data || []).map((r: any) => ({
+				date: r.date as DateString,
+				mentor_count: typeof r.mentor_count === 'string' ? Number(r.mentor_count) : (r.mentor_count || 0),
+				ninja_count: typeof r.ninja_count === 'string' ? Number(r.ninja_count) : (r.ninja_count || 0),
+				total_count: typeof r.total_count === 'string' ? Number(r.total_count) : (r.total_count || 0),
+			}));
+
+			return stats;
+		} catch (error: any) {
+			console.error(`Error fetching attendance session stats: ${error?.message}`);
+			return [];
+		}
+	},
+
+	/**
 	 * Create a new member attendance record (if one doesn't already exist for that member/date)
 	 */
 	CreateMemberAttendance: async (
