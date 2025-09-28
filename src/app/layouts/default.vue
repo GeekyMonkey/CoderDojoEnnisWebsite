@@ -16,7 +16,11 @@
 					</SheetTrigger>
 					<SheetContent side="left" class="Sidebar">
 						<div class="SidebarPanel">
-							<div style="flex-grow: 1">ToDo: menu stuff…</div>
+							<div style="flex-grow: 1">ToDo: Menu stuff…</div>
+							<nuxt-link to="/foo" class="btn width-full"
+								><NuxtIcon name="line-md:home" /> foo</nuxt-link>
+							<nuxt-link to="/mentor" class="btn width-full"
+								><NuxtIcon name="line-md:home" /> mentor</nuxt-link>
 							<div class="SidebarFooter">
 								<Menubar class="bg-transparent border-0">
 									<ThemeSelect />

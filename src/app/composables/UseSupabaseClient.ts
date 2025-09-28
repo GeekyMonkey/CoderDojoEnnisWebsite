@@ -1,35 +1,11 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { PostgrestClient } from "@supabase/postgrest-js";
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-// Singleton values
-let supabaseClient: SupabaseClient;
-let coderdojoData: PostgrestClient<any, "coderdojo", any>;
-
-/**
- * Supabase Client Composable
- */
-export const UseSupabaseClient = (tables: string[] = ["teams"]) => {
-	const config = useRuntimeConfig();
-
-	if (!supabaseClient || !coderdojoData) {
-		const supabaseUrl: string =
-			config.public.supabase.url ||
-			process.env.NUXT_SUPABASE_URL ||
-			process.env.SUPABASE_URL ||
-			"?";
-		const supabaseKey: string =
-			config.public.supabase.key ||
-			process.env.NUXT_SUPABASE_KEY ||
-			process.env.SUPABASE_KEY ||
-			"?";
-
-		// Get a Supabase client & coderdojo schema
-		supabaseClient = createClient(supabaseUrl, supabaseKey);
-		coderdojoData = supabaseClient.schema("coderdojo");
-	}
-
-	return {
-		coderdojoData,
-		supabaseClient,
-	};
-};
+// Wrap the Nuxt module client so we have a single source of truth for auth/session.
+// Supabase JS v2 client (used by @nuxtjs/supabase) exposes .from() for table queries.
+// If you previously relied on .schema('coderdojo'), replace with supabaseClient.from('<table>')
+// since all your tables live in that schema already (search_path handles it). If explicit
+// schema scoping is ever needed you can use RPC or Postgrest filters directly.
+export const UseSupabaseClient = () => {
+  const supabaseClient = useSupabaseClient<SupabaseClient>()
+  return { supabaseClient }
+}
