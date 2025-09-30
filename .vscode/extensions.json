@@ -5,6 +5,7 @@
     "vue.volar",
     "bradlc.vscode-tailwindcss",
     "nuxtr.nuxt-vscode-extentions",
-    "renesaarsoo.sql-formatter-vsc"
+    "renesaarsoo.sql-formatter-vsc",
+    "fronterior.biome-monorepo"
   ]
 }

@@ -1,8 +1,15 @@
 import type { H3Event, EventHandlerRequest } from "h3";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 import type { Database } from "../../types/supabase";
-import { memberFromRecords, MemberModelArray, MemberModelArraySchema, memberToRecords, type MemberModel } from "~~/shared/types/models/MemberModel";
+import {
+	memberFromRecords,
+	MemberModelArray,
+	MemberModelArraySchema,
+	memberToRecords,
+	type MemberModel,
+} from "~~/shared/types/models/MemberModel";
 import { GeneratePasswordHash } from "../utils/authUtils";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 export type MemberRecord = Database["coderdojo"]["Tables"]["members"]["Row"];
 
@@ -16,14 +23,17 @@ export const MembersData = {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("members").select("*");
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*");
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching members:", error);
 				return [];
 			}
 			return memberFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error fetching members: ${error?.message}`);
+		} catch (error) {
+			throw new Error(`Error fetching members: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -49,8 +59,8 @@ export const MembersData = {
 				return null;
 			}
 			return memberFromRecords([data])[0];
-		} catch (error: any) {
-			throw new Error(`Error fetching member by ID: ${error?.message}`);
+		} catch (error) {
+			throw new Error(`Error fetching member by ID: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -59,7 +69,7 @@ export const MembersData = {
 	 */
 	GetMemberByFingerprintId: async (
 		event: H3Event<EventHandlerRequest>,
-		fingerprintId: number
+		fingerprintId: number,
 	): Promise<MemberModel | null> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return null;
@@ -76,8 +86,10 @@ export const MembersData = {
 				return null;
 			}
 			return memberFromRecords([data])[0];
-		} catch (error: any) {
-			throw new Error(`Error fetching member by fingerprint ID: ${error?.message}`);
+		} catch (error) {
+			throw new Error(
+				`Error fetching member by fingerprint ID: ${ErrorToString(error)}`,
+			);
 		}
 	},
 
@@ -86,7 +98,7 @@ export const MembersData = {
 	 */
 	SaveMember: async (
 		event: H3Event<EventHandlerRequest>,
-		member: MemberModel
+		member: MemberModel,
 	): Promise<MemberModel | null> => {
 		const all = await MembersData.SaveMembers(event, [member]);
 		return all[0] || null;
@@ -94,14 +106,17 @@ export const MembersData = {
 
 	SaveMembers: async (
 		event: H3Event<EventHandlerRequest>,
-		members: MemberModelArray
+		members: MemberModelArray,
 	): Promise<MemberModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
 			// Use zod validation on model before saving (Excludes password_hash)
-			const { success, error: validationError, data: validMembers } =
-				MemberModelArraySchema.safeParse(members);
+			const {
+				success,
+				error: validationError,
+				data: validMembers,
+			} = MemberModelArraySchema.safeParse(members);
 			if (!success) {
 				console.error("Validation error:", validationError);
 				return [];
@@ -116,8 +131,8 @@ export const MembersData = {
 				return [];
 			}
 			return memberFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error saving members: ${error?.message}`);
+		} catch (error) {
+			throw new Error(`Error saving members: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -126,19 +141,23 @@ export const MembersData = {
 	 */
 	DeleteMember: async (
 		event: H3Event<EventHandlerRequest>,
-		memberId: string
+		memberId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;
 		try {
-			const { error } = await supabase.schema("coderdojo").from("members").delete().eq("id", memberId);
+			const { error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.delete()
+				.eq("id", memberId);
 			if (error) {
 				console.error("Error deleting member:", error);
 				return false;
 			}
 			return true;
-		} catch (error: any) {
-			console.error(`Error deleting member: ${error?.message}`);
+		} catch (error) {
+			console.error(`Error deleting member: ${ErrorToString(error)}`);
 			return false;
 		}
 	},
@@ -200,19 +219,30 @@ export const MembersData = {
 		// const salt = options?.saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
 		const runtime = useRuntimeConfig();
 		const salt = runtime.private.auth.pass_salt;
-		let updated = 0, skipped = 0, errors = 0;
+		let updated = 0,
+			skipped = 0,
+			errors = 0;
 
 		for (const m of legacyMembers) {
 			const shouldGenerate = m.isMentor && !m.deleted;
-			if (!shouldGenerate) { skipped++; continue; }
+			if (!shouldGenerate) {
+				skipped++;
+				continue;
+			}
 			const firstInitial = (m.nameFirst || "").trim().substring(0, 1);
 			const last = (m.nameLast || "").trim();
-			const shortId = m.id ? m.id.substring(0,8) : "";
+			const shortId = m.id ? m.id.substring(0, 8) : "";
 			const plain = (firstInitial + last + shortId).toLowerCase().trim();
-			if (!plain) { skipped++; continue; }
+			if (!plain) {
+				skipped++;
+				continue;
+			}
 			try {
 				const hash = await GeneratePasswordHash(plain, salt);
-				if (!hash) { errors++; continue; }
+				if (!hash) {
+					errors++;
+					continue;
+				}
 				// Skip if not forcing and a hash already exists
 				if (!options?.force) {
 					const { data: existing } = await supabase
@@ -221,14 +251,20 @@ export const MembersData = {
 						.select("password_hash")
 						.eq("id", m.id)
 						.single();
-					if (existing && existing.password_hash) { skipped++; continue; }
+					if (existing && existing.password_hash) {
+						skipped++;
+						continue;
+					}
 				}
 				const { error } = await supabase
 					.schema("coderdojo")
 					.from("members")
 					.update({ password_hash: hash })
 					.eq("id", m.id);
-				if (error) { errors++; continue; }
+				if (error) {
+					errors++;
+					continue;
+				}
 				updated++;
 			} catch (e) {
 				errors++;

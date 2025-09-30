@@ -1,7 +1,11 @@
 import type { H3Event, EventHandlerRequest } from "h3";
 import { GetSupabaseAdminClient, GetSupabaseClient } from "./DatabaseClient";
 import type { Database } from "../../types/supabase";
-import { teamFromRecords, type TeamModel } from "~~/shared/types/models/TeamModel";
+import {
+	teamFromRecords,
+	type TeamModel,
+} from "~~/shared/types/models/TeamModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 /**
  * Custom types for Supabase schema
@@ -12,7 +16,6 @@ export type TeamRecord = Database["coderdojo"]["Tables"]["teams"]["Row"];
  * Data for teams
  */
 export const TeamsData = {
-
 	/**
 	 * Get the team rows (cached)
 	 */
@@ -23,7 +26,7 @@ export const TeamsData = {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const query =  supabase
+			const query = supabase
 				.schema("coderdojo")
 				.from("teams")
 				.select("*")
@@ -32,15 +35,15 @@ export const TeamsData = {
 				query.eq("deleted", false);
 			}
 			const { data: teams, error } = await query;
-			
+
 			if (error || !teams || teams.length === 0) {
 				console.error("Error fetching teams:", error);
 				return [];
 			}
 
 			return teamFromRecords(teams as TeamRecord[]);
-		} catch (error: any) {
-			throw new Error(`Error fetching teams: ${error?.message}`);
+		} catch (error) {
+			throw new Error(`Error fetching teams: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -49,7 +52,7 @@ export const TeamsData = {
 	 */
 	SaveTeam: async (
 		event: H3Event<EventHandlerRequest>,
-		team: TeamModel
+		team: TeamModel,
 	): Promise<TeamModel | null> => {
 		const teams = await TeamsData.SaveTeams(event, [team]);
 		return teams.length > 0 ? teams[0] : null;
@@ -60,7 +63,7 @@ export const TeamsData = {
 	 */
 	SaveTeams: async (
 		event: H3Event<EventHandlerRequest>,
-		teams: TeamModel[]
+		teams: TeamModel[],
 	): Promise<TeamModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
@@ -78,8 +81,8 @@ export const TeamsData = {
 			}
 
 			return teamFromRecords(data as TeamRecord[]);
-		} catch (error: any) {
-			throw new Error(`Error saving teams: ${error?.message}`);
+		} catch (error) {
+			throw new Error(`Error saving teams: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -88,7 +91,7 @@ export const TeamsData = {
 	 */
 	DeleteTeam: async (
 		event: H3Event<EventHandlerRequest>,
-		teamId: string
+		teamId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;
@@ -105,11 +108,9 @@ export const TeamsData = {
 			}
 
 			return true;
-		} catch (error: any) {
-			console.error(`Error deleting team: ${error?.message}`);
+		} catch (error) {
+			console.error(`Error deleting team: ${ErrorToString(error)}`);
 			return false;
 		}
 	},
-
-
 };

@@ -1,5 +1,12 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "editor.defaultFormatter": "fronterior.biome-monorepo",
   "editor.detectIndentation": true,
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.formatOnSave": true,
   "editor.insertSpaces": false,
   "editor.tabSize": 4,
   "files.autoSave": "onFocusChange",
@@ -37,7 +44,6 @@
   "SQL-Formatter-VSCode.dialect": "postgresql",
   "SQL-Formatter-VSCode.ignoreTabSettings": true,
   "SQL-Formatter-VSCode.insertSpacesOverride": true,
-  "editor.gotoLocation.multipleDefinitions": "goto",
   "folder-color.pathColors": [
     {
       "folderPath": "CoderDojoEnnisWebsite\\src\\app\\",

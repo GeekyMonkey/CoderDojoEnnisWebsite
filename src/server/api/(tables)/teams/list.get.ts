@@ -1,4 +1,5 @@
 import { TeamsData } from "~~/server/db/TeamsData";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<TeamModel[]>;
 
@@ -18,10 +19,10 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 
 	try {
 		resp.data = await TeamsData.GetTeams(event, includeDeleted);
-	} catch (error: any) {
+	} catch (error) {
 		resp = {
 			success: false,
-			error: error.message,
+			error: ErrorToString(error),
 			logs,
 		};
 	}

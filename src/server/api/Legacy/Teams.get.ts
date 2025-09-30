@@ -1,5 +1,6 @@
 import { defineEventHandler } from "#imports";
 import { ReadLegacyTeams } from "~~/server/sql/LegacyData";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 type ResponseBody = {
 	data: any[];
@@ -18,11 +19,11 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	};
 
 	try {
-		const result = (await GetLegacyTeams());
+		const result = await GetLegacyTeams();
 		resp.logs.push(...result.logs);
 		resp.data = result.data;
-	} catch (error: any) {
-		const errorMsg = "Error in GetLegacyTeams: " + error.message;
+	} catch (error) {
+		const errorMsg = `Error in GetLegacyTeams: ${ErrorToString(error)}`;
 		console.error(errorMsg);
 		resp.logs.push(errorMsg);
 	}
@@ -36,16 +37,14 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 /**
  * Get legacy teams
  */
-async function GetLegacyTeams(
-): Promise<{ data: any[], logs: string[] }> {
+async function GetLegacyTeams(): Promise<{ data: any[]; logs: string[] }> {
 	const logs: string[] = [];
-	let data: any[] = []; 
+	let data: any[] = [];
 	try {
 		data = await ReadLegacyTeams();
-	} catch (error: any) {
+	} catch (error) {
 		console.error("Error reading data:", error);
-		logs.push("Error: " + error.message);
+		logs.push(`Error: ${ErrorToString(error)}`);
 	}
 	return { data, logs };
 }
-

@@ -1,10 +1,17 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
+import type { EventHandlerRequest, H3Event } from "h3";
+import {
+	type MemberAttendanceModel,
+	type MemberAttendanceModelArray,
+	memberAttendanceFromRecords,
+	memberAttendanceToRecords,
+} from "~~/shared/types/models/MemberAttendanceModel";
+import { type DateString, TodayYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
-import { memberAttendanceFromRecords, MemberAttendanceModelArray, memberAttendanceToRecords, type MemberAttendanceModel } from "~~/shared/types/models/MemberAttendanceModel";
-import { DateString, TodayYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
-export type MemberAttendanceRecord = Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
+export type MemberAttendanceRecord =
+	Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
 
 export const MemberAttendancesData = {
 	
@@ -14,7 +21,7 @@ export const MemberAttendancesData = {
 	 */
 	GetMemberAttendancesForMember: async (
 		event: H3Event<EventHandlerRequest>,
-		memberId: string
+		memberId: string,
 	): Promise<MemberAttendanceModelArray> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
@@ -29,8 +36,10 @@ export const MemberAttendancesData = {
 				return [];
 			}
 			return memberAttendanceFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error fetching member attendances: ${error?.message}`);
+		} catch (error) {
+			throw new Error(
+				`Error fetching member attendances: ${ErrorToString(error)}`,
+			);
 		}
 	},
 
@@ -39,7 +48,7 @@ export const MemberAttendancesData = {
 	 */
 	GetMemberAttendancesCountForMember: async (
 		event: H3Event<EventHandlerRequest>,
-		memberId: string
+		memberId: string,
 	): Promise<number> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return 0;
@@ -54,8 +63,10 @@ export const MemberAttendancesData = {
 				return 0;
 			}
 			return count || 0;
-		} catch (error: any) {
-			console.error(`Error fetching member attendance count: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error fetching member attendance count: ${ErrorToString(error)}`,
+			);
 			return 0;
 		}
 	},
@@ -68,7 +79,7 @@ export const MemberAttendancesData = {
 	  */
 	GetAttendanceSessionDates: async (
 		event: H3Event<EventHandlerRequest>,
-		dateToInclude?: DateString
+		dateToInclude?: DateString,
 	): Promise<DateString[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
@@ -76,10 +87,10 @@ export const MemberAttendancesData = {
 			// Use the RPC to get distinct dates (no paging)
 			const { data, error: rpcError } = await supabase
 				.schema("coderdojo")
-				.rpc('get_attendance_dates');
+				.rpc("get_attendance_dates");
 
 			if (rpcError) {
-				console.error('Error fetching attendance dates via RPC:', rpcError);
+				console.error("Error fetching attendance dates via RPC:", rpcError);
 				return [];
 			}
 
@@ -92,8 +103,10 @@ export const MemberAttendancesData = {
 			// Extract unique dates
 			const uniqueDates: DateString[] = Array.from(new Set(allDates));
 			return uniqueDates;
-		} catch (error: any) {
-			console.error(`Error fetching attendance session dates: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error fetching attendance session dates: ${ErrorToString(error)}`,
+			);
 			return [];
 		}
 	},
@@ -102,30 +115,51 @@ export const MemberAttendancesData = {
 	 * Get attendance stats per session date (date + attendance_count)
 	 */
 	GetAttendanceSessionStats: async (
-		event: H3Event<EventHandlerRequest>
-	): Promise<{ date: DateString; mentor_count: number; ninja_count: number; total_count: number }[]> => {
+		event: H3Event<EventHandlerRequest>,
+	): Promise<
+		{
+			date: DateString;
+			mentor_count: number;
+			ninja_count: number;
+			total_count: number;
+		}[]
+	> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
 			const { data, error: rpcError } = await supabase
-				.schema('coderdojo')
-				.rpc('get_attendance_stats_split');
+				.schema("coderdojo")
+				.rpc("get_attendance_stats_split");
 
 			if (rpcError) {
-				console.error('Error fetching split attendance stats via RPC:', rpcError);
+				console.error(
+					"Error fetching split attendance stats via RPC:",
+					rpcError,
+				);
 				return [];
 			}
 
 			const stats = (data || []).map((r: any) => ({
 				date: r.date as DateString,
-				mentor_count: typeof r.mentor_count === 'string' ? Number(r.mentor_count) : (r.mentor_count || 0),
-				ninja_count: typeof r.ninja_count === 'string' ? Number(r.ninja_count) : (r.ninja_count || 0),
-				total_count: typeof r.total_count === 'string' ? Number(r.total_count) : (r.total_count || 0),
+				mentor_count:
+					typeof r.mentor_count === "string"
+						? Number(r.mentor_count)
+						: r.mentor_count || 0,
+				ninja_count:
+					typeof r.ninja_count === "string"
+						? Number(r.ninja_count)
+						: r.ninja_count || 0,
+				total_count:
+					typeof r.total_count === "string"
+						? Number(r.total_count)
+						: r.total_count || 0,
 			}));
 
 			return stats;
-		} catch (error: any) {
-			console.error(`Error fetching attendance session stats: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error fetching attendance session stats: ${ErrorToString(error)}`,
+			);
 			return [];
 		}
 	},
@@ -136,7 +170,7 @@ export const MemberAttendancesData = {
 	CreateMemberAttendance: async (
 		event: H3Event<EventHandlerRequest>,
 		memberId: string,
-		date?: string
+		date?: string,
 	): Promise<MemberAttendanceModel | null> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return null;
@@ -156,8 +190,10 @@ export const MemberAttendancesData = {
 				return null;
 			}
 			return memberAttendanceFromRecords(data as any)[0];
-		} catch (error: any) {
-			console.error(`Error creating member attendance: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error creating member attendance: ${ErrorToString(error)}`,
+			);
 			return null;
 		}
 	},
@@ -167,9 +203,11 @@ export const MemberAttendancesData = {
 	 */
 	SaveMemberAttendance: async (
 		event: H3Event<EventHandlerRequest>,
-		attendance: MemberAttendanceModel
+		attendance: MemberAttendanceModel,
 	): Promise<MemberAttendanceModel | null> => {
-		const all = await MemberAttendancesData.SaveMemberAttendances(event, [attendance]);
+		const all = await MemberAttendancesData.SaveMemberAttendances(event, [
+			attendance,
+		]);
 		return all[0] || null;
 	},
 
@@ -178,19 +216,27 @@ export const MemberAttendancesData = {
 	 */
 	SaveMemberAttendances: async (
 		event: H3Event<EventHandlerRequest>,
-		attendances: MemberAttendanceModel[]
+		attendances: MemberAttendanceModel[],
 	): Promise<MemberAttendanceModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("member_attendances").upsert(memberAttendanceToRecords(attendances) as any, { onConflict: "id" }).select();
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_attendances")
+				.upsert(memberAttendanceToRecords(attendances) as any, {
+					onConflict: "id",
+				})
+				.select();
 			if (error || !data || data.length === 0) {
 				console.error("Error saving member attendances:", error);
 				return [];
 			}
 			return memberAttendanceFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error saving member attendances: ${error?.message}`);
+		} catch (error) {
+			throw new Error(
+				`Error saving member attendances: ${ErrorToString(error)}`,
+			);
 		}
 	},
 
@@ -199,19 +245,25 @@ export const MemberAttendancesData = {
 	 */
 	DeleteMemberAttendance: async (
 		event: H3Event<EventHandlerRequest>,
-		attendanceId: string
+		attendanceId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;
 		try {
-			const { error } = await supabase.schema("coderdojo").from("member_attendances").delete().eq("id", attendanceId);
+			const { error } = await supabase
+				.schema("coderdojo")
+				.from("member_attendances")
+				.delete()
+				.eq("id", attendanceId);
 			if (error) {
 				console.error("Error deleting member attendance:", error);
 				return false;
 			}
 			return true;
-		} catch (error: any) {
-			console.error(`Error deleting member attendance: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error deleting member attendance: ${ErrorToString(error)}`,
+			);
 			return false;
 		}
 	},

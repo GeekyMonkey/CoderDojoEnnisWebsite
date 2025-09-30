@@ -1,9 +1,15 @@
 import type { H3Event, EventHandlerRequest } from "h3";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 import type { Database } from "../../types/supabase";
-import { memberBadgeCategoryFromRecords, memberBadgeCategoryToRecords, type MemberBadgeCategoryModel } from "~~/shared/types/models/MemberBadgeCategoryModel";
+import {
+	memberBadgeCategoryFromRecords,
+	memberBadgeCategoryToRecords,
+	type MemberBadgeCategoryModel,
+} from "~~/shared/types/models/MemberBadgeCategoryModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
-export type MemberBadgeCategoryRecord = Database["coderdojo"]["Tables"]["member_badge_categories"]["Row"];
+export type MemberBadgeCategoryRecord =
+	Database["coderdojo"]["Tables"]["member_badge_categories"]["Row"];
 
 export const MemberBadgeCategoriesData = {
 	GetMemberBadgeCategories: async (
@@ -12,55 +18,80 @@ export const MemberBadgeCategoriesData = {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("member_badge_categories").select("*");
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_badge_categories")
+				.select("*");
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching member badge categories:", error);
 				return [];
 			}
 			return memberBadgeCategoryFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error fetching member badge categories: ${error?.message}`);
+		} catch (error) {
+			throw new Error(
+				`Error fetching member badge categories: ${ErrorToString(error)}`,
+			);
 		}
 	},
+
 	SaveMemberBadgeCategory: async (
 		event: H3Event<EventHandlerRequest>,
-		entity: MemberBadgeCategoryModel
+		entity: MemberBadgeCategoryModel,
 	): Promise<MemberBadgeCategoryModel | null> => {
-		const all = await MemberBadgeCategoriesData.SaveMemberBadgeCategories(event, [entity]);
+		const all = await MemberBadgeCategoriesData.SaveMemberBadgeCategories(
+			event,
+			[entity],
+		);
 		return all[0] || null;
 	},
+
 	SaveMemberBadgeCategories: async (
 		event: H3Event<EventHandlerRequest>,
-		entities: MemberBadgeCategoryModel[]
+		entities: MemberBadgeCategoryModel[],
 	): Promise<MemberBadgeCategoryModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return [];
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("member_badge_categories").upsert(memberBadgeCategoryToRecords(entities) as any, { onConflict: "id" }).select();
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_badge_categories")
+				.upsert(memberBadgeCategoryToRecords(entities) as any, {
+					onConflict: "id",
+				})
+				.select();
 			if (error || !data || data.length === 0) {
 				console.error("Error saving member badge categories:", error);
 				return [];
 			}
 			return memberBadgeCategoryFromRecords(data as any);
-		} catch (error: any) {
-			throw new Error(`Error saving member badge categories: ${error?.message}`);
+		} catch (error) {
+			throw new Error(
+				`Error saving member badge categories: ${ErrorToString(error)}`,
+			);
 		}
 	},
+
 	DeleteMemberBadgeCategory: async (
 		event: H3Event<EventHandlerRequest>,
-		id: string
+		id: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) return false;
 		try {
-			const { error } = await supabase.schema("coderdojo").from("member_badge_categories").delete().eq("id", id);
+			const { error } = await supabase
+				.schema("coderdojo")
+				.from("member_badge_categories")
+				.delete()
+				.eq("id", id);
 			if (error) {
 				console.error("Error deleting member badge category:", error);
 				return false;
 			}
 			return true;
-		} catch (error: any) {
-			console.error(`Error deleting member badge category: ${error?.message}`);
+		} catch (error) {
+			console.error(
+				`Error deleting member badge category: ${ErrorToString(error)}`,
+			);
 			return false;
 		}
 	},

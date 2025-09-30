@@ -1,5 +1,6 @@
 import { BadgeCategoriesData } from "~~/server/db/BadgeCategoriesData";
 import { BadgeCategoryModel } from "~~/shared/types/models/BadgeCategoryModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<BadgeCategoryModel[]>;
 
@@ -18,11 +19,14 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	};
 
 	try {
-		resp.data = await BadgeCategoriesData.GetBadgeCategories(event, includeDeleted);
-	} catch (error: any) {
+		resp.data = await BadgeCategoriesData.GetBadgeCategories(
+			event,
+			includeDeleted,
+		);
+	} catch (error) {
 		resp = {
 			success: false,
-			error: error.message,
+			error: ErrorToString(error),
 			logs,
 		};
 	}

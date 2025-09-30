@@ -1,12 +1,16 @@
 import { log } from "console";
-import { defineEventHandler, H3Event } from "h3";
+import { defineEventHandler, type H3Event } from "h3";
 // import {
 // 	GetDrizzleConnecionString,
 // 	ServerContext,
 // } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
-import { ThemesConfig, ThemesConfigDefault } from "~~/shared/types/ThemeModel";
-import { UiConfigModel } from "~~/shared/types/UiConfigModel";
+import {
+	type ThemesConfig,
+	ThemesConfigDefault,
+} from "~~/shared/types/ThemeModel";
+import type { UiConfigModel } from "~~/shared/types/UiConfigModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 // GET: /Config/UiConfig
 export default defineEventHandler(
@@ -18,8 +22,8 @@ export default defineEventHandler(
 		let themesConfig: ThemesConfig | null = null;
 		try {
 			themesConfig = await new ThemesService().GetThemes();
-		} catch (error: any) {
-			errors.push("[Uiconfig] GET error: " + error.message);
+		} catch (error) {
+			errors.push(`[Uiconfig] GET error: ${ErrorToString(error)}`);
 		}
 
 		const uiConfig: UiConfigModel = {
@@ -45,8 +49,8 @@ export default defineEventHandler(
 			// );
 			// logs.push(`ServerContext: ${JSON.stringify(ServerContext)}`);
 			// logs.push(`event.context: ${JSON.stringify(event.context)}`);
-		} catch (error: any) {
-			errors.push(`Error: ${error.message}`);
+		} catch (error) {
+			errors.push(`Error: ${ErrorToString(error)}`);
 		}
 
 		return {

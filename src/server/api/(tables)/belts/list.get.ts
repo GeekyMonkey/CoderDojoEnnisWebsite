@@ -1,5 +1,6 @@
 import { BeltsData } from "~~/server/db/BeltsData";
-import { BeltModel } from "~~/shared/types/models/BeltModel";
+import type { BeltModel } from "~~/shared/types/models/BeltModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<BeltModel[]>;
 
@@ -19,10 +20,10 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 
 	try {
 		resp.data = await BeltsData.GetBelts(event, includeDeleted);
-	} catch (error: any) {
+	} catch (error) {
 		resp = {
 			success: false,
-			error: error.message,
+			error: ErrorToString(error),
 			logs,
 		};
 	}
