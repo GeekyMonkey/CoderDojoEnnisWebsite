@@ -1,29 +1,27 @@
 <script setup lang="ts">
-	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
-	import { VisuallyHidden } from "radix-vue";
+import { VisuallyHidden } from "radix-vue";
+import DialogCloseButton from "./ui/dialog/DialogClose.vue";
 
-	const { locale, setLocale, setLocaleCookie, locales } = useI18n();
+const { locale, setLocale, setLocaleCookie, locales } = useI18n();
 
-	const currentLanguage = computed<string>(() => {
-		return (
-			locales.value.find((l) => l.code === locale.value)?.language ?? ""
-		);
-	});
+const currentLanguage = computed<string>(() => {
+	return locales.value.find((l) => l.code === locale.value)?.language ?? "";
+});
 
-	const setLang = (lang: string) => {
-		console.log("setLang", lang);
-		setLocale(lang);
-		setLocaleCookie(lang);
-		setHtmlLangAttribute(lang);
-	};
+const setLang = (lang: string) => {
+	console.log("setLang", lang);
+	setLocale(lang);
+	setLocaleCookie(lang);
+	setHtmlLangAttribute(lang);
+};
 
-	const setHtmlLangAttribute = (lang: string) => {
-		document.documentElement.setAttribute("lang", lang);
-	};
+const setHtmlLangAttribute = (lang: string) => {
+	document.documentElement.setAttribute("lang", lang);
+};
 
-	onMounted(() => {
-		setHtmlLangAttribute(locale.value);
-	});
+onMounted(() => {
+	setHtmlLangAttribute(locale.value);
+});
 </script>
 
 <template>

@@ -14,7 +14,62 @@ export type MemberAttendanceRecord =
 	Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
 
 export const MemberAttendancesData = {
-	
+	/**
+	 * Get all member attendances for a specified date
+	 */
+	GetMemberAttendancesForDate: async (
+		event: H3Event<EventHandlerRequest>,
+		date: string,
+	): Promise<MemberAttendanceModelArray> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) return [];
+		try {
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_attendances")
+				.select("*")
+				.eq("date", date);
+			if (error || !data || data.length === 0) {
+				console.error("Error fetching member attendances for date:", error);
+				return [];
+			}
+			return memberAttendanceFromRecords(data as any);
+		} catch (error) {
+			throw new Error(
+				`Error fetching member attendances for date: ${ErrorToString(error)}`,
+			);
+		}
+	},
+
+	/**
+	 * Get all member attendances for the date of the most recent session
+	 */
+	GetMemberAttendancesForMostRecentSession: async (
+		event: H3Event<EventHandlerRequest>,
+	): Promise<MemberAttendanceModelArray> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) return [];
+		try {
+			const sessionDates =
+				await MemberAttendancesData.GetAttendanceSessionDates(event);
+			const mostRecentDate = sessionDates[0];
+			if (!mostRecentDate) {
+				console.error("No most recent attendance date found");
+				return [];
+			}
+
+			return await MemberAttendancesData.GetMemberAttendancesForDate(
+				event,
+				mostRecentDate,
+			);
+		} catch (error) {
+			console.error(
+				`Error fetching member attendances for most recent session: ${ErrorToString(error)}`,
+			);
+			return [];
+		}
+	},
+
 	/**
 	 * Get all member attendances
 	 * ToDo: Probably want a more focused query here in future
@@ -71,12 +126,12 @@ export const MemberAttendancesData = {
 		}
 	},
 
-	 /**
-	  * Get a list of all of the CoderDojo sessions that have been held
-	  * Not from the sessions table, but from the member and adult attendances
-	  * This is used to populate the session filter dropdown on the attendance page
-	  * and to show the list of sessions on the reports page
-	  */
+	/**
+	 * Get a list of all of the CoderDojo sessions that have been held
+	 * Not from the sessions table, but from the member and adult attendances
+	 * This is used to populate the session filter dropdown on the attendance page
+	 * and to show the list of sessions on the reports page
+	 */
 	GetAttendanceSessionDates: async (
 		event: H3Event<EventHandlerRequest>,
 		dateToInclude?: DateString,
