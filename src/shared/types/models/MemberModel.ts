@@ -43,7 +43,7 @@ export type MemberSupabaseModel = {memberId: string} & Pick<MemberModel, "isMent
 export const Member_SetLoginDate = (member: MemberModel): MemberModel => {
 	member.loginDatePrevious = member.loginDate;
 	member.loginDate = Date.now();
-	return member;	
+	return member;
 };
 
 /**
