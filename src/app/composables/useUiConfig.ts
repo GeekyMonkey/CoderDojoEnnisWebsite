@@ -1,5 +1,5 @@
-import { useColorMode, type UseColorModeReturn } from "@vueuse/core";
 import { useQuery } from "@tanstack/vue-query";
+import { type UseColorModeReturn, useColorMode } from "@vueuse/core";
 
 let ColorModeService: UseColorModeReturn<string> | null = null;
 
