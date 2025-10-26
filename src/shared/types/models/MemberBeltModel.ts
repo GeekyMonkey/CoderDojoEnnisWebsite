@@ -21,6 +21,11 @@ export const MemberBeltModelSchema = z
 
 export type MemberBeltModel = z.infer<typeof MemberBeltModelSchema>;
 
+export const MemberBeltWithBeltDetailModelSchema = MemberBeltModelSchema.extend({
+	belt: BeltModelSchema,
+});
+export type MemberBeltWithBeltDetailModel = z.infer<typeof MemberBeltWithBeltDetailModelSchema>;
+
 export function memberBeltFromRecord(record: MemberBeltRecord): MemberBeltModel {
 	return MemberBeltModelSchema.parse({
 		id: record.id,

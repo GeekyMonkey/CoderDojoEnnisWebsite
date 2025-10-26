@@ -8,18 +8,27 @@ export const MemberAttendanceNotificationTypesSchema = z.enum([
 	"REMINDER",
 	"MILESTONE",
 ]);
-export type MemberAttendanceNotificationTypes = z.infer<typeof MemberAttendanceNotificationTypesSchema>;
+export type MemberAttendanceNotificationTypes = z.infer<
+	typeof MemberAttendanceNotificationTypesSchema
+>;
 
 export const AttendanceNotificationSchema = z
 	.object({
 		type: MemberAttendanceNotificationTypesSchema,
 		message: z.string(),
+		dateString: DateStringSchema.optional(),
 	})
 	.strict();
-export const AttendanceNotificationArraySchema = z.array(AttendanceNotificationSchema);
+export const AttendanceNotificationArraySchema = z.array(
+	AttendanceNotificationSchema,
+);
 
-export type AttendanceNotification = z.infer<typeof AttendanceNotificationSchema>;
-export type AttendanceNotificationArray = z.infer<typeof AttendanceNotificationArraySchema>;
+export type AttendanceNotification = z.infer<
+	typeof AttendanceNotificationSchema
+>;
+export type AttendanceNotificationArray = z.infer<
+	typeof AttendanceNotificationArraySchema
+>;
 
 /**
  * Schema for Response from the sign-in API
@@ -33,12 +42,16 @@ export const AttendanceSignInResponseModelSchema = z.object({
 	memberMessage: z.string(),
 
 	// Used by web ui, but not fingerprint scanner
+	logs: z.array(z.string()),
 	memberDetails: MemberModelSchema,
 	notifications: AttendanceNotificationArraySchema,
+	previousSignInDate: DateStringSchema.optional(),
 });
 
 /**
  * Response from the sign-in API
  * Failure is indicated by HTTP status code 400, not this type
  */
-export type AttendanceSignInResponseModel = z.infer<typeof AttendanceSignInResponseModelSchema>;
+export type AttendanceSignInResponseModel = z.infer<
+	typeof AttendanceSignInResponseModelSchema
+>;

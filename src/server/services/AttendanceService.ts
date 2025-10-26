@@ -1,9 +1,15 @@
+import { log } from "console";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
 import { MembersData } from "~~/server/db/MembersData";
 import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
-import { Member_SetLoginDate, type MemberModel } from "~~/shared/types/models/MemberModel";
+import {
+	Member_SetLoginDate,
+	type MemberModel,
+} from "~~/shared/types/models/MemberModel";
 import { TodayYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
+import { MemberBadgesData } from "../db/MemberBadgesData";
+import { MemberBeltsData } from "../db/MemberBeltsData";
 
 export class AttendanceServiceError extends Error {
 	constructor(
@@ -23,16 +29,35 @@ export class AttendanceService {
 	 * @param member Member model to sign in
 	 * @param testing If true, do not persist attendance record, but simulate increment
 	 */
-	async signInMember(member: MemberModel, testing: boolean = false): Promise<AttendanceSignInResponseModel> {
+	async signInMember(
+		member: MemberModel,
+		testing: boolean = false,
+	): Promise<AttendanceSignInResponseModel> {
+		const logs: string[] = [];
+
 		if (!member) {
 			throw new AttendanceServiceError("Member not provided", "NO_MEMBER");
 		}
 
+		const todayString: string = TodayYYYY_MM_dd();
 		if (!testing) {
-			await MemberAttendancesData.CreateMemberAttendance(this.event, member.id, TodayYYYY_MM_dd());
+			await MemberAttendancesData.CreateMemberAttendance(
+				this.event,
+				member.id,
+				todayString,
+			);
+			logs.push(`Attendance record created for ${todayString}`);
+		} else {
+			logs.push(
+				`[Testing mode] Attendance record not created for ${todayString}`,
+			);
 		}
 
-		let sessionCount: number = await MemberAttendancesData.GetMemberAttendancesCountForMember(this.event, member.id);
+		let sessionCount: number =
+			await MemberAttendancesData.GetMemberAttendancesCountForMember(
+				this.event,
+				member.id,
+			);
 		if (testing) {
 			sessionCount = sessionCount + 1;
 		}
@@ -40,7 +65,12 @@ export class AttendanceService {
 		Member_SetLoginDate(member as MemberModel);
 		await MembersData.SaveMember(this.event, member);
 
-		const { message, notifications } = await this.GenerateAttendanceNotifications(member, sessionCount);
+		const {
+			message,
+			notifications,
+			logs: notificationLogs,
+		} = await this.GenerateAttendanceNotifications(member, sessionCount);
+		logs.push(...notificationLogs);
 
 		const response: AttendanceSignInResponseModel = {
 			memberId: member.id,
@@ -49,6 +79,7 @@ export class AttendanceService {
 			memberMessage: message,
 			memberDetails: member,
 			notifications: notifications,
+			logs,
 		};
 		return response;
 	}
@@ -61,16 +92,30 @@ export class AttendanceService {
 	async GenerateAttendanceNotifications(
 		member: MemberModel,
 		sessionCount: number,
-	): Promise<{ message: string; notifications: AttendanceNotificationArray }> {
+	): Promise<{
+		message: string;
+		notifications: AttendanceNotificationArray;
+		logs: string[];
+	}> {
 		let message: string = "";
 		let notifications: AttendanceNotificationArray = [];
+		let logs: string[] = [];
+
 		// Decide which generator to use based on whether the member is a Ninja (youth) or an Adult (mentor/parent)
 		if (member.isNinja) {
-			({ message, notifications } = await this.GenerateAttendanceNotificationsForNinja(member, sessionCount));
+			({ message, notifications, logs } =
+				await this.GenerateAttendanceNotificationsForNinja(
+					member,
+					sessionCount,
+				));
 		} else {
-			({ message, notifications } = await this.GenerateAttendanceNotificationForAdult(member, sessionCount));
+			({ message, notifications, logs } =
+				await this.GenerateAttendanceNotificationForAdult(
+					member,
+					sessionCount,
+				));
 		}
-		return { message, notifications };
+		return { message, notifications, logs };
 	}
 
 	/**
@@ -78,9 +123,14 @@ export class AttendanceService {
 	 * @remarks Keep messages short & encouraging for display on kiosk / fingerprint scanner
 	 */
 	private async GenerateAttendanceNotificationsForNinja(
-		_member: MemberModel,
+		member: MemberModel,
 		sessionCount: number,
-	): Promise<{ message: string; notifications: AttendanceNotificationArray }> {
+	): Promise<{
+		message: string;
+		notifications: AttendanceNotificationArray;
+		logs: string[];
+	}> {
+		const logs: string[] = [];
 		let message = "";
 		const notifications: AttendanceNotificationArray = [];
 
@@ -113,10 +163,40 @@ export class AttendanceService {
 			100: "100 sessions – incredible commitment!",
 		};
 		if (milestoneMap[sessionCount]) {
-			notifications.push({ type: "MILESTONE", message: milestoneMap[sessionCount] });
+			notifications.push({
+				type: "MILESTONE",
+				message: milestoneMap[sessionCount],
+			});
 		}
 
-		return { message, notifications };
+		// Look for recent badge or belt achievements to notify about
+		const loginDatePreviousTimestamp: number = member.loginDatePrevious || 0;
+		logs.push(
+			`Previous login timestamp: ${loginDatePreviousTimestamp}: ${TimestampToDateString(loginDatePreviousTimestamp)}`,
+		);
+		const memberNewBadges = (
+			await MemberBadgesData.GetMemberBadgesByMemberId(this.event, member.id)
+		).filter((b) => b.awarded && b.awarded > loginDatePreviousTimestamp);
+		logs.push(`Member new badge count: ${memberNewBadges.length}`);
+		for (const memberBadge of memberNewBadges) {
+			notifications.push({
+				type: "BADGE_EARNED",
+				message: `New badge earned: ${memberBadge.badge.achievement}`,
+			});
+		}
+
+		const memberNewBelts = (
+			await MemberBeltsData.GetMemberBeltsByMemberId(this.event, member.id)
+		).filter((b) => b.awarded && b.awarded > loginDatePreviousTimestamp);
+		logs.push(`Member new belt count: ${memberNewBelts.length}`);
+		for (const memberBelt of memberNewBelts) {
+			notifications.push({
+				type: "BELT_EARNED",
+				message: `New belt earned: ${memberBelt.belt.color}`,
+			});
+		}
+
+		return { message, notifications, logs };
 	}
 
 	/**
@@ -126,7 +206,12 @@ export class AttendanceService {
 	private async GenerateAttendanceNotificationForAdult(
 		_member: MemberModel,
 		sessionCount: number,
-	): Promise<{ message: string; notifications: AttendanceNotificationArray }> {
+	): Promise<{
+		message: string;
+		notifications: AttendanceNotificationArray;
+		logs: string[];
+	}> {
+		const logs: string[] = [];
 		let message = "";
 		const notifications: AttendanceNotificationArray = [];
 
@@ -154,9 +239,12 @@ export class AttendanceService {
 			100: "100 sessions – you are a pillar of this dojo!",
 		};
 		if (milestones[sessionCount]) {
-			notifications.push({ type: "MILESTONE", message: milestones[sessionCount] });
+			notifications.push({
+				type: "MILESTONE",
+				message: milestones[sessionCount],
+			});
 		}
 
-		return { message, notifications };
+		return { message, notifications, logs };
 	}
 }

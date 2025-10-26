@@ -30,6 +30,37 @@ export const MemberBadgesData = {
 		}
 	},
 
+	GetMemberBadgesByMemberId: async (event: H3Event<EventHandlerRequest>, memberId: string) => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return [];
+		}
+		try {
+			// server-side join to include badge details
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_badges")
+				.select("*, badge:badges(*)")
+				.eq("member_id", memberId);
+			if (error || !data || !Array.isArray(data) || data.length === 0) {
+				if (error) {
+					console.error("Error fetching member badges by member ID:", error);
+				}
+				return [];
+			}
+			type JoinedRow = MemberBadgeRecord & { badge: BadgeRecord | null };
+			const rows: JoinedRow[] = data as unknown as JoinedRow[];
+			return rows
+				.filter((r): r is JoinedRow & { badge: BadgeRecord } => !!r.badge)
+				.map((r) => ({
+					...memberBadgeFromRecord(r as MemberBadgeRecord),
+					badge: badgeFromRecord(r.badge as BadgeRecord),
+				}));
+		} catch (error) {
+			throw new Error(`Error fetching member badges by member ID: ${ErrorToString(error)}`);
+		}
+	},
+
 	SaveMemberBadge: async (
 		event: H3Event<EventHandlerRequest>,
 		entity: MemberBadgeModel,

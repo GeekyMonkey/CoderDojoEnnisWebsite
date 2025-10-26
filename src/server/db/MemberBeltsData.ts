@@ -42,6 +42,44 @@ export const MemberBeltsData = {
 		}
 	},
 
+	GetMemberBeltsByMemberId: async (
+		event: H3Event<EventHandlerRequest>,
+		memberId: string,
+	): Promise<MemberBeltWithBeltDetailModel[]> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return [];
+		}
+		try {
+			// Perform a server-side join to retrieve belt details in one round-trip.
+			// Assuming foreign key member_belts.belt_id -> belts.id and PostgREST relation naming
+			// If relation is not automatically recognized, an explicit view or RPC may be required.
+			type JoinedRow = MemberBeltRecord & { belt: BeltRecord | null };
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_belts")
+				.select("*, belt:belts(*)")
+				.eq("member_id", memberId);
+			if (error || !data || (data as unknown as JoinedRow[]).length === 0) {
+				if (error) {
+					console.error("Error fetching member belts by member ID:", error);
+				}
+				return [];
+			}
+			const rows: JoinedRow[] = data as unknown as JoinedRow[];
+			return rows
+				.filter((r): r is JoinedRow & { belt: BeltRecord } => !!r.belt)
+				.map((r) => ({
+					...memberBeltFromRecord(r as MemberBeltRecord),
+					belt: beltFromRecord(r.belt as BeltRecord),
+				}));
+		} catch (error) {
+			throw new Error(
+				`Error fetching member belts by member ID: ${ErrorToString(error)}`,
+			);
+		}
+	},
+
 	SaveMemberBelt: async (
 		event: H3Event<EventHandlerRequest>,
 		entity: MemberBeltModel,

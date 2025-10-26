@@ -1,10 +1,20 @@
 import type { Session } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { useRuntimeConfig } from "#imports";
-import { GetSupabaseAdminClient, type SupabaseClientType } from "~~/server/db/DatabaseClient";
+import {
+	GetSupabaseAdminClient,
+	type SupabaseClientType,
+} from "~~/server/db/DatabaseClient";
 import type { MemberRecord } from "~~/server/db/MembersData";
-import { GeneratePasswordHash, LoginToSupabase } from "~~/server/utils/authUtils";
-import { type MemberModel, type MemberSupabaseModel, memberFromRecord } from "~~/shared/types/models/MemberModel";
+import {
+	GeneratePasswordHash,
+	LoginToSupabase,
+} from "~~/server/utils/authUtils";
+import {
+	type MemberModel,
+	type MemberSupabaseModel,
+	memberFromRecord,
+} from "~~/shared/types/models/MemberModel";
 
 export type AuthServiceErrorCode =
 	| "INVALID_INPUT"
@@ -51,19 +61,33 @@ export class AuthService {
 		const passwordHash = await GeneratePasswordHash(password.trim(), salt);
 		logs.push("Computed hash");
 		if (!passwordHash) {
-			throw new AuthServiceError("Invalid password", "INVALID_PASSWORD_HASH", logs);
+			throw new AuthServiceError(
+				"Invalid password",
+				"INVALID_PASSWORD_HASH",
+				logs,
+			);
 		}
 
 		const supabase = await GetSupabaseAdminClient(this.event);
 		if (!supabase) {
-			throw new AuthServiceError("Database unavailable", "DATABASE_UNAVAILABLE", logs);
+			throw new AuthServiceError(
+				"Database unavailable",
+				"DATABASE_UNAVAILABLE",
+				logs,
+			);
 		}
 
-		const candidates = await this.findCandidatesByUsername(username.trim(), supabase, logs);
+		const candidates = await this.findCandidatesByUsername(
+			username.trim(),
+			supabase,
+			logs,
+		);
 		const uniqueCandidates = this.deduplicateCandidates(candidates);
 		logs.push(`Candidates: ${uniqueCandidates.length}`);
 
-		const matched = uniqueCandidates.find((candidate) => candidate.password_hash === passwordHash);
+		const matched = uniqueCandidates.find(
+			(candidate) => candidate.password_hash === passwordHash,
+		);
 		if (!matched) {
 			logs.push("Password mismatch for all candidates");
 			throw new AuthServiceError("Invalid login", "INVALID_CREDENTIALS", logs);
@@ -73,8 +97,16 @@ export class AuthService {
 		return { member: memberModel, memberRecord: matched };
 	}
 
-	async loginWithPassword(username: string, password: string, logs: string[] = []): Promise<LoginWithPasswordResult> {
-		const { member, memberRecord } = await this.validateCredentials(username, password, logs);
+	async loginWithPassword(
+		username: string,
+		password: string,
+		logs: string[] = [],
+	): Promise<LoginWithPasswordResult> {
+		const { member, memberRecord } = await this.validateCredentials(
+			username,
+			password,
+			logs,
+		);
 		const session = await this.createSupabaseSession(member, logs);
 		if (!session) {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);
@@ -147,7 +179,10 @@ export class AuthService {
 	/**
 	 * Create a supabase session for the given member
 	 */
-	private async createSupabaseSession(member: MemberModel, logs: string[]): Promise<Session | null> {
+	private async createSupabaseSession(
+		member: MemberModel,
+		logs: string[],
+	): Promise<Session | null> {
 		const memberEntityLike: MemberSupabaseModel = {
 			memberId: member.id,
 			isMentor: member.isMentor,
@@ -156,7 +191,9 @@ export class AuthService {
 			nameFirst: member.nameFirst,
 			nameLast: member.nameLast,
 		};
-		logs.push(`Logging into supabase for ${JSON.stringify({ memberEntityLike })}`);
+		logs.push(
+			`Logging into supabase for ${JSON.stringify({ memberEntityLike })}`,
+		);
 		const auth = await LoginToSupabase(this.event, memberEntityLike, logs);
 		if (!auth || !auth.session) {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);

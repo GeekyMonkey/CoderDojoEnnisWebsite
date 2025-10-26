@@ -22,6 +22,11 @@ export const MemberBadgeModelSchema = z
 
 export type MemberBadgeModel = z.infer<typeof MemberBadgeModelSchema>;
 
+export const MemberBadgeWithBadgeDetailsModelSchema = MemberBadgeModelSchema.extend({
+	badge: BadgeModelSchema,
+}).strict();
+export type MemberBadgeWithBadgeDetailsModel = z.infer<typeof MemberBadgeWithBadgeDetailsModelSchema>;
+
 export function memberBadgeFromRecord(record: MemberBadgeRecord): MemberBadgeModel {
 	return MemberBadgeModelSchema.parse({
 		id: record.id,
