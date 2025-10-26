@@ -82,7 +82,7 @@
 		"vitest": "2.1.9",
 		"wrangler": "3.114.14"
 	},
-	"packageManager": "pnpm@10.18.0",
+	"packageManager": "pnpm@10.18.3",
 	"prettier": {
 		"bracketSameLine": false,
 		"endOfLine": "lf",
