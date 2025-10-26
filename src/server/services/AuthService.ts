@@ -1,12 +1,10 @@
 import type { Session } from "@supabase/supabase-js";
-import type { H3Event, EventHandlerRequest } from "h3";
+import type { EventHandlerRequest, H3Event } from "h3";
 import { useRuntimeConfig } from "#imports";
-import { GeneratePasswordHash, LoginToSupabase } from "~~/server/utils/authUtils";
-import { GetSupabaseAdminClient } from "~~/server/db/DatabaseClient";
-import { memberFromRecord, type MemberModel, type MemberSupabaseModel } from "~~/shared/types/models/MemberModel";
+import { GetSupabaseAdminClient, type SupabaseClientType } from "~~/server/db/DatabaseClient";
 import type { MemberRecord } from "~~/server/db/MembersData";
-
-type SupabaseClientType = NonNullable<Awaited<ReturnType<typeof GetSupabaseAdminClient>>>;
+import { GeneratePasswordHash, LoginToSupabase } from "~~/server/utils/authUtils";
+import { type MemberModel, type MemberSupabaseModel, memberFromRecord } from "~~/shared/types/models/MemberModel";
 
 export type AuthServiceErrorCode =
 	| "INVALID_INPUT"
@@ -33,9 +31,9 @@ export type ValidateCredentialsResult = {
 };
 
 export type LoginWithPasswordResult = {
-  member: MemberModel;
-  session: Session;
-  memberRecord: MemberRecord;
+	member: MemberModel;
+	session: Session;
+	memberRecord: MemberRecord;
 };
 
 export class AuthService {
@@ -75,11 +73,7 @@ export class AuthService {
 		return { member: memberModel, memberRecord: matched };
 	}
 
-	async loginWithPassword(
-		username: string,
-		password: string,
-		logs: string[] = [],
-	): Promise<LoginWithPasswordResult> {
+	async loginWithPassword(username: string, password: string, logs: string[] = []): Promise<LoginWithPasswordResult> {
 		const { member, memberRecord } = await this.validateCredentials(username, password, logs);
 		const session = await this.createSupabaseSession(member, logs);
 		if (!session) {
@@ -108,8 +102,12 @@ export class AuthService {
 			.select("*")
 			.or(`login.eq.${usernameLower},email.eq.${usernameLower}`)
 			.eq("deleted", false);
-		if (loginEmailErr) logs.push("Login/email query error: " + loginEmailErr.message);
-		if (byLoginEmail) candidates.push(...(byLoginEmail as MemberRecord[]));
+		if (loginEmailErr) {
+			logs.push(`Login/email query error: ${loginEmailErr.message}`);
+		}
+		if (byLoginEmail) {
+			candidates.push(...(byLoginEmail as MemberRecord[]));
+		}
 
 		if (candidates.length === 0 && first && last) {
 			const { data: byName, error: nameErr } = await supabase
@@ -119,8 +117,12 @@ export class AuthService {
 				.ilike("name_first", first)
 				.ilike("name_last", last)
 				.eq("deleted", false);
-			if (nameErr) logs.push("Name query error: " + nameErr.message);
-			if (byName) candidates.push(...(byName as MemberRecord[]));
+			if (nameErr) {
+				logs.push(`Name query error: ${nameErr.message}`);
+			}
+			if (byName) {
+				candidates.push(...(byName as MemberRecord[]));
+			}
 		}
 
 		if (candidates.length === 0) {
@@ -154,7 +156,7 @@ export class AuthService {
 			nameFirst: member.nameFirst,
 			nameLast: member.nameLast,
 		};
-		logs.push("Logging into supabase for " + JSON.stringify({ memberEntityLike }));
+		logs.push(`Logging into supabase for ${JSON.stringify({ memberEntityLike })}`);
 		const auth = await LoginToSupabase(this.event, memberEntityLike, logs);
 		if (!auth || !auth.session) {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);

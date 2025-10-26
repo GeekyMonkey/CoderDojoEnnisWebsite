@@ -1,107 +1,49 @@
-	import type { Session } from "@supabase/supabase-js";
-	import { defineEventHandler, readBody, useRuntimeConfig } from "#imports";
-	import type { ApiResponse } from "~~/shared/types/ApiResponse";
-	import { GeneratePasswordHash, LoginToSupabase } from "~~/server/utils/authUtils";
-	import { GetSupabaseAdminClient } from "~~/server/db/DatabaseClient";
-	import { memberFromRecord, MemberSupabaseModel, type MemberModel } from "~~/shared/types/models/MemberModel";
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
-import { MemberRecord } from "~~/server/db/MembersData";
-import { MemberAttendanceModel } from "~~/shared/types/models/MemberAttendanceModel";
+import { defineEventHandler, readBody } from "#imports";
+import { AttendanceService } from "~~/server/services/AttendanceService";
+import { AuthService, AuthServiceError } from "~~/server/services/AuthService";
+import type { ApiResponse } from "~~/shared/types/ApiResponse";
+import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
 
-	type RequestBody = { username: string; password: string };
-	type ResponseBody = {
-		member: MemberModel | null;
-		memberAttendanceCount: number;
-		message: string;
-	};
+type RequestBody = { username: string; password: string };
 
-	/**
-	 * POST: /api/MemberAttendance/SignIn
-	 * Signing in for attendance via username (login/email or first+last) and password.
-	 * Accepts username (login/email or first+last) and password, validates against members table.
-	 * Passwords stored as deterministic hash (GeneratePasswordHash). Members with deleted=true are excluded.
-	 */
-	export default defineEventHandler(async (event): Promise<ApiResponse<ResponseBody>> => {
-		const logs: string[] = [];
-		try {
-			const { username, password } = await readBody<RequestBody>(event);
-			if (!username || !password) {
-				return { success: false, error: "Username and password required", logs };
-			}
-			const runtime = useRuntimeConfig();
-			const salt = runtime.private.auth.pass_salt;
-			const passwordHash = await GeneratePasswordHash(password.trim(), salt);
-			logs.push("Computed hash");
-			if (!passwordHash) {
-				return { success: false, error: "Invalid password", logs };
-			}
-
-			const supabase = await GetSupabaseAdminClient(event);
-			if (!supabase) {
-				return { success: false, error: "Database unavailable", logs };
-			}
-
-			const usernameLower = username.trim().toLowerCase();
-			const parts = usernameLower.split(/\s+/).filter(Boolean);
-			const first = parts[0] || "";
-			const last = parts.length > 1 ? parts[parts.length - 1] : "";
-
-			// Build OR match: login, email, (first AND last)
-			// Supabase JS query builder doesn't support grouped OR with AND directly; do multi-query fallback
-			// Query 1: login/email match
-			const candidates: MemberRecord[] = [];
-			const { data: byLoginEmail, error: loginEmailErr } = await supabase
-				.schema("coderdojo")
-				.from("members")
-				.select("*")
-				.or(`login.eq.${usernameLower},email.eq.${usernameLower}`)
-				.eq("deleted", false);
-			if (loginEmailErr) logs.push("SignIn/email query error: " + loginEmailErr.message);
-			if (byLoginEmail) candidates.push(...byLoginEmail);
-
-			// Query 2: first/last name (case-insensitive) if both provided and nothing found yet
-			if (candidates.length === 0 && first && last) {
-				const { data: byName, error: nameErr } = await supabase
-					.schema("coderdojo")
-					.from("members")
-					.select("*")
-					.ilike("name_first", first)
-					.ilike("name_last", last)
-					.eq("deleted", false);
-				if (nameErr) logs.push("Name query error: " + nameErr.message);
-				if (byName) candidates.push(...byName);
-			}
-
-			if (candidates.length === 0) {
-				logs.push("No member candidate");
-				return { success: false, error: "Invalid login", logs };
-			}
-
-			// Deduplicate by id
-			const uniqueById = new Map<string, any>();
-			for (const c of candidates) uniqueById.set(String(c.id).toLowerCase(), c);
-			const uniqueCandidates = Array.from(uniqueById.values());
-			logs.push(`Candidates: ${uniqueCandidates.length}`);
-
-			// Match password hash
-			const matched = uniqueCandidates.find(c => c.password_hash === passwordHash);
-			if (!matched) {
-				logs.push("Password mismatch for all candidates");
-				return { success: false, error: "Invalid login", logs };
-			}
-
-			// Record the attendance
-			const member: MemberModel = memberFromRecord(matched);
-			const memberAttendance: MemberAttendanceModel | null = await MemberAttendancesData.CreateMemberAttendance(event, member.id);
-			const memberAttendanceCount: number = await MemberAttendancesData.GetMemberAttendancesCountForMember(event, member.id);
-			const message: string = "ToDo: Welcome message here";
-			
-			return {
-				success: true,
-				data: { member, memberAttendanceCount, message },
-				logs,
-			};
-		} catch (err: any) {
-			return { success: false, error: "[Login] POST error: " + err.message, logs: [err.message] };
+/**
+ * POST: /api/MemberAttendance/SignIn
+ * Signing in for attendance via username (login/email or first+last) and password.
+ * Accepts username (login/email or first+last) and password, validates against members table.
+ * Passwords stored as deterministic hash (GeneratePasswordHash). Members with deleted=true are excluded.
+ */
+export default defineEventHandler(async (event): Promise<ApiResponse<AttendanceSignInResponseModel>> => {
+	const logs: string[] = [];
+	try {
+		const { username, password } = await readBody<RequestBody>(event);
+		if (!username || !password) {
+			return { success: false, error: "Username and password required", logs };
 		}
-	});
+
+		const authService = new AuthService(event);
+		const { member } = await authService.validateCredentials(username, password, logs);
+
+		const attendanceService = new AttendanceService(event);
+		const signInResponse = await attendanceService.signInMember(member);
+		return {
+			success: true,
+			data: signInResponse,
+			logs,
+		};
+	} catch (err) {
+		// Sign-in failed (wrong password, etc)
+		if (err instanceof AuthServiceError) {
+			return {
+				success: false,
+				error: err.message,
+				logs: err.logs,
+			};
+		}
+		const message: string = ErrorToString(err);
+		return {
+			success: false,
+			error: `[Login] POST error: ${message}`,
+			logs: [message],
+		};
+	}
+});

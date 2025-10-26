@@ -1,15 +1,14 @@
 import { z } from "zod";
 import type { Database } from "../../../types/supabase";
+import { IsYYYY_MM_dd } from "../../utils/DateHelpers";
 
 export type MemberAttendanceRecord = Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
-
-import { IsYYYY_MM_dd } from '../../utils/DateHelpers';
 
 export const MemberAttendanceModelSchema = z
 	.object({
 		id: z.string(),
 		memberId: z.string(),
-		date: z.string().refine(IsYYYY_MM_dd, { message: 'date must be YYYY-MM-DD' }),
+		date: z.string().refine(IsYYYY_MM_dd, { message: "date must be YYYY-MM-DD" }),
 	})
 	.strict();
 export const MemberAttendanceModelArraySchema = z.array(MemberAttendanceModelSchema);
