@@ -193,8 +193,8 @@ export default defineNuxtConfig({
 				runtime: process.env.NUXT_ENV_RUNTIME || "development", // "cloudflare" | "development"
 			},
 			supabase: {
-				url: process.env.NUXT_SUPABASE_URL,
-				key: process.env.NUXT_SUPABASE_KEY_PUBLIC,
+				url: process.env.NUXT_PUBLIC_SUPABASE_URL,
+				key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
 			},
 			// baseUrl: isIonic ? "https://mealcritic.geekymonkey.com" : "",
 			// buildTarget: buildTarget,
@@ -267,8 +267,8 @@ export default defineNuxtConfig({
 
 	devServer: {
 		https: {
-			key: "certs/server.key",
-			cert: "certs/server.cert",
+			key: "./certs/server.key",
+			cert: "./certs/server.cert",
 		},
 	},
 });

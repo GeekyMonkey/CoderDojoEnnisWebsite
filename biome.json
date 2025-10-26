@@ -2,7 +2,7 @@
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
   "formatter": {
     "indentStyle": "tab",
-    "lineWidth": 120,
+    "lineWidth": 80,
     "lineEnding": "lf"
   },
   "javascript": {

@@ -5,5 +5,25 @@
   "ignore": [
     "node_modules",
     ".git"
-  ]
+  ],
+  "size": 0.0025873184204101562,
+  "filesCount": 23,
+  "clientCertificates": {
+    "enabled": true,
+    "certs": [
+      {
+        "domain": "localhost:3000",
+        "type": "cert",
+        "certFilePath": "..\\..\\src\\certs\\server.cert",
+        "keyFilePath": "..\\..\\src\\certs\\server.key",
+        "passphrase": ""
+      },
+      {
+        "domain": "localhost",
+        "type": "pfx",
+        "pfxFilePath": "..\\..\\src\\certs\\server.pfx",
+        "passphrase": ""
+      }
+    ]
+  }
 }

@@ -3,10 +3,6 @@ name = "coderdojoennis"
 compatibility_date = "2024-12-05"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./dist"
-                                       
-[[hyperdrive]]
-binding = "NUXT_HYPERDRIVE"
-id = "d97bf97ae9294b578f26758a33ff4530"
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Pages Function, running it closer to your back-end infrastructure

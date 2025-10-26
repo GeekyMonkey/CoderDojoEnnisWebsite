@@ -1,12 +1,20 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
+	type BeltRecord,
+	beltFromRecord,
+} from "~~/shared/types/models/BeltModel";
+import type {
+	MemberBeltModel,
+	MemberBeltWithBeltDetailModel,
+} from "~~/shared/types/models/MemberBeltModel";
+import {
+	memberBeltFromRecord,
 	memberBeltFromRecords,
 	memberBeltToRecords,
-	type MemberBeltModel,
 } from "~~/shared/types/models/MemberBeltModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
 export type MemberBeltRecord =
 	Database["coderdojo"]["Tables"]["member_belts"]["Row"];
@@ -16,7 +24,9 @@ export const MemberBeltsData = {
 		event: H3Event<EventHandlerRequest>,
 	): Promise<MemberBeltModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -26,7 +36,7 @@ export const MemberBeltsData = {
 				console.error("Error fetching member belts:", error);
 				return [];
 			}
-			return memberBeltFromRecords(data as any);
+			return memberBeltFromRecords(data as unknown as MemberBeltRecord[]);
 		} catch (error) {
 			throw new Error(`Error fetching member belts: ${ErrorToString(error)}`);
 		}
@@ -45,18 +55,23 @@ export const MemberBeltsData = {
 		entities: MemberBeltModel[],
 	): Promise<MemberBeltModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
+			const upsertRecords = memberBeltToRecords(
+				entities,
+			) as unknown as MemberBeltRecord[];
 			const { data, error } = await supabase
 				.schema("coderdojo")
 				.from("member_belts")
-				.upsert(memberBeltToRecords(entities) as any, { onConflict: "id" })
+				.upsert(upsertRecords, { onConflict: "id" })
 				.select();
 			if (error || !data || data.length === 0) {
 				console.error("Error saving member belts:", error);
 				return [];
 			}
-			return memberBeltFromRecords(data as any);
+			return memberBeltFromRecords(data as unknown as MemberBeltRecord[]);
 		} catch (error) {
 			throw new Error(`Error saving member belts: ${ErrorToString(error)}`);
 		}
@@ -67,7 +82,9 @@ export const MemberBeltsData = {
 		id: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")
