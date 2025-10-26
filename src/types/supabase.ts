@@ -497,7 +497,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_attendance_dates: {
+        Args: never
+        Returns: {
+          date: string
+        }[]
+      }
+      get_attendance_stats: {
+        Args: never
+        Returns: {
+          attendance_count: number
+          date: string
+        }[]
+      }
+      get_attendance_stats_split: {
+        Args: never
+        Returns: {
+          date: string
+          mentor_count: number
+          ninja_count: number
+          total_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

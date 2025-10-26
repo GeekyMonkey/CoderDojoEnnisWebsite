@@ -11,7 +11,7 @@ export default defineNuxtPlugin(async () => {
 				// The composable will auto-populate reactive user, nothing else needed.
 				console.log(
 					"[supabase-init] Session restored for",
-					data.session.user.id,
+					data.session.user.id || data.session.user.email,
 				);
 			}
 		}

@@ -49,7 +49,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 async function isAuthenticated(): Promise<boolean> {
 	const user = useSupabaseUser();
-	if (user.value?.aud === "authenticated") return true;
+	if (user.value?.aud === "authenticated") {
+		return true;
+	}
 
 	// Attempt to restore session (race condition on first load)
 	try {
