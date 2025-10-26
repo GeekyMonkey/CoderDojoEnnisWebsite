@@ -1,5 +1,5 @@
 import { useColorMode, type UseColorModeReturn } from "@vueuse/core";
-import { useQuery } from '@tanstack/vue-query'
+import { useQuery } from "@tanstack/vue-query";
 
 let ColorModeService: UseColorModeReturn<string> | null = null;
 
@@ -110,8 +110,7 @@ export function useUiConfig() {
 		if (ColorModeService) {
 			const themeId = ColorModeService.value;
 			return (
-				data.value?.themesConfig.themes.find((t) => t.id === themeId) ??
-				null
+				data.value?.themesConfig.themes.find((t) => t.id === themeId) ?? null
 			);
 		}
 		return null;

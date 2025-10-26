@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Database } from "../../../types/supabase";
 
-export type MemberBadgeCategoryRecord = Database["coderdojo"]["Tables"]["member_badge_categories"]["Row"];
+export type MemberBadgeCategoryRecord =
+	Database["coderdojo"]["Tables"]["member_badge_categories"]["Row"];
 
 export const MemberBadgeCategoryModelSchema = z
 	.object({
@@ -15,7 +16,9 @@ export type MemberBadgeCategoryModel = z.infer<
 	typeof MemberBadgeCategoryModelSchema
 >;
 
-export function memberBadgeCategoryFromRecord(record: MemberBadgeCategoryRecord): MemberBadgeCategoryModel {
+export function memberBadgeCategoryFromRecord(
+	record: MemberBadgeCategoryRecord,
+): MemberBadgeCategoryModel {
 	return MemberBadgeCategoryModelSchema.parse({
 		id: record.id,
 		memberId: record.member_id || "",
@@ -23,7 +26,9 @@ export function memberBadgeCategoryFromRecord(record: MemberBadgeCategoryRecord)
 	});
 }
 
-export function memberBadgeCategoryToRecord(model: MemberBadgeCategoryModel): MemberBadgeCategoryRecord {
+export function memberBadgeCategoryToRecord(
+	model: MemberBadgeCategoryModel,
+): MemberBadgeCategoryRecord {
 	return {
 		id: model.id,
 		member_id: model.memberId,
@@ -31,10 +36,14 @@ export function memberBadgeCategoryToRecord(model: MemberBadgeCategoryModel): Me
 	} as MemberBadgeCategoryRecord;
 }
 
-export function memberBadgeCategoryFromRecords(records: MemberBadgeCategoryRecord[]): MemberBadgeCategoryModel[] {
+export function memberBadgeCategoryFromRecords(
+	records: MemberBadgeCategoryRecord[],
+): MemberBadgeCategoryModel[] {
 	return records.map(memberBadgeCategoryFromRecord);
 }
 
-export function memberBadgeCategoryToRecords(models: MemberBadgeCategoryModel[]): MemberBadgeCategoryRecord[] {
+export function memberBadgeCategoryToRecords(
+	models: MemberBadgeCategoryModel[],
+): MemberBadgeCategoryRecord[] {
 	return models.map(memberBadgeCategoryToRecord);
 }

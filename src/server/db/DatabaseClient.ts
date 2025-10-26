@@ -9,7 +9,9 @@ import type { EventHandlerRequest, H3Event } from "h3";
 export type DatabaseMode = "anon" | "admin";
 
 // Common exported Supabase client type used across server services
-export type SupabaseClientType = NonNullable<Awaited<ReturnType<typeof GetSupabaseAdminClient>>>;
+export type SupabaseClientType = NonNullable<
+	Awaited<ReturnType<typeof GetSupabaseAdminClient>>
+>;
 
 // Environment variables
 const supabaseUrl = process.env.NUXT_PUBLIC_SUPABASE_URL;
@@ -22,7 +24,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 if (!supabaseServiceKey) {
-	console.warn("SUPABASE_SERVICE_ROLE_KEY is not set. Admin mode will not be available.");
+	console.warn(
+		"SUPABASE_SERVICE_ROLE_KEY is not set. Admin mode will not be available.",
+	);
 }
 
 // Symbol used to store client cache on event object
@@ -33,10 +37,14 @@ const CLIENT_CACHE_KEY_admin = Symbol("supabaseClientCache_admin");
  * Gets a client cache for the current request
  * This keeps the cache scoped to the request lifecycle
  */
-function getEventCache(event: H3Event<EventHandlerRequest>, mode: DatabaseMode): Map<string, SupabaseClient> {
+function getEventCache(
+	event: H3Event<EventHandlerRequest>,
+	mode: DatabaseMode,
+): Map<string, SupabaseClient> {
 	// Cast to any to allow adding properties
 	const eventObj = event as any;
-	const cacheKey = mode === "admin" ? CLIENT_CACHE_KEY_admin : CLIENT_CACHE_KEY_anon;
+	const cacheKey =
+		mode === "admin" ? CLIENT_CACHE_KEY_admin : CLIENT_CACHE_KEY_anon;
 
 	// Create cache if it doesn't exist
 	if (!eventObj[cacheKey]) {
@@ -72,7 +80,9 @@ export async function GetSupabaseClient(
 		if (mode === "admin") {
 			// Use service role key to bypass RLS
 			if (!supabaseServiceKey) {
-				console.error("Cannot use admin mode: SUPABASE_SERVICE_ROLE_KEY is not set");
+				console.error(
+					"Cannot use admin mode: SUPABASE_SERVICE_ROLE_KEY is not set",
+				);
 				return null;
 			}
 			apiKey = supabaseServiceKey;
@@ -80,7 +90,9 @@ export async function GetSupabaseClient(
 		} else {
 			// Use anon key for regular access
 			if (!supabaseAnonKey) {
-				console.error("Cannot use anon mode: NUXT_PUBLIC_SUPABASE_KEY is not set");
+				console.error(
+					"Cannot use anon mode: NUXT_PUBLIC_SUPABASE_KEY is not set",
+				);
 				return null;
 			}
 			apiKey = supabaseAnonKey;
@@ -108,7 +120,9 @@ export async function GetSupabaseClient(
  * Get a Supabase read-write client with admin privileges (bypasses RLS)
  * Uses the same caching mechanism as GetSupabaseClient
  */
-export async function GetSupabaseAdminClient(event: H3Event<EventHandlerRequest>): Promise<SupabaseClient | null> {
+export async function GetSupabaseAdminClient(
+	event: H3Event<EventHandlerRequest>,
+): Promise<SupabaseClient | null> {
 	return GetSupabaseClient(event, "admin");
 }
 
@@ -133,7 +147,12 @@ export const GetMimeTypeFromExtension = (ext: string): string => {
 /**
  * Format an image file name (relative to storage root)
  */
-export const FormatImageFileName = (ownerType: string, ownerId: string, imageId: string, ext: string): string => {
+export const FormatImageFileName = (
+	ownerType: string,
+	ownerId: string,
+	imageId: string,
+	ext: string,
+): string => {
 	return `${ownerType}/${ownerId}/${imageId}.${ext}`.replace(/-/g, "");
 };
 
@@ -156,13 +175,15 @@ export const SaveFile = async ({
 		return false;
 	}
 
-	const { data, error } = await supabase.storage.from("coderdojo").upload(filePath, file, {
-		upsert: true,
-		metadata: {
-			ownerType: filePath.split("/")[0],
-			ownerId: filePath.split("/")[1],
-		},
-	});
+	const { data, error } = await supabase.storage
+		.from("coderdojo")
+		.upload(filePath, file, {
+			upsert: true,
+			metadata: {
+				ownerType: filePath.split("/")[0],
+				ownerId: filePath.split("/")[1],
+			},
+		});
 
 	if (error) {
 		console.error("Error saving file:", error);
@@ -210,14 +231,16 @@ export const SaveBase64Image = async ({
 		// Create a Blob from the bytes
 		const blob = new Blob([bytes], { type: contentType });
 
-		const { data, error } = await supabase.storage.from("coderdojo").upload(filePath, blob, {
-			upsert: true,
-			contentType,
-			metadata: {
-				ownerType: filePath.split("/")[0],
-				ownerId: filePath.split("/")[1],
-			},
-		});
+		const { data, error } = await supabase.storage
+			.from("coderdojo")
+			.upload(filePath, blob, {
+				upsert: true,
+				contentType,
+				metadata: {
+					ownerType: filePath.split("/")[0],
+					ownerId: filePath.split("/")[1],
+				},
+			});
 
 		if (error) {
 			console.error("Error saving base64 image:", error);
@@ -248,7 +271,9 @@ export const DeleteFile = async ({
 		return false;
 	}
 
-	const { data, error } = await supabase.storage.from("coderdojo").remove([filePath]);
+	const { data, error } = await supabase.storage
+		.from("coderdojo")
+		.remove([filePath]);
 
 	if (error) {
 		console.error("Error deleting file:", error);
@@ -279,7 +304,9 @@ export const GetImageUrl = async ({
 	}
 
 	try {
-		const { data } = supabase.storage.from(bucketName).getPublicUrl(filePathClean);
+		const { data } = supabase.storage
+			.from(bucketName)
+			.getPublicUrl(filePathClean);
 
 		return data?.publicUrl ?? null;
 	} catch (error) {

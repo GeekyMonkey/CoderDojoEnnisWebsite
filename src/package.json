@@ -9,6 +9,7 @@
 		"dev": "cls && pnpm install && nuxt dev",
 		"dev-unix": "clear && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
+		"format": "cls && biome format . --write",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
 		"preview2": "npm run build && wrangler pages dev",
@@ -50,7 +51,7 @@
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.4",
+		"@biomejs/biome": "2.3.0",
 		"@cloudflare/workers-types": "4.20250923.0",
 		"@iconify-json/radix-icons": "1.2.5",
 		"@iconify/vue": "4.3.0",

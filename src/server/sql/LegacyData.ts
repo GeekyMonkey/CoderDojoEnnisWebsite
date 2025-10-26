@@ -29,9 +29,7 @@ const sqlConfig: config = {
 async function ReadLegacyTable<T>(tableName: string): Promise<T[]> {
 	try {
 		let pool = await sql.connect(sqlConfig);
-		let result = await pool
-			.request()
-			.query<T>(`SELECT * FROM ${tableName}`);
+		let result = await pool.request().query<T>(`SELECT * FROM ${tableName}`);
 
 		// Convert passwordHash field to byte array if it exists
 		result.recordset.forEach((record: any) => {
@@ -85,18 +83,26 @@ export async function ReadLegacyNinjas(): Promise<LegacyMemberEntity[]> {
 export async function ReadLegacyMemberAttendances(): Promise<
 	LegacyMemberAttendanceEntity[]
 > {
-	return await ReadLegacyTable<LegacyMemberAttendanceEntity>("MemberAttendance");
+	return await ReadLegacyTable<LegacyMemberAttendanceEntity>(
+		"MemberAttendance",
+	);
 }
 
-export async function ReadLegacyMemberBadges(): Promise<LegacyMemberBadgeEntity[]> {
+export async function ReadLegacyMemberBadges(): Promise<
+	LegacyMemberBadgeEntity[]
+> {
 	return await ReadLegacyTable<LegacyMemberBadgeEntity>("MemberBadges");
 }
 
-export async function ReadLegacyMemberBelts(): Promise<LegacyMemberBeltEntity[]> {
+export async function ReadLegacyMemberBelts(): Promise<
+	LegacyMemberBeltEntity[]
+> {
 	return await ReadLegacyTable<LegacyMemberBeltEntity>("MemberBelts");
 }
 
-export async function ReadLegacyMemberParents(): Promise<LegacyMemberParentEntity[]> {
+export async function ReadLegacyMemberParents(): Promise<
+	LegacyMemberParentEntity[]
+> {
 	return await ReadLegacyTable<LegacyMemberParentEntity>("MemberParent");
 }
 

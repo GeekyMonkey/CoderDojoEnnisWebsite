@@ -1,15 +1,15 @@
 <script setup lang="ts">
-	const router = useRouter();
+const router = useRouter();
 
-	const { supabaseClient } = UseSupabaseClient();
+const { supabaseClient } = UseSupabaseClient();
 
-	definePageMeta({
-		layout: "auth",
-	});
+definePageMeta({
+	layout: "auth",
+});
 
-	supabaseClient.auth.signOut({});
+supabaseClient.auth.signOut({});
 
-	router.replace("/login");
+router.replace("/login");
 </script>
 
 <template>

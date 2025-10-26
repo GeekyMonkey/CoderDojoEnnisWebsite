@@ -1,0 +1,41 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+	"files": {
+		"includes": [
+			"app/**",
+			"server/**",
+			"shared/**",
+			"types/**",
+			"nuxt.config.ts",
+			"package.json",
+			"drizzle.config.ts",
+			"tailwind.config.ts",
+			"!app/assets/**",
+			"!app/assets/css/**",
+			"!app/assets/images/**",
+			"!types/supabase.ts",
+			"!**/*.d.ts"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"lineWidth": 80,
+		"lineEnding": "lf"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"trailingCommas": "all"
+		}
+	},
+	"linter": {
+		"rules": {
+			"complexity": {
+				"noUselessSwitchCase": "off"
+			},
+			"style": {
+				"useBlockStatements": "error"
+			}
+		}
+	}
+}

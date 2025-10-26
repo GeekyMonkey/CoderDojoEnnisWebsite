@@ -1,8 +1,6 @@
 <script setup lang="ts">
-	const { CurrentTheme } = useUiConfig();
-	const currentThemeName = computed<string>(
-		() => CurrentTheme.value?.id || "",
-	);
+const { CurrentTheme } = useUiConfig();
+const currentThemeName = computed<string>(() => CurrentTheme.value?.id || "");
 </script>
 
 <template>

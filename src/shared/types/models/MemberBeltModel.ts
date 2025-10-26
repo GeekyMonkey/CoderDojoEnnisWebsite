@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Database } from "../../../types/supabase";
 
-export type MemberBeltRecord = Database["coderdojo"]["Tables"]["member_belts"]["Row"];
+export type MemberBeltRecord =
+	Database["coderdojo"]["Tables"]["member_belts"]["Row"];
 
 export const MemberBeltModelSchema = z
 	.object({
@@ -21,12 +22,18 @@ export const MemberBeltModelSchema = z
 
 export type MemberBeltModel = z.infer<typeof MemberBeltModelSchema>;
 
-export const MemberBeltWithBeltDetailModelSchema = MemberBeltModelSchema.extend({
-	belt: BeltModelSchema,
-});
-export type MemberBeltWithBeltDetailModel = z.infer<typeof MemberBeltWithBeltDetailModelSchema>;
+export const MemberBeltWithBeltDetailModelSchema = MemberBeltModelSchema.extend(
+	{
+		belt: BeltModelSchema,
+	},
+);
+export type MemberBeltWithBeltDetailModel = z.infer<
+	typeof MemberBeltWithBeltDetailModelSchema
+>;
 
-export function memberBeltFromRecord(record: MemberBeltRecord): MemberBeltModel {
+export function memberBeltFromRecord(
+	record: MemberBeltRecord,
+): MemberBeltModel {
 	return MemberBeltModelSchema.parse({
 		id: record.id,
 		memberId: record.member_id || "",
@@ -36,9 +43,13 @@ export function memberBeltFromRecord(record: MemberBeltRecord): MemberBeltModel 
 		awardedNotes: record.awarded_notes,
 		rejectedByAdultId: record.rejected_by_adult_id,
 		rejectedNotes: record.rejected_notes,
-		applicationDate: record.application_date ? Date.parse(record.application_date) : null,
+		applicationDate: record.application_date
+			? Date.parse(record.application_date)
+			: null,
 		awarded: record.awarded ? Date.parse(record.awarded) : null,
-		rejectedDate: record.rejected_date ? Date.parse(record.rejected_date) : null,
+		rejectedDate: record.rejected_date
+			? Date.parse(record.rejected_date)
+			: null,
 	});
 }
 
@@ -52,16 +63,24 @@ export function memberBeltToRecord(model: MemberBeltModel): MemberBeltRecord {
 		awarded_notes: model.awardedNotes,
 		rejected_by_adult_id: model.rejectedByAdultId,
 		rejected_notes: model.rejectedNotes,
-		application_date: model.applicationDate ? new Date(model.applicationDate).toISOString() : null,
+		application_date: model.applicationDate
+			? new Date(model.applicationDate).toISOString()
+			: null,
 		awarded: model.awarded ? new Date(model.awarded).toISOString() : null,
-		rejected_date: model.rejectedDate ? new Date(model.rejectedDate).toISOString() : null,
+		rejected_date: model.rejectedDate
+			? new Date(model.rejectedDate).toISOString()
+			: null,
 	} as MemberBeltRecord;
 }
 
-export function memberBeltFromRecords(records: MemberBeltRecord[]): MemberBeltModel[] {
+export function memberBeltFromRecords(
+	records: MemberBeltRecord[],
+): MemberBeltModel[] {
 	return records.map(memberBeltFromRecord);
 }
 
-export function memberBeltToRecords(models: MemberBeltModel[]): MemberBeltRecord[] {
+export function memberBeltToRecords(
+	models: MemberBeltModel[],
+): MemberBeltRecord[] {
 	return models.map(memberBeltToRecord);
 }

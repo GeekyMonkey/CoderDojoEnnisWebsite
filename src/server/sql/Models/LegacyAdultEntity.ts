@@ -62,7 +62,7 @@ export const FromLegacyAdultEntity = (
 		xboxGamertag: legacy.XboxGamertag,
 	};
 
-// password hashing intentionally omitted (passwordHash not in MemberModel schema)
+	// password hashing intentionally omitted (passwordHash not in MemberModel schema)
 
 	return member;
 };

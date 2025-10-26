@@ -30,9 +30,7 @@ export const FromLegacyMemberAttendanceEntities = (
 		(attendance, index, self) =>
 			index ===
 			self.findIndex(
-				(t) =>
-					t.memberId === attendance.memberId &&
-					t.date === attendance.date,
+				(t) => t.memberId === attendance.memberId && t.date === attendance.date,
 			),
 	);
 

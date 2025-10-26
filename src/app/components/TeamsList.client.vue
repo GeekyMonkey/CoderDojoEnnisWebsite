@@ -1,15 +1,15 @@
 <script setup lang="ts">
-	import { useBadgesStore } from "~/stores/useBadgesStore";
-	import { useBeltsStore } from "~/stores/useBeltsStore";
-	import { useTeamsStore } from "~/stores/useTeamsStore";
+import { useBadgesStore } from "~/stores/useBadgesStore";
+import { useBeltsStore } from "~/stores/useBeltsStore";
+import { useTeamsStore } from "~/stores/useTeamsStore";
 
-	const { Teams, Options, isLoading, error } = useTeamsStore();
-	const { BadgeCategories, BadgesByCategory } = useBadgesStore();
-	const { Belts } = useBeltsStore();
+const { Teams, Options, isLoading, error } = useTeamsStore();
+const { BadgeCategories, BadgesByCategory } = useBadgesStore();
+const { Belts } = useBeltsStore();
 
-	onMounted(() => {
-		console.log("TeamsList Component Mounted");
-	});
+onMounted(() => {
+	console.log("TeamsList Component Mounted");
+});
 </script>
 
 <template>

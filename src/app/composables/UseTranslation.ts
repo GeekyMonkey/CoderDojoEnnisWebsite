@@ -20,9 +20,7 @@ export function useTranslation() {
 		if (typeof key === "string") {
 			return !!values ? $t(key, values) : $t(key);
 		}
-		return (
-			TranslateToLanguage(key, locale.value as LangCode, values) ?? null
-		);
+		return TranslateToLanguage(key, locale.value as LangCode, values) ?? null;
 	};
 
 	/**

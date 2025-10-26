@@ -1,5 +1,8 @@
 import type { EventHandlerRequest, H3Event } from "h3";
-import { type BadgeRecord, badgeFromRecord } from "~~/shared/types/models/BadgeModel";
+import {
+	type BadgeRecord,
+	badgeFromRecord,
+} from "~~/shared/types/models/BadgeModel";
 import {
 	type MemberBadgeModel,
 	memberBadgeFromRecord,
@@ -10,16 +13,22 @@ import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 
-export type MemberBadgeRecord = Database["coderdojo"]["Tables"]["member_badges"]["Row"];
+export type MemberBadgeRecord =
+	Database["coderdojo"]["Tables"]["member_badges"]["Row"];
 
 export const MemberBadgesData = {
-	GetMemberBadges: async (event: H3Event<EventHandlerRequest>): Promise<MemberBadgeModel[]> => {
+	GetMemberBadges: async (
+		event: H3Event<EventHandlerRequest>,
+	): Promise<MemberBadgeModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) {
 			return [];
 		}
 		try {
-			const { data, error } = await supabase.schema("coderdojo").from("member_badges").select("*");
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_badges")
+				.select("*");
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching member badges:", error);
 				return [];
@@ -30,7 +39,10 @@ export const MemberBadgesData = {
 		}
 	},
 
-	GetMemberBadgesByMemberId: async (event: H3Event<EventHandlerRequest>, memberId: string) => {
+	GetMemberBadgesByMemberId: async (
+		event: H3Event<EventHandlerRequest>,
+		memberId: string,
+	) => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) {
 			return [];
@@ -57,7 +69,9 @@ export const MemberBadgesData = {
 					badge: badgeFromRecord(r.badge as BadgeRecord),
 				}));
 		} catch (error) {
-			throw new Error(`Error fetching member badges by member ID: ${ErrorToString(error)}`);
+			throw new Error(
+				`Error fetching member badges by member ID: ${ErrorToString(error)}`,
+			);
 		}
 	},
 
@@ -78,7 +92,9 @@ export const MemberBadgesData = {
 			return [];
 		}
 		try {
-			const upsertRecords = memberBadgeToRecords(entities) as unknown as MemberBadgeRecord[];
+			const upsertRecords = memberBadgeToRecords(
+				entities,
+			) as unknown as MemberBadgeRecord[];
 			const { data, error } = await supabase
 				.schema("coderdojo")
 				.from("member_badges")
@@ -94,13 +110,20 @@ export const MemberBadgesData = {
 		}
 	},
 
-	DeleteMemberBadge: async (event: H3Event<EventHandlerRequest>, id: string): Promise<boolean> => {
+	DeleteMemberBadge: async (
+		event: H3Event<EventHandlerRequest>,
+		id: string,
+	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) {
 			return false;
 		}
 		try {
-			const { error } = await supabase.schema("coderdojo").from("member_badges").delete().eq("id", id);
+			const { error } = await supabase
+				.schema("coderdojo")
+				.from("member_badges")
+				.delete()
+				.eq("id", id);
 			if (error) {
 				console.error("Error deleting member badge:", error);
 				return false;

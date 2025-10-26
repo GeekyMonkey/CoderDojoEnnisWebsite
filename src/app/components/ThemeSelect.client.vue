@@ -1,26 +1,26 @@
 <script setup lang="ts">
-	import DialogCloseButton from "./ui/dialog/DialogClose.vue";
-	import { Icon } from "@iconify/vue";
+import DialogCloseButton from "./ui/dialog/DialogClose.vue";
+import { Icon } from "@iconify/vue";
 
-	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
-	const { Translate, TranslateOrDefault } = useTranslation();
+const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
+const { Translate, TranslateOrDefault } = useTranslation();
 
-	const themes = computed<ThemeModel[]>(() => {
-		const sorted: ThemeModel[] = [
-			...(ThemesConfig.value?.themes ?? []),
-		].sort((a, b) => {
+const themes = computed<ThemeModel[]>(() => {
+	const sorted: ThemeModel[] = [...(ThemesConfig.value?.themes ?? [])].sort(
+		(a, b) => {
 			const aName = TranslateOrDefault(a.themeName, "").toLowerCase();
 			const bName = TranslateOrDefault(b.themeName, "").toLowerCase();
 			const compare = aName.localeCompare(bName, undefined, {
 				sensitivity: "base",
 			});
 			return compare;
-		});
-		console.log("[ThemeSelect] themes", sorted);
-		return sorted;
-	});
+		},
+	);
+	console.log("[ThemeSelect] themes", sorted);
+	return sorted;
+});
 
-	onMounted(() => {});
+onMounted(() => {});
 </script>
 
 <template>

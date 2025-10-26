@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Database } from "../../../types/supabase";
 
-export type MemberParentRecord = Database["coderdojo"]["Tables"]["member_parents"]["Row"];
+export type MemberParentRecord =
+	Database["coderdojo"]["Tables"]["member_parents"]["Row"];
 
 export const MemberParentModelSchema = z
 	.object({
@@ -13,7 +14,9 @@ export const MemberParentModelSchema = z
 
 export type MemberParentModel = z.infer<typeof MemberParentModelSchema>;
 
-export function memberParentFromRecord(record: MemberParentRecord): MemberParentModel {
+export function memberParentFromRecord(
+	record: MemberParentRecord,
+): MemberParentModel {
 	return MemberParentModelSchema.parse({
 		id: record.id,
 		memberId: record.member_id || "",
@@ -21,7 +24,9 @@ export function memberParentFromRecord(record: MemberParentRecord): MemberParent
 	});
 }
 
-export function memberParentToRecord(model: MemberParentModel): MemberParentRecord {
+export function memberParentToRecord(
+	model: MemberParentModel,
+): MemberParentRecord {
 	return {
 		id: model.id,
 		member_id: model.memberId,
@@ -29,10 +34,14 @@ export function memberParentToRecord(model: MemberParentModel): MemberParentReco
 	} as MemberParentRecord;
 }
 
-export function memberParentFromRecords(records: MemberParentRecord[]): MemberParentModel[] {
+export function memberParentFromRecords(
+	records: MemberParentRecord[],
+): MemberParentModel[] {
 	return records.map(memberParentFromRecord);
 }
 
-export function memberParentToRecords(models: MemberParentModel[]): MemberParentRecord[] {
+export function memberParentToRecords(
+	models: MemberParentModel[],
+): MemberParentRecord[] {
 	return models.map(memberParentToRecord);
 }

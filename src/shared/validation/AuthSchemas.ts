@@ -27,11 +27,11 @@ export const passwordChangeRequestSchema = z
 	.object({
 		username: usernameSchema,
 		oldPassword: passwordSchema,
-		newPassword: passwordSchema.refine(p => p.length >= PASSWORD_LENGTH_MIN, {
+		newPassword: passwordSchema.refine((p) => p.length >= PASSWORD_LENGTH_MIN, {
 			message: `New password must be at least ${PASSWORD_LENGTH_MIN} characters`,
 		}),
 	})
-	.refine(d => d.oldPassword !== d.newPassword, {
+	.refine((d) => d.oldPassword !== d.newPassword, {
 		message: "New password must be different to old password",
 		path: ["newPassword"],
 	});

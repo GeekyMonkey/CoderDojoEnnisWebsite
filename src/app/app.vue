@@ -1,6 +1,6 @@
 <script setup lang="ts">
-	// Load the UiConfig as early as possible
-	const { UiConfig } = useUiConfig();
+// Load the UiConfig as early as possible
+const { UiConfig } = useUiConfig();
 </script>
 
 <template>

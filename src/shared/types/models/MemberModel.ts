@@ -35,7 +35,10 @@ export const MemberModelArraySchema = z.array(MemberModelSchema);
 export type MemberModel = z.infer<typeof MemberModelSchema>;
 export type MemberModelArray = z.infer<typeof MemberModelArraySchema>;
 
-export type MemberSupabaseModel = {memberId: string} & Pick<MemberModel, "isMentor" | "isNinja" | "isParent" | "nameFirst" | "nameLast">;
+export type MemberSupabaseModel = { memberId: string } & Pick<
+	MemberModel,
+	"isMentor" | "isNinja" | "isParent" | "nameFirst" | "nameLast"
+>;
 
 /**
  * Adjust the member login date and previous login date
@@ -59,9 +62,7 @@ export const EncodePasswordHash = (
 		const encoded: string = Base64Encode(passwordHash);
 		return encoded;
 	} catch (err) {
-		throw new Error(
-			`Error encoding password hash for ${passwordHash}: ${err}`,
-		);
+		throw new Error(`Error encoding password hash for ${passwordHash}: ${err}`);
 	}
 };
 
@@ -109,7 +110,9 @@ export function memberToRecord(model: MemberModel): MemberRecord {
 		is_ninja: model.isNinja,
 		is_parent: model.isParent,
 		login: model.login,
-		login_date: model.loginDate ? new Date(model.loginDate).toISOString() : null,
+		login_date: model.loginDate
+			? new Date(model.loginDate).toISOString()
+			: null,
 		login_date_previous: model.loginDatePrevious
 			? new Date(model.loginDatePrevious).toISOString()
 			: null,

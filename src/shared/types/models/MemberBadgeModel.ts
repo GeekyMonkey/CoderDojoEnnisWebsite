@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Database } from "../../../types/supabase";
 
-export type MemberBadgeRecord = Database["coderdojo"]["Tables"]["member_badges"]["Row"];
+export type MemberBadgeRecord =
+	Database["coderdojo"]["Tables"]["member_badges"]["Row"];
 
 export const MemberBadgeModelSchema = z
 	.object({
@@ -22,12 +23,17 @@ export const MemberBadgeModelSchema = z
 
 export type MemberBadgeModel = z.infer<typeof MemberBadgeModelSchema>;
 
-export const MemberBadgeWithBadgeDetailsModelSchema = MemberBadgeModelSchema.extend({
-	badge: BadgeModelSchema,
-}).strict();
-export type MemberBadgeWithBadgeDetailsModel = z.infer<typeof MemberBadgeWithBadgeDetailsModelSchema>;
+export const MemberBadgeWithBadgeDetailsModelSchema =
+	MemberBadgeModelSchema.extend({
+		badge: BadgeModelSchema,
+	}).strict();
+export type MemberBadgeWithBadgeDetailsModel = z.infer<
+	typeof MemberBadgeWithBadgeDetailsModelSchema
+>;
 
-export function memberBadgeFromRecord(record: MemberBadgeRecord): MemberBadgeModel {
+export function memberBadgeFromRecord(
+	record: MemberBadgeRecord,
+): MemberBadgeModel {
 	return MemberBadgeModelSchema.parse({
 		id: record.id,
 		memberId: record.member_id || "",
@@ -37,14 +43,20 @@ export function memberBadgeFromRecord(record: MemberBadgeRecord): MemberBadgeMod
 		awardedNotes: record.awarded_notes,
 		rejectedByAdultId: record.rejected_by_adult_id,
 		rejectedNotes: record.rejected_notes,
-		applicationDate: record.application_date ? Date.parse(record.application_date) : null,
+		applicationDate: record.application_date
+			? Date.parse(record.application_date)
+			: null,
 		awarded: record.awarded ? Date.parse(record.awarded) : null,
-		rejectedDate: record.rejected_date ? Date.parse(record.rejected_date) : null,
+		rejectedDate: record.rejected_date
+			? Date.parse(record.rejected_date)
+			: null,
 		goalDate: record.goal_date ? Date.parse(record.goal_date) : null,
 	});
 }
 
-export function memberBadgeToRecord(model: MemberBadgeModel): MemberBadgeRecord {
+export function memberBadgeToRecord(
+	model: MemberBadgeModel,
+): MemberBadgeRecord {
 	return {
 		id: model.id,
 		member_id: model.memberId,
@@ -54,17 +66,25 @@ export function memberBadgeToRecord(model: MemberBadgeModel): MemberBadgeRecord 
 		awarded_notes: model.awardedNotes,
 		rejected_by_adult_id: model.rejectedByAdultId,
 		rejected_notes: model.rejectedNotes,
-		application_date: model.applicationDate ? new Date(model.applicationDate).toISOString() : null,
+		application_date: model.applicationDate
+			? new Date(model.applicationDate).toISOString()
+			: null,
 		awarded: model.awarded ? new Date(model.awarded).toISOString() : null,
-		rejected_date: model.rejectedDate ? new Date(model.rejectedDate).toISOString() : null,
+		rejected_date: model.rejectedDate
+			? new Date(model.rejectedDate).toISOString()
+			: null,
 		goal_date: model.goalDate ? new Date(model.goalDate).toISOString() : null,
 	} as MemberBadgeRecord;
 }
 
-export function memberBadgeFromRecords(records: MemberBadgeRecord[]): MemberBadgeModel[] {
+export function memberBadgeFromRecords(
+	records: MemberBadgeRecord[],
+): MemberBadgeModel[] {
 	return records.map(memberBadgeFromRecord);
 }
 
-export function memberBadgeToRecords(models: MemberBadgeModel[]): MemberBadgeRecord[] {
+export function memberBadgeToRecords(
+	models: MemberBadgeModel[],
+): MemberBadgeRecord[] {
 	return models.map(memberBadgeToRecord);
 }

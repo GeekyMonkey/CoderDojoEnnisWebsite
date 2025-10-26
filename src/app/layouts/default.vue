@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	const currentPage = ref("ToDo: currentPage");
+const currentPage = ref("ToDo: currentPage");
 </script>
 
 <template>

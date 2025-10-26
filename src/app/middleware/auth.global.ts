@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// Debug logging (temporary) to diagnose refresh redirect issue
 	if (process.client) {
 		const user = useSupabaseUser();
-		console.debug('[AuthMiddleware] Route check', {
+		console.debug("[AuthMiddleware] Route check", {
 			path: to.fullPath,
 			section,
 			initialUserAud: user.value?.aud,
@@ -57,7 +57,7 @@ async function isAuthenticated(): Promise<boolean> {
 		const { data } = await client.auth.getSession();
 		const restored = !!data.session?.user;
 		if (process.client) {
-			console.debug('[AuthMiddleware] getSession() result', {
+			console.debug("[AuthMiddleware] getSession() result", {
 				restored,
 				userId: data.session?.user?.id,
 			});
