@@ -15,6 +15,8 @@ import type {
 } from "~~/shared/types/models/MemberModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
+const log = useLogger("authUtils");
+
 /**
  * Generate a password hash
  */
@@ -27,17 +29,17 @@ export const GeneratePasswordHash = async (
 	}
 	const passClean = (password || "").toLowerCase().trim();
 	const toHash = `${passClean}-${salt}`;
-	console.log("toHash", toHash);
+	log.info("toHash", { toHash });
 
 	const hash = hasher(toHash);
 	const hash64: string = hash.toString(CryptoJS.enc.Hex);
-	// console.log("hash64", hash64);
+	// log.info("hash64", { hash64 });
 
 	const base64String = hash64
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_")
 		.replace(/=+$/, "");
-	console.log("hashed", base64String);
+	log.info("hashed", { base64String });
 
 	return base64String;
 };
@@ -134,18 +136,18 @@ export async function LoginToSupabase(
 		} | null = null;
 		let error: AuthError | null = null;
 		try {
-			logs.push("Attempting sign in to supabase for " + supabaseEmail);
+			logs.push(`Attempting sign in to supabase for ${supabaseEmail}`);
 
 			const signInResponse = await supabase.auth.signInWithPassword({
 				email: supabaseEmail,
 				password: supabasePass,
 			});
 
-			logs.push("Sign in response: " + JSON.stringify(signInResponse));
+			logs.push(`Sign in response: ${JSON.stringify(signInResponse)}`);
 			authTokenResponse = signInResponse.data;
 			error = signInResponse.error;
 			if (error) {
-				logs.push("Sign in error: " + JSON.stringify(error));
+				logs.push(`Sign in error: ${JSON.stringify(error)}`);
 				throw error;
 			}
 		} catch (error) {
@@ -183,7 +185,7 @@ export async function LoginToSupabase(
 			authTokenResponse = signInResponse.data;
 			error = signInResponse.error;
 			if (error) {
-				logs.push("Post-create sign in error: " + JSON.stringify(error));
+				logs.push(`Post-create sign in error: ${JSON.stringify(error)}`);
 				throw error;
 			}
 		}
@@ -195,7 +197,7 @@ export async function LoginToSupabase(
 			user = authTokenResponse.user;
 			session = authTokenResponse.session;
 		}
-		console.log("User authenticated:", { user, session });
+		log.info("User authenticated:", { user, session });
 
 		// Update the user metadata if it changed, or if it's a new user
 		if (user) {
@@ -205,7 +207,7 @@ export async function LoginToSupabase(
 		return authTokenResponse;
 	} catch (error) {
 		logs.push(`LoginToSupabase error: ${JSON.stringify(ErrorToString(error))}`);
-		console.error("Error generating JWT:", logs);
+		log.error("Error generating JWT:", { logs });
 		return null;
 	}
 }
@@ -251,19 +253,23 @@ async function FindSupabaseUserByEmail(email: string): Promise<User | null> {
 				perPage,
 			});
 			if (error) {
-				console.error("listUsers error", { error, page });
+				log.error("listUsers error", { error, page });
 				return null;
 			}
 			const match = (data.users as User[]).find(
 				(u: User) => (u.email || "").toLowerCase() === target,
 			);
-			if (match) return match;
-			if (data.users.length < perPage) break; // last page
+			if (match) {
+				return match;
+			}
+			if (data.users.length < perPage) {
+				break; // last page
+			}
 			page++;
 		}
 		return null;
 	} catch (err) {
-		console.error("Error scanning users for email", err);
+		log.error("Error scanning users for email", { err });
 		return null;
 	}
 }
@@ -281,9 +287,11 @@ async function CreateSupabaseAdminClient(): Promise<any> {
 		process.env.SUPABASE_SERVICE_ROLE_KEY ||
 		config.private.supabase.key_private ||
 		process.env.NUXT_SUPABASE_KEY_PRIVATE;
-	if (!supabaseUrl) throw new Error("Supabase URL not configured");
+	if (!supabaseUrl) {
+		throw new Error("Supabase URL not configured");
+	}
 	if (!serviceRoleKey) {
-		console.error(
+		log.error(
 			"Service role key missing (set SUPABASE_SERVICE_ROLE_KEY or NUXT_SUPABASE_KEY_PRIVATE)",
 		);
 		throw new Error("Supabase service role key missing");

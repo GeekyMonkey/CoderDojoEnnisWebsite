@@ -8,6 +8,8 @@ type ResponseBody = {
 	success: boolean;
 };
 
+const log = useLogger("TeamsAPI");
+
 /**
  * GET: api/Legacy/Teams
  */
@@ -24,7 +26,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		resp.data = result.data;
 	} catch (error) {
 		const errorMsg = `Error in GetLegacyTeams: ${ErrorToString(error)}`;
-		console.error(errorMsg);
+		log.error(errorMsg);
 		resp.logs.push(errorMsg);
 	}
 
@@ -43,7 +45,7 @@ async function GetLegacyTeams(): Promise<{ data: any[]; logs: string[] }> {
 	try {
 		data = await ReadLegacyTeams();
 	} catch (error) {
-		console.error("Error reading data:", error);
+		log.error("Error reading data:", error);
 		logs.push(`Error: ${ErrorToString(error)}`);
 	}
 	return { data, logs };

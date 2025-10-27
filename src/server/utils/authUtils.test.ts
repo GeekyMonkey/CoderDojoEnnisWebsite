@@ -1,5 +1,5 @@
+import { describe, expect, it } from "vitest";
 import { GeneratePasswordHash } from "./authUtils";
-import { describe, it, expect } from "vitest";
 
 // Test suite for GeneratePasswordHash. Uses Vitest globals; importing explicitly
 // prevents ReferenceError: describe is not defined when tsconfig/types isn't set.

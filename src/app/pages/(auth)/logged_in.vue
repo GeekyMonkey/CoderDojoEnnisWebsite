@@ -2,17 +2,19 @@
 const router = useRouter();
 const user = useSupabaseUser();
 
+const log = useLogger("auth/logged_in");
+
 definePageMeta({
 	layout: "auth",
 });
 
 // Where should we be based on the user's login state and role?
 if (!user.value) {
-	console.warn("[auth/logged_in] No user found. Redirecting to login.");
+	log.warn("[auth/logged_in] No user found. Redirecting to login.");
 	router.replace("/login");
 } else {
 	let defaultRole: UserRoles | null = null;
-	console.log("[auth/logged_in] User:", user.value);
+	log.info("[auth/logged_in] User:", user.value);
 
 	// const userId: string = user.value.id;
 	// Search for coder, mentor, or parent role for user
@@ -23,7 +25,7 @@ if (!user.value) {
 			defaultRole = "mentor";
 		} else if (userMeta.isParent) {
 			defaultRole = "parent";
-		} else if (userMeta.isCoder) {
+		} else if (userMeta.isNinja) {
 			defaultRole = "coder";
 		}
 		console.log("[auth/logged_in] User default role:", defaultRole);
@@ -32,7 +34,7 @@ if (!user.value) {
 	if (defaultRole) {
 		router.replace(`/${defaultRole}`);
 	} else {
-		console.error("[auth/logged_in] No default role found.");
+		log.error("[auth/logged_in] No default role found.");
 		// router.replace("/");
 	}
 }

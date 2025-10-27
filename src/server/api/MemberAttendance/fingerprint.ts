@@ -6,6 +6,8 @@ import {
 } from "~~/server/services/AttendanceService";
 import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
 
+const log = useLogger("api/MemberAttendance/fingerprint");
+
 type AttendanceSignInErrorResponse = { error: string };
 export default defineEventHandler(
 	async (
@@ -27,7 +29,7 @@ export default defineEventHandler(
 				fingerprintId,
 			);
 			if (!member) {
-				console.warn(`No member found with fingerprint ID ${fingerprintId}`);
+				log.warn(`No member found with fingerprint ID ${fingerprintId}`);
 				event.node.res.statusCode = 400;
 				return {
 					error: `No member found with fingerprint ID ${fingerprintId}`,
@@ -40,11 +42,11 @@ export default defineEventHandler(
 			return response;
 		} catch (err) {
 			if (err instanceof AttendanceServiceError) {
-				console.warn(err.message);
+				log.warn(err.message);
 				event.node.res.statusCode = 400;
 				return { error: err.message };
 			}
-			console.error("Unexpected sign-in error", err);
+			log.error("Unexpected sign-in error", err);
 			event.node.res.statusCode = 500;
 			return { error: "Unexpected error during sign-in" };
 		}

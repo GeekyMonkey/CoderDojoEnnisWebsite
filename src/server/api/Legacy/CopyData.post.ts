@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { defineEventHandler, readBody } from "#imports";
+import { defineEventHandler } from "#imports";
 import { BadgeCategoriesData } from "~~/server/db/BadgeCategoriesData";
 import { BadgesData } from "~~/server/db/BadgesData";
 import { BeltsData } from "~~/server/db/BeltsData";
@@ -41,8 +41,7 @@ import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 // Global tolerance constants
 const TIME_TOLERANCE_MS = 6 * 60 * 60 * 1000; // 6 hours tolerance for loginDate comparisons
 
-// Define interfaces for the request body and query parameters
-type RequestBody = {};
+const log = useLogger("CopyDataAPI");
 
 type ResponseBody = {
 	logs: string[];
@@ -54,7 +53,7 @@ type ResponseBody = {
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	// Access request body
-	const body: RequestBody = await readBody(event);
+	// const body: RequestBody = await readBody(event);
 	const resp: ResponseBody = {
 		logs: [],
 		success: false,
@@ -72,7 +71,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
  * Copy the SQL Server data to Supabase
  */
 async function CopyData(
-	resp: ResponseBody,
+	// resp: ResponseBody,
 	event: H3Event<EventHandlerRequest>,
 ): Promise<string[]> {
 	const logs: string[] = [];
@@ -80,7 +79,7 @@ async function CopyData(
 		// Get a DB connection
 		const db: SupabaseClient | null = await GetSupabaseAdminClient(event);
 		if (!db) {
-			console.error("Failed to initialize Supabase client");
+			log.error("Failed to initialize Supabase client");
 			return [];
 		}
 		logs.push("DB client created");
@@ -98,7 +97,7 @@ async function CopyData(
 		logs.push(...(await CopyMemberBadgesTable(event, db)));
 		logs.push(...(await CopyMemberBeltsTable(event, db)));
 	} catch (error) {
-		console.error("Error copying data:", error);
+		log.error("Error copying data:", undefined, error);
 		logs.push(`Error: ${ErrorToString(error)}`);
 	}
 	return logs;
@@ -119,7 +118,7 @@ async function CopyTeamsTable(
 		.delete()
 		.not("id", "is", null);
 	if (error) {
-		logs.push("Error deleting teams: " + error.message);
+		logs.push(`Error deleting teams: ${error.message}`);
 	} else {
 		logs.push("Teams deleted successfully");
 	}
@@ -127,7 +126,7 @@ async function CopyTeamsTable(
 	logs.push("Reading teams");
 	const legacyTeams = await ReadLegacyTeams();
 
-	logs.push("Copying teams table with " + legacyTeams.length + " rows");
+	logs.push(`Copying teams table with ${legacyTeams.length} rows`);
 	const newTeams = FromLegacyTeamEntities(legacyTeams);
 
 	try {
@@ -165,8 +164,12 @@ async function CopyTeamsTable(
 				const dv = (dest as any)[f];
 				// Treat undefined and null as equivalent empty states; also normalise trimming for strings
 				const norm = (v: any) => {
-					if (v === null || v === undefined) return "";
-					if (typeof v === "string") return v.trim();
+					if (v === null || v === undefined) {
+						return "";
+					}
+					if (typeof v === "string") {
+						return v.trim();
+					}
 					return v;
 				};
 				if (norm(sv) !== norm(dv)) {
@@ -178,7 +181,9 @@ async function CopyTeamsTable(
 		}
 
 		for (const [lcId, dest] of savedById.entries()) {
-			if (!sourceById.has(lcId)) extraInDb.push(dest.id);
+			if (!sourceById.has(lcId)) {
+				extraInDb.push(dest.id);
+			}
 		}
 
 		if (
@@ -190,17 +195,22 @@ async function CopyTeamsTable(
 				`Teams verification passed: ${savedTeams.length} rows match source exactly (UUID case ignored)`,
 			);
 		} else {
-			if (missingInDb.length)
+			if (missingInDb.length) {
 				logs.push(`Verification missing in DB: ${missingInDb.join(",")}`);
-			if (extraInDb.length)
+			}
+			if (extraInDb.length) {
 				logs.push(`Verification extra in DB: ${extraInDb.join(",")}`);
+			}
 			if (fieldMismatches.length) {
 				logs.push(`Verification field mismatches (${fieldMismatches.length}):`);
-				for (const mm of fieldMismatches.slice(0, 25)) logs.push("  " + mm);
-				if (fieldMismatches.length > 25)
+				for (const mm of fieldMismatches.slice(0, 25)) {
+					logs.push(`  ${mm}`);
+				}
+				if (fieldMismatches.length > 25) {
 					logs.push(
 						`  ... ${fieldMismatches.length - 25} more (showing first 25)`,
 					);
+				}
 			}
 		}
 	} catch (error) {
@@ -242,11 +252,13 @@ async function CopySimpleTable<TLegacy, TModel>(
 		.from(options.tableName)
 		.delete()
 		.not("id", "is", null);
-	if (delError)
+	if (delError) {
 		logs.push(
 			`Error deleting ${options.label.toLowerCase()}: ${delError.message}`,
 		);
-	else logs.push(`${options.label} deleted successfully`);
+	} else {
+		logs.push(`${options.label} deleted successfully`);
+	}
 
 	logs.push(`Reading ${options.label.toLowerCase()}`);
 	const legacy = await options.readLegacy();
@@ -273,8 +285,12 @@ async function CopySimpleTable<TLegacy, TModel>(
 		const mismatches: string[] = [];
 
 		const norm = (v: any) => {
-			if (v === null || v === undefined) return "";
-			if (typeof v === "string") return v.trim();
+			if (v === null || v === undefined) {
+				return "";
+			}
+			if (typeof v === "string") {
+				return v.trim();
+			}
 			return v;
 		};
 
@@ -300,14 +316,17 @@ async function CopySimpleTable<TLegacy, TModel>(
 						// else keep original values for mismatch report (uncommon different IDs)
 					}
 				}
-				if (sv !== dv)
+				if (sv !== dv) {
 					mismatches.push(
 						`${(src as any).id}:${fieldName} expected='${rawSv}' actual='${rawDv}'`,
 					);
+				}
 			}
 		}
 		for (const [id, dest] of destById.entries()) {
-			if (!srcById.has(id)) extra.push((dest as any).id);
+			if (!srcById.has(id)) {
+				extra.push((dest as any).id);
+			}
 		}
 
 		if (!missing.length && !extra.length && !mismatches.length) {
@@ -315,21 +334,26 @@ async function CopySimpleTable<TLegacy, TModel>(
 				`${options.label} verification passed: ${saved.length} rows match source exactly (UUID case ignored)`,
 			);
 		} else {
-			if (missing.length)
+			if (missing.length) {
 				logs.push(
 					`${options.label} verification missing in DB: ${missing.join(",")}`,
 				);
-			if (extra.length)
+			}
+			if (extra.length) {
 				logs.push(
 					`${options.label} verification extra in DB: ${extra.join(",")}`,
 				);
+			}
 			if (mismatches.length) {
 				logs.push(
 					`${options.label} verification field mismatches (${mismatches.length}):`,
 				);
-				for (const mm of mismatches.slice(0, 25)) logs.push("  " + mm);
-				if (mismatches.length > 25)
+				for (const mm of mismatches.slice(0, 25)) {
+					logs.push(`  ${mm}`);
+				}
+				if (mismatches.length > 25) {
 					logs.push(`  ... ${mismatches.length - 25} more (showing first 25)`);
+				}
 			}
 		}
 	} catch (error) {
@@ -410,8 +434,11 @@ async function CopyMembersTable(
 		.from("members")
 		.delete()
 		.not("id", "is", null);
-	if (delError) logs.push(`Error deleting members: ${delError.message}`);
-	else logs.push("Members deleted successfully");
+	if (delError) {
+		logs.push(`Error deleting members: ${delError.message}`);
+	} else {
+		logs.push("Members deleted successfully");
+	}
 
 	logs.push("Reading legacy ninjas and adults");
 	const ninjas = await ReadLegacyNinjas();

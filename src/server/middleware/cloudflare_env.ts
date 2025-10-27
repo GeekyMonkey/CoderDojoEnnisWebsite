@@ -1,7 +1,10 @@
 import type { H3Event } from "h3";
+
 // import { SetServerContext } from "~~/server/db/UseDrizzle";
 
+const log = useLogger("Middleware-Cloudflare");
+
 export default defineEventHandler((event: H3Event) => {
-	console.log("[Middleware-Cloudflare] Setting server context", event.context);
+	log.verbose("Setting server context", event.context);
 	// SetServerContext(event.context);
 });

@@ -1,6 +1,8 @@
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 import { useAuthStore } from "../stores/useAuthStore";
 
+const log = useLogger("AuthMiddleware");
+
 // NOTE: On a hard reload the Supabase user ref may not yet be populated when this
 // middleware first executes. We make it async and try to restore the existing
 // session (from localStorage) before deciding to redirect.
@@ -21,7 +23,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// Debug logging (temporary) to diagnose refresh redirect issue
 	if (process.client) {
 		const user = useSupabaseUser();
-		console.debug("[AuthMiddleware] Route check", {
+		log.info("Route check", {
 			path: to.fullPath,
 			section,
 			initialUserAud: user.value?.aud,
@@ -59,14 +61,14 @@ async function isAuthenticated(): Promise<boolean> {
 		const { data } = await client.auth.getSession();
 		const restored = !!data.session?.user;
 		if (process.client) {
-			console.debug("[AuthMiddleware] getSession() result", {
+			log.info("getSession() result", {
 				restored,
 				userId: data.session?.user?.id,
 			});
 		}
 		return restored;
 	} catch (err) {
-		console.warn("[Auth_middleware] Failed to restore Supabase session", err);
+		log.error("Failed to restore Supabase session", undefined, err);
 		return false;
 	}
 }

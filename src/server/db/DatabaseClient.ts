@@ -1,6 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 
+const log = useLogger("DatabaseClient");
+
 /**
  * Database access mode type
  * - 'anon': Uses anon key (default), respects RLS policies
@@ -19,12 +21,12 @@ const supabaseAnonKey = process.env.NUXT_PUBLIC_SUPABASE_KEY;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-	console.error("Missing required Supabase environment variables");
+	log.error("Missing required Supabase environment variables");
 	process.exit(1);
 }
 
 if (!supabaseServiceKey) {
-	console.warn(
+	log.warn(
 		"SUPABASE_SERVICE_ROLE_KEY is not set. Admin mode will not be available.",
 	);
 }
@@ -80,19 +82,17 @@ export async function GetSupabaseClient(
 		if (mode === "admin") {
 			// Use service role key to bypass RLS
 			if (!supabaseServiceKey) {
-				console.error(
+				log.error(
 					"Cannot use admin mode: SUPABASE_SERVICE_ROLE_KEY is not set",
 				);
 				return null;
 			}
 			apiKey = supabaseServiceKey;
-			console.log("Using admin mode with service role key");
+			log.verbose("Using admin mode with service role key");
 		} else {
 			// Use anon key for regular access
 			if (!supabaseAnonKey) {
-				console.error(
-					"Cannot use anon mode: NUXT_PUBLIC_SUPABASE_KEY is not set",
-				);
+				log.error("Cannot use anon mode: NUXT_PUBLIC_SUPABASE_KEY is not set");
 				return null;
 			}
 			apiKey = supabaseAnonKey;
@@ -111,7 +111,7 @@ export async function GetSupabaseClient(
 
 		return client;
 	} catch (error) {
-		console.error("Error initializing Supabase client:", error);
+		log.error("Error initializing Supabase client:", undefined, error);
 		return null;
 	}
 }
@@ -171,7 +171,7 @@ export const SaveFile = async ({
 	// Use admin client to bypass RLS
 	const supabase = await GetSupabaseAdminClient(event);
 	if (!supabase) {
-		console.error("Supabase client is not initialized.");
+		log.error("Supabase client is not initialized.");
 		return false;
 	}
 
@@ -186,7 +186,7 @@ export const SaveFile = async ({
 		});
 
 	if (error) {
-		console.error("Error saving file:", error);
+		log.error("Error saving file:", undefined, error);
 		return false;
 	}
 
@@ -210,7 +210,7 @@ export const SaveBase64Image = async ({
 	// Use admin client to bypass RLS
 	const supabase = await GetSupabaseAdminClient(event);
 	if (!supabase) {
-		console.error("Supabase client is not initialized.");
+		log.error("Supabase client is not initialized.");
 		return false;
 	}
 
@@ -243,13 +243,13 @@ export const SaveBase64Image = async ({
 			});
 
 		if (error) {
-			console.error("Error saving base64 image:", error);
+			log.error("Error saving base64 image:", undefined, error);
 			return false;
 		}
 
 		return true;
 	} catch (error) {
-		console.error("Error processing base64 image:", error);
+		log.error("Error processing base64 image:", undefined, error);
 		return false;
 	}
 };
@@ -267,7 +267,7 @@ export const DeleteFile = async ({
 	// Use admin client to bypass RLS
 	const supabase = await GetSupabaseAdminClient(event);
 	if (!supabase) {
-		console.error("Supabase client is not initialized.");
+		log.error("Supabase client is not initialized.");
 		return false;
 	}
 
@@ -276,7 +276,7 @@ export const DeleteFile = async ({
 		.remove([filePath]);
 
 	if (error) {
-		console.error("Error deleting file:", error);
+		log.error("Error deleting file:", undefined, error);
 		return false;
 	}
 
@@ -299,7 +299,7 @@ export const GetImageUrl = async ({
 	// Use default client mode for public storage operations (RLS applies)
 	const supabase = await GetSupabaseClient(event);
 	if (!supabase) {
-		console.error("Supabase client is not initialized.");
+		log.error("Supabase client is not initialized.");
 		return null;
 	}
 
@@ -310,7 +310,7 @@ export const GetImageUrl = async ({
 
 		return data?.publicUrl ?? null;
 	} catch (error) {
-		console.error("Error getting image URL:", error);
+		log.error("Error getting image URL:", undefined, error);
 		return null;
 	}
 };

@@ -1,21 +1,22 @@
 import { defineNuxtPlugin, useNuxtApp } from "nuxt/app";
 
+const log = useLogger("startup-plugin");
+
 export default defineNuxtPlugin({
 	name: "startup-plugin",
 	enforce: "pre", // or 'post'
 	async setup(nuxtApp) {
 		// this is the equivalent of a normal functional plugin
-		console.log("--Starting CoderDojo Nuxt Website--");
+		log.info("--Starting CoderDojo Nuxt Website--");
 	},
 	hooks: {
 		// You can directly register Nuxt app runtime hooks here
 		"app:created"() {
 			const nuxtApp = useNuxtApp();
-			console.log("--Created CoderDojo Nuxt Website--");
-			console.log("Public Env Variables:", {
+			log.info("--Created CoderDojo Nuxt Website--");
+			log.info("Public Env Variables:", {
 				public: nuxtApp.$config.public,
 			});
-			console.log("----------");
 		},
 	},
 	env: {

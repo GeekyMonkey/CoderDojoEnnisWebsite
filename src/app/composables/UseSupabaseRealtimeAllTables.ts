@@ -2,6 +2,12 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 import mitt, { type Emitter } from "mitt";
 import { UseSupabaseClient } from "./UseSupabaseClient";
 
+const log = useLogger("SupabaseRealtime-AllTables");
+
+/**
+ * Events emitted for all tables in the `coderdojo` schema
+ */
+
 export type AllTablesDbEvents = {
 	INSERT: { table: string; id: string; newData: unknown };
 	UPDATE: { table: string; id: string; newData: unknown; oldData: unknown };
@@ -21,9 +27,7 @@ export function UseSupabaseRealtimeAllTables() {
 		return { channel: allTablesChannel, events: allTablesEmitter };
 	}
 
-	console.log(
-		"[UseSupabaseClient] Subscribing to changes in ALL coderdojo tables",
-	);
+	log.info("Subscribing to changes in ALL coderdojo tables");
 	allTablesEmitter = mitt<AllTablesDbEvents>();
 
 	// Wildcard subscription: omit `table` to receive events for every table in the schema
@@ -42,9 +46,11 @@ export function UseSupabaseRealtimeAllTables() {
 				const table = payload?.table || "";
 				const newData = payload?.new || null;
 				const oldData = payload?.old || null;
-				console.log(`[SupabaseRealtime][AllTables] ${eventType} on ${table}`);
+				log.info(`${eventType} on ${table}`);
 				const rawId = newData?.id ?? oldData?.id;
-				if (!rawId || typeof rawId !== "string" || !allTablesEmitter) return;
+				if (!rawId || typeof rawId !== "string" || !allTablesEmitter) {
+					return;
+				}
 				const base = { table, id: rawId };
 				if (eventType === "INSERT") {
 					allTablesEmitter.emit("INSERT", { ...base, newData });

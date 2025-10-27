@@ -1,4 +1,4 @@
-import { useI18n, type NamedValue } from "vue-i18n";
+import { type NamedValue, useI18n } from "vue-i18n";
 
 /**
  * Translation composable
@@ -18,7 +18,7 @@ export function useTranslation() {
 			return null;
 		}
 		if (typeof key === "string") {
-			return !!values ? $t(key, values) : $t(key);
+			return values ? $t(key, values) : $t(key);
 		}
 		return TranslateToLanguage(key, locale.value as LangCode, values) ?? null;
 	};

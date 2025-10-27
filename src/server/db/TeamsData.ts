@@ -1,16 +1,18 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient, GetSupabaseClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
-	teamFromRecords,
 	type TeamModel,
+	teamFromRecords,
 } from "~~/shared/types/models/TeamModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GetSupabaseAdminClient, GetSupabaseClient } from "./DatabaseClient";
 
 /**
  * Custom types for Supabase schema
  */
 export type TeamRecord = Database["coderdojo"]["Tables"]["teams"]["Row"];
+
+const log = useLogger("TeamsData");
 
 /**
  * Data for teams
@@ -24,7 +26,9 @@ export const TeamsData = {
 		includeDeleted: boolean,
 	): Promise<TeamModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const query = supabase
 				.schema("coderdojo")
@@ -37,7 +41,7 @@ export const TeamsData = {
 			const { data: teams, error } = await query;
 
 			if (error || !teams || teams.length === 0) {
-				console.error("Error fetching teams:", error);
+				log.error("Error fetching teams:", undefined, { error });
 				return [];
 			}
 
@@ -66,7 +70,9 @@ export const TeamsData = {
 		teams: TeamModel[],
 	): Promise<TeamModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const teamRecords: TeamRecord[] = teamToRecords(teams);
 			const { data, error } = await supabase
@@ -76,7 +82,7 @@ export const TeamsData = {
 				.select();
 
 			if (error || !data || data.length === 0) {
-				console.error("Error saving teams:", error);
+				log.error("Error saving teams:", { error });
 				return [];
 			}
 
@@ -94,7 +100,9 @@ export const TeamsData = {
 		teamId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")
@@ -103,13 +111,13 @@ export const TeamsData = {
 				.eq("id", teamId);
 
 			if (error) {
-				console.error("Error deleting team:", error);
+				log.error("Error deleting team:", undefined, { error });
 				return false;
 			}
 
 			return true;
 		} catch (error) {
-			console.error(`Error deleting team: ${ErrorToString(error)}`);
+			log.error(`Error deleting team: ${ErrorToString(error)}`);
 			return false;
 		}
 	},

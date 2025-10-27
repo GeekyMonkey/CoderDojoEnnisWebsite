@@ -125,6 +125,7 @@ export default defineNuxtConfig({
 
 	imports: {
 		dirs: [
+			"~~/shared/utils",
 			// "~~/src/app/components",
 			// "~/stores",
 		],
@@ -228,6 +229,7 @@ export default defineNuxtConfig({
 
 	supabase: {
 		redirect: false,
+		types: "~~/types/supabase.ts",
 	},
 
 	typescript: {

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+const log = useLogger("MentorPage");
+
 onMounted(() => {
 	// Trigger the teams data load
-	console.log("Mentor Page Mounted");
+	log.info("Mounted");
 });
 </script>
 

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { type UseColorModeReturn, useColorMode } from "@vueuse/core";
 
 let ColorModeService: UseColorModeReturn<string> | null = null;
+const log = useLogger("UiConfig");
 
 /**
  * Load the UI Config from the server
@@ -13,20 +14,18 @@ export function useUiConfig() {
 	const { data, isLoading, isError, error } = useQuery({
 		queryKey: ["UiConfig"],
 		queryFn: async ({ signal }) => {
-			console.log("Loading UiConfig");
+			log.info("Loading UiConfig");
 			try {
 				const response = await $fetch<ApiResponse<UiConfigModel>>(
 					`/api/Config/UiConfig`,
 					{ signal },
 				);
 				if (!response.success) {
-					debugger;
 					throw new Error(response.error || "api error");
 				}
 				return response.data;
 			} catch (e) {
-				console.error("Error loading UiConfig", e);
-				debugger;
+				log.error("Error loading UiConfig", {}, e);
 				throw e;
 			}
 		},
@@ -41,13 +40,13 @@ export function useUiConfig() {
 		refetchOnMount: false,
 		refetchIntervalInBackground: false,
 		// onResponse: (response) => {
-		// 	console.log("UiConfig response", response);
+		// 	log.info("UiConfig response", response);
 		// },
 		// onSuccess: () => {
-		// 	console.log("UiConfig loaded successfully");
+		// 	log.info("UiConfig loaded successfully");
 		// },
 		// onRequestError({ request, options, error }) {
-		// 	console.error("Request Error loading UiConfig", error);
+		// 	log.error("Request Error loading UiConfig", error);
 		// },
 	});
 

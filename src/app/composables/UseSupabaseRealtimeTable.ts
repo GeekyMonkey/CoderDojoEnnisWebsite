@@ -1,6 +1,6 @@
-import { RealtimeChannel } from "@supabase/supabase-js";
-import { UseSupabaseClient } from "./UseSupabaseClient";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import mitt, { type Emitter } from "mitt";
+import { UseSupabaseClient } from "./UseSupabaseClient";
 
 type DbEventTypes = "INSERT" | "UPDATE" | "DELETE";
 export type DbEvents = {
@@ -10,8 +10,8 @@ export type DbEvents = {
 };
 
 // Singleton values
-let realtimeChannels: Map<string, RealtimeChannel> = new Map();
-let eventEmitters: Map<string, Emitter<DbEvents>> = new Map();
+const realtimeChannels: Map<string, RealtimeChannel> = new Map();
+const eventEmitters: Map<string, Emitter<DbEvents>> = new Map();
 
 /**
  * Supabase Client Composable
@@ -24,6 +24,7 @@ export const UseSupabaseRealtimeTable = ({
 	forceResubscribe?: boolean;
 }) => {
 	const { supabaseClient } = UseSupabaseClient();
+	const log = useLogger(`SupabaseRealtime-${table}`);
 
 	// Do we already have this subscription?
 	const existingChannel = realtimeChannels.get(table);
@@ -42,9 +43,7 @@ export const UseSupabaseRealtimeTable = ({
 	}
 
 	// Subscribe to changes in the specified table
-	console.log(
-		`[UseSupabaseClient] Subscribing to changes in the ${table} table`,
-	);
+	log.info(`Subscribing to changes in the ${table} table`);
 	const channel = supabaseClient
 		.channel(`coderdojo:${table}`)
 		.on(
@@ -53,10 +52,7 @@ export const UseSupabaseRealtimeTable = ({
 			(payload) => {
 				const { eventType, new: newData, old: oldData } = payload;
 				const id = (newData as any)?.id || (oldData as any).id;
-				console.log(
-					`[SupabaseRealtime] ${eventType} received in ${table} table id=${id}`,
-					newData,
-				);
+				log.info(`${eventType} received in ${table} table id=${id}`, newData);
 				let eventData: { id: string; newData?: any; oldData?: any } = {
 					id,
 				};
