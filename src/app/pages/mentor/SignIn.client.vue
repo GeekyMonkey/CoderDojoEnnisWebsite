@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import type { Session } from "@supabase/gotrue-js";
 import { z } from "zod";
 import SessionStats from "~/components/Attendance/SessionStats.vue";
@@ -12,6 +11,7 @@ const router = useRouter();
 const { supabaseClient } = UseSupabaseClient();
 const showPassword = ref(false);
 const errorMessage = ref<string | null>(null);
+const log = useLogger("mentor/SignIn");
 
 // Form Validation & State
 const formSchema = z.object({
@@ -59,7 +59,7 @@ const handleLogin = async () => {
 			password: formState.password,
 		},
 	});
-	console.log("[SignIn] result:", result);
+	log.info("[SignIn] result:", result);
 	if (result.success) {
 		// Clear the form for the next member
 		formState.username = "";
@@ -69,7 +69,7 @@ const handleLogin = async () => {
 		const message: string = result.data?.message || "Welcome!";
 		alert(message); // ToDo: Replace with a nicer UI element
 	} else if (result.error) {
-		console.error("[Login] Error:", result.error);
+		log.error("[Login] Error:", result.error);
 		errorMessage.value = result.error || "Could Not Complete Login";
 	}
 };
@@ -77,76 +77,64 @@ const handleLogin = async () => {
 
 
 <template>
-	<div class="LoginPage flex flex-col md:flex-row gap-6 items-start justify-center w-full">
-		<Card class="w-full max-w-md">
-			<CardHeader>
-				<CardTitle>
+	<div class="LoginPage">
+		<div>
+			<div>
+				<h1>
 					<Translated t="signIn.title" />
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
+				</h1>
+			</div>
+			<div>
 				<form @submit.prevent="handleLogin">
-					<FormItem>
-						<Label for="username">
+					<div>
+						<label for="username">
 							<Translated t="login.username" />
-						</Label>
-						<Input
+						</label>
+						<input
 							type="text"
 							id="username"
 							v-model="formState.username"
 							required
-							@onkeypress="clearErrorMessage()"
+							@keypress="clearErrorMessage()"
 						/>
-					</FormItem>
+					</div>
 
-					<FormItem>
-						<Label for="password">
+					<div>
+						<label for="password">
 							<Translated t="login.password" />
-						</Label>
-						<div class="InputWithButton">
-							<Input
+						</label>
+						<div>
+							<input
 								:type="showPassword ? 'text' : 'password'"
 								id="password"
 								v-model="formState.password"
 								required
-								@onkeypress="clearErrorMessage()"
+								@keypress="clearErrorMessage()"
 							/>
-							<Button
+							<UButton
 								type="button"
 								@click="togglePasswordVisibility"
-								variant="icon"
-								icon
 							>
-								<Icon
-									:icon="
-										showPassword
+								<NuxtIcon :name="showPassword
 											? 'mdi:show'
-											: 'mdi-show-outline'
-									"
-									class="ToggleIcon w-5 h-5"
-								/>
-							</Button>
+											: 'mdi-show-outline'" />
+							</UButton>
 						</div>
-					</FormItem>
+					</div>
 
-					<Button
+					<UButton
 						type="submit"
-						class="w-full"
-						variant="default"
-						size="lg"
 					>
 						{{ $t("signIn.signInButton") }}
-					</Button>
+					</UButton>
 
-					<div v-if="errorMessage" class="mt-2">
-						<Alert variant="destructive">
-							{{ errorMessage }}
-						</Alert>
+					<div v-if="errorMessage">
+						{{ errorMessage }}
 					</div>
 				</form>
-			</CardContent>
-		</Card>
-		<div class="w-full max-w-md">
+			</div>
+		</div>
+		<div>
 			<SessionStats />
 		</div>
 	</div>

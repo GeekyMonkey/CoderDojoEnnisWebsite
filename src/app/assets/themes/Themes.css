@@ -3,3 +3,10 @@
 @import "./neon/neon.css";
 
 @layer base, theme;
+
+@layer theme {
+	html body  {
+		/* Nuxt UI */
+		--ui-bg: var(--background-color);
+	}
+}

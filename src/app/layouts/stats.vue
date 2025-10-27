@@ -6,10 +6,10 @@
 			<slot />
 		</main>
 
-		<Menubar class="bg-transparent border-0">
+		<ButtonGroup>
 			<ThemeSelect />
 			<LanguageSelect />
-		</Menubar>
+		</ButtonGroup>
 	</div>
 </template>
 

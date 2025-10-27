@@ -18,6 +18,7 @@ CoderDojo Ennis Website is a modern, maintainable platform for managing CoderDoj
 ### Code Style
 Use TypeScript for all new code.
 Vue/Nuxt components for all features (unless static HTML is required).
+Use NuxtUI for UI components.
 TailwindCSS used sparingly, only in reusable components.
 Prefer reusable CSS style classes over Tailwind or inline styles.
 Clean, well-documented code; avoid duplication.
@@ -58,5 +59,6 @@ Compliance with public contribution and review standards.
 Supabase (database, authentication)
 Cloudflare Workers (serverless backend)
 TailwindCSS (used sparingly, only in reusable components)
+NuxtUI (UI components)
 Vitest (testing)
 pnpm (package management)

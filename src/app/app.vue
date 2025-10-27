@@ -5,7 +5,9 @@ const { UiConfig } = useUiConfig();
 
 <template>
 	<NuxtLayout>
+		<UApp>
 		<NuxtPage />
+		</UApp>
 	</NuxtLayout>
 	<ThemesThemeFooter />
 </template>

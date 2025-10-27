@@ -1,5 +1,5 @@
 @layer theme {
-	[theme="bright"] body {
+	html[theme="bright"] body {
 		/* ShadCn */
 		--background-color: #ddd;
 		--foreground-color: #111;

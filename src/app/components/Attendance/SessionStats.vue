@@ -34,7 +34,9 @@ const hasMembers = computed(
       <li v-for="id in memberIds" :key="id">{{ id }}</li>
     </ul>
     <div v-else class="status empty">No members signed in yet.</div>
-    <div class="actions"><Button size="xs" variant="outline" @click="refetchCurrent">Refresh</Button></div>
+    <div class="actions">
+      <UButton size="xs" variant="outline" @click="refetchCurrent">Refresh</UButton>
+    </div>
   </div>
 </template>
 

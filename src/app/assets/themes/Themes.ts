@@ -5,5 +5,8 @@ import brightTheme from "./bright/bright";
 import crtTheme from "./crt/crt";
 import neonTheme from "./neon/neon";
 
+const log = useLogger("Themes");
+
 export const Themes: ThemeModel[] = [brightTheme, crtTheme, neonTheme];
-console.log("Themes: " + JSON.stringify(Themes));
+log.info("Hard coded themes ",{ Themes });
+	

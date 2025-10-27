@@ -43,14 +43,16 @@ export default defineNuxtConfig({
 
 	compatibilityDate: "2025-05-15",
 
-	components: true,
-
-	css: [
-		"~/assets/css/tailwind.scss",
-		"~/assets/css/shadcn.scss",
-		"~/assets/css/app.scss",
-		"~/assets/themes/Themes.css",
+	components: [
+		{ path: "~/components", pathPrefix: false },
+		{ path: "~/components/Attendance", pathPrefix: false },
+		{ path: "~/components/Common", pathPrefix: false },
+		{ path: "~/components/Modals", pathPrefix: false },
+		{ path: "~/components/Teams", pathPrefix: false },
+		{ path: "~/components/Themes", pathPrefix: false },
 	],
+
+	css: ["~/assets/css/app.css", "~/assets/themes/Themes.css"],
 
 	devtools: { enabled: false },
 
@@ -73,6 +75,9 @@ export default defineNuxtConfig({
 	},
 
 	i18n: {
+		bundle: {
+			optimizeTranslationDirective: false,
+		},
 		detectBrowserLanguage: {
 			alwaysRedirect: false,
 			cookieCrossOrigin: true,
@@ -133,19 +138,14 @@ export default defineNuxtConfig({
 	},
 
 	modules: [
-		// "@nuxt/image",
-		// "@primevue/nuxt-module",
-		// "@nuxt/scripts",
-		// "@hebilicious/vue-query-nuxt",
 		"@nuxt/icon",
+		"@nuxt/ui",
 		"@nuxtjs/color-mode",
 		"@nuxtjs/google-fonts",
 		"@nuxtjs/i18n",
 		"@nuxtjs/supabase",
-		"@nuxtjs/tailwindcss",
 		"@vueuse/nuxt",
 		"nitro-cloudflare-dev",
-		"shadcn-nuxt",
 	],
 
 	nitro: {
@@ -223,18 +223,6 @@ export default defineNuxtConfig({
 		},
 	},
 	// serverMiddleware: [],
-
-	shadcn: {
-		/**
-		 * Prefix for all the imported component
-		 */
-		prefix: "",
-
-		/**
-		 * Directory that the component lives in.
-		 */
-		componentDir: "./app/components/ui",
-	},
 
 	ssr: false,
 

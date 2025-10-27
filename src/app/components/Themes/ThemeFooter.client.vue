@@ -6,7 +6,7 @@ const currentThemeName = computed<string>(() => CurrentTheme.value?.id || "");
 <template>
 	<Teleport to="body">
 		<div id="ThemeFooter" :data-theme="currentThemeName">
-			<ThemesTheme_crt v-if="currentThemeName === 'crt'" />
+			<Theme_crt v-if="currentThemeName === 'crt'" />
 		</div>
 	</Teleport>
 </template>

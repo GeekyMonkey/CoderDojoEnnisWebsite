@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import type { Session } from "@supabase/gotrue-js";
 import { z } from "zod";
 
@@ -65,7 +64,7 @@ const handleLogin = async () => {
 		const userRef = useSupabaseUser();
 		const user = await waitForRefValue(userRef, 5000);
 
-		if (!!user) {
+		if (user) {
 			// todo - save member and session in the store?
 			// This will continue with a redirect to the /logged_in page
 			console.log("[Login] User:", user);
@@ -81,75 +80,62 @@ const handleLogin = async () => {
 </script>
 
 <template>
-	<div class="LoginComponent flex items-center justify-center">
-		<Card class="w-full max-w-md">
-			<CardHeader>
-				<CardTitle>
+	<div class="LoginComponent">
+		<div>
+			<div>
+				<h1>
 					<Translated t="login.title" />
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
+				</h1>
+			</div>
+			<div>
 				<form @submit.prevent="handleLogin">
-					<FormItem>
-						<Label for="username">
+					<div>
+						<label for="username">
 							<Translated t="login.username" />
-						</Label>
-						<Input
+						</label>
+						<input
 							type="text"
 							id="username"
 							v-model="formState.username"
 							required
-							@onkeypress="clearErrorMessage()"
+							@keypress="clearErrorMessage()"
 						/>
-					</FormItem>
+					</div>
 
-					<FormItem>
-						<Label for="password">
+					<div>
+						<label for="password">
 							<Translated t="login.password" />
-						</Label>
-						<div class="InputWithButton">
-							<Input
+						</label>
+						<div>
+							<input
 								:type="showPassword ? 'text' : 'password'"
 								id="password"
 								v-model="formState.password"
 								required
-								@onkeypress="clearErrorMessage()"
+								@keypress="clearErrorMessage()"
 							/>
-							<Button
-								type="button"
+							<UButton
 								@click="togglePasswordVisibility"
-								variant="icon"
-								icon
 							>
-								<Icon
-									:icon="
-										showPassword
+								<NuxtIcon :name="showPassword
 											? 'mdi:show'
-											: 'mdi-show-outline'
-									"
-									class="ToggleIcon w-5 h-5"
-								/>
-							</Button>
+											: 'mdi-show-outline'" />
+							</UButton>
 						</div>
-					</FormItem>
+					</div>
 
-					<Button
+					<UButton
 						type="submit"
-						class="w-full"
-						variant="default"
-						size="lg"
 					>
 						{{ $t("login.loginButton") }}
-					</Button>
+					</UButton>
 
-					<div v-if="errorMessage" class="mt-2">
-						<Alert variant="destructive">
-							{{ errorMessage }}
-						</Alert>
+					<div v-if="errorMessage">
+						{{ errorMessage }}
 					</div>
 				</form>
-			</CardContent>
-		</Card>
+			</div>
+		</div>
 	</div>
 </template>
 

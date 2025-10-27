@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+</script>
 
 <template>
 	<div class="AuthLayout flex min-h-screen w-full">
@@ -6,10 +8,10 @@
 			<slot />
 		</main>
 
-		<Menubar class="bg-transparent border-0">
+		<ButtonGroup>
 			<ThemeSelect />
 			<LanguageSelect />
-		</Menubar>
+		</ButtonGroup>
 	</div>
 </template>
 
