@@ -79,7 +79,11 @@
   ],
   "git.blame.statusBarItem.enabled": true,
   "cSpell.words": [
+    "coderdojo",
+    "iconify",
+    "nuxtjs",
     "parallelizable",
-    "Supabase"
+    "Supabase",
+    "vueuse"
   ]
 }
