@@ -1,0 +1,68 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = member.MemberName;
+    ViewBag.MenuActive = "MyKids";
+}
+
+
+@section HeaderLeft
+{
+<a data-role="button" data-icon="tag" id="PrintButton">Print ID</a>
+}
+
+@section HeaderRight
+{
+    <a data-role="button" data-icon="tag" id="PrintButton">Print ID</a>
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_ParentMenu")
+}
+
+@Html.Partial("_MemberMenu")
+
+@Html.Partial("_ImageEditable", "Member_" + member.Id.ToString("N"))
+
+<div data-role="content">
+    <div data-role="fieldcontain">
+        <label>Birth Year: @member.BirthYear</label>
+    </div>
+    <div data-role="fieldcontain">
+        <label>Sessions Attended: @member.MemberAttendances.Count()</label>
+    </div>
+
+    @if (!string.IsNullOrEmpty(member.ScratchName)) {
+        <div data-role="fieldcontain">
+            <a href="http://scratch.mit.edu/users/@(member.ScratchName)" data-role="button" data-icon="scratch" data-iconpos="right" data-inline="true" target="_blank">@(member.FirstName)'s Scratch page</a>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(member.GithubLogin)) {
+        <div data-role="fieldcontain">
+            <a href="https://github.com/@(member.GithubLogin)/" data-role="button" data-icon="github" data-iconpos="right" data-inline="true" target="_blank">@(member.FirstName)'s GitHub page</a>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(member.XboxGamertag)) {
+        <div data-role="fieldcontain">
+            <a href="https://live.xbox.com/en-IE/Profile?gamertag=@(member.XboxGamertag)" data-role="button" data-icon="xbox" data-iconpos="right" data-inline="true" target="_blank">@(member.FirstName)'s XBox page</a>
+            <img src="https://avatar-ssl.xboxlive.com/avatar/@(member.XboxGamertag)/avatarpic-l.png" style="vertical-align:middle;margin-left: 50px;" />
+        </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#PrintButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            window.openNewWindow("/Passport/@(member.Id.ToString("N"))");
+        });
+
+    });
+</script>

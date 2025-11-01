@@ -1,0 +1,255 @@
+﻿.Controller_Mentor.Action_Attendance .ui-li-static
+{
+    padding: 0px;
+}
+.Controller_Mentor.Action_Attendance .ui-li-static label
+{
+    margin: 0px;
+}
+.Controller_Mentor.Action_Attendance .ui-li-static label > span
+{
+    margin: 0px;
+}
+.Controller_Mentor.Action_Attendance .ui-checkbox,
+.Controller_Mentor.Action_Attendance .ui-btn-corner-all
+{
+    border-radius: 0px;
+}
+
+.CoderDojoLogo {
+    background-image: url("../Images/YingYang32.png");
+    width: 32px;
+    height: 32px;
+    float: right;
+    margin-left: 5px;
+}
+
+.ui-icon-xbox {
+    background-image: url("../Images/Icons/xbox-18.png");
+}
+.ui-icon-scratch {
+    background-image: url("../Images/Icons/scratch-18.png");
+}
+.ui-icon-github {
+    background-image: url("../Images/Icons/github-18.png");
+}
+
+blockquote {
+    font-style: italic;
+    font-family: serif;
+}
+
+em {
+    font-style: italic;
+    font-family: serif;
+    display: inline-block;
+    padding-left: 20px;
+    padding-top: 4px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.ErrorMessage {
+    color: #f44;
+    padding: 20px;
+    margin: 10px;
+    display: none;
+}
+
+.BeltRejection {
+    border-bottom: dashed 1px #888;
+    padding-bottom: 0px;
+    margin-bottom: 20px;
+}
+
+
+@media (min-width:600px) {
+
+    /* wrap on wide viewports once open */
+
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+        margin-right: 17em;
+    }
+
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-right,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-right {
+        margin-left: 17em;
+    }
+
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-push,
+    .ui-responsive-panel.ui-page-panel-open .ui-panel-content-fixed-toolbar-display-reveal {
+        width: auto;
+    }
+
+    /* disable "dismiss" on wide viewports */
+    .ui-responsive-panel .ui-panel-dismiss-display-push {
+        display: none;
+    }
+
+    /* Show the panel */
+    .ui-panel-closed {
+        width: 17em;
+        visibility: visible;
+    }
+
+    .ui-responsive-panel.ui-page-panel-closed .ui-panel-content-fixed-toolbar-display-push.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-closed .ui-panel-content-fixed-toolbar-display-reveal.ui-panel-content-fixed-toolbar-position-left,
+    .ui-responsive-panel.ui-page-panel-closed .ui-panel-content-wrap-display-push.ui-panel-content-wrap-position-left,
+    .ui-responsive-panel.ui-page-panel-closed .ui-panel-content-wrap-display-reveal.ui-panel-content-wrap-position-left {
+        margin-right: 17em;
+    }
+
+    .ui-panel-content-wrap-closed {
+        position: relative;
+        margin-left: 17em;
+    }
+    .ui-footer {
+        margin-left: 17em;
+    }
+
+    #PanelClose {
+        display: none;
+    }
+
+    #ShowMenuButton {
+        display: none;
+    }
+}
+
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, .ui-li-has-thumb.ui-li-static {
+    min-height: 0;
+    padding-left: 50px;
+}
+
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit img, .ui-li-static.ui-li-has-thumb img {
+    max-width: 40px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+}
+
+.ui-btn-text img
+{
+    margin-left: 6px;
+    max-width: 40px;
+    max-height: 24px;
+    width: auto;
+    height: auto;
+    vertical-align: middle;
+}
+
+ul#TeamMembers li {list-style-type: none;}
+
+
+
+.BeltStripe {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    bottom: 0;
+    display: block;
+    width: 10px;
+    z-index: 2;
+}
+
+.Present .BeltStripe:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    border-radius: 5px;
+    border: solid 1px black;
+    background-color: lime;        
+}
+
+li.MemberListItem.NotRegistered a.ui-link-inherit,
+li.ApplicationListItem.NotRegistered a.ui-link-inherit {
+    color: #666 !important;
+}
+
+.Checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .Checkboxes .Checkbox {
+        flex-grow: 1;
+        min-width: 300px;
+    }
+
+        .Checkboxes .Checkbox label {
+            color: blue;
+        }
+
+        .Checkboxes .Checkbox input {
+            color: green;
+        }
+
+
+/*---- Sessions ----*/
+
+@keyframes PodKeyframes {
+  0%   {background-size:110%}
+  50%  {background-size:100%}
+  100% {background-size:110%}
+}
+
+#SessionList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.SessionCard {
+    flex-grow: 1;
+    margin: 10px;
+    padding: 0 10px;
+    border: solid 1px #0f0;
+    border-radius: 30px;
+    box-shadow: rgba(0,255,0, 0.4) 0px 0px 20px;
+    max-width: 600px;
+    text-align: center;
+    background-color: #202820;
+    background-image: url(/Content/Images/pod.jpg);
+    background-size: 105%;
+    background-position: center center;
+    animation-name: PodKeyframes;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    background-repeat: repeat;
+    animation-timing-function: ease-in-out;
+}
+
+.SessionCard.MentorsOnly {
+    border-color: #f00;
+    box-shadow: rgba(255,0,0, 0.4) 0px 0px 20px;
+}
+
+.HostCards {
+    display: flex;
+    flex-direction: row;
+}
+
+.HostCard {
+    flex-grow: 1;
+    margin: 5px;
+    padding: 5px;
+    /*border: solid 1px #004400;*/
+}
+
+    .HostCard img {
+        height: 40px;
+        height: 50px;
+        display: block;
+        margin: 0 auto 5px;
+    }

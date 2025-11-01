@@ -1,0 +1,51 @@
+﻿@model List<CoderDojo.Adult>
+@{
+    List<CoderDojo.Adult> adults = Model;
+    string adultMode = ViewBag.AdultMode;
+    ViewBag.MenuActive = adultMode + "s";
+}
+
+@section HeaderLeft
+{
+    @if (adultMode == "Mentor") {
+        <a data-role="button" data-icon="tag" id="PrintButton">Print IDs</a>
+    }
+}
+
+@section HeaderRight
+{
+    <a href="AdultSignup?AdultMode=@(adultMode)" data-role="button" data-icon="plus">Signup</a>
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<div class="content-primary">
+    <ul data-role="listview" data-autodividers="true" id="myFilter" data-filter="true" data-filter-placeholder="Search..." data-filter-theme="a">
+        @foreach (CoderDojo.Adult m in adults)
+        {
+            string memId = m.Id.ToString("N");
+            <li>
+                <a href="Adult/@(memId)" class="ThumbListItem">
+                    <img data-src="@m.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                    <span>@m.FullName</span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+<script typeof="text/javascript">
+    $(function () {
+        $("#PrintButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            window.openNewWindow("/PassportMentor/");
+        });
+    });
+</script>

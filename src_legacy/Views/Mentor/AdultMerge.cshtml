@@ -1,0 +1,179 @@
+﻿@model CoderDojo.Adult
+@{
+    CoderDojo.Adult adult = Model;
+    ViewBag.Title = "Merge " + adult.FullName;
+    ViewBag.MenuActive = Request["AdultMode"] + "s";
+    ViewBag.ParentMenuActive = "Merge";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<style>
+    table {
+        width:100%;
+        vertical-align:top;
+    }
+
+    tr td {
+        border-top: solid 1px #777;
+    }
+        thead tr td {
+            border-top: none;
+        }
+    td {
+        padding: 10px;
+        vertical-align: top;
+        border-left: solid 1px #777;
+        width: 40%;
+        position: relative;
+    }
+    td:first-child {
+        border-left: none;
+        width: 20%;
+    }
+        td input[type=radio]{
+            width: 15px;
+            height: 15px;
+        }
+
+    .MergeTable td:nth-child(2) input[type=radio] {
+            float: right;
+        
+    }
+    .MergeTable tbody td:nth-child(3) {
+        -moz-transition: 1s;
+        -o-transition: 1s;
+        -webkit-transition: 1s;
+        transition: 1s;
+        opacity: 0;
+    }
+    .MergeTable tbody td:nth-child(3) label {
+        float: right;
+    }
+    .MergeTable.AdultSelected tbody td:nth-child(3) {
+        opacity: 1;
+    }
+</style>
+
+<input type="hidden" id="AdultId" value="@adult.Id.ToString("N")" />
+<table class="MergeTable">
+    <thead>
+        <tr>
+            <td></td>
+            <td>
+                <h3>@adult.FullName</h3>
+            </td>
+            <td>
+                <h3>Select account to merge</h3>
+                <ul id="AdultSelect" data-role="listview" data-autodividers="false" data-filter-reveal="true" data-filter-placeholder="Search Adults" data-corners="true" data-inset="true" data-filter="true"></ul>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Phone:</td>
+            <td><label for="Phone1" data-role="none">@adult.Phone</label><input id="Phone1" type="radio" name="Phone" value="0" checked="checked" data-role="none" /></td>
+            <td><input id="Phone2" type="radio" name="Phone" data-role="none" value="1" /><label for="Phone2" data-role="none"></label></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><label for="Email1" data-role="none">@adult.Email</label><input type="radio" name="Email" id="Email1" value="0" checked="checked" data-role="none" /></td>
+            <td><input type="radio" name="Email" id="Email2" data-role="none" value="1" /><label for="Email2" data-role="none"></label></td>
+        </tr>
+    </tbody>
+</table>
+
+<input type="button" id="MergeButton" value="Merge These Accounts" disabled="disabled" />
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        var adults = [];
+        var adultId = $("#AdultId").val();
+        var selectedAdult;
+
+        // Search for other adult
+        $("#AdultSelect").on("listviewbeforefilter", function (e, data) {
+            var $ul = $(this),
+                $input = $(data.input),
+                value = $input.val(),
+                html = "";
+            $ul.html("");
+            $("#MergeButton").button("disable");
+            $(".MergeTable").removeClass("AdultSelected");
+            if (value && value.length > 2) {
+                $.mobile.showPageLoadingMsg(true);
+                $.ajax({
+                    url: "/Mentor/SearchAdultMergeByName",
+                    dataType: "json",
+                    crossDomain: false,
+                    data: {
+                        name: $input.val(),
+                        adultId: adultId
+                    }
+                })
+                .then(function (response) {
+                    adults = response;
+                    $.each(adults, function (i, adult) {
+                        html += "<li data-icon='add' data-icon-position='right'><a href='#' data-adultid='" + adult.Id + "'>" + adult.FirstName + " " + adult.LastName + "</a></li>";
+                    });
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+                    $.mobile.hidePageLoadingMsg();
+                });
+            }
+        });
+
+        // Other adult selected
+        $("#AdultSelect").on("click", "a", function (e) {
+            e.preventDefault();
+
+            $(".MergeTable").addClass("AdultSelected");
+            $("#MergeButton").button("enable");
+
+            $.each(adults, function (index, a) {
+                if (a.Id == $(e.target).data("adultid")) {
+                    selectedAdult = a;
+                }
+            });
+
+            $("label[for='Phone2']").html(selectedAdult.Phone);
+            $("label[for='Email2']").html(selectedAdult.Email);
+        });
+
+        // Merge button clicked
+        $("#MergeButton").on("click", function (e) {
+
+            $.ajax("/Mentor/MergeAdults", {
+                type: "POST",
+                data: {
+                    adultId: $("#AdultId").val(),
+                    mergeId: selectedAdult.Id,
+                    newPhone: $("input[type='radio'][name='Phone']:checked").val(),
+                    newEmail: $("input[type='radio'][name='Email']:checked").val()
+                }
+            })
+            .then(function (response) {
+                window.location = "/Mentor/Adult/" + $("#AdultId").val();
+            });
+        });
+    });
+</script>

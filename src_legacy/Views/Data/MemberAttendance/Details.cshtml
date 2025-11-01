@@ -1,0 +1,29 @@
+﻿@model CoderDojo.MemberAttendance
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>MemberAttendance</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Member.FirstName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Member.FirstName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Date)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Date)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

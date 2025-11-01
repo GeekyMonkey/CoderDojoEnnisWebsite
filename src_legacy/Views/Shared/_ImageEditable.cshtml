@@ -1,0 +1,186 @@
+﻿@model string
+@{
+    string fileName = Model;
+    string ImageUrl = System.Configuration.ConfigurationManager.AppSettings["ImageUrl"];
+}
+
+<style>
+    #EntityImage {
+        position: relative;
+    }
+
+    #holder {
+        border: 10px dashed #CCC;
+        width: 300px;
+        max-width: 90%;
+        min-height: 100px;
+        margin: 20px auto;
+        position: relative;
+    }
+
+        #holder.disabled {
+            border-width: 0;
+        }
+
+        #holder.hover {
+            border: 10px dashed #0c0;
+        }
+
+        #holder img {
+            position: relative;
+            z-index: 2;
+            display: block;
+            margin: 1px;
+            width: 100%;
+        }
+
+        #holder p {
+            margin: 10px;
+            font-size: 14px;
+        }
+
+        #ImageInstructions {
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            margin-top: -10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        #ImageInstructions span {
+            display: inline-block;
+            width: 30%;
+            text-align: center;
+            line-height: 1.5;
+            color: silver;
+        }
+
+    progress {
+        width: 200px;
+        left: 50%;
+        margin-left: -100px;
+        position: absolute;
+        bottom: 11px;
+        display: none;
+        color: blue;
+    }
+
+        progress:after {
+            content: '%';
+        }
+
+    .fail {
+        background: #c00;
+        padding: 2px;
+        color: #FFF;
+    }
+
+    #upload {
+        scale: 60%;
+        margin-top: -25px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>
+
+<div id="EntityImage">
+    <div id="holder">
+        <div id="ImageInstructions">
+            <span id="DropMessage">Drop an image here.</span>
+        </div>
+        <img src="@(ImageUrl)@(fileName).jpg" />
+    </div>
+    <p id="upload"><label>Upload Image:<br><input type="file"></label></p>
+    <progress id="uploadprogress" min="0" max="100" value="0">0</progress></p>
+</div>
+
+<script>
+    var holder = document.getElementById('holder'),
+        tests = {
+            filereader: typeof FileReader != 'undefined',
+            dnd: 'draggable' in document.createElement('span'),
+            formdata: !!window.FormData,
+            progress: "upload" in new XMLHttpRequest
+        },
+        acceptedTypes = {
+            'image/png': true,
+            'image/jpeg': true,
+            'image/gif': true
+        },
+        progress = document.getElementById('uploadprogress'),
+        fileupload = document.getElementById('upload');
+
+    // IE9 doesn't support these
+    "filereader formdata progress".split(' ').forEach(function (api) {
+        if (tests[api] === false) {
+            $("#Holder").addClass("disabled");
+        }
+    });
+
+    function previewfile(file) {
+        if (tests.filereader === true && acceptedTypes[file.type] === true) {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                $("#holder img").show().attr("src", event.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function readfiles(files) {
+
+        var formData = tests.formdata ? new FormData() : null;
+        var i = 0;
+        //for (var i = 0; i < files.length; i++) {
+            if (tests.formdata) {
+                formData.append('file', files[i]);
+            }
+            previewfile(files[i]);
+        //}
+
+        // now post a new XHR request
+        if (tests.formdata) {
+            formData.append("filename", '@(fileName)');
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Home/ImageUpload');
+            $("#uploadprogress").fadeIn();
+            xhr.onload = function () {
+                progress.value = progress.innerHTML = 100;
+                $("#uploadprogress").fadeOut();
+            };
+
+            if (tests.progress) {
+                xhr.upload.onprogress = function (event) {
+                    if (event.lengthComputable) {
+                        var complete = (event.loaded / event.total * 100 | 0);
+                        progress.value = progress.innerHTML = complete;
+                    }
+                }
+            }
+
+            xhr.send(formData);
+        }
+    }
+
+    if (tests.dnd) {
+        holder.ondragover = function () { this.className = 'hover'; return false; };
+        holder.ondragend = function () { this.className = ''; return false; };
+        holder.ondrop = function (e) {
+            this.className = '';
+            e.preventDefault();
+            readfiles(e.dataTransfer.files);
+        }
+    } else {
+        // fileupload.className = '';
+        $("#DropMessage").hide();
+    }
+
+    fileupload.querySelector('input').onchange = function () {
+        readfiles(this.files);
+    };
+
+</script>

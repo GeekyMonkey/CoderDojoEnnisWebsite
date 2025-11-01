@@ -1,0 +1,97 @@
+﻿@model List<CoderDojo.Badge>
+@{
+    Member member = ViewBag.CurrentMember;
+    List<CoderDojo.Badge> badges = Model;
+    ViewBag.Title = "Badges";
+    ViewBag.MenuActive = "Badges";
+    List<MemberBadge> MemberBadges = member.MemberBadges
+        .Where(mb => mb.Awarded != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<MemberBadge> MemberBadgesPending = member.MemberBadges
+        .Where(mb => mb.Awarded == null && mb.RejectedDate == null && mb.ApplicationDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<Guid> BadgesEarnedIds = MemberBadges.Select(mb => mb.BadgeId).ToList();
+    List<Guid> BadgesPendingIds = MemberBadgesPending.Select(mb => mb.BadgeId).ToList();
+    List<Badge> BadgesNotEarned = badges.Where(b => BadgesEarnedIds.Contains(b.Id) == false && b.Deleted == false && BadgesPendingIds.Contains(b.Id) == false).ToList();
+    List<Badge> BadgesApplied = badges.Where(b => BadgesPendingIds.Contains(b.Id) == true).ToList();
+    MemberBadge badgePending;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+@if (BadgesApplied.Count() > 0)
+{
+    <div data-role="collapsible-set" data-corners="true" data-inset="true">
+        <h3>Badge Applications</h3>
+        @foreach (var badge in BadgesApplied)
+        {
+            <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+                <h3>@(badge.BadgeCategory.CategoryName) - @(badge.Achievement)</h3>
+                <div data-role="fieldcontain">
+                    <p>@badge.Description</p>
+                    @* Rejections *@
+                    @foreach (var rejection in member.MemberBadges
+                        .Where(mb => (mb.BadgeId == badge.Id) && (mb.RejectedDate != null))
+                        .OrderBy(mb => mb.RejectedDate))
+                    {
+                        <div class="BadgeRejection">
+                            <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                            <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                        </div>
+                    }
+
+                    @* Application Pending *@
+                    @{ badgePending = MemberBadgesPending.FirstOrDefault(mb => mb.BadgeId == badge.Id);}
+                    <p>Application for the @(badge.BadgeCategory.CategoryName) - @(badge.Achievement) badge was submitted on @(badgePending.ApplicationDate.Value.ToString("dd-MMM-yyyy")). Talk to a mentor to find out what's up.</p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<div data-role="collapsible-set" data-corners="true" data-inset="true">
+    <h3>Badges Earned</h3>
+    @if (MemberBadges.Count() == 0)
+    {
+        <p>You have not yet earned any badges.</p>
+    }
+    @foreach (var memberBadge in MemberBadges)
+    {
+        <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+            <h3>@(memberBadge.Badge.BadgeCategory.CategoryName) - @(memberBadge.Badge.Achievement)</h3>
+            <div data-role="fieldcontain">
+                <p>@memberBadge.Badge.Description</p>
+                <blockquote>@memberBadge.ApplicationNotes</blockquote>
+                <p>Awarded on @memberBadge.Awarded.Value.ToString("dd-MMM-yyyy")</p>
+                <blockquote>@memberBadge.AwardedNotes - @memberBadge.AwardedByAdult.FullName</blockquote>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿@model CoderDojo.LoginModel
+@{
+    ViewBag.Title = "Ennis CoderDojo";
+    ViewBag.HideMenuButton = true;
+}
+
+@section HeaderLeft
+{
+}
+
+@using (Html.BeginForm("Login", "Home")) {
+    <label for="UsernameInput">User</label>
+    @Html.TextBoxFor(x => x.Username, new { @class = "AutoFocus" })
+    
+    <label for="PassowrdInput">Password</label>
+    @Html.PasswordFor(x => x.Password)
+
+    <input type="hidden" name="returnurl" value='@Request.QueryString["returnurl"]' />
+
+    @*
+    <label for="Remember">Remember Me</label>
+    @Html.CheckBoxFor(x => x.Remember)
+    *@
+    
+    <div class="validation-summary-errors">@ViewBag.ValidationMessage</div>
+    <input type="submit" id="LoginButton" value="Login" data-icon="check" />
+    
+    @Html.AntiForgeryToken()
+}

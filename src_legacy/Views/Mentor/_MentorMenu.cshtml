@@ -1,0 +1,55 @@
+﻿@{
+    string sessionTitle = System.Configuration.ConfigurationManager.AppSettings["SessionMenuTitle"];
+    string sessionsTitle = System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"];
+    string activePage = ViewBag.MenuActive;
+    string activeClass = "ui-btn-active ui-state-persist";
+    string inactiveClass = "";
+}
+
+<div data-role="panel" data-postion-fixed="true" id="LeftMenu" data-theme="a" class="nav-search">
+        
+    <div data-role="controlgroup" data-type="horizontal" id="PanelClose">
+        <a href="#" data-rel="close" data-role="button" data-icon="arrow-l">Close Menu</a>
+    </div>
+
+    <ul data-role="listview" data-inset="true">
+        <li>@Html.ActionLink("Home", "Index", "Mentor", null, new { @class = (activePage == "Index" ? activeClass : inactiveClass) })</li>
+        <li>@Html.ActionLink("Attendance", "Attendance", "Mentor", null, new { @class = (activePage == "Attendance" ? activeClass : inactiveClass) })</li>
+        <li>@Html.ActionLink("Members", "Members", "Mentor", null, new { @class = (activePage == "Members" ? activeClass : inactiveClass) })</li>
+        <li>@Html.ActionLink("Parents", "Parents", "Mentor", null, new { @class = (activePage == "Parents" ? activeClass : inactiveClass) })</li>
+        <li>@Html.ActionLink("Mentors", "Mentors", "Mentor", null, new { @class = (activePage == "Mentors" ? activeClass : inactiveClass) })</li>
+        <!--<li><a href="http://webhub.coderdojoennis.com/editor">Web Hub</a></li>-->
+        <li>@Html.ActionLink(@System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"], "Sessions", "Mentor", null, new { @class = (activePage == sessionsTitle ? activeClass : inactiveClass) })</li>
+    </ul>
+
+    <div data-role="collapsible" data-content-theme="a">
+        <h3>Maintenance</h3>
+        <ul data-role="listview" data-inset="true">
+            <li>@Html.ActionLink("Belts", "Belts", "Mentor", null, new { @class = (activePage == "Belts" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Badges", "Badges", "Mentor", null, new { @class = (activePage == "Badges" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Badge Categories", "BadgeCategories", "Mentor", null, new { @class = (activePage == "BadgeCategories" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Teams", "Teams", "Mentor", null, new { @class = (activePage == "Teams" ? activeClass : inactiveClass) })</li>
+            <li></li>
+            <li>@Html.ActionLink("Purge Members", "DataCleanup", "Mentor", null, new { @class = (activePage == "DataCleanup" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Purge Registrations", "PurgeRegistrations", "Mentor", null, new { @class = (activePage == "PurgeRegistrations" ? activeClass : inactiveClass) })</li>
+        </ul>
+    </div>
+
+    <div data-role="collapsible" data-content-theme="a">
+        <h3>Reports</h3>
+        <ul data-role="listview" data-inset="true">
+            <li>@Html.ActionLink("Parent Emails CSV", "ExportParentEmails", "Mentor", null, new { target = "_blank", @class = (activePage == "ExportParentEmails" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Mentor Email CSV", "ExportMentorEmails", "Mentor", null, new { target = "_blank", @class = (activePage == "ExportMentorEmails" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Recent Belts", "RecentBelts", "Mentor", null, new { @class = (activePage == "RecentBelts" ? activeClass : inactiveClass) })</li>
+            <li>@Html.ActionLink("Recent Belts CSV", "RecentBeltsCsv", "Mentor", null, new { target = "_blank", @class = (activePage == "RecentBeltsCsv" ? activeClass : inactiveClass) })</li>
+        </ul>
+    </div>
+
+    <div data-role="controlgroup" data-type="vertical">
+        @if (ViewBag.CurrentAdult.IsParent) {
+                @Html.ActionLink("Parent Mode", "Index", "Parent", null, new { data_role="button", data_icon="star" })
+        }
+        <a href="/Mentor/SignInMode" data-icon="signin" data-role="button">Sign In Mode</a>
+        <a href="/Home/LogOut" data-icon="delete" data-role="button">Log Out</a>
+    </div>
+</div>

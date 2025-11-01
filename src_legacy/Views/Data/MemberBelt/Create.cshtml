@@ -1,0 +1,59 @@
+﻿@model CoderDojo.MemberBelt
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>MemberBelt</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MemberId, "Member")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("MemberId", String.Empty)
+            @Html.ValidationMessageFor(model => model.MemberId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BeltId, "Belt")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("BeltId", String.Empty)
+            @Html.ValidationMessageFor(model => model.BeltId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Awarded)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Awarded)
+            @Html.ValidationMessageFor(model => model.Awarded)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AwardedByAdultId, "Adult")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("AwardedByAdultId", String.Empty)
+            @Html.ValidationMessageFor(model => model.AwardedByAdultId)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,160 @@
+﻿@model CoderDojo.Member
+@{
+    ViewBag.Title = "ID Printout";
+    ViewBag.HideMenuButton = true;
+    this.Layout = null;
+    Member member = Model;
+    MemberBelt memberBelt = member.MemberBelts.Where(b => b.Awarded != null).OrderByDescending(b => b.Awarded).FirstOrDefault();
+    double pageWidthCm = 29.7;
+    double pageHeightCm = 21.0;
+    double widthCm = pageWidthCm - 2;
+    double heightCm = pageHeightCm - 2;
+}
+
+
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Member IDs</title>
+    <link href="~/Content/font/ocr.css" rel="stylesheet" />
+    <link href="~/Content/font/oldenglish.css" rel="stylesheet" />
+    <style>
+*
+{
+    border: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+html
+{
+    font: 16px/1 'Open Sans', sans-serif;
+    overflow: auto;
+    padding: 0;
+    background: #999;
+    cursor: default;
+    padding: 2cm;
+}
+
+body
+{
+    width: @(pageWidthCm)cm;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 1cm;
+    position: relative;
+    background: #FFF;
+}
+
+@@media print
+{
+    * {
+        -webkit-print-color-adjust: exact;
+    }
+    html {
+        background: none;
+        padding: 0;
+    }
+    body {
+        height: @(pageHeightCm)cm;
+        margin: 0;
+    }
+}
+
+@@page {
+    margin: 0 1cm;
+}
+
+.Cert
+{
+    width: @(widthCm)cm;
+    height: @(heightCm)cm;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    page-break-inside: avoid;
+    font-size: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.Cert.Belt_yellow
+{
+    background-image: url("/Images/BeltCertificates/CoderDojoBeltCertificate-Yellow.png");
+}
+.Cert.Belt_green
+{
+    background-image: url("/Images/BeltCertificates/CoderDojoBeltCertificate-Green.png");
+}
+.Cert.Belt_blue
+{
+    background-image: url("/Images/BeltCertificates/CoderDojoBeltCertificate-Blue.png");
+}
+.Cert.Belt_red
+{
+    background-image: url("/Images/BeltCertificates/CoderDojoBeltCertificate-Red.png");
+}
+
+#Name
+{
+        font-family: 'oldenglish';
+        font-size: 2cm;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        top: 6.3cm;
+}
+
+#Belt
+{
+    font-family: 'oldenglish';
+    font-size: 1.8cm;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 9.2cm;
+}
+
+#Date
+{
+    font-family: 'ocraext';
+    font-size: 0.6cm;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 13.8cm;
+}
+
+
+    </style>
+
+    <script src="//code.jquery.com/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+    @if (memberBelt == null)
+    {
+        <div>@member.MemberName has not been awarded a belt.</div>
+    } else {
+        @Card(member, memberBelt)
+    }
+</body>
+</html>
+
+@helper Card(Member m, MemberBelt memberBelt)
+{
+    <div class="Cert Belt_@(memberBelt.Belt.Color.ToLower())">
+        <div id="Name">@m.MemberName</div>
+        <div id="Belt">@(memberBelt.Belt.Color) Belt</div>
+        <div id="Date">@(memberBelt.Awarded.Value.ToString("MMMM yyyy"))</div>
+    </div>
+}

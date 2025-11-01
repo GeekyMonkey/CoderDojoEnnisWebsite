@@ -1,0 +1,235 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = member.MemberName;
+    ViewBag.MenuActive = "Members";
+    ViewBag.MemberMenuActive = "Badges";
+    List<Badge> badges = ViewBag.Badges;
+    List<MemberBadge> MemberBadges = member.MemberBadges
+        .Where(mb => mb.Awarded != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<MemberBadge> MemberBadgesPending = member.MemberBadges
+        .Where(mb => mb.Awarded == null && mb.RejectedDate == null && mb.ApplicationDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<MemberBadge> MemberBadgesGoal = member.MemberBadges
+        .Where(mb => mb.Awarded == null && mb.GoalDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<Guid> BadgesGoalIds = MemberBadgesGoal.Select(mb => mb.BadgeId).ToList();
+    List<Guid> BadgesEarnedIds = MemberBadges.Select(mb => mb.BadgeId).ToList();
+    List<Guid> BadgesPendingIds = MemberBadgesPending.Select(mb => mb.BadgeId).ToList();
+    List<Badge> BadgesNotEarned = badges.Where(b => BadgesEarnedIds.Contains(b.Id) == false && b.Deleted == false && BadgesPendingIds.Contains(b.Id) == false).ToList();
+    List<Badge> BadgesApplied = badges.Where(b => BadgesPendingIds.Contains(b.Id) == true).ToList();
+    Adult mentor = ViewBag.Mentor;
+    bool IsMentorsChild = member.MemberParents.Any(mp => mp.AdultId == mentor.Id);
+}
+
+@section HeaderLeft {
+}
+
+@section HeaderRight {
+}
+
+@section Footer {
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+@Html.Partial("_MemberMenu")
+
+
+@if (BadgesApplied.Count() > 0)
+{
+    <div data-role="collapsible-set" data-corners="true" data-inset="true">
+        <h3>Badge Applications</h3>
+        @foreach (var badge in BadgesApplied)
+        {
+            MemberBadge badgeApplication = null;
+            string divclass = "BadgeHeader";
+            if (BadgesPendingIds.Contains(badge.Id))
+            {
+                badgeApplication = MemberBadgesPending.FirstOrDefault(mb => mb.BadgeId == badge.Id);
+            }
+            <div data-role="collapsible" data-content-theme="a" class="BadgeHeader ApplicationPending">
+                <h3>@(badge.BadgeCategory.CategoryName) - @(badge.Achievement)</h3>
+                <div data-role="fieldcontain">
+                    <p>@badge.Description</p>
+
+                    @* Rejections *@
+                    @foreach (var rejection in member.MemberBadges
+                                    .Where(mb => (mb.BadgeId == badge.Id) && (mb.RejectedDate != null))
+                                    .OrderBy(mb => mb.RejectedDate))
+                    {
+                        <div class="BadgeRejection">
+                            <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                            <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                            @if (rejection.RejectedByAdultId == mentor.Id)
+                            {
+                                <a href="/Mentor/BadgeUndo/@rejection.Id.ToString("N")" data-role="button" data-icon="delete" class="UndoBadge">Undo Rejection</a>
+                            }
+                        </div>
+                    }
+
+                    @* Pending Application *@
+                    @if (badgeApplication != null)
+                    {
+                        <p>Application for the @(badge.BadgeCategory.CategoryName) - @(badge.Achievement) badge was submitted on @(badgeApplication.ApplicationDate.Value.ToString("dd-MMM-yyyy")).</p>
+                        if (!string.IsNullOrEmpty(badgeApplication.ApplicationNotes))
+                        {
+                            <blockquote>@(badgeApplication.ApplicationNotes) - @(badgeApplication.Member.MemberName)</blockquote>
+                        }
+                        if (!IsMentorsChild || mentor.FirstName == "Russ") // Temporarily relax this rule
+                        {
+                            <div data-role="fieldcontain">
+                                <label for="ApproveRejectMessage">Approval / Rejection Message</label>
+                                <textarea id="ApproveRejectMessage" class="ApproveRejectMessage"></textarea>
+                            </div>
+                            <a href="/Mentor/BadgeApprove/@badgeApplication.Id.ToString("N")" data-role="button" data-icon="star" class="ui-disabled ApproveBadge">Approve</a>
+                            <a href="/Mentor/BadgeReject/@badgeApplication.Id.ToString("N")" data-role="button" data-icon="delete" class="ui-disabled RejectBadge">Reject</a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+<div data-role="collapsible-set" data-corners="true" data-inset="true">
+    <h3>Badges Earned</h3>
+    @if (MemberBadges.Count() == 0)
+    {
+        <p>@member.MemberName has not yet earned any badges.</p>
+    }
+    @foreach (var memberBadge in MemberBadges)
+    {
+        <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+            <h3>@(memberBadge.Badge.BadgeCategory.CategoryName) - @(memberBadge.Badge.Achievement)</h3>
+            <div data-role="fieldcontain">
+                <p>@memberBadge.Badge.Description</p>
+                <blockquote>@memberBadge.ApplicationNotes</blockquote>
+                <p>Awarded on @memberBadge.Awarded.Value.ToString("dd-MMM-yyyy")</p>
+                <blockquote>@memberBadge.AwardedNotes - @memberBadge.AwardedByAdult.FullName</blockquote>
+                @if (memberBadge.AwardedByAdultId == mentor.Id)
+                {
+                    <a href="/Mentor/BadgeUndo/@memberBadge.Id.ToString("N")" data-role="button" data-icon="delete" class="UndoBadge">Undo Approval</a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+@if (BadgesNotEarned.Count() > 0)
+{
+    <h3>Badges Not Earned</h3>
+    <div data-role="collapsible" data-corners="true" data-inset="true">
+        <h3>Badges Available</h3>
+        @foreach (var badge in BadgesNotEarned)
+        {
+            MemberBadge badgeApplication = null;
+            <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+                <h3 class="BadgeGoalHeading">
+                    <span>@(badge.BadgeCategory.CategoryName) - @(badge.Achievement)</span>
+
+                    <!-- Goal Star -->
+                    @if (BadgesGoalIds.Contains(badge.Id))
+                    {
+                        <img src="~/Images/Icons/star.png" />
+                    }
+                </h3>
+
+                <div data-role="fieldcontain">
+                    <p>@badge.Description</p>
+
+                    @* Rejections *@
+                    @foreach (var rejection in member.MemberBadges
+                                    .Where(mb => (mb.BadgeId == badge.Id) && (mb.RejectedDate != null))
+                                    .OrderBy(mb => mb.RejectedDate))
+                    {
+                        <div class="BadgeRejection">
+                            <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                            <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+<style>
+    .BadgeGoalHeading .ui-btn-text {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .DescriptionAndGoal {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+
+<script type="text/javascript">
+    $(function () {
+        setTimeout(function () {
+            // Open the first pending one
+            $(".ApplicationPending h3").first().trigger("click");
+        }, 1000);
+
+        $(".ApproveBadge,.RejectBadge").off("click").on("click", function (e) {
+            e.preventDefault();
+            var applicationContainer = $(this).closest(".ApplicationPending");
+            var message = applicationContainer.find(".ApproveRejectMessage").val();
+            if (message.length) {
+                $.ajax($(this).attr("href"), {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        message: message
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        $(".UndoBadge").off("click").on("click", function (e) {
+            e.preventDefault();
+            $.ajax($(this).attr("href"), {
+                type: "POST",
+                dataType: "json",
+                data: {
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        });
+
+        $(".ApproveRejectMessage").off("keyup change").on("keyup change", function () {
+            var applicationContainer = $(this).closest(".ApplicationPending");
+            setTimeout(function () {
+                var message = applicationContainer.find(".ApproveRejectMessage").val();
+                applicationContainer.find('a.ApproveBadge,a.RejectBadge').button();
+                if (message.length) {
+                    applicationContainer.find('a.ApproveBadge,a.RejectBadge').removeClass('ui-disabled');
+                } else {
+                    applicationContainer.find('a.ApproveBadge,a.RejectBadge').addClass('ui-disabled');
+                }
+            }, 5);
+        }
+        );
+    });
+</script>

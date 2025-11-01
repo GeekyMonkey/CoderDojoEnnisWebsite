@@ -1,0 +1,178 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = "Merge " + member.MemberName;
+    ViewBag.MenuActive = "Members";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<style>
+    table {
+        width:100%;
+        vertical-align:top;
+    }
+
+    tr td {
+        border-top: solid 1px #777;
+    }
+        thead tr td {
+            border-top: none;
+        }
+    td {
+        padding: 10px;
+        vertical-align: top;
+        border-left: solid 1px #777;
+        width: 40%;
+        position: relative;
+    }
+    td:first-child {
+        border-left: none;
+        width: 20%;
+    }
+        td input[type=radio]{
+            width: 15px;
+            height: 15px;
+        }
+
+    .MergeTable td:nth-child(2) input[type=radio] {
+            float: right;
+        
+    }
+    .MergeTable tbody td:nth-child(3) {
+        -moz-transition: 1s;
+        -o-transition: 1s;
+        -webkit-transition: 1s;
+        transition: 1s;
+        opacity: 0;
+    }
+    .MergeTable tbody td:nth-child(3) label {
+        float: right;
+    }
+    .MergeTable.MemberSelected tbody td:nth-child(3) {
+        opacity: 1;
+    }
+</style>
+
+<input type="hidden" id="MemberId" value="@member.Id.ToString("N")" />
+    <table class="MergeTable">
+        <thead>
+            <tr>
+                <td></td>
+                <td>
+                    <h3>@member.MemberName</h3>
+                </td>
+                <td>
+                    <h3>Select account to merge</h3>
+                    <ul id="MemberSelect" data-role="listview" data-autodividers="false" data-filter-reveal="true" data-filter-placeholder="Search Members" data-corners="true" data-inset="true" data-filter="true"></ul>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Birth Year:</td>
+                <td><label for="BirthYear1" data-role="none">@member.BirthYear</label><input id="BirthYear1" type="radio" name="BirthYear" value="0" checked="checked" data-role="none" /></td>
+                <td><input id="BirthYear2" type="radio" name="BirthYear" data-role="none" value="1" /><label for="BirthYear2" data-role="none"></label></td>
+            </tr>
+            <tr>
+                <td>Scratch Name:</td>
+                <td><label for="ScratchName1" data-role="none">@member.ScratchName</label><input type="radio" name="ScratchName" id="ScratchName1" value="0" checked="checked" data-role="none" /></td>
+                <td><input type="radio" name="ScratchName" id="ScratchName2" data-role="none" value="1" /><label for="ScratchName2" data-role="none"></label></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <input type="button" id="MergeButton" value="Merge These Accounts" disabled="disabled" />
+
+
+<script type="text/javascript">
+    $(function () {
+
+        var memberss = [];
+        var memberId = $("#MemberId").val();
+        var selectedMember;
+
+        // Search for other member
+        $("#MemberSelect").on("listviewbeforefilter", function (e, data) {
+            var $ul = $(this),
+                $input = $(data.input),
+                value = $input.val(),
+                html = "";
+            $ul.html("");
+            $("#MergeButton").button("disable");
+            $(".MergeTable").removeClass("MemberSelected");
+            if (value && value.length > 2) {
+                $.mobile.showPageLoadingMsg(true);
+                $.ajax({
+                    url: "/Mentor/SearchMemberMergeByName",
+                    dataType: "json",
+                    crossDomain: false,
+                    data: {
+                        name: $input.val(),
+                        memberId: memberId
+                    }
+                })
+                .then(function (response) {
+                    members = response;
+                    $.each(members, function (i, member) {
+                        html += "<li data-icon='add' data-icon-position='right'><a href='#' data-memberid='" + member.Id + "'>" + member.FirstName + " " + member.LastName + "</a></li>";
+                    });
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+                    $.mobile.hidePageLoadingMsg();
+                });
+            }
+        });
+
+        // Other member selected
+        $("#MemberSelect").off("click").on("click", "a", function (e) {
+            e.preventDefault();
+
+            $(".MergeTable").addClass("MemberSelected");
+            $("#MergeButton").button("enable");
+
+            $.each(members, function (index, m) {
+                if (m.Id == $(e.target).data("memberid")) {
+                    selectedMember = m;
+                }
+            });
+
+            $("label[for='BirthYear2']").html(selectedMember.BirthYear);
+            $("label[for='ScratchName2']").html(selectedMember.ScratchName);
+        });
+
+        // Merge button clicked
+        $("#MergeButton").off("click").on("click", function (e) {
+
+            $.ajax("/Mentor/MergeMembers", {
+                type: "POST",
+                data: {
+                    memberId: $("#MemberId").val(),
+                    mergeId: selectedMember.Id,
+                    newBirthYear: $("input[type='radio'][name='BirthYear']:checked").val(),
+                    newScratchName: $("input[type='radio'][name='ScratchName']:checked").val()
+                }
+            })
+            .then(function (response) {
+                window.location = "/Mentor/Member/" + $("#MemberId").val();
+            });
+        });
+    });
+</script>
+

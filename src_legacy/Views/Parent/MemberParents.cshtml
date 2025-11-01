@@ -1,0 +1,37 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = member.MemberName;
+    ViewBag.MenuActive = "Members";
+    ViewBag.MemberMenuActive = "Parents";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_ParentMenu")
+}
+
+@Html.Partial("_MemberMenu")
+
+<ul data-role="listview" id="ParentList" data-autodividers="false" data-corners="true" data-inset="true" data-split-icon="delete">
+    @foreach (CoderDojo.MemberParent mp in member.MemberParents.OrderBy(mp => mp.Adult.FirstName))
+    {
+        <li>
+            <div>@mp.Adult.FullName</div>
+            <div>@mp.Adult.Email</div>
+            <div>@mp.Adult.Phone</div>
+        </li>
+    }
+</ul>

@@ -1,0 +1,23 @@
+﻿@model string
+@{
+    ViewBag.Title = "Redirecting";
+    string Url = Model;
+    Layout = null;
+}
+
+<html>
+    <head>
+        <!-- HTML reload (for data-ajax=false) -->
+        <script>
+            location.href = '@Url';
+        </script>
+    </head>
+    <body>
+        <!-- Change page : JQueryMobile redirect -->
+        <div data-role="page" id="redirectexternal">
+            <script>
+                location.href = '@Url';
+            </script>
+        </div>
+    </body>
+</html>

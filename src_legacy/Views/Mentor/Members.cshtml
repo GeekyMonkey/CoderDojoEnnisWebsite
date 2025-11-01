@@ -1,0 +1,63 @@
+﻿@model List<CoderDojo.Member>
+@{
+    ViewBag.Title = "Members ";
+    ViewBag.MenuActive = "Members";
+    List<CoderDojo.Member> members = Model;
+    List<Guid> presentMemberIds = ViewBag.PresentMemberIds;
+}
+
+@section HeaderLeft {
+    <a data-role="button" data-icon="tag" id="PrintButton">Print IDs</a>
+}
+    
+@section HeaderRight {
+    <a href="MemberSignup?PreviousPage=Members" data-role="button" data-icon="plus">Signup</a>
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<style>
+    .MemberList .TeamImage {
+        position: absolute;
+        right: 50px;
+        top: 1px;
+        left: auto;
+    }
+</style>
+
+
+<div data-role="content">
+    <div class="content-primary">
+        <ul class="MemberList" data-role="listview" data-autodividers="true" id="myFilter" data-filter="true" data-filter-placeholder="Search members..." data-filter-theme="a">
+            @foreach (CoderDojo.Member m in members)
+            {
+                string memId = m.Id.ToString("N");
+                bool present = presentMemberIds.Contains(m.Id);
+                <li class="MemberListItem @(present ? "Present" : "" ) @(m.RegisteredCurrentTerm ? "Registered" : "NotRegistered" )">
+                    <a href="Member/@(memId)">
+                        <img data-src="@m.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                        <img class="TeamImage" data-src="@((m.Team != null ) ? m.Team.ImageUrl : "")" onerror="if (this.src != '') this.src = '';" />
+                        <div class="BeltStripe" style="background-color:@(m.BeltColorHex)"></div>
+                        <span>@m.MemberName</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#PrintButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            window.openNewWindow("/Passports");
+        });
+    });
+</script>

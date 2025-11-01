@@ -1,0 +1,27 @@
+﻿@{
+    string activePage = ViewBag.MenuActive;
+    string activeClass = "ui-btn-active ui-state-persist";
+    string inactiveClass = "";
+}
+
+<div data-role="panel" data-postion-fixed="true" id="LeftMenu" data-theme="a" class="nav-search">
+        
+    <div data-role="controlgroup" data-type="horizontal" id="PanelClose">
+        <a href="#" data-rel="close" data-role="button" data-icon="arrow-l">Close Menu</a>
+    </div>
+
+    <ul data-role="listview" data-inset="true">
+        <li><a href="/Member/Profile" class="@(activePage == "Profile" ? activeClass : inactiveClass)">Profile</a></li>
+        <li><a href="/Member/Badges" class="@(activePage == "Badges" ? activeClass : inactiveClass)">Badges Earned</a></li>
+        <li><a href="/Member/BadgesAvailable" class="@(activePage == "BadgesAvailable" ? activeClass : inactiveClass)">Badges Available</a></li>
+        <li><a href="/Member/Belts" class="@(activePage == "Belts" ? activeClass : inactiveClass)">Belts</a></li>
+        <li><a href="/Member/Goals" class="@(activePage == "Goals" ? activeClass : inactiveClass)">Goals</a></li>
+        <li><a href="/Member/Attendance" class="@(activePage == "Attendance" ? activeClass : inactiveClass)">Attendance</a></li>
+        <!--<li><a href="http://webhub.coderdojoennis.com/editor">Web Hub</a></li>-->
+        <li><a href="/Member/Sessions">@System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"]</a></li>
+    </ul>
+
+    <div data-role="controlgroup" data-type="horizontal">
+        <a href="/Home/LogOut" data-icon="delete" data-role="button">Log Out</a>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+﻿@model CoderDojo.Adult
+@{
+    CoderDojo.Adult parent = Model;
+    ViewBag.Title = parent.FullName;
+    ViewBag.MenuActive = "MyAccount";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+    <a data-role="button" data-icon="check" id="SaveButton">Save</a>
+}
+
+@section Panels
+{
+    @Html.Partial("_ParentMenu")
+}
+
+@Html.Partial("_ImageEditable", "Adult_" + parent.Id.ToString("N"))
+
+@using (Html.BeginForm("MyAccountSave", "Parent"))
+{
+    <fieldset data-role="controlgroup">
+
+        @Html.HiddenFor(m => m.Id)
+
+        <label for="FirstName">First Name</label>
+        @Html.TextBoxFor(m => m.FirstName)
+
+        <label for="LastName">Last Name</label>
+        @Html.TextBoxFor(m => m.LastName)
+
+        <label for="LastName">Email</label>
+        @Html.TextBoxFor(m => m.Email)
+
+        <label for="LastName">Phone</label>
+        @Html.TextBoxFor(m => m.Phone)
+
+        <label for="Password">New Password</label>
+        @Html.PasswordFor(m => m.NewPassword)
+
+        <label for="ConfirmPassword">Confirm Password</label>
+        <input type="password" id="ConfirmPassword" />
+ 
+    </fieldset>
+}
+
+
+<script type="text/javascript">
+    $(function() {
+        $("#SaveButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            if ($("#NewPassword").val() != $("#ConfirmPassword").val()) {
+                alert("Password and Confirm Password do not match.");
+            } else {
+                var form = $(this).closest("div.pagerole").find("form");
+                if (form.length == 0) {
+                    console.log("Form save clicked, but form not found");
+                }
+                form.submit();
+            }
+        });
+    });
+</script>

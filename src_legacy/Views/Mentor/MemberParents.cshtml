@@ -1,0 +1,150 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = member.MemberName;
+    ViewBag.MenuActive = "Members";
+    ViewBag.MemberMenuActive = "Parents";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+@Html.Partial("_MemberMenu")
+
+@*if (adult.MemberParents.Count() == 0) {
+    <p>There aren't any parents linked to @member.MemberName yet.  Use the search below, then click on the parent's name to create the link.</p>
+} else {
+*@
+    <ul data-role="listview" id="ParentList" data-autodividers="false" data-corners="true" data-inset="true" data-split-icon="delete">
+        @foreach (CoderDojo.MemberParent mp in member.MemberParents.OrderBy(mp => mp.Adult.FirstName))
+        {
+            <li data-adultid="@(mp.AdultId.ToString("N"))" data-relationshipid="@(mp.Id.ToString("N"))">
+                <a href="#" class="View" title="View @(mp.Adult.FirstName)'s Details">@mp.Adult.FullName</a>
+                <a href="#" class="Delete" title="Remove Relationship"></a>
+            </li>
+        }
+    </ul>
+@*
+}
+*@
+
+
+<h3>Add a Relationship</h3>
+<ul id="ParentSelect" data-role="listview" data-autodividers="false" data-filter-reveal="true" data-filter-placeholder="Search Parents" data-corners="true" data-inset="true" data-filter="true">
+</ul>
+
+
+<div data-role="popup" id="DeleteRelationshipPopup" data-overlay-theme="a" data-theme="c" data-dismissible="false" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Delete Relationship?</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <h3 class="ui-title">Are you sure you want to delete this relationship?</h3>
+        <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>
+        <a id="ConfirmDelete" href="#" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Delete</a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#ParentSelect").off("click", "a").on("click", "a", function (e) {
+            e.preventDefault();
+            var parentId = $(this).data("adultid");
+            var memberId = '@(member.Id.ToString("N"))';
+
+            $.ajax("/Mentor/CreateRelationship", {
+                type: "POST",
+                data: {
+                    parentId: parentId,
+                    memberId: memberId
+                }
+            })
+            .then(function (response) {
+                $("#ParentList").append('<li data-adultid="' + response.adultId + '" data-relationshipid="' + response.relationshipId + '">' +
+                    '<a href="#" class="View" title="View ' + response.adultFullName + '&quot;s Details">' + response.adultFullName + '</a>' +
+                    '<a href="#" class="Delete" title="Remove Relationship"></a></li>');
+                $("ul#ParentList").listview("refresh").trigger("updatelayout");
+                // $(".ui-listview-filter input").val("").trigger("change")
+                $("#ParentSelect li a[data-adultid=" + response.adultId + "]").closest("li").remove();
+                $("#ParentSelect").listview("refresh").trigger("updatelayout");
+            });
+        });
+
+        $("#ParentList").off("click", "a.Delete").on("click", "a.Delete", function (e) {
+            e.preventDefault();
+            var relationshipId = $(this).closest("li").data("relationshipid");
+            $("#DeleteRelationshipPopup").data("relationshipid", relationshipId);
+            $("#DeleteRelationshipPopup").popup("open");
+            setTimeout(function () {
+                $("a#ConfirmDelete").off("click").on("click", function (e) {
+                    var relationshipId = $("#DeleteRelationshipPopup").data("relationshipid");
+                    $.ajax("/Mentor/DeleteRelationship", {
+                        type: "POST",
+                        data: {
+                            id: relationshipId
+                        }
+                    })
+                        .then(function (response) {
+                            $("#ParentList li[data-relationshipid=" + relationshipId + "]").fadeOut(200, function () {
+                                $(this).remove();
+                                $("ul#ParentList").listview("refresh").trigger("updatelayout");
+                            });
+                        });
+                });
+
+            }, 500);
+        });
+
+        $("#ParentList").off("click", "a.View").on("click", "a.View", function (e) {
+            e.preventDefault();
+            var adultId = $(this).closest("li").data("adultid");
+            window.location = "/Mentor/Adult/" + adultId;
+        });
+
+        $("#ParentSelect").on("listviewbeforefilter", function (e, data) {
+            var $ul = $(this),
+                $input = $(data.input),
+                value = $input.val(),
+                html = "";
+            $ul.html("");
+            if (value && value.length > 2) {
+                $.mobile.showPageLoadingMsg(true);
+                $.ajax({
+                    url: "/Mentor/SearchParentsByName",
+                    dataType: "json",
+                    crossDomain: false,
+                    data: {
+                        name: $input.val()
+                    }
+                })
+                .then(function (response) {
+                    $.each(response, function (i, adult) {
+                        // Check that the parent isn't alredy related
+                        if ($("#ParentList li[data-adultid=" + adult.Id + "]").length == 0) {
+                            html += "<li data-icon='add' data-icon-position='right'><a href='#' data-adultid='" + adult.Id + "'>" + adult.FirstName + " " + adult.LastName + "</a></li>";
+                        }
+                    });
+                    $ul.html(html);
+                    $ul.listview("refresh");
+                    $ul.trigger("updatelayout");
+                    $.mobile.hidePageLoadingMsg();
+                });
+            }
+        });
+    });
+</script>

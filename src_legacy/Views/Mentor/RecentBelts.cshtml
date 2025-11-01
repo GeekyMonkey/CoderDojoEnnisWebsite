@@ -1,0 +1,43 @@
+﻿@model List<CoderDojo.MemberBelt>
+@{
+    ViewBag.Title = "Recent Belts ";
+    ViewBag.MenuActive = "RecentBelts";
+    List<CoderDojo.MemberBelt> memberBelts = Model;
+    List<Guid> presentMemberIds = ViewBag.PresentMemberIds;
+}
+
+@section HeaderLeft {
+}
+ 
+@section HeaderRight {
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+
+<div data-role="content">
+    <div class="content-primary">
+        <ul data-role="listview" data-autodividers="false" id="myFilter" data-filter="true" data-filter-placeholder="Search members..." data-filter-theme="a">
+            @foreach (CoderDojo.MemberBelt mb in memberBelts)
+            {
+                var m = mb.Member;
+                string memId = m.Id.ToString("N");
+                bool present = presentMemberIds.Contains(m.Id);
+                <li class="MemberListItem @(present ? "Present" : "" )  @(m.RegisteredCurrentTerm ? "Registered" : "NotRegistered" )">
+                    <a href="Member/@(memId)">
+                        <img data-src="@m.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                        <div class="BeltStripe" style="background-color:@(mb.Belt.HexCode)"></div>
+                        <span>@m.MemberName - Awarded @mb.Awarded.Value.ToString("dd-MMM-yyyy")</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

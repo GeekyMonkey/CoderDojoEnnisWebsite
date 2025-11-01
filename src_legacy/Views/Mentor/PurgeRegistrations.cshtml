@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.MenuActive = "PurgeRegistrations";
+    ViewBag.Title = "Purge Term Registrations";
+    int membersUnregistered = ViewBag.MembersUnregistered;
+    Exception ex = ViewBag.Exception;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<div class="content-primary">
+
+    <table>
+        <tr>
+            <td>Members un-registered.</td>
+            <td>@membersUnregistered</td>
+        </tr>
+    </table>
+    @if (ex != null)
+    {
+        <p>Error: @ex.Message</p>
+        <p>Error: @ex.StackTrace</p>
+    }
+</div>

@@ -1,0 +1,160 @@
+﻿@model CoderDojo.Member
+@{
+    CoderDojo.Member member = Model;
+    ViewBag.Title = member.MemberName;
+    ViewBag.MenuActive = "Members";
+    ViewBag.MemberMenuActive = "Goals";
+    List<Belt> belts = ViewBag.Belts;
+    List<MemberBelt> MemberBelts = member.MemberBelts.Where(mb => mb.Awarded != null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<MemberBelt> MemberBeltsPending = member.MemberBelts.Where(mb => mb.Awarded == null && mb.RejectedDate == null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<Guid> BeltsEarnedIds = MemberBelts.Select(mb => mb.BeltId).ToList();
+    List<Guid> BeltsPendingIds = MemberBeltsPending.Select(mb => mb.BeltId).ToList();
+    List<Belt> BeltsNotEarned = belts.Where(b => BeltsEarnedIds.Contains(b.Id) == false).ToList();
+    Belt NextBelt = BeltsNotEarned.FirstOrDefault();
+    List<MemberBadge> MemberBadgeGoals = member.MemberBadges.Where(mb => mb.Awarded == null && mb.GoalDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<MemberBadge> MemberBadgesPending = member.MemberBadges
+        .Where(mb => mb.Awarded == null && mb.RejectedDate == null && mb.ApplicationDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    MemberBadge badgePending;
+}
+
+@section HeaderLeft {
+}
+
+@section HeaderRight {
+}
+
+@section Footer {
+}
+
+@section Panels
+{
+    @Html.Partial("_ParentMenu")
+}
+
+@Html.Partial("_MemberMenu")
+
+
+<div data-role="collapsible-set" data-corners="true" data-inset="true">
+    <h3>Goals</h3>
+
+    <h4>Short Term Goal (2 months)</h4>
+    <blockquote>
+        @if (member.GoalShortTerm != null && member.GoalShortTerm != "")
+        {
+            @member.GoalShortTerm
+        }
+        else
+        {
+        <em>No long term goal set. Talk to the ninja or a mentor about setting their goals.</em>
+        }
+    </blockquote>
+
+    <h4>Long Term Goal (2 years)</h4>
+    <blockquote>
+        @if (member.GoalLongTerm != null && member.GoalShortTerm != "")
+        {
+            @member.GoalLongTerm
+        }
+        else
+        {
+            <em>No long term goal set. Talk to the ninja or a mentor about setting their goals.</em>
+        }
+    </blockquote>
+
+    @if (NextBelt != null)
+    {
+        Belt belt = NextBelt;
+        MemberBelt beltApplication = null;
+        string divclass = "BeltHeader";
+        if (BeltsPendingIds.Contains(belt.Id))
+        {
+            beltApplication = MemberBeltsPending.FirstOrDefault(mb => mb.BeltId == belt.Id);
+            divclass += " ApplicationPending";
+        }
+        <h4>Next Belt</h4>
+        <div data-role="collapsible" data-content-theme="a" class="@divclass" data-color="@belt.HexCode">
+            <h3>@belt.Color</h3>
+            <div data-role="fieldcontain">
+                <p>@Html.Raw(belt.Description.Replace("\r\n", "<br />"))</p>
+
+                @* Rejections *@
+                @foreach (var rejection in member.MemberBelts
+                    .Where(mb => (mb.BeltId == belt.Id) && (mb.RejectedDate != null))
+                    .OrderBy(mb => mb.RejectedDate))
+                {
+                    <div class="BeltRejection">
+                        <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                        <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                    </div>
+                }
+
+                @* Pending Application *@
+                @if (beltApplication != null)
+                {
+                    <p>Application for the <span class="BeltColorText">@(belt.Color.ToLower()) belt</span> was submitted on @(beltApplication.ApplicationDate.Value.ToString("dd-MMM-yyyy")).</p>
+                    if (!string.IsNullOrEmpty(beltApplication.ApplicationNotes))
+                    {
+                        <blockquote>@(beltApplication.ApplicationNotes) - @(beltApplication.Member.MemberName)</blockquote>
+                    }
+                }
+            </div>
+        </div>
+    }
+
+    <h4>Badge Goals</h4>
+    @if (MemberBadgeGoals.Count == 0)
+    {
+        <p><em>No Goals Selected. Ask the ninja to select at least one badge goal.</em></p>
+    }
+    else
+    {
+        foreach (var goal in MemberBadgeGoals)
+        {
+            var badge = goal.Badge;
+
+            <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+                <h3 class="BadgeGoalHeading">
+                    <span>@(goal.Badge.BadgeCategory.CategoryName) - @(goal.Badge.Achievement)</span>
+                    <img src="~/Images/Icons/star.png" />
+                </h3>
+
+                <div data-role="fieldcontain">
+                    <div class="DescriptionAndGoal">
+                        <p>@Html.Raw(badge.Description.Replace("\r\n", "<br />"))</p>
+                    </div>
+
+                    @{
+                        badgePending = MemberBadgesPending.FirstOrDefault(mb => mb.BadgeId == badge.Id);
+                    }
+                    @if (badgePending != null)
+                    {
+                        <p><i>Application for the @(badge.BadgeCategory.CategoryName) - @(badge.Achievement) badge was submitted on @(badgePending.ApplicationDate.Value.ToString("dd-MMM-yyyy")).</i></p>
+                    }
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        setTimeout(function () {
+            // Apply colors
+            $(".BeltHeader").each(function (i, e) {
+                $(this).find("h3 .ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find("h3 .ui-btn-inner").css("background-color", $(this).data("color"));
+                $(this).find(".BeltColorText").css("color", $(this).data("color"));
+            });
+
+            // Open the first pending one
+            $(".ApplicationPending h3").first().trigger("click");
+        }, 1000);
+    });
+</script>

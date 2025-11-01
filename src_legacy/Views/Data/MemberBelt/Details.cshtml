@@ -1,0 +1,43 @@
+﻿@model CoderDojo.MemberBelt
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>MemberBelt</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Member.FirstName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Member.FirstName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Belt.Color)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Belt.Color)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Awarded)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Awarded)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Adult.FirstName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Adult.FirstName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

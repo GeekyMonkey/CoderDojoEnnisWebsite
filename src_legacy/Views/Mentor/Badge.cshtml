@@ -1,0 +1,89 @@
+﻿@model CoderDojo.Badge
+@{
+    Badge badge = Model;
+    ViewBag.Title = "Badge";
+    ViewBag.MenuActive = "Badge";
+    bool newItem = (Model.Id == null || Model.Id == Guid.Empty);
+    IEnumerable<SelectListItem> categories = from c in ViewBag.BadgeCategories as IEnumerable<CoderDojo.BadgeCategory>
+                                             select new SelectListItem
+                                             {
+                                                  Value = c.Id.ToString(),
+                                                  Text = c.CategoryName,
+                                                  Selected = (c.Id == badge.BadgeCategoryId)
+                                             }; 
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+    <a data-role="button" data-icon="check" class="FormSave">Save</a>
+    @if (!newItem) {
+        <a data-role="button" data-icon="delete" id="Delete">Delete</a>
+    }
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+
+@using (Html.BeginForm("BadgeSave", "Mentor"))
+{
+    <fieldset data-role="controlgroup">
+
+        @Html.HiddenFor(b => b.Id)
+
+        <label for="Color">Achievement</label>
+        @Html.TextBoxFor(b => b.Achievement, new { @class="AutoFocus" })
+
+        <label for="HexCode">Description</label>
+        @Html.TextAreaFor(b => b.Description)
+
+        <label for="Cagegory">Category</label>
+        @Html.DropDownListFor(b => b.BadgeCategoryId, categories)
+
+    </fieldset>
+}
+
+<div data-role="popup" id="DeleteConfirmPopup" data-overlay-theme="a" data-theme="c" data-dismissible="false" class="ui-corner-all">
+    <div data-role="header" data-theme="a" class="ui-corner-top">
+        <h1>Delete Badge?</h1>
+    </div>
+    <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+        <h3 class="ui-title">Are you sure you want to delete this?</h3>
+        <p>It has been awarded to @(badge.MemberBadges.Count) members.</p>
+        <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Cancel</a>
+        <a id="ConfirmDelete" href="#" data-role="button" data-inline="true" data-rel="back" data-transition="flow" data-theme="b">Delete</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("a#Delete").off("click").on("click", function (e) {
+            e.preventDefault();
+            $("#DeleteConfirmPopup").popup("open");
+            setTimeout(function () {
+                $("a#ConfirmDelete").off("click").on("click", function (e) {
+                    var id = $("#Id").val();
+                    $.ajax("/Mentor/BadgeDelete", {
+                        type: "POST",
+                        data: {
+                            id: id
+                        }
+                    })
+                        .then(function (response) {
+                            window.location = "/Mentor/Badges";
+                        });
+                });
+            }, 500);
+        });
+    });
+</script>

@@ -1,0 +1,48 @@
+﻿@model List<CoderDojo.Belt>
+@{
+    List<CoderDojo.Belt> belts = Model;
+    ViewBag.MenuActive = "Belts";
+    ViewBag.Title = "Belts";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+    <a href="BeltAdd" data-role="button" data-icon="plus">New Belt</a>
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<div class="content-primary">
+	<ul data-role="listview" data-autodividers="false" id="myFilter" data-filter="false" data-filter-placeholder="Search..." data-filter-theme="a">
+    @foreach (Belt b in belts)
+    {
+        <li class="BeltHeader" data-color="@b.HexCode">
+            <a href="Belt/@(b.Id.ToString("N"))">@b.Color</a>
+        </li>
+    }
+    </ul>
+</div>
+
+<script type="text/javascript">
+    var minMessageLength = 5;
+
+    $(function () {
+        setTimeout(function () {
+            $(".BeltHeader").each(function (i, e) {
+                $(this).find(".ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find(".ui-btn-inner").css("background-color", $(this).data("color"));
+            });
+        }, 1000);
+    });
+</script>

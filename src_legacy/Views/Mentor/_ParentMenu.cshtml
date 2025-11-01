@@ -1,0 +1,14 @@
+﻿@model Adult
+@{
+    string activePage = ViewBag.ParentMenuActive;
+    string activeClass = "ui-btn-active ui-state-persist";
+    string inactiveClass = "";
+    string adultId = Model.Id.ToString("N");  // todo - maybe get this somewhere else
+}
+
+<div data-role="navbar">
+    <ul>
+        <li><a href="/Mentor/Adult/@adultId" class="@(activePage == "Details" ? activeClass : inactiveClass)">Details</a></li>
+        <li><a href="/Mentor/ParentKids/@adultId" class="@(activePage == "Kids" ? activeClass : inactiveClass)">Kids</a></li>
+    </ul>
+</div>

@@ -1,0 +1,144 @@
+﻿@model List<CoderDojo.Belt>
+@{
+    Member member = ViewBag.CurrentMember;
+    List<CoderDojo.Belt> belts = Model;
+    ViewBag.Title = "Belts";
+    ViewBag.MenuActive = "Belts";
+    List<MemberBelt> MemberBelts = member.MemberBelts.Where(mb => mb.Awarded != null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<MemberBelt> MemberBeltsPending = member.MemberBelts.Where(mb => mb.Awarded == null && mb.RejectedDate == null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<Guid> BeltsEarnedIds = MemberBelts.Select(mb => mb.BeltId).ToList();
+    List<Guid> BeltsPendingIds = MemberBeltsPending.Select(mb => mb.BeltId).ToList();
+    List<Belt> BeltsNotEarned = belts.Where(b => BeltsEarnedIds.Contains(b.Id) == false).ToList();
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+<div data-role="collapsible-set" data-corners="true" data-inset="true">
+    <h3>Belts Earned</h3>
+    @if (MemberBelts.Count() == 0)
+    {
+        <p>You have not yet earned any belts.</p>
+    }
+    @foreach (var memberBelt in MemberBelts)
+    {
+        <div data-role="collapsible" data-content-theme="a" class="BeltHeader" data-color="@memberBelt.Belt.HexCode">
+            <h3>@memberBelt.Belt.Color</h3>
+            <div data-role="fieldcontain">
+                <p>@Html.Raw(memberBelt.Belt.Description.Replace("\r\n", "<br />"))</p>
+                <blockquote>@memberBelt.ApplicationNotes</blockquote>
+                <p>Awarded on @memberBelt.Awarded.Value.ToString("dd-MMM-yyyy")</p>
+                <blockquote>@memberBelt.AwardedNotes - @memberBelt.AwardedByAdult.FullName</blockquote>
+            </div>
+        </div>
+    }
+</div>
+
+
+@if (BeltsNotEarned.Count() > 0)
+{
+    bool first = true;
+    <div data-role="collapsible-set" data-corners="true" data-inset="true">
+        <h3>Belts Not Earned</h3>
+        @foreach (var belt in BeltsNotEarned)
+        {
+            <div data-role="collapsible" data-content-theme="a" class="BeltHeader" data-color="@belt.HexCode">
+                <h3>@belt.Color</h3>
+                <div data-role="fieldcontain">
+                    <p>@Html.Raw(belt.Description.Replace("\r\n", "<br />"))</p>
+                    @if (first)
+                    {
+                        first = false;
+
+                        @* Rejections *@
+                        foreach (var rejection in member.MemberBelts
+                            .Where(mb => (mb.BeltId == belt.Id) && (mb.RejectedDate != null))
+                            .OrderBy(mb => mb.RejectedDate))
+                        {
+                            <div class="BeltRejection">
+                                <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                                <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                            </div>
+                        }
+                        
+                        @* Application Pending *@
+                        if (BeltsPendingIds.Contains(belt.Id))
+                        {
+                            <p>Application for the <span class="BeltColorText">@(belt.Color.ToLower()) belt</span> was submitted on @(MemberBeltsPending.FirstOrDefault(mb => mb.BeltId == belt.Id).ApplicationDate.Value.ToString("dd-MMM-yyyy")). Talk to a mentor to find out what's up.</p>
+                        }
+                        else
+                        {
+                            <div data-role="fieldcontain">
+                                <label for="BeltApplicationMessage">Tell us why you deserve this:</label>
+                                <textarea id="BeltApplicationMessage"></textarea>
+                            </div>
+                            <a href="/Member/BeltApplication/@belt.Id.ToString("N")" id="BeltApplyButton" data-role="button" data-inline="false" data-icon="star" class="ui-disabled">Apply</a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<script type="text/javascript">
+    var minMessageLength = 5;
+
+    $(function () {
+        setTimeout(function () {
+            $(".BeltHeader").each(function (i, e) {
+                $(this).find("h3 .ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find("h3 .ui-btn-inner").css("background-color", $(this).data("color"));
+                $(this).find(".BeltColorText").css("color", $(this).data("color"));
+            });
+        }, 1000);
+
+        $("#BeltApplyButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            var message = $("#BeltApplicationMessage").val();
+            if (message.length >= minMessageLength) {
+                $.ajax($(this).attr("href"), {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        message: message
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            } else {
+                $("#BeltApplicationMessage").focus();
+                $("#BeltApplicationMessage").prev("label").css("color", "red");
+            }
+        });
+
+        $("#BeltApplicationMessage").off("keyup change").on("keyup change", function () {
+            setTimeout(function () {
+                var message = $("#BeltApplicationMessage").val();
+                $('a#ApproveBelt').button();
+                if (message.length >= minMessageLength) {
+                    $('a#BeltApplyButton').removeClass('ui-disabled');
+                } else {
+                    $('a#BeltApplyButton').addClass('ui-disabled');
+                }
+            }, 5);
+        }
+        );
+
+    });
+</script>

@@ -1,0 +1,122 @@
+﻿@model List<CoderDojo.Session>
+@{
+    string sessionTitle = System.Configuration.ConfigurationManager.AppSettings["SessionMenuTitle"];
+    string sessionsTitle = System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"];
+    List<CoderDojo.Session> sessions = Model;
+    ViewBag.MenuActive = sessionsTitle;
+    ViewBag.Title = sessionsTitle;
+    string userId = ViewBag.UserId;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+<div class="content-primary">
+    
+    @if (sessions.Count() == 0)
+    {
+        <h2 style="text-align:center;">There are no pods currently being hosted. Check our calendar below for scheduled times.</h2>
+        <iframe src="https://www.google.com/calendar/embed?title=Ennis%20Coder%20Dojo&amp;mode=AGENDA&amp;height=600&amp;wkst=2&amp;bgcolor=%23228822&amp;src=enniscoderdojo%40gmail.com&amp;color=%23125A12&amp;ctz=Europe%2FDublin"
+                style="border-width:0;" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+    }
+
+	<div id="SessionList">
+    @foreach (CoderDojo.Session s in sessions)
+    {
+        <div class="SessionCard">
+            <h2>
+                @s.Topic
+            </h2>
+            <div>
+                <div class="HostCards">
+                    @if (s.Adult != null)
+                    {
+                        <div class="HostCard">
+                            <img data-src="@s.Adult.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                            <span>@s.Adult.FirstName @s.Adult.LastName</span>
+                        </div>
+                    }
+                    @if (s.Adult2 != null)
+                    {
+                        <div class="HostCard">
+                            <img data-src="@s.Adult2.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                            <span>@s.Adult2.FirstName @s.Adult2.LastName</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            <a class="JoinButton" data-href="@s.Url" data-role="button" data-icon="arrow-r">Join</a>
+            <a class="JoinButton2" style="display:none;" href="@s.Url" rel="external" target="_blank">Try this if the above button doesn't work<br /><small>@s.Url</small></a>
+        </div>
+    }
+    </div>
+
+    <div id="BrowserSuggest" style="margin: 50px;text-align: center;">
+        
+        <a href="https://brave.com/?ref=cod209" target="_blank" style="text-decoration: none;display: block; margin: 0 auto;">
+            <h2 style="font-size: 14px;">For best screen sharing, we recommend the Brave browser:</h2>
+            <img style="max-width: 400px;" src="https://brave.com/wp-content/uploads/2018/02/brave_logo_2color_reversed.svg" />
+        </a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        // Join button
+        $(".SessionCard .JoinButton").click(function (event) {
+            event.preventDefault();
+
+            // Update attendance
+            window.settingAttendanceMemberId = null; // '@(userId)';   // If this is the same as the current user id, then the welcome message displays
+            $.ajax("/SessionPodLogin", {
+                type: "POST",
+                data: {
+                    memberId: '@(userId)'
+                }
+            });
+
+            // Show backup method
+            $(".JoinButton2").show();
+
+            // Open window
+            let url = $(event.currentTarget).attr("data-href");
+            window.open(url);
+        });
+    });
+
+    // Start the SignalR connection
+    $.connection.hub.start().done(function () {
+    });
+
+    /**
+     * Receive a notification that someone altered a session
+     */
+    $.connection.sessionHub.client.onSessionChange = function (sessionId) {
+        // If the viewer is on a sessions page, then reload the page
+        if (window.location.href.includes("Sessions")) {
+            window.location.reload(true);
+        }
+    };
+
+    /**
+     * Refresh every 5 minutes for sessions that end on schedule
+     */
+    setInterval(function () {
+        window.location.reload(true);
+    }, 1000 * 60 * 5)
+</script>

@@ -1,0 +1,69 @@
+﻿@model CoderDojo.MemberBadge
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>MemberBadge</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MemberId, "Member")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("MemberId", String.Empty)
+            @Html.ValidationMessageFor(model => model.MemberId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BadgeId, "Badge")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("BadgeId", String.Empty)
+            @Html.ValidationMessageFor(model => model.BadgeId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Awarded)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Awarded)
+            @Html.ValidationMessageFor(model => model.Awarded)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AwardedByAdultId, "Adult")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("AwardedByAdultId", String.Empty)
+            @Html.ValidationMessageFor(model => model.AwardedByAdultId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Notes)
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

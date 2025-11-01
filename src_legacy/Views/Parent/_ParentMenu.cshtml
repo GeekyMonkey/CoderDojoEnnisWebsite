@@ -1,0 +1,28 @@
+﻿@{
+    string activePage = ViewBag.MenuActive;
+    string activeClass = "ui-btn-active ui-state-persist";
+    string inactiveClass = "";
+}
+
+<div data-role="panel" data-postion-fixed="true" id="LeftMenu" data-theme="a" class="nav-search">
+        
+    <div data-role="controlgroup" data-type="horizontal" id="PanelClose">
+        <a href="#" data-rel="close" data-role="button" data-icon="arrow-l">Close Menu</a>
+    </div>
+
+    <ul data-role="listview" data-inset="true">
+        <li><a href="/Parent/MyAccount" class="@(activePage == "MyAccount" ? activeClass : inactiveClass)">My Account</a></li>
+        <li><a href="/Parent/MyKids" class="@(activePage == "MyKids" ? activeClass : inactiveClass)">My Kids</a></li>
+        <li><a href="/Parent/Sessions">@System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"]</a></li>
+    </ul>
+
+    @if (ViewBag.CurrentAdult.IsMentor) {
+        <div data-role="controlgroup" data-type="horizontal">
+            @Html.ActionLink("Mentor Mode", "Index", "Mentor", null, new { data_role="button", data_icon="star"})
+        </div>
+    }
+
+    <div data-role="controlgroup" data-type="horizontal">
+        <a href="/Home/LogOut" data-icon="delete" data-role="button">Log Out</a>
+    </div>
+</div>

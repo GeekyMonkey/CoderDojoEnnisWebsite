@@ -1,0 +1,160 @@
+﻿@using CoderDojo
+@model LoginModel
+@{
+    ViewBag.Title = "Ennis CoderDojo";
+    ViewBag.HideMenuButton = true;
+    ViewBag.BodyTheme = "a";
+    DateTime sessionDate = ViewBag.SessionDate;
+    IEnumerable<MemberAttendance> signedInMembers = ViewBag.SignedInMembers;
+    IEnumerable<AdultAttendance> signedInAdults = ViewBag.SignedInAdults;
+    List<Team> teams = ViewBag.Teams;
+    teams.Add(new Team { TeamName = "No Team", Id = Guid.Empty });
+    char col = ' ';
+}
+
+@section HeaderLeft
+{
+}
+
+@using (Html.BeginForm("SignIn", "Home")) {
+    <input type="hidden" id="SessionDate" value="@sessionDate.ToString("dd-MMM-yyyy")" />
+    
+    <label for="UsernameInput">User</label>
+    @Html.TextBoxFor(x => x.Username, new { @class = "AutoFocus" })
+    
+    <label for="PassowrdInput">Password</label>
+    @Html.PasswordFor(x => x.Password)
+
+    <div class="ErrorMessage">@ViewBag.ValidationMessage</div>
+    <a href="#" id="SignInButton" data-icon="check" data-role="button">Sign In</a>
+}
+
+
+<div data-role="content" style="margin-top: 20px;">
+    <h3>Signed In: <span id="DojoAttendanceCount">@(signedInMembers.Count()) Members, @(signedInAdults.Count()) Mentors</span></h3>
+</div>
+
+    <div class="ui-grid-a">
+    @foreach (Team team in teams.Where(t => t.Deleted == false))
+    {
+        col = (col == 'a') ? 'b' : 'a';
+        <div data-role="ui-block-@(col)" style="float:left;">
+            <div data-role="collapsible" data-collapsed="false" data-content-theme="a" class="TeamHeader" data-color="@team.HexCode">
+                <h3>
+                    <img data-src="@team.ImageUrl" />
+                    Team: @team.TeamName
+                </h3>
+                <ul data-role="listview" data-autodividers="false" id="Team@(team.Id.ToString("N"))">
+                    @foreach (var ma in signedInMembers.Where(ma => ma.Member.TeamId == team.Id || (ma.Member.TeamId == null && team.Id == Guid.Empty)))
+                    {
+                        <li id="m_@ma.MemberId.ToString("N")">
+                            <img data-src="@ma.Member.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';"  />
+                            @ma.Member.MemberName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    @{
+        col = (col == 'a') ? 'b' : 'a';
+        <div data-role="ui-block-@(col)" style="float:left;">
+            <div data-role="collapsible" data-collapsed="false" data-content-theme="a" class="TeamHeader" data-color="#888888">
+                <h3>
+                    Mentors
+                </h3>
+                <ul data-role="listview" data-autodividers="false" id="TeamMentor">
+                    @foreach (var aa in signedInAdults.Where(a => a.Adult.IsMentor))
+                    {
+                        <li id="m_@aa.AdultId.ToString("N")">
+                            <img data-src="@aa.Adult.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';"  />
+                            @aa.Adult.FullName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+    </div>
+
+
+<!-- todo : merge all of these -->
+<div data-role="popup" id="SignInWelcomeDialog" data-theme="c" data-transition="pop" data-overlay-theme="a" class="ui-content">
+    <a href="#" data-rel="close" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <div id="MemberMessages"></div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("input").off("change").on("change", function () {
+            $(".ErrorMessage").fadeOut();
+        });
+
+        $("#Username,#Password").val("");
+
+        $("#Username,#Password").off("keypress").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#SignInButton").trigger("click");
+            }
+        });
+
+        setTimeout(function () {
+            $(".TeamHeader").each(function (i, e) {
+                $(this).find("h3 .ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find("h3 .ui-btn-inner").css("background-color", $(this).data("color"));
+                $(this).find(".TeamColorText").css("color", $(this).data("color"));
+            });
+        }, 1000);
+
+        $("#SignInButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            $.ajax("SignIn", {
+                type: "POST",
+                dataType: "json",
+                data: {
+                    username: $("#Username").val(),
+                    password: $("#Password").val()
+                },
+                success: function (data) {
+                    if (data.ValidationMessage) {
+                        $(".ErrorMessage").html(data.ValidationMessage).show();
+                    } else {
+                        // Show the welcome message
+                        var memberId = data.memberId;
+                        $(".ErrorMessage").hide();
+                        $("#Username,#Password").val("");
+                        $("#MemberMessages").html(data.memberMessage);
+                        $("#SignInWelcomeDialog").last().popup("open").on("click", function () {
+                            $("#SignInWelcomeDialog").last().popup("close");
+                        });
+                    }
+                }
+            });
+        });
+
+        // Start the SignalR connection
+        $.connection.hub.start().done(function () {
+        });
+
+        // Receive a notification that someone altered attendance
+        $.connection.attendanceHub.client.onAttendanceChange = function (attendanceDate, memberId, memberName, teamId, present, sessionCount, dojoAttendanceCount, memberMessage, memberImageUrl) {
+            if ($("#SessionDate").val() == attendanceDate) {
+
+                // Update the list
+                $("li#m_" + memberId).remove();
+                if (teamId == "Mentors") {
+                    $("#AdultAttendanceCount").html(dojoAttendanceCount);
+                } else {
+                    $("#DojoAttendanceCount").html(dojoAttendanceCount);
+                }
+                var ul = $("ul#Team" + teamId);
+                if (present == "true") {
+                    ul.prepend("<li id='m_" + memberId + "'><img src='" + memberImageUrl + "' />" + memberName + "</li>");
+                    ul.listview("refresh");
+                }
+                ul.trigger("updatelayout");
+            }
+        };
+    });
+</script>

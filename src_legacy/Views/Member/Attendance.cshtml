@@ -1,0 +1,32 @@
+﻿@model Member
+@{
+    Member member = Model;
+    ViewBag.Title = "Welcome " + member.FirstName;
+    int sessionCount = member.MemberAttendances.Count();
+    ViewBag.MenuActive = "Attendance";
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+<h2>Total sessions attended: @(sessionCount)</h2>
+<h2>Dates</h2>
+<ul>
+    @foreach(var ma in member.MemberAttendances.OrderByDescending(ma => ma.Date)) {
+        <li>@ma.Date.ToString("dd-MMM-yyyy")</li>
+    }
+</ul>

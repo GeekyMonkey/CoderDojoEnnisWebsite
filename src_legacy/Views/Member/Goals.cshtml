@@ -1,0 +1,217 @@
+﻿@model Member
+@{
+    Member member = Model;
+    ViewBag.Title = "Goals";
+    ViewBag.MenuActive = "Goals";
+    List<Belt> belts = ViewBag.Belts;
+    List<MemberBelt> MemberBelts = member.MemberBelts.Where(mb => mb.Awarded != null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<MemberBelt> MemberBeltsPending = member.MemberBelts.Where(mb => mb.Awarded == null && mb.RejectedDate == null).OrderBy(mb => mb.Belt.SortOrder).ToList();
+    List<MemberBadge> MemberBadgeGoals = member.MemberBadges.Where(mb => mb.Awarded == null && mb.GoalDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    List<Guid> BeltsEarnedIds = MemberBelts.Select(mb => mb.BeltId).ToList();
+    List<Guid> BeltsPendingIds = MemberBeltsPending.Select(mb => mb.BeltId).ToList();
+    List<Belt> BeltsNotEarned = belts.Where(b => BeltsEarnedIds.Contains(b.Id) == false).ToList();
+    List<MemberBadge> MemberBadgesPending = member.MemberBadges
+        .Where(mb => mb.Awarded == null && mb.RejectedDate == null && mb.ApplicationDate != null)
+        .OrderBy(mb => mb.Badge.BadgeCategory.CategoryName)
+        .ThenBy(mb => mb.Badge.Achievement)
+        .ToList();
+    Belt NextBelt = BeltsNotEarned.FirstOrDefault();
+    MemberBadge badgePending;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+    <a data-role="button" data-icon="check" class="FormSave">Save</a>
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+
+<div data-role="content">
+    <form role="controlgroup" action="ProfileSave" method="post">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.XboxGamertag)
+        @Html.HiddenFor(m => m.Login)
+        @Html.HiddenFor(m => m.GithubLogin)
+        @Html.HiddenFor(m => m.ScratchName)
+
+        <h3>Short Term Goal (2 months)</h3>
+        @Html.TextAreaFor(m => m.GoalShortTerm)
+
+        <h3>Long Term Goal (2 years)</h3>
+        @Html.TextAreaFor(m => m.GoalLongTerm)
+
+        @if (NextBelt != null)
+        {
+            Belt belt = NextBelt;
+            MemberBelt beltApplication = null;
+            string divclass = "BeltHeader";
+            if (BeltsPendingIds.Contains(belt.Id))
+            {
+                beltApplication = MemberBeltsPending.FirstOrDefault(mb => mb.BeltId == belt.Id);
+                divclass += " ApplicationPending";
+            }
+            <h3>Next Belt</h3>
+            <div data-role="collapsible" data-content-theme="a" class="@divclass" data-color="@belt.HexCode">
+                <h3>@belt.Color</h3>
+                <div data-role="fieldcontain">
+                    <p>@Html.Raw(belt.Description.Replace("\r\n", "<br />"))</p>
+
+                    @* Rejections *@
+                    @foreach (var rejection in member.MemberBelts
+                        .Where(mb => (mb.BeltId == belt.Id) && (mb.RejectedDate != null))
+                        .OrderBy(mb => mb.RejectedDate))
+                    {
+                        <div class="BeltRejection">
+                            <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                            <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                        </div>
+                    }
+
+                    @* Pending Application *@
+                    @if (beltApplication != null)
+                    {
+                        <p>Application for the <span class="BeltColorText">@(belt.Color.ToLower()) belt</span> was submitted on @(beltApplication.ApplicationDate.Value.ToString("dd-MMM-yyyy")).</p>
+                        if (!string.IsNullOrEmpty(beltApplication.ApplicationNotes))
+                        {
+                            <blockquote>@(beltApplication.ApplicationNotes) - @(beltApplication.Member.MemberName)</blockquote>
+                        }
+                    }
+                </div>
+            </div>
+        }
+
+        <h3>Badge Goals</h3>
+        @if (MemberBadgeGoals.Count == 0)
+        {
+            <p>Select Badges and choose some goals</p>
+        }
+        else
+        {
+            foreach (var goal in MemberBadgeGoals)
+            {
+                var badge = goal.Badge;
+
+                <div data-role="collapsible" data-content-theme="a" class="BadgeHeader">
+                    <h3 class="BadgeGoalHeading">
+                        <span>@(goal.Badge.BadgeCategory.CategoryName) - @(goal.Badge.Achievement)</span>
+                        <img src="~/Images/Icons/star.png" />
+                    </h3>
+
+                    <div data-role="fieldcontain">
+                        <div class="DescriptionAndGoal">
+                            <p>@Html.Raw(badge.Description.Replace("\r\n", "<br />"))</p>
+                        </div>
+
+                        @* Rejections *@
+                        @foreach (var rejection in member.MemberBadges
+                            .Where(mb => (mb.BadgeId == badge.Id) && (mb.RejectedDate != null))
+                            .OrderBy(mb => mb.RejectedDate))
+                        {
+                            <div class="BadgeRejection">
+                                <p>Rejected on @(rejection.RejectedDate.Value.ToString("dd-MMM-yyyy"))</p>
+                                <blockquote>@rejection.RejectedNotes - @rejection.RejectedByAdult.FullName</blockquote>
+                            </div>
+                        }
+
+                        @* Application *@
+                        @{
+                            badgePending = MemberBadgesPending.FirstOrDefault(mb => mb.BadgeId == badge.Id);
+                        }
+                        @if (badgePending != null)
+                        {
+                            <p><i>Application for the @(badge.BadgeCategory.CategoryName) - @(badge.Achievement) badge was submitted on @(badgePending.ApplicationDate.Value.ToString("dd-MMM-yyyy")). Talk to a mentor to find out what's up.</i></p>
+                        } else { 
+                            <div data-role="fieldcontain">
+                                <label for="BadgeApplicationMessage">Tell us why you deserve this:</label>
+                                <textarea id="BadgeApplicationMessage" class="BadgeApplicationMessage"></textarea>
+                            </div>
+                            <a href="/Member/BadgeApplication/@badge.Id.ToString("N")" data-role="button" data-inline="false" data-icon="star" class="BadgeApplyButton ui-disabled">Apply</a>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+    </form>
+</div>
+
+
+<style>
+    .BadgeGoalHeading .ui-btn-text {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .DescriptionAndGoal {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+
+<script type="text/javascript">
+    $(function () {
+        const minMessageLength = 5;
+
+        setTimeout(function () {
+            // Apply colors
+            $(".BeltHeader").each(function (i, e) {
+                $(this).find("h3 .ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find("h3 .ui-btn-inner").css("background-color", $(this).data("color"));
+                $(this).find(".BeltColorText").css("color", $(this).data("color"));
+            });
+
+            // Open the first pending one
+            $(".ApplicationPending h3").first().trigger("click");
+        }, 1000);
+
+        $(".BadgeApplyButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            var applicationContainer = $(this).closest(".BadgeHeader");
+            var message = applicationContainer.find(".BadgeApplicationMessage").val();
+            if (message.length >= minMessageLength) {
+                $.ajax($(this).attr("href"), {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        message: message
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            } else {
+                applicationContainer.find(".BadgeApplicationMessage").focus();
+                applicationContainer.find(".BadgeApplicationMessage").prev("label").css("color", "red");
+            }
+        });
+
+        $(".BadgeApplicationMessage").off("keyup change").on("keyup change", function () {
+            var applicationContainer = $(this).closest(".BadgeHeader");
+            setTimeout(function () {
+                var message = applicationContainer.find(".BadgeApplicationMessage").val();
+                applicationContainer.find('a.ApproveBadge').button();
+                if (message.length >= minMessageLength) {
+                    applicationContainer.find('a.BadgeApplyButton').removeClass('ui-disabled');
+                } else {
+                    applicationContainer.find('a.BadgeApplyButton').addClass('ui-disabled');
+                }
+            }, 5);
+        });
+    });
+</script>

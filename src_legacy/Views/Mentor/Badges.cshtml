@@ -1,0 +1,39 @@
+﻿@model List<CoderDojo.Badge>
+@{
+    List<CoderDojo.Badge> badges = Model;
+    ViewBag.MenuActive = "Badges";
+    ViewBag.Title = "Badges";
+    BadgeCategory previousCategory = null;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+    <a href="BadgeAdd" data-role="button" data-icon="plus">New Badge</a>
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<div class="content-primary">
+	<ul data-role="listview" data-autodividers="false" id="myFilter" data-filter="false" data-filter-placeholder="Search..." data-filter-theme="a">
+    @foreach (Badge b in badges)
+    {
+        if (b.BadgeCategory != previousCategory)
+        {
+            previousCategory = b.BadgeCategory;
+            <li data-role="list-divider">@(b.BadgeCategory.CategoryName)</li>
+        }
+        <li><a href="Badge/@(b.Id.ToString("N"))">@b.Achievement</a></li>
+    }
+    </ul>
+</div>

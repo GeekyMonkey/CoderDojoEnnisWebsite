@@ -1,0 +1,68 @@
+﻿@model List<CoderDojo.AttendanceModel>
+@{
+    DateTime attendanceDate = ViewBag.AttendanceDate;
+    string attendanceDateFormatted = attendanceDate.ToString("dd-MMM-yyyy");
+    ViewBag.Title = "Attendance " + attendanceDateFormatted;
+    ViewBag.MenuActive = "Attendance";
+    List<CoderDojo.AttendanceModel> attendance = Model;
+    int attendanceCount = attendance.Count(a => a.Present);
+}
+
+@section HeaderLeft {
+}
+
+@section HeaderTitle {
+    <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+        <label style="float:left;padding-top: 7px;">Attendance&nbsp;</label>
+        <select data-inline="true" id="AttendanceDateSelect">
+            @foreach(DateTime dt in ViewBag.SessionDates) {
+                string dateFormatted = dt.ToString("dd-MMM-yyyy");
+                <option @if (dateFormatted == attendanceDateFormatted) { <text>selected='selected'</text>}>@dateFormatted</option>
+            }
+        </select>
+    </div>
+}
+
+@section HeaderRight {
+    <a href="MemberSignup?PreviousPage=Attendance" data-role="button" data-icon="plus">Signup</a>
+}
+
+@section Footer
+{
+    <div data-role="controlgroup">
+        <label>Total Attendance:&nbsp;</label><span id="TotalAttendanceNumber">@attendanceCount</span>
+        <a href="ChooseRandom" data-role="button" data-icon="plus">Choose Random</a>
+    </div>
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+@using (Html.BeginForm("Attendance", "Member")) {
+<ul data-role="listview" data-autodividers="true" id="myFilter" data-filter="true" data-filter-placeholder="Search members..." data-filter-theme="a">
+@foreach (CoderDojo.AttendanceModel a in attendance)
+{
+    string memId = a.MemberId.ToString("N");
+<li>
+    <input type="checkbox" id="P@(memId)" @if (a.Present) { <text>checked="checked"</text> } />
+    <label for="P@(memId)">@a.MemberName</label>
+    <div class="BeltStripe" style="background-color:@(a.MemberBeltColorHex)"></div>
+    <!-- todo: <span class="Count"></span> -->
+</li>
+}
+</ul>
+}
+
+<div data-role="popup" id="MemberWelcomeDialog" data-theme="c" data-transition="pop" data-overlay-theme="a" class="ui-content">
+    <a href="#" data-rel="close" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right CloseButton">Close</a>
+    <div id="MemberMessages"></div>
+    <a href="#" data-role="button" data-icon="arrow-r" data-corners="true" data-iconpos="right" id="WelcomeDetailsButton">View Member Details</a>
+</div>
+
+<script type="text/javascript">
+    (function ($) {
+        initAttendancePage();
+    })(jQuery);
+</script>

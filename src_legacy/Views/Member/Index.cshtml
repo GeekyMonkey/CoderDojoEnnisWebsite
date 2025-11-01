@@ -1,0 +1,31 @@
+﻿@model Member
+@{
+    Member member = Model;
+    ViewBag.Title = "Welcome " + member.FirstName;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MemberMenu")
+}
+
+<div id="MemberIndexMessages">@Html.Raw(member.GetLoginMessage(true))</div>
+
+<style type="text/css">
+#MemberIndexMessages p {
+    border-top : dotted 1px #666;
+    padding-top: 4px;
+}
+</style>

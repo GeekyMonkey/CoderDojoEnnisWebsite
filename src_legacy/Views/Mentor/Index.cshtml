@@ -1,0 +1,86 @@
+﻿@model Adult
+@{
+    Adult mentor = Model;
+    ViewBag.Title = "Mentor: " + mentor.FirstName;
+    ViewBag.MenuActive = "Index";
+    List<MemberBelt> beltApplications = ViewBag.BeltApplications;
+    List<MemberBadge> badgeApplications = ViewBag.BadgeApplications;
+    List<Guid> presentMemberIds = ViewBag.PresentMemberIds;
+}
+
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_MentorMenu")
+}
+
+<h2>Belt Applications</h2>
+@if (beltApplications.Count() > 0)
+{
+    <ul data-role="listview" data-inset="true">
+        @foreach (var mb in beltApplications)
+        {
+            bool present = presentMemberIds.Contains(mb.MemberId);
+            <li data-beltcolor="@mb.Belt.HexCode"
+                class="ApplicationListItem @(present ? "Present" : "") @(mb.Member.RegisteredCurrentTerm ? "Registered" : "NotRegistered")">
+                <a href="/Mentor/MemberBelts/@mb.MemberId.ToString("N")">
+                    <img data-src="@mb.Member.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                    <div class="BeltStripe" style="background-color:@(mb.Member.BeltColorHex)"></div>
+                    <span>@mb.Member.MemberName</span>
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>There are no pending belt applications.</p>
+}
+
+
+<h2>Badge Applications</h2>
+@if (badgeApplications.Count() > 0)
+{
+    <ul data-role="listview" data-inset="true">
+        @foreach (var mb in badgeApplications)
+        {
+            bool present = presentMemberIds.Contains(mb.MemberId);
+            <li class="ApplicationListItem @(present ? "Present" : "") @(mb.Member.RegisteredCurrentTerm ? "Registered" : "NotRegistered")">
+                <a href="/Mentor/MemberBadges/@mb.MemberId.ToString("N")">
+                    <img data-src="@mb.Member.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';" />
+                    <div class="BeltStripe" style="background-color:@(mb.Member.BeltColorHex)"></div>
+                    <span>@(mb.Member.MemberName) - @(mb.Badge.BadgeCategory.CategoryName) - @(mb.Badge.Achievement)</span>
+                </a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>There are no pending badge applications.</p>
+}
+
+<script type="text/javascript">
+    $(function () {
+        setTimeout(function () {
+            $("li[data-beltcolor]").each(function () {
+                var color = $(this).data("beltcolor");
+                $(this).find(".ui-btn-text").css("background-color", "rgba(0,0,0,.2)");
+                $(this).find(".ui-li").css("transition", "background-color 0.5s")
+                    .css("background-color", color);
+            });
+        }, 100);
+    });
+</script>

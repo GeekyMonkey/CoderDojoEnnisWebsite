@@ -1,0 +1,25 @@
+﻿@model Adult
+@{
+    Adult parent = Model;
+    ViewBag.Title = "Parent: " + parent.FirstName;
+}
+
+@section HeaderLeft
+{
+}
+
+@section HeaderRight
+{
+}
+
+@section Footer
+{
+}
+
+@section Panels
+{
+    @Html.Partial("_ParentMenu")
+}
+
+<p>Use the menu at the top left to navigate to other parent functions.</p>
+<p>In the future, you will see news and status updates appear here.</p>

@@ -1,0 +1,376 @@
+﻿@using CoderDojo
+@model LoginModel
+@{
+    ViewBag.Title = "Ennis CoderDojo";
+    ViewBag.HideMenuButton = true;
+    ViewBag.BodyTheme = "a";
+    DateTime sessionDate = ViewBag.SessionDate;
+    IEnumerable<MemberAttendance> signedInMembers = ViewBag.SignedInMembers;
+    IEnumerable<AdultAttendance> signedInAdults = ViewBag.SignedInAdults;
+    List<Team> teams = ViewBag.Teams;
+    teams.Add(new Team { TeamName = "No Team", Id = Guid.Empty });
+    char col = ' ';
+}
+
+@section HeaderLeft
+{
+}
+
+    <div id="QR" style="float:right;width:50%;">
+        <video id="v" width="320" height="240"></video>
+        <canvas id="qr-canvas" style="display:none;" width="320" height="240"></canvas>
+    </div>
+
+@using (Html.BeginForm("SignIn", "Home")) {
+    <input type="hidden" id="SessionDate" value="@sessionDate.ToString("dd-MMM-yyyy")" />
+
+    <label for="UsernameInput">User</label>
+    @Html.TextBoxFor(x => x.Username, new { @class = "AutoFocus" })
+    
+    <label for="PassowrdInput">Password</label>
+    @Html.PasswordFor(x => x.Password)
+
+    <div class="ErrorMessage">@ViewBag.ValidationMessage</div>
+    <a href="#" id="SignInButton" data-icon="check" data-role="button">Sign In</a>
+}
+
+
+<div data-role="content" style="margin-top: 20px;">
+    <h3>Members Signed In: <span id="DojoAttendanceCount">@(signedInMembers.Count())</span></h3>
+</div>
+
+    <div class="ui-grid-a">
+        @foreach (Team team in teams.Where(t => t.Deleted == false))
+        {
+            col = (col == 'a') ? 'b' : 'a';
+        <div data-role="ui-block-@(col)" style="float:left;">
+            <div data-role="collapsible" data-collapsed="false" data-content-theme="a" class="TeamHeader" data-color="@team.HexCode">
+                <h3>
+                    <img data-src="@team.ImageUrl" />
+                    Team: @team.TeamName
+                </h3>
+                <ul data-role="listview" data-autodividers="false" id="Team@(team.Id.ToString("N"))">
+                    @foreach (var ma in signedInMembers.Where(ma => ma.Member.TeamId == team.Id || (ma.Member.TeamId == null && team.Id == Guid.Empty)))
+                    {
+                        <li id="m_@ma.MemberId.ToString("N")">
+                            <img data-src="@ma.Member.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';"  />
+                            @ma.Member.MemberName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        }
+        @{
+        col = (col == 'a') ? 'b' : 'a';
+        <div data-role="ui-block-@(col)" style="float:left;">
+            <div data-role="collapsible" data-collapsed="false" data-content-theme="a" class="TeamHeader" data-color="#ffffff">
+                <h3>
+                    Mentors
+                </h3>
+                <ul data-role="listview" data-autodividers="false" id="TeamMentor">
+                    @foreach (var aa in signedInAdults.Where(a => a.Adult.IsMentor))
+                    {
+                        <li id="m_@aa.AdultId.ToString("N")">
+                            <img data-src="@aa.Adult.ImageUrl" onerror="if (this.src != '/Images/User.png') this.src = '/Images/User.png';"  />
+                            @aa.Adult.FullName
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        }
+
+    </div>
+
+
+<!-- todo : merge all of these -->
+<div data-role="popup" id="SignInWelcomeDialog" data-theme="c" data-transition="pop" data-overlay-theme="a" class="ui-content">
+    <a href="#" data-rel="close" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <div id="MemberMessages"></div>
+</div>
+
+
+<script defer src="/scripts/qr/js/grid.js"></script>
+<script defer src="/scripts/qr/js/version.js"></script>
+<script defer src="/scripts/qr/js/detector.js"></script>
+<script defer src="/scripts/qr/js/formatinf.js"></script>
+<script defer src="/scripts/qr/js/errorlevel.js"></script>
+<script defer src="/scripts/qr/js/bitmat.js"></script>
+<script defer src="/scripts/qr/js/datablock.js"></script>
+<script defer src="/scripts/qr/js/bmparser.js"></script>
+<script defer src="/scripts/qr/js/datamask.js"></script>
+<script defer src="/scripts/qr/js/rsdecoder.js"></script>
+<script defer src="/scripts/qr/js/gf256poly.js"></script>
+<script defer src="/scripts/qr/js/gf256.js"></script>
+<script defer src="/scripts/qr/js/decoder.js"></script>
+<script defer src="/scripts/qr/js/qrcode.js"></script>
+<script defer src="/scripts/qr/js/findpat.js"></script>
+<script defer src="/scripts/qr/js/alignpat.js"></script>
+<script defer src="/scripts/qr/js/databr.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("input").off("change").on("change", function () {
+            $(".ErrorMessage").fadeOut();
+        });
+
+        $("#Username,#Password").val("");
+
+        $("#Username,#Password").off("keypress").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#SignInButton").trigger("click");
+            }
+        });
+
+        setTimeout(function () {
+            $(".TeamHeader").each(function (i, e) {
+                $(this).find("h3 .ui-btn-inner").css("transition", "background-color 2s");
+                $(this).find("h3 .ui-btn-inner").css("background-color", $(this).data("color"));
+                $(this).find(".TeamColorText").css("color", $(this).data("color"));
+            });
+        }, 1000);
+
+        $("#SignInButton").off("click").on("click", function (e) {
+            e.preventDefault();
+            $.ajax("SignIn", {
+                type: "POST",
+                dataType: "json",
+                data: {
+                    username: $("#Username").val(),
+                    password: $("#Password").val()
+                },
+                success: function (data) {
+                    if (data.ValidationMessage) {
+                        $(".ErrorMessage").html(data.ValidationMessage).show();
+                    } else {
+                        // Show the welcome message
+                        var memberId = data.memberId;
+                        $(".ErrorMessage").hide();
+                        $("#Username,#Password").val("");
+                        $("#MemberMessages").html(data.memberMessage);
+                        $("#SignInWelcomeDialog").last().popup("open").on("click", function () {
+                            $("#SignInWelcomeDialog").last().popup("close");
+                        });
+                    }
+                }
+            });
+        });
+
+        loginWithId = function (id) {
+            $("#Username,#Password").val("");
+            $.ajax("SignInQR", {
+                type: "POST",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+                    if (data.ValidationMessage) {
+                        $(".ErrorMessage").html(data.ValidationMessage).show();
+                    } else {
+                        // Show the welcome message
+                        var memberId = data.memberId;
+                        $(".ErrorMessage").hide();
+                        $("#Username,#Password").val("");
+                        $("#MemberMessages").html(data.memberMessage);
+                        $("#SignInWelcomeDialog").last().popup("open").on("click", function () {
+                            $("#SignInWelcomeDialog").last().popup("close");
+                        });
+                    }
+                }
+            });
+        }
+
+        // Start the SignalR connection
+        $.connection.hub.start().done(function () {
+        });
+
+        // Receive a notification that someone altered attendance
+        $.connection.attendanceHub.client.onAttendanceChange = function (attendanceDate, memberId, memberName, teamId, present, sessionCount, dojoAttendanceCount, memberMessage, memberImageUrl) {
+            if ($("#SessionDate").val() == attendanceDate) {
+
+                // Update the list
+                $("li#m_" + memberId).remove();
+                if (teamId == "Mentors") {
+                    $("#AdultAttendanceCount").html(dojoAttendanceCount);
+                } else {
+                    $("#DojoAttendanceCount").html(dojoAttendanceCount);
+                }
+                var ul = $("ul#Team" + teamId);
+                if (present == "true") {
+                    ul.prepend("<li id='m_" + memberId + "'><img src='" + memberImageUrl + "' />" + memberName + "</li>");
+                    ul.listview("refresh");
+                }
+                ul.trigger("updatelayout");
+            }
+        };
+
+        var QRCodeScanner = {
+            canvas: document.getElementById("qr-canvas"),
+            video: document.getElementById('v'),
+            capture: document.getElementById('capture'),
+            // photo: document.getElementById('p'),
+            width: 320,
+            height: 240,
+            streaming: false,
+
+            /**
+             * Present content on screen
+             */
+            read: function scanner_read(txt) {
+                // alert(txt);
+                if (txt) {
+                    // this.video.pause();
+                    // var msg = document.getElementById('message');
+                    // msg.innerHTML = this.formatContent(txt);
+
+                    loginWithId(txt);
+                }
+            },
+
+            formatContent: function scanner_format(txt) {
+                if (txt.indexOf('http') === 0) {
+                    return '<a href="' + txt + '" target="_blank">' + txt + '</a>';
+                } else {
+                    return txt;
+                }
+            },
+
+            // imageData: null,
+            context: null,
+
+            init: function scanner_init() {
+                navigator.getMedia = (navigator.getUserMedia ||
+                                     navigator.webkitGetUserMedia ||
+                                     navigator.mozGetUserMedia ||
+                                     navigator.msGetUserMedia);
+                var self = this;
+                navigator.getMedia(
+                  {
+                      video: true,
+                      audio: false
+                  },
+                  function (stream) {
+                      // if (navigator.mozGetUserMedia) {
+                      //   self.video.mozSrcObject = stream;
+                      // } else {
+                      var vendorURL = window.URL || window.webkitURL;
+                      self.video.src = vendorURL.createObjectURL(stream);
+                      // }
+                      self.video.play();
+                  },
+                    function (err) {
+                        console.log("An error occured! " + err);
+                    }
+                );
+
+                this.canvas.addEventListener("dragenter", this.dragenter, false);
+                this.canvas.addEventListener("dragover", this.dragover, false);
+                this.canvas.addEventListener("drop", this.drop.bind(this), false);
+
+                qrcode.callback = this.read.bind(this);
+
+                this.video.addEventListener('canplay', function (ev) {
+                    if (!self.streaming) {
+                        // self.height = self.video.videoHeight / (self.video.videoWidth/self.width);
+                        self.video.setAttribute('width', self.width);
+                        self.video.setAttribute('height', self.height);
+                        self.canvas.setAttribute('width', self.width);
+                        self.canvas.setAttribute('height', self.height);
+                        self.streaming = true;
+                        // console.log('w:'+self.video.videoWidth+'/h:'+self.video.videoHeight);
+                        self.canvas.style.width = self.width + "px";
+                        self.canvas.style.height = self.height + "px";
+                        self.canvas.width = self.width;
+                        self.canvas.height = self.height;
+                        self.context = self.canvas.getContext("2d");
+                        self.context.clearRect(0, 0, self.width, self.height);
+                        // self.imageData = self.context.getImageData(0,0,
+                        //   self.video.videoWidth,self.video.videoHeight);
+                    }
+                }, false);
+
+                //this.capture.style.display = 'none';
+
+                this.video.addEventListener('play', function () {
+                    //It should repeatly capture till a qrcode is successfully captured.
+                    setInterval(function () {
+                        self.scanQRCode();
+                    }, 500);
+                }, false);
+            },
+
+            dragenter: function scanner_dragenter(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            },
+
+            dragover: function scanner_dragover(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            },
+
+            drop: function scanner_drop(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                var dt = e.dataTransfer;
+                var files = dt.files;
+
+                this.handleFiles(files);
+            },
+
+            handleFiles: function scanner_handleFiles(f) {
+                var o = [];
+                for (var i = 0; i < f.length; i++) {
+                    var reader = new FileReader();
+
+                    reader.onload = (function (theFile) {
+                        return function (e) {
+                            qrcode.decode(e.target.result);
+                        };
+                    })(f[i]);
+
+                    // Read in the image file as a data URL.
+                    reader.readAsDataURL(f[i]);
+                }
+            },
+
+            /**
+             * Decode the QRCode
+             */
+            scanQRCode: function scanner_scanQRCode() {
+                // this.video.play();
+                this.context.drawImage(this.video, 0, 0, this.width, this.height);
+                var data = this.canvas.toDataURL('image/png');
+                // this.photo.setAttribute('src', data);
+
+                if (qrcode.decode()) {
+                    /*
+                    // Stop automatic capture.
+                    this.capture.style.display = 'block';
+                    this.video.pause();
+
+                    var self = this;
+                    // Restart video capturing.
+                    this.capture.addEventListener('click', function () {
+                        document.getElementById('message').innerHTML = "";
+                        self.capture.style.display = 'none';
+                        self.video.play();
+                    }, false);
+                    */
+                }
+            }
+        };
+
+        QRCodeScanner.init();
+    });
+</script>
+
+
+<style>
+    form {
+        width: 50%;
+    }
+</style>
