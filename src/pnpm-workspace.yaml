@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
   - '@hebilicious/vue-query-nuxt'
+  - '@parcel/watcher'
   - esbuild
   - sharp
   - vue-demi

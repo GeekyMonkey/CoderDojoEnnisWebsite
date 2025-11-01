@@ -6,10 +6,9 @@
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
-		"dev": "cls && pnpm install && nuxt dev",
-		"dev-unix": "clear && pnpm install && nuxt dev",
+		"dev": "npx cls-cli && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
-		"format": "cls && biome format . --write",
+		"format": "cls-cli && biome format . --write",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
 		"preview2": "npm run build && wrangler pages dev",
@@ -17,8 +16,7 @@
 		"start": "node .output/server/index.mjs",
 		"supabase-migrate": "supabase db push",
 		"supabase-types": "supabase gen types typescript --project-id newsofwpimzmfbqsooka --schema coderdojo > types/supabase.ts",
-		"test": "cls && vitest",
-		"test-unix": "clear && vitest"
+		"test": "npx cls-cli && vitest"
 	},
 	"dependencies": {
 		"@iconify/json": "2.2.400",
@@ -53,6 +51,7 @@
 		"@types/node": "24.9.1",
 		"@vitejs/plugin-vue": "6.0.1",
 		"@vue/test-utils": "2.4.6",
+		"cls-cli": "2.2.4",
 		"cross-env": "10.1.0",
 		"nitro-cloudflare-dev": "0.2.2",
 		"postcss-custom-properties": "14.0.6",
