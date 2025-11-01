@@ -1,0 +1,166 @@
+# MemberWebsiteFeaturesDetailed
+
+## Members (Students/Ninjas)
+- **Profile Management**: View and edit personal profile including Github login, Xbox gamertag, Scratch name, short-term and long-term goals.
+  - Presented fields: Name (display only), Birth Year (display only), Team info (display, with members list), Login (disabled textbox), GithubLogin (textbox), ScratchName (textbox), XboxGamertag (textbox), Print ID button, links to external profiles if set.
+  - Required inputs: GithubLogin (string, optional), ScratchName (string, optional), XboxGamertag (string, optional).
+  - Validation rules: Trim strings, no specific length or format validation in view.
+  - Possible outcomes: Success - save changes, redirect to /Member/Profile. Errors - if ModelState invalid, return view with errors (not shown in view).
+- **Goals**: View and set goals for badges, organized by belts.
+  - Presented fields: GoalShortTerm (textarea), GoalLongTerm (textarea), Next Belt info (display, with description, rejections, pending application), Badge Goals (list with descriptions, rejections, application status, textarea for new applications).
+  - Required inputs: GoalShortTerm (string, optional), GoalLongTerm (string, optional), BadgeApplicationMessage (textarea, min 5 chars for application).
+  - Validation rules: Badge application message length >=5, else highlight label red and focus field.
+  - Possible outcomes: Save goals - redirect to ProfileSave, success. Badge application - AJAX POST to BadgeApplication, success reload page. Badge goal change - AJAX POST to MemberGoalChange, success reload.
+- **Badges**: View all badges, view available badges, apply for badges with notes.
+  - Presented fields: Earned badges (list with descriptions, application notes, awarded date/notes), Pending applications (list with rejections), Available badges (by category, with descriptions, rejections, goal status, application textarea).
+  - Required inputs: BadgeApplicationMessage (textarea, min 5 chars).
+  - Validation rules: Message length >=5, else highlight label red and focus.
+  - Possible outcomes: Apply - AJAX POST to BadgeApplication, success reload. Goal add/remove - AJAX POST to MemberGoalChange, success reload.
+- **Belts**: View all belts, apply for belts with notes.
+  - Presented fields: Earned belts (list with descriptions, application notes, awarded date/notes), Not earned belts (list with descriptions, rejections, application textarea for next belt).
+  - Required inputs: BeltApplicationMessage (textarea, min 5 chars).
+  - Validation rules: Message length >=5, else highlight label red and focus.
+  - Possible outcomes: Apply - AJAX POST to BeltApplication, success reload.
+- **Attendance**: View personal attendance history.
+  - Presented fields: Total sessions count, list of attendance dates.
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only.
+- **Sessions**: View upcoming non-mentor-only sessions.
+  - Presented fields: List of sessions (topic, hosts with images, join button), Google calendar iframe if no sessions.
+  - Required inputs: Click join button.
+  - Validation rules: None.
+  - Possible outcomes: Join - AJAX to /SessionPodLogin with memberId, open new window to session URL.
+- **Team Member**: View details of other team members.
+  - Presented fields: Name, Birth Year, Team info (with members list), Membership links (Scratch, Xbox), Earned belts (list), Earned badges (list).
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only, links to external profiles.
+
+## Mentors
+- **Dashboard**: View pending belt and badge applications, present members for current session.
+  - Presented fields: Belt applications list (member name, image, belt color, present/registered status), Badge applications list (member name, badge, image, belt color, present/registered status).
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Click links to /Mentor/MemberBelts or /Mentor/MemberBadges for details.
+- **Attendance Management**: View and edit attendance for sessions, mark members/adults present/absent, random member selection.
+  - Presented fields: Date selector (dropdown), list of members/adults (checkboxes for present, images, belt stripes, filter search), total attendance count.
+  - Required inputs: Checkboxes (bool for present), date select.
+  - Validation rules: None specific.
+  - Possible outcomes: Change checkbox - AJAX to AttendanceChange, update count. Change date - reload page. Signup - link to MemberSignup. Random - link to AttendanceRandom.
+- **Member Management**: List members, view/edit member details, signup new members, merge members, view member badges/belts/attendance/goals/parents, manage parent-child relationships.
+  - Presented fields: Varies by sub-view, e.g., Members list (names, images, present status), Member details (name, birth year, logins, team, etc.), Badges/Belts (earned, pending, with approve/reject buttons), Attendance (dates), Goals (goals, belts), Parents (list with add/remove).
+  - Required inputs: Varies, e.g., MemberSave (name, birth year, logins - strings), BadgeApprove (notes - string), BeltApprove (notes - string), CreateRelationship (parentId, memberId - Guids).
+  - Validation rules: ModelState.IsValid for saves, Trim strings.
+  - Possible outcomes: Save - redirect to /Mentor/Members, success. Approve/Reject - AJAX to BadgeApprove/BadgeReject/BeltApprove/BeltReject, success Json("OK"). Merge - POST to MergeMembers, success Json(success=true). Errors - return view with errors.
+- **Adult Management**: List adults/parents/mentors, view/edit adult details, signup new adults, merge adults, view adult badge categories.
+  - Presented fields: Adults list (names, images), Adult details (name, email, phone, logins, badge categories checkboxes), Signup form (similar), Merge form (select fields to merge).
+  - Required inputs: AdultSave (FirstName, LastName, Email, Phone, Login, Password - strings, BadgeCategoriesSelected - Guid array), MergeAdults (adultId, mergeId, newPhone, newEmail - ints).
+  - Validation rules: ModelState.IsValid, Trim strings.
+  - Possible outcomes: Save - redirect to /Mentor/Adults, success. Merge - POST to MergeAdults, success Json(success=true). Errors - return view.
+- **Belt/Badge Management**: Approve/reject/undo belt/badge applications, manage belts (add/edit/delete), manage badges (add/edit/delete), manage badge categories (add/edit/delete).
+  - Presented fields: Lists (names, descriptions), Edit forms (Color, Description, HexCode, SortOrder for belts; Achievement, Description, BadgeCategoryId for badges; CategoryName, CategoryDescription for categories).
+  - Required inputs: BeltSave (Color, Description, HexCode, SortOrder - strings/ints), BadgeSave (Achievement, Description, BadgeCategoryId - strings/Guid), BadgeCategorySave (CategoryName, CategoryDescription - strings).
+  - Validation rules: ModelState.IsValid.
+  - Possible outcomes: Save - redirect to list, success. Delete - POST to BeltDelete/BadgeDelete/BadgeCategoryDelete, redirect to list. Errors - return view.
+- **Session Management**: View sessions, add/edit/delete sessions with mentors and topics.
+  - Presented fields: Sessions list (topic, mentors, end date), Edit form (AdultId, Adult2Id, Topic, Url, MentorsOnly - Guids/strings/bool).
+  - Required inputs: SessionSave (AdultId, Topic, Url - Guid/string, others optional).
+  - Validation rules: ModelState.IsValid.
+  - Possible outcomes: Save - redirect to /Mentor/Sessions, success. Delete - POST to SessionDelete, redirect. Errors - return view.
+- **Team Management**: View teams, add/edit/delete teams.
+  - Presented fields: Teams list (name, goal, hex code), Edit form (TeamName, Goal, Notes, HexCode - strings).
+  - Required inputs: TeamSave (TeamName, Goal, Notes, HexCode - strings).
+  - Validation rules: ModelState.IsValid.
+  - Possible outcomes: Save - redirect to /Mentor/Teams, success. Delete - POST to TeamDelete, redirect. Errors - return view.
+- **Data Maintenance**: Data cleanup (delete old inactive records), purge registrations.
+  - Presented fields: Results (members/parents deleted/unregistered counts, exception if any).
+  - Required inputs: None (POST actions).
+  - Validation rules: None.
+  - Possible outcomes: POST to actions, display results.
+- **Sign In Mode**: Initiate sign-in mode for sessions.
+  - Presented fields: None.
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Redirect to /Home/SignIn.
+
+## Adults (Parents)
+- **Dashboard**: Overview of parent account.
+  - Presented fields: Parent name.
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only.
+- **My Kids**: List and view details of linked children.
+  - Presented fields: Kids list (names, images), Kid details (name, birth year, team, belts, badges, attendance).
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only.
+- **My Account**: View and edit personal account details (name, email, phone, password).
+  - Presented fields: FirstName, LastName, Email, Phone (textboxes), NewPassword (textbox).
+  - Required inputs: FirstName, LastName, Email, Phone, NewPassword (optional) - strings.
+  - Validation rules: ModelState.IsValid, Trim strings.
+  - Possible outcomes: Save - POST to MyAccountSave, redirect to /Parent/MyAccount, success. Errors - return view.
+- **Child Management**: View/edit limited child details (birth year, logins, goals), view child badges/attendance/goals/belts/parents.
+  - Presented fields: Similar to member views, limited editing (no name, login disabled).
+  - Required inputs: BirthYear (int), GithubLogin, ScratchName, XboxGamertag, NewPassword (optional) - strings.
+  - Validation rules: ModelState.IsValid, Trim strings.
+  - Possible outcomes: Save - POST to MemberSave, redirect to /Parent/Member/{id}, success. Errors - return view.
+- **Sessions**: View upcoming non-mentor-only sessions.
+  - Presented fields: Same as member sessions.
+  - Required inputs: Click join.
+  - Validation rules: None.
+  - Possible outcomes: Same as member.
+- **Team Member**: View details of other members.
+  - Presented fields: Same as member.
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only.
+
+## Common Features
+- **Authentication**: Login/logout with username/password or name, role-based redirection.
+  - Presented fields: Username (textbox), Password (textbox), Remember (checkbox), ReturnUrl (hidden).
+  - Required inputs: Username, Password - strings.
+  - Validation rules: None in view.
+  - Possible outcomes: Success - authenticate, set cookies, redirect to role/Index or ReturnUrl. Errors - ViewBag.ValidationMessage "Username or password is not correct.", return view.
+- **Tools**: Access to tools page.
+  - Presented fields: LoginModel (empty).
+  - Required inputs: None.
+  - Validation rules: None.
+  - Possible outcomes: Display only.
+- **Passports**: View/print individual or all member passports, mentor passports, belt certificates, team cards.
+  - Presented fields: Member/mentor details, images, badges/belts.
+  - Required inputs: Id (Guid in URL).
+  - Validation rules: None.
+  - Possible outcomes: Print/display.
+- **Sign In**: Manual sign-in or QR code sign-in for sessions, view signed-in members/adults.
+  - Presented fields: Signed-in lists, teams, session date.
+  - Required inputs: Username/Password or Id (QR).
+  - Validation rules: None.
+  - Possible outcomes: Success - SignInMember/SignInAdult, Json with member info, update attendance. Errors - Json ValidationMessage.
+- **Image Upload**: Upload images to Azure Blob Storage.
+  - Presented fields: None.
+  - Required inputs: file (HttpPostedFileBase), filename (string).
+  - Validation rules: None.
+  - Possible outcomes: Success - upload to blob, Json(success=true). Errors - Json(error=message).
+
+## Back-end Functionality
+- **Controllers**: MVC controllers for UI (Home, Member, Mentor, Parent, Chatbot), API controllers for RESTful data access (Adult, Badge, Belt, GithubAccounts, Member, MemberAttendance, MemberBadge, MemberBelt, MemberParent, Team).
+  - Details: Controllers handle requests, validate inputs via ModelState, call DB methods, return views/Json/redirects. Errors logged or displayed.
+- **Models**: Entity models (Adult, Badge, BadgeCategory, Belt, Dojo, Member, MemberAttendance, MemberBadge, MemberBelt, MemberParent, Session, Team, AdultAttendance, AdultBadgeCategory), view models (AttendanceModel, LoginModel, UserRoles).
+  - Details: Entities map to DB tables, view models for UI data. Validation via DataAnnotations if any.
+- **Services**: Database operations via CoderDojoData DbContext (Entity Framework), password hashing, attendance setting, session date retrieval.
+  - Details: DbContext methods like GeneratePasswordHash, MemberAttendanceSet, GetSessionDates. Outcomes: SaveChanges success or exceptions.
+- **Database**: SQL Server with tables for Members, Adults, Badges, Belts, Attendances, Sessions, Teams, BadgeCategories, Dojos, MemberParents, AdultBadgeCategories.
+  - Details: CRUD operations, foreign keys, constraints. Errors: DB exceptions.
+
+## Integration APIs
+- **GithubAccounts API**: GET endpoint returning JSON list of members and mentors with Github logins for external integration.
+  - Details: Controllers/Api/GithubAccountsController.cs, GetMemberAttendances, returns GithubUsersCollection. Inputs: None. Outcomes: Json data. Errors: None.
+- **Chatbot API**: GET endpoints for badges and belts data in JSON format for chatbot consumption.
+  - Details: Controllers/ChatbotController.cs, Badges/Belts actions, return Json lists. Inputs: None. Outcomes: Json data. Errors: None.
+- **SignalR Hubs**: AttendanceHub for real-time attendance change broadcasts, SessionHub for session change notifications.
+  - Details: Hubs/AttendanceHub.cs, SessionHub.cs, broadcast to clients. Inputs: Change events. Outcomes: Client updates. Errors: Connection issues.
+- **Azure Blob Storage**: Image upload functionality for member/adult images.
+  - Details: HomeController ImageUpload, uploads to container. Inputs: file, filename. Outcomes: Success Json. Errors: Upload exceptions.
+- **Session Pod Login**: POST endpoint for pod-based login and attendance marking.
+  - Details: HomeController SessionPodLogin, calls DoMemberAttendanceChange. Inputs: memberId (Guid). Outcomes: Success Json. Errors: None.
