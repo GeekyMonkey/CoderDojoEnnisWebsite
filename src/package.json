@@ -6,9 +6,9 @@
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
-		"dev": "npx cls-cli && pnpm install && nuxt dev",
+		"dev": "cls && clear && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
-		"format": "cls-cli && biome format . --write",
+		"format": "cls && clear && biome format . --write",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
 		"preview2": "npm run build && wrangler pages dev",
@@ -16,17 +16,17 @@
 		"start": "node .output/server/index.mjs",
 		"supabase-migrate": "supabase db push",
 		"supabase-types": "supabase gen types typescript --project-id newsofwpimzmfbqsooka --schema coderdojo > types/supabase.ts",
-		"test": "npx cls-cli && vitest"
+		"test": "cls && clear && vitest"
 	},
 	"dependencies": {
-		"@iconify/json": "2.2.400",
+		"@iconify/json": "2.2.403",
 		"@nuxt/ui": "4.1.0",
 		"@nuxtjs/color-mode": "3.5.2",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "9.5.6",
 		"@nuxtjs/supabase": "2.0.1",
-		"@supabase/supabase-js": "2.76.1",
-		"@tanstack/vue-query": "5.90.5",
+		"@supabase/supabase-js": "2.79.0",
+		"@tanstack/vue-query": "5.90.6",
 		"@vee-validate/zod": "4.15.1",
 		"@vueuse/core": "14.0.0",
 		"@vueuse/nuxt": "14.0.0",
@@ -42,16 +42,15 @@
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.1",
+		"@biomejs/biome": "2.3.3",
 		"@cloudflare/workers-types": "4.20251014.0",
 		"@nuxt/icon": "2.1.0",
 		"@types/crypto-js": "4.2.2",
 		"@types/jsonwebtoken": "9.0.10",
 		"@types/mssql": "9.1.8",
-		"@types/node": "24.9.1",
+		"@types/node": "24.10.0",
 		"@vitejs/plugin-vue": "6.0.1",
 		"@vue/test-utils": "2.4.6",
-		"cls-cli": "2.2.4",
 		"cross-env": "10.1.0",
 		"nitro-cloudflare-dev": "0.2.2",
 		"postcss-custom-properties": "14.0.6",
@@ -61,10 +60,10 @@
 		"ts-node": "10.9.2",
 		"typescript": "5.9.3",
 		"vite": "6.4.1",
-		"vitest": "4.0.3",
-		"wrangler": "4.45.0"
+		"vitest": "4.0.7",
+		"wrangler": "4.45.4"
 	},
-	"packageManager": "pnpm@10.19.0",
+	"packageManager": "pnpm@10.20.0",
 	"prettier": {
 		"bracketSameLine": false,
 		"endOfLine": "lf",

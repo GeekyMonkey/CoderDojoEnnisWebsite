@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNonNullAssertion: <explanation> */
 import {
 	type AuthError,
 	createClient,
@@ -14,6 +15,7 @@ import type {
 	MemberSupabaseModel,
 } from "~~/shared/types/models/MemberModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { useLogger } from "~~/shared/utils/Logger";
 
 const log = useLogger("authUtils");
 
@@ -116,7 +118,7 @@ export async function LoginToSupabase(
 		const supabase = await CreateSupabaseAdminClient();
 
 		const supabaseEmail = GenerateSupabaseEmailAddressForMember(member);
-		logs.push("Supabase email: " + supabaseEmail);
+		logs.push(`Supabase email: ${supabaseEmail}`);
 
 		const supabasePass = await GeneratePasswordHash(
 			String(member.memberId),
@@ -150,7 +152,7 @@ export async function LoginToSupabase(
 				logs.push(`Sign in error: ${JSON.stringify(error)}`);
 				throw error;
 			}
-		} catch (error) {
+		} catch (_error) {
 			// Attempt cleanup & admin-based creation (email auto-confirmed)
 			const oldUser = await FindSupabaseUserByEmail(supabaseEmail);
 			if (oldUser) {
@@ -167,7 +169,9 @@ export async function LoginToSupabase(
 				user_metadata: GenerateSupabaseUserMetaForMember(member),
 			});
 			if (createRes.error) {
-				logs.push("Admin create error: " + JSON.stringify(createRes.error));
+				logs.push(
+					`Admin create error: ${JSON.stringify(createRes.error)}`,
+				);
 				throw createRes.error;
 			}
 			// Explicit sign-in after admin creation (admin.createUser does not return a session)
@@ -183,10 +187,11 @@ export async function LoginToSupabase(
 					}),
 			);
 			authTokenResponse = signInResponse.data;
-			error = signInResponse.error;
-			if (error) {
-				logs.push(`Post-create sign in error: ${JSON.stringify(error)}`);
-				throw error;
+			if (signInResponse.error) {
+				logs.push(
+					`Post-create sign in error: ${JSON.stringify(signInResponse.error)}`,
+				);
+				throw signInResponse.error;
 			}
 		}
 
@@ -206,7 +211,9 @@ export async function LoginToSupabase(
 
 		return authTokenResponse;
 	} catch (error) {
-		logs.push(`LoginToSupabase error: ${JSON.stringify(ErrorToString(error))}`);
+		logs.push(
+			`LoginToSupabase error: ${JSON.stringify(ErrorToString(error))}`,
+		);
 		log.error("Error generating JWT:", { logs });
 		return null;
 	}
