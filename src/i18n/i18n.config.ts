@@ -1,6 +1,7 @@
 // Do this to include the translations in the bundle rather than lazy loading
 // import en from "./locales/en";
 // import fr from "./locales/fr";
+// import ga from "./locales/ga";
 // import uk from "./locales/uk";
 
 /**
@@ -14,6 +15,7 @@ const i18nConfig = defineI18nConfig(() => ({
 	// messages: {
 	// 	en,
 	// 	fr,
+	// 	ga,
 	// 	uk,
 	// },
 }));

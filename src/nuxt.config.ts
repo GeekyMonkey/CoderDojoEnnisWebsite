@@ -91,6 +91,7 @@ export default defineNuxtConfig({
 		locales: [
 			{ code: "en", file: "en.ts", language: "English" },
 			{ code: "fr", file: "fr.ts", language: "Français" },
+			{ code: "ga", file: "ga.ts", language: "Gaeilge" },
 			{ code: "uk", file: "uk.ts", language: "Українська" },
 		],
 		strategy: "no_prefix",
