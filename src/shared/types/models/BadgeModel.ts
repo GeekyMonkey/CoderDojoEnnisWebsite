@@ -3,15 +3,13 @@ import type { Database } from "../../../types/supabase";
 
 export type BadgeRecord = Database["coderdojo"]["Tables"]["badges"]["Row"];
 
-export const BadgeModelSchema = z
-	.object({
+export const BadgeModelSchema = z.strictObject({
 		id: z.string(),
 		deleted: z.boolean(),
 		achievement: z.string().nullable(),
 		badgeCategoryId: z.string().nullable(),
 		description: z.string().nullable(),
-	})
-	.strict();
+	});
 
 export type BadgeModel = z.infer<typeof BadgeModelSchema>;
 

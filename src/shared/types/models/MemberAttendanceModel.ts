@@ -4,13 +4,11 @@ import type { Database } from "../../../types/supabase";
 export type MemberAttendanceRecord =
 	Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
 
-export const MemberAttendanceModelSchema = z
-	.object({
+export const MemberAttendanceModelSchema = z.strictObject({
 		id: z.string(),
 		memberId: z.string(),
 		date: DateStringSchema,
-	})
-	.strict();
+	});
 export const MemberAttendanceModelArraySchema = z.array(
 	MemberAttendanceModelSchema,
 );

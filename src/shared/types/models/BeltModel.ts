@@ -3,16 +3,14 @@ import type { Database } from "../../../types/supabase";
 
 export type BeltRecord = Database["coderdojo"]["Tables"]["belts"]["Row"];
 
-export const BeltModelSchema = z
-	.object({
+export const BeltModelSchema = z.strictObject({
 		id: z.string(),
 		deleted: z.boolean(),
 		color: z.string().nullable(),
 		hexCode: z.string().nullable(),
 		description: z.string().nullable(),
 		sortOrder: z.number(),
-	})
-	.strict();
+	});
 
 export type BeltModel = z.infer<typeof BeltModelSchema>;
 

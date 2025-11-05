@@ -4,16 +4,14 @@ import type { TeamRecord } from "../../../server/db/TeamsData";
 /**
  * Team Model Schema
  */
-export const TeamModelSchema = z
-	.object({
+export const TeamModelSchema = z.strictObject({
 		id: z.string(),
 		deleted: z.boolean(),
 		goal: z.string().nullable(),
 		hexcode: z.string().nullable(),
 		notes: z.string().nullable(),
 		teamName: z.string(),
-	})
-	.strict();
+	});
 
 /**
  * Team Model

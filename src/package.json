@@ -6,9 +6,9 @@
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
-		"dev": "cls && clear && pnpm install && nuxt dev",
+		"dev": "clear && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
-		"format": "cls && clear && biome format . --write",
+		"format": "clear && biome format . --write",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
 		"preview2": "npm run build && wrangler pages dev",
@@ -16,7 +16,7 @@
 		"start": "node .output/server/index.mjs",
 		"supabase-migrate": "supabase db push",
 		"supabase-types": "supabase gen types typescript --project-id newsofwpimzmfbqsooka --schema coderdojo > types/supabase.ts",
-		"test": "cls && clear && vitest"
+		"test": "clear && vitest"
 	},
 	"dependencies": {
 		"@iconify/json": "2.2.403",
@@ -39,7 +39,7 @@
 		"vee-validate": "4.15.1",
 		"vue": "3.5.22",
 		"vue-router": "4.6.3",
-		"zod": "3.25.76"
+		"zod": "4.1.12"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.3",

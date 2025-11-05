@@ -4,8 +4,7 @@ import type { Database } from "../../../types/supabase";
 export type MemberBadgeRecord =
 	Database["coderdojo"]["Tables"]["member_badges"]["Row"];
 
-export const MemberBadgeModelSchema = z
-	.object({
+export const MemberBadgeModelSchema = z.strictObject({
 		id: z.string(),
 		memberId: z.string(),
 		badgeId: z.string(),
@@ -18,15 +17,15 @@ export const MemberBadgeModelSchema = z
 		awarded: z.number().nullable(),
 		rejectedDate: z.number().nullable(),
 		goalDate: z.number().nullable(),
-	})
-	.strict();
+	});
 
 export type MemberBadgeModel = z.infer<typeof MemberBadgeModelSchema>;
 
 export const MemberBadgeWithBadgeDetailsModelSchema =
-	MemberBadgeModelSchema.extend({
+	z.strictObject({
+		...MemberBadgeModelSchema.shape,
 		badge: BadgeModelSchema,
-	}).strict();
+	});
 export type MemberBadgeWithBadgeDetailsModel = z.infer<
 	typeof MemberBadgeWithBadgeDetailsModelSchema
 >;

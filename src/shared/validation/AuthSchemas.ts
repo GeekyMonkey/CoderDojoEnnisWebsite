@@ -6,16 +6,16 @@ const PASSWORD_LENGTH_MIN: number = 4;
 export const usernameSchema = z
 	.string()
 	.trim()
-	.min(1, "Username cannot be blank")
-	.min(4, "Username too short")
-	.max(120, "Username too long");
+	.min(1, { error: "Username cannot be blank" })
+	.min(4, { error: "Username too short" })
+	.max(120, { error: "Username too long" });
 
 export const passwordSchema = z
 	.string()
 	.trim()
-	.min(1, "Password cannot be blank")
-	.min(PASSWORD_LENGTH_MIN, "Password too short")
-	.max(120, "Password too long");
+	.min(1, { error: "Password cannot be blank" })
+	.min(PASSWORD_LENGTH_MIN, { error: "Password too short" })
+	.max(120, { error: "Password too long" });
 
 export const loginRequestSchema = z.object({
 	username: usernameSchema,
@@ -28,11 +28,10 @@ export const passwordChangeRequestSchema = z
 		username: usernameSchema,
 		oldPassword: passwordSchema,
 		newPassword: passwordSchema.refine((p) => p.length >= PASSWORD_LENGTH_MIN, {
-			message: `New password must be at least ${PASSWORD_LENGTH_MIN} characters`,
+			error: `New password must be at least ${PASSWORD_LENGTH_MIN} characters`,
 		}),
 	})
 	.refine((d) => d.oldPassword !== d.newPassword, {
-		message: "New password must be different to old password",
-		path: ["newPassword"],
-	});
+        error: "New password must be different to old password"
+    });
 export type PasswordChangeRequest = z.infer<typeof passwordChangeRequestSchema>;

@@ -3,8 +3,7 @@ import type { Database } from "../../../types/supabase";
 
 export type SessionRecord = Database["coderdojo"]["Tables"]["sessions"]["Row"];
 
-export const SessionModelSchema = z
-	.object({
+export const SessionModelSchema = z.strictObject({
 		id: z.string(),
 		createdDate: z.number(),
 		endDate: z.number().nullable(),
@@ -13,8 +12,7 @@ export const SessionModelSchema = z
 		adultId: z.string().nullable(),
 		adult2Id: z.string().nullable(),
 		mentorsOnly: z.boolean(),
-	})
-	.strict();
+	});
 
 export type SessionModel = z.infer<typeof SessionModelSchema>;
 

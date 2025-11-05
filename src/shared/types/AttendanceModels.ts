@@ -12,13 +12,11 @@ export type MemberAttendanceNotificationTypes = z.infer<
 	typeof MemberAttendanceNotificationTypesSchema
 >;
 
-export const AttendanceNotificationSchema = z
-	.object({
+export const AttendanceNotificationSchema = z.strictObject({
 		type: MemberAttendanceNotificationTypesSchema,
 		message: z.string(),
 		dateString: DateStringSchema.optional(),
-	})
-	.strict();
+	});
 export const AttendanceNotificationArraySchema = z.array(
 	AttendanceNotificationSchema,
 );

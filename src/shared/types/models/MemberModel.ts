@@ -4,8 +4,7 @@ import type { Database } from "../../../types/supabase";
 
 export type MemberRecord = Database["coderdojo"]["Tables"]["members"]["Row"];
 
-export const MemberModelSchema = z
-	.object({
+export const MemberModelSchema = z.strictObject({
 		id: z.string(),
 		deleted: z.boolean(),
 		birthYear: z.number().nullable(),
@@ -28,8 +27,7 @@ export const MemberModelSchema = z
 		scratchName: z.string().nullable(),
 		teamId: z.string().nullable(),
 		xboxGamertag: z.string().nullable(),
-	})
-	.strict();
+	});
 export const MemberModelArraySchema = z.array(MemberModelSchema);
 
 export type MemberModel = z.infer<typeof MemberModelSchema>;

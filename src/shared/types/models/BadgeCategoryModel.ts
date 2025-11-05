@@ -4,14 +4,12 @@ import type { Database } from "../../../types/supabase";
 export type BadgeCategoryRecord =
 	Database["coderdojo"]["Tables"]["badge_categories"]["Row"];
 
-export const BadgeCategoryModelSchema = z
-	.object({
+export const BadgeCategoryModelSchema = z.strictObject({
 		id: z.string(),
 		deleted: z.boolean(),
 		categoryName: z.string().nullable(),
 		categoryDescription: z.string().nullable(),
-	})
-	.strict();
+	});
 
 export type BadgeCategoryModel = z.infer<typeof BadgeCategoryModelSchema>;
 

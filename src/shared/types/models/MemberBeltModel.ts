@@ -4,8 +4,7 @@ import type { Database } from "../../../types/supabase";
 export type MemberBeltRecord =
 	Database["coderdojo"]["Tables"]["member_belts"]["Row"];
 
-export const MemberBeltModelSchema = z
-	.object({
+export const MemberBeltModelSchema = z.strictObject({
 		id: z.string(),
 		memberId: z.string(),
 		beltId: z.string(),
@@ -17,8 +16,7 @@ export const MemberBeltModelSchema = z
 		applicationDate: z.number().nullable(),
 		awarded: z.number().nullable(),
 		rejectedDate: z.number().nullable(),
-	})
-	.strict();
+	});
 
 export type MemberBeltModel = z.infer<typeof MemberBeltModelSchema>;
 

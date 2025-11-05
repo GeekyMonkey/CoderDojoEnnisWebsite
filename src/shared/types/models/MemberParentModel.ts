@@ -4,13 +4,11 @@ import type { Database } from "../../../types/supabase";
 export type MemberParentRecord =
 	Database["coderdojo"]["Tables"]["member_parents"]["Row"];
 
-export const MemberParentModelSchema = z
-	.object({
+export const MemberParentModelSchema = z.strictObject({
 		id: z.string(),
 		memberId: z.string(),
 		parentId: z.string(),
-	})
-	.strict();
+	});
 
 export type MemberParentModel = z.infer<typeof MemberParentModelSchema>;
 
