@@ -1,4 +1,10 @@
-export const en = {
+import type { BroadenLiterals } from "~~/shared/utils/TypeHelpers";
+
+/**
+ * English translations
+ * Used as the base for other locales
+ */
+export default {
 	login: {
 		title: "CoderDojo Ennis Member Login",
 		username: "Username",
@@ -13,5 +19,10 @@ export const en = {
 		author: "Created by {AuthorName}",
 		select: "Select Theme",
 	},
-};
-export type enMessagesType = typeof en;
+} as const;
+
+/**
+ * Type used for validation in other locale files for completeness
+ */
+export type defaultType = ReturnType<() => typeof import("./en").default>;
+export type enMessagesType = BroadenLiterals<defaultType>;

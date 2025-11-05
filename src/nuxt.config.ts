@@ -75,9 +75,6 @@ export default defineNuxtConfig({
 	},
 
 	i18n: {
-		bundle: {
-			optimizeTranslationDirective: false,
-		},
 		detectBrowserLanguage: {
 			alwaysRedirect: false,
 			cookieCrossOrigin: true,
@@ -90,9 +87,11 @@ export default defineNuxtConfig({
 		experimental: {
 			localeDetector: "../i18n/localeDetector.ts",
 		},
+		langDir: "../i18n/locales/",
 		locales: [
-			{ code: "en", language: "English" },
-			{ code: "fr", language: "Français" },
+			{ code: "en", file: "en.ts", language: "English" },
+			{ code: "fr", file: "fr.ts", language: "Français" },
+			{ code: "uk", file: "uk.ts", language: "Українська" },
 		],
 		strategy: "no_prefix",
 		vueI18n: "../i18n/i18n.config.ts",

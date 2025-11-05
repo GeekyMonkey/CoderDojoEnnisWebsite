@@ -5,27 +5,26 @@ export type MemberBadgeRecord =
 	Database["coderdojo"]["Tables"]["member_badges"]["Row"];
 
 export const MemberBadgeModelSchema = z.strictObject({
-		id: z.string(),
-		memberId: z.string(),
-		badgeId: z.string(),
-		awardedByAdultId: z.string().nullable(),
-		applicationNotes: z.string().nullable(),
-		awardedNotes: z.string().nullable(),
-		rejectedByAdultId: z.string().nullable(),
-		rejectedNotes: z.string().nullable(),
-		applicationDate: z.number().nullable(),
-		awarded: z.number().nullable(),
-		rejectedDate: z.number().nullable(),
-		goalDate: z.number().nullable(),
-	});
+	id: z.string(),
+	memberId: z.string(),
+	badgeId: z.string(),
+	awardedByAdultId: z.string().nullable(),
+	applicationNotes: z.string().nullable(),
+	awardedNotes: z.string().nullable(),
+	rejectedByAdultId: z.string().nullable(),
+	rejectedNotes: z.string().nullable(),
+	applicationDate: z.number().nullable(),
+	awarded: z.number().nullable(),
+	rejectedDate: z.number().nullable(),
+	goalDate: z.number().nullable(),
+});
 
 export type MemberBadgeModel = z.infer<typeof MemberBadgeModelSchema>;
 
-export const MemberBadgeWithBadgeDetailsModelSchema =
-	z.strictObject({
-		...MemberBadgeModelSchema.shape,
-		badge: BadgeModelSchema,
-	});
+export const MemberBadgeWithBadgeDetailsModelSchema = z.strictObject({
+	...MemberBadgeModelSchema.shape,
+	badge: BadgeModelSchema,
+});
 export type MemberBadgeWithBadgeDetailsModel = z.infer<
 	typeof MemberBadgeWithBadgeDetailsModelSchema
 >;
@@ -72,7 +71,9 @@ export function memberBadgeToRecord(
 		rejected_date: model.rejectedDate
 			? new Date(model.rejectedDate).toISOString()
 			: null,
-		goal_date: model.goalDate ? new Date(model.goalDate).toISOString() : null,
+		goal_date: model.goalDate
+			? new Date(model.goalDate).toISOString()
+			: null,
 	} as MemberBadgeRecord;
 }
 

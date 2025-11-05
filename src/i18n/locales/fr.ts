@@ -1,6 +1,10 @@
 import { type enMessagesType } from "./en";
 
-export const fr: enMessagesType = {
+/**
+ * French translations
+ * Requires all keys from enMessagesType
+ */
+export default {
 	login: {
 		title: "CoderDojo Ennis Membre Connexion",
 		username: "Nom d'utilisateur",
@@ -15,4 +19,4 @@ export const fr: enMessagesType = {
 		author: "Créé par {AuthorName}",
 		select: "Sélectionnez le thème",
 	},
-};
+} as const satisfies enMessagesType;

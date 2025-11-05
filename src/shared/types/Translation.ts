@@ -1,7 +1,8 @@
 /**
  * Supported languages array
+ * See also i18n.config.ts for supported languages
  */
-export const LangCodes = ["en", "fr"] as const;
+export const LangCodes = ["en", "fr", "uk"] as const;
 
 /**
  * Supported languages type
