@@ -1,4 +1,3 @@
-import { log } from "console";
 import { defineEventHandler, type H3Event } from "h3";
 // import {
 // 	GetDrizzleConnecionString,
@@ -37,21 +36,21 @@ export default defineEventHandler(
 			`isCloudflare: ${config.public.environment.runtime == "cloudflare"}`,
 		);
 
-		try {
-			// logs.push(
-			// 	`Drizzle connection string: ${GetDrizzleConnecionString(event)}`,
-			// );
-			// logs.push(
-			// 	`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
-			// );
-			// logs.push(
-			// 	`HYPERDRIVE Stuff: ${JSON.stringify(ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE)}`,
-			// );
-			// logs.push(`ServerContext: ${JSON.stringify(ServerContext)}`);
-			// logs.push(`event.context: ${JSON.stringify(event.context)}`);
-		} catch (error) {
-			errors.push(`Error: ${ErrorToString(error)}`);
-		}
+		// try {
+		// 	// logs.push(
+		// 	// 	`Drizzle connection string: ${GetDrizzleConnecionString(event)}`,
+		// 	// );
+		// 	// logs.push(
+		// 	// 	`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,
+		// 	// );
+		// 	// logs.push(
+		// 	// 	`HYPERDRIVE Stuff: ${JSON.stringify(ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE)}`,
+		// 	// );
+		// 	// logs.push(`ServerContext: ${JSON.stringify(ServerContext)}`);
+		// 	// logs.push(`event.context: ${JSON.stringify(event.context)}`);
+		// } catch (error) {
+		// 	errors.push(`Error: ${ErrorToString(error)}`);
+		// }
 
 		return {
 			data: uiConfig,
