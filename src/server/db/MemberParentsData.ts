@@ -4,9 +4,9 @@ import {
 	memberParentFromRecords,
 	memberParentToRecords,
 } from "~~/shared/types/models/MemberParentModel";
+import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 export type MemberParentRecord =
 	Database["coderdojo"]["Tables"]["member_parents"]["Row"];
@@ -16,7 +16,9 @@ export const MemberParentsData = {
 		event: H3Event<EventHandlerRequest>,
 	): Promise<MemberParentModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -45,7 +47,9 @@ export const MemberParentsData = {
 		entities: MemberParentModel[],
 	): Promise<MemberParentModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -67,7 +71,9 @@ export const MemberParentsData = {
 		id: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")

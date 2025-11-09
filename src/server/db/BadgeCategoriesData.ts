@@ -1,12 +1,12 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
+	type BadgeCategoryModel,
 	badgeCategoryFromRecords,
 	badgeCategoryToRecords,
-	type BadgeCategoryModel,
 } from "~~/shared/types/models/BadgeCategoryModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
 export type BadgeCategoryRecord =
 	Database["coderdojo"]["Tables"]["badge_categories"]["Row"];
@@ -17,7 +17,9 @@ export const BadgeCategoriesData = {
 		includeDeleted: boolean,
 	): Promise<BadgeCategoryModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const query = supabase
 				.schema("coderdojo")
@@ -55,7 +57,9 @@ export const BadgeCategoriesData = {
 		categories: BadgeCategoryModel[],
 	): Promise<BadgeCategoryModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -77,7 +81,9 @@ export const BadgeCategoriesData = {
 		categoryId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")

@@ -1,12 +1,12 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
+	type BeltModel,
 	beltFromRecords,
 	beltToRecords,
-	type BeltModel,
 } from "~~/shared/types/models/BeltModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
 export type BeltRecord = Database["coderdojo"]["Tables"]["belts"]["Row"];
 
@@ -16,7 +16,9 @@ export const BeltsData = {
 		includeDeleted: boolean,
 	): Promise<BeltModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const query = supabase
 				.schema("coderdojo")
@@ -49,7 +51,9 @@ export const BeltsData = {
 		belts: BeltModel[],
 	): Promise<BeltModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -70,7 +74,9 @@ export const BeltsData = {
 		beltId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")

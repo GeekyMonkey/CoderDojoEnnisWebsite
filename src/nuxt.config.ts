@@ -84,9 +84,9 @@ export default defineNuxtConfig({
 			redirectOn: "all",
 			useCookie: true,
 		},
-		experimental: {
-			localeDetector: "../i18n/localeDetector.ts",
-		},
+		// experimental: {
+		// 	localeDetector: "../i18n/localeDetector.ts",
+		// },
 		langDir: "../i18n/locales/",
 		locales: [
 			{ code: "en", file: "en.ts", language: "English" },

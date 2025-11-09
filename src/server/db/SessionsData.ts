@@ -1,12 +1,12 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
+	type SessionModel,
 	sessionFromRecords,
 	sessionToRecords,
-	type SessionModel,
 } from "~~/shared/types/models/SessionModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
 export type SessionRecord = Database["coderdojo"]["Tables"]["sessions"]["Row"];
 
@@ -18,7 +18,9 @@ export const SessionsData = {
 		event: H3Event<EventHandlerRequest>,
 	): Promise<SessionModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -53,7 +55,9 @@ export const SessionsData = {
 		sessions: SessionModel[],
 	): Promise<SessionModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -78,7 +82,9 @@ export const SessionsData = {
 		sessionId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")

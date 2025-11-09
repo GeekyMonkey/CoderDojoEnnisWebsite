@@ -1,11 +1,8 @@
 import type { Session } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { useRuntimeConfig } from "#imports";
-import {
-	GetSupabaseAdminClient,
-	type SupabaseClientType,
-} from "~~/server/db/DatabaseClient";
 import type { MemberRecord } from "~~/server/db/MembersData";
+import { MembersData } from "~~/server/db/MembersData";
 import {
 	GeneratePasswordHash,
 	LoginToSupabase,
@@ -68,18 +65,8 @@ export class AuthService {
 			);
 		}
 
-		const supabase = await GetSupabaseAdminClient(this.event);
-		if (!supabase) {
-			throw new AuthServiceError(
-				"Database unavailable",
-				"DATABASE_UNAVAILABLE",
-				logs,
-			);
-		}
-
 		const candidates = await this.findCandidatesByUsername(
 			username.trim(),
-			supabase,
 			logs,
 		);
 		const uniqueCandidates = this.deduplicateCandidates(candidates);
@@ -119,7 +106,6 @@ export class AuthService {
 	 */
 	private async findCandidatesByUsername(
 		username: string,
-		supabase: SupabaseClientType,
 		logs: string[],
 	): Promise<MemberRecord[]> {
 		const usernameLower = username.toLowerCase();
@@ -128,30 +114,17 @@ export class AuthService {
 		const last = parts.length > 1 ? parts[parts.length - 1] : "";
 
 		const candidates: MemberRecord[] = [];
-		const { data: byLoginEmail, error: loginEmailErr } = await supabase
-			.schema("coderdojo")
-			.from("members")
-			.select("*")
-			.or(`login.eq.${usernameLower},email.eq.${usernameLower}`)
-			.eq("deleted", false);
-		if (loginEmailErr) {
-			logs.push(`Login/email query error: ${loginEmailErr.message}`);
-		}
+
+		const byLoginEmail: MemberRecord[] =
+			await MembersData.GetMembersByLoginUsername(this.event, usernameLower);
+		candidates.push(...byLoginEmail);
 		if (byLoginEmail) {
 			candidates.push(...(byLoginEmail as MemberRecord[]));
 		}
 
 		if (candidates.length === 0 && first && last) {
-			const { data: byName, error: nameErr } = await supabase
-				.schema("coderdojo")
-				.from("members")
-				.select("*")
-				.ilike("name_first", first)
-				.ilike("name_last", last)
-				.eq("deleted", false);
-			if (nameErr) {
-				logs.push(`Name query error: ${nameErr.message}`);
-			}
+			const byName: MemberRecord[] =
+				await MembersData.GetMembersByLoginFirstLast(this.event, first, last);
 			if (byName) {
 				candidates.push(...(byName as MemberRecord[]));
 			}

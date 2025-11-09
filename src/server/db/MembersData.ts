@@ -1,15 +1,15 @@
-import type { H3Event, EventHandlerRequest } from "h3";
-import { GetSupabaseAdminClient } from "./DatabaseClient";
-import type { Database } from "../../types/supabase";
+import type { EventHandlerRequest, H3Event } from "h3";
 import {
-	memberFromRecords,
-	MemberModelArray,
-	MemberModelArraySchema,
-	memberToRecords,
 	type MemberModel,
+	type MemberModelArray,
+	MemberModelArraySchema,
+	memberFromRecords,
+	memberToRecords,
 } from "~~/shared/types/models/MemberModel";
-import { GeneratePasswordHash } from "../utils/authUtils";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import type { Database } from "../../types/supabase";
+import { GeneratePasswordHash } from "../utils/authUtils";
+import { GetSupabaseAdminClient } from "./DatabaseClient";
 
 export type MemberRecord = Database["coderdojo"]["Tables"]["members"]["Row"];
 
@@ -21,7 +21,9 @@ export const MembersData = {
 		event: H3Event<EventHandlerRequest>,
 	): Promise<MemberModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			const { data, error } = await supabase
 				.schema("coderdojo")
@@ -45,7 +47,9 @@ export const MembersData = {
 		memberId: string,
 	): Promise<MemberModel | null> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return null;
+		if (!supabase) {
+			return null;
+		}
 
 		try {
 			const { data, error } = await supabase
@@ -72,7 +76,9 @@ export const MembersData = {
 		fingerprintId: number,
 	): Promise<MemberModel | null> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return null;
+		if (!supabase) {
+			return null;
+		}
 
 		try {
 			const { data, error } = await supabase
@@ -94,6 +100,70 @@ export const MembersData = {
 	},
 
 	/**
+	 * Get active members by login username (or email)
+	 */
+	GetMembersByLoginUsername: async (
+		event: H3Event<EventHandlerRequest>,
+		usernameLower: string,
+	): Promise<MemberRecord[]> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return [];
+		}
+		const candidates: MemberRecord[] = [];
+
+		try {
+			const { data: byLoginEmail } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*")
+				.or(`login.eq.${usernameLower},email.eq.${usernameLower}`)
+				.eq("deleted", false);
+			if (byLoginEmail) {
+				candidates.push(...(byLoginEmail as MemberRecord[]));
+			}
+		} catch (error) {
+			throw new Error(
+				`Error fetching members by login username: ${ErrorToString(error)}`,
+			);
+		}
+		return candidates;
+	},
+
+	/**
+	 * Get active members by login first and last name
+	 */
+	GetMembersByLoginFirstLast: async (
+		event: H3Event<EventHandlerRequest>,
+		first: string,
+		last: string,
+	): Promise<MemberRecord[]> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return [];
+		}
+		const candidates: MemberRecord[] = [];
+
+		try {
+			const { data: byLoginEmail } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*")
+				.ilike("name_first", first)
+				.ilike("name_last", last)
+				.eq("deleted", false);
+			if (byLoginEmail) {
+				candidates.push(...(byLoginEmail as MemberRecord[]));
+			}
+		} catch (error) {
+			throw new Error(
+				`Error fetching members by login first and last name: ${ErrorToString(error)}`,
+			);
+		}
+		return candidates;
+	},
+
+	/**
 	 * Save changes to a member
 	 */
 	SaveMember: async (
@@ -104,12 +174,17 @@ export const MembersData = {
 		return all[0] || null;
 	},
 
+	/**
+	 * Save multiple members
+	 */
 	SaveMembers: async (
 		event: H3Event<EventHandlerRequest>,
 		members: MemberModelArray,
 	): Promise<MemberModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return [];
+		if (!supabase) {
+			return [];
+		}
 		try {
 			// Use zod validation on model before saving (Excludes password_hash)
 			const {
@@ -144,7 +219,9 @@ export const MembersData = {
 		memberId: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			const { error } = await supabase
 				.schema("coderdojo")
@@ -172,13 +249,17 @@ export const MembersData = {
 		// saltOverride?: string,
 	): Promise<boolean> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return false;
+		if (!supabase) {
+			return false;
+		}
 		try {
 			//const salt = saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
 			const runtime = useRuntimeConfig();
 			const salt = runtime.private.auth.pass_salt;
 			const hash = await GeneratePasswordHash(plainPassword, salt);
-			if (!hash) return false;
+			if (!hash) {
+				return false;
+			}
 			const { error } = await supabase
 				.schema("coderdojo")
 				.from("members")
@@ -215,7 +296,9 @@ export const MembersData = {
 		options?: { force?: boolean; saltOverride?: string },
 	): Promise<{ updated: number; skipped: number; errors: number }> => {
 		const supabase = await GetSupabaseAdminClient(event);
-		if (!supabase) return { updated: 0, skipped: 0, errors: 0 };
+		if (!supabase) {
+			return { updated: 0, skipped: 0, errors: 0 };
+		}
 		// const salt = options?.saltOverride || process.env.PASSWORD_SALT || "_Salty!_";
 		const runtime = useRuntimeConfig();
 		const salt = runtime.private.auth.pass_salt;
@@ -251,7 +334,7 @@ export const MembersData = {
 						.select("password_hash")
 						.eq("id", m.id)
 						.single();
-					if (existing && existing.password_hash) {
+					if (existing?.password_hash) {
 						skipped++;
 						continue;
 					}
