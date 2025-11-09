@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+	layout: "member-layout",
+});
+
+</script>
 
 <template>
 	<h2>Mentor Page</h2>

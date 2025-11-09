@@ -5,7 +5,7 @@ const user = useSupabaseUser();
 const log = useLogger("auth/logged_in");
 
 definePageMeta({
-	layout: "auth",
+	layout: "auth-layout",
 });
 
 // Where should we be based on the user's login state and role?

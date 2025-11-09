@@ -4,7 +4,7 @@ import { z } from "zod";
 import SessionStats from "~/components/Attendance/SessionStats.vue";
 
 definePageMeta({
-	layout: "stats",
+	layout: "default",
 });
 
 const router = useRouter();
@@ -90,13 +90,8 @@ const handleLogin = async () => {
 						<label for="username">
 							<Translated t="login.username" />
 						</label>
-						<input
-							type="text"
-							id="username"
-							v-model="formState.username"
-							required
-							@keypress="clearErrorMessage()"
-						/>
+						<input type="text" id="username" v-model="formState.username" required
+							@keypress="clearErrorMessage()" />
 					</div>
 
 					<div>
@@ -104,27 +99,17 @@ const handleLogin = async () => {
 							<Translated t="login.password" />
 						</label>
 						<div>
-							<input
-								:type="showPassword ? 'text' : 'password'"
-								id="password"
-								v-model="formState.password"
-								required
-								@keypress="clearErrorMessage()"
-							/>
-							<UButton
-								type="button"
-								@click="togglePasswordVisibility"
-							>
+							<input :type="showPassword ? 'text' : 'password'" id="password" v-model="formState.password"
+								required @keypress="clearErrorMessage()" />
+							<UButton type="button" @click="togglePasswordVisibility">
 								<NuxtIcon :name="showPassword
-											? 'mdi:show'
-											: 'mdi-show-outline'" />
+									? 'mdi:show'
+									: 'mdi-show-outline'" />
 							</UButton>
 						</div>
 					</div>
 
-					<UButton
-						type="submit"
-					>
+					<UButton type="submit">
 						{{ $t("signIn.signInButton") }}
 					</UButton>
 
@@ -141,5 +126,8 @@ const handleLogin = async () => {
 </template>
 
 <style scoped lang="scss">
-    .LoginPage { flex-grow:1; padding: 1rem; }
+.LoginPage {
+	flex-grow: 1;
+	padding: 1rem;
+}
 </style>

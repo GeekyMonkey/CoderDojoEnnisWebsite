@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const log = useLogger("MentorPage");
 
+definePageMeta({
+	layout: "member-layout",
+});
+
 onMounted(() => {
 	// Trigger the teams data load
 	log.info("Mounted");

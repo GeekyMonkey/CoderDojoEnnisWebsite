@@ -3,7 +3,7 @@ import type { Session } from "@supabase/gotrue-js";
 import { z } from "zod";
 
 definePageMeta({
-	layout: "auth",
+	layout: "auth-layout",
 });
 
 const router = useRouter();
@@ -93,13 +93,8 @@ const handleLogin = async () => {
 						<label for="username">
 							<Translated t="login.username" />
 						</label>
-						<input
-							type="text"
-							id="username"
-							v-model="formState.username"
-							required
-							@keypress="clearErrorMessage()"
-						/>
+						<input type="text" id="username" v-model="formState.username" required
+							@keypress="clearErrorMessage()" />
 					</div>
 
 					<div>
@@ -107,26 +102,17 @@ const handleLogin = async () => {
 							<Translated t="login.password" />
 						</label>
 						<div>
-							<input
-								:type="showPassword ? 'text' : 'password'"
-								id="password"
-								v-model="formState.password"
-								required
-								@keypress="clearErrorMessage()"
-							/>
-							<UButton
-								@click="togglePasswordVisibility"
-							>
+							<input :type="showPassword ? 'text' : 'password'" id="password" v-model="formState.password"
+								required @keypress="clearErrorMessage()" />
+							<UButton @click="togglePasswordVisibility">
 								<NuxtIcon :name="showPassword
-											? 'mdi:show'
-											: 'mdi-show-outline'" />
+									? 'mdi:show'
+									: 'mdi-show-outline'" />
 							</UButton>
 						</div>
 					</div>
 
-					<UButton
-						type="submit"
-					>
+					<UButton type="submit">
 						{{ $t("login.loginButton") }}
 					</UButton>
 
@@ -140,7 +126,7 @@ const handleLogin = async () => {
 </template>
 
 <style scoped lang="scss">
-	.LoginComponent {
-		flex-grow: 1;
-	}
+.LoginComponent {
+	flex-grow: 1;
+}
 </style>

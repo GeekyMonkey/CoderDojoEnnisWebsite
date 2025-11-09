@@ -4,7 +4,7 @@ const router = useRouter();
 const { supabaseClient } = UseSupabaseClient();
 
 definePageMeta({
-	layout: "auth",
+	layout: "auth-layout",
 });
 
 supabaseClient.auth.signOut({});
