@@ -6,6 +6,8 @@
     "bradlc.vscode-tailwindcss",
     "nuxtr.nuxt-vscode-extentions",
     "renesaarsoo.sql-formatter-vsc",
-    "fronterior.biome-monorepo"
+    "fronterior.biome-monorepo",
+    "bruno-api-client.bruno",
+    "johnpapa.vscode-peacock"
   ]
 }

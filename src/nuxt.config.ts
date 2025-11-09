@@ -257,8 +257,8 @@ export default defineNuxtConfig({
 
 	devServer: {
 		https: {
-			key: "./certs/server.key",
-			cert: "./certs/server.cert",
+			key: "../certs/localhost.key",
+			cert: "../certs/localhost.cert",
 		},
 	},
 });

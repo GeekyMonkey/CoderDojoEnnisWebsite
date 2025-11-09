@@ -14,14 +14,8 @@
       {
         "domain": "localhost:3000",
         "type": "cert",
-        "certFilePath": "..\\..\\src\\certs\\server.cert",
-        "keyFilePath": "..\\..\\src\\certs\\server.key",
-        "passphrase": ""
-      },
-      {
-        "domain": "localhost",
-        "type": "pfx",
-        "pfxFilePath": "..\\..\\src\\certs\\server.pfx",
+        "certFilePath": "..\\..\\certs\\localhost.cert",
+        "keyFilePath": "..\\..\\certs\\localhost.key",
         "passphrase": ""
       }
     ]
