@@ -18,7 +18,7 @@
         <li>@Html.ActionLink("Members", "Members", "Mentor", null, new { @class = (activePage == "Members" ? activeClass : inactiveClass) })</li>
         <li>@Html.ActionLink("Parents", "Parents", "Mentor", null, new { @class = (activePage == "Parents" ? activeClass : inactiveClass) })</li>
         <li>@Html.ActionLink("Mentors", "Mentors", "Mentor", null, new { @class = (activePage == "Mentors" ? activeClass : inactiveClass) })</li>
-        <!--<li><a href="http://webhub.coderdojoennis.com/editor">Web Hub</a></li>-->
+        <li><a href="https://discord.gg/N5GDrWyN5" target='_blank'>Chat Room </a></li>
         <li>@Html.ActionLink(@System.Configuration.ConfigurationManager.AppSettings["SessionsMenuTitle"], "Sessions", "Mentor", null, new { @class = (activePage == sessionsTitle ? activeClass : inactiveClass) })</li>
     </ul>
 
