@@ -61,9 +61,11 @@
   "git.blame.statusBarItem.enabled": true,
   "cSpell.words": [
     "coderdojo",
+    "hilight",
     "iconify",
     "nuxtjs",
     "parallelizable",
+    "rgba",
     "Supabase",
     "vueuse"
   ],

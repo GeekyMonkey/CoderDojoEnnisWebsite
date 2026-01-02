@@ -38,6 +38,7 @@ export default defineNuxtConfig({
 	// builder: "vite",
 
 	colorMode: {
+		classSuffix: "-mode",
 		preference: "neon",
 	},
 

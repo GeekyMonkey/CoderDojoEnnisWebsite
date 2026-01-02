@@ -1,3 +1,6 @@
+ignoredBuiltDependencies:
+  - supabase
+
 onlyBuiltDependencies:
   - '@hebilicious/vue-query-nuxt'
   - '@parcel/watcher'
