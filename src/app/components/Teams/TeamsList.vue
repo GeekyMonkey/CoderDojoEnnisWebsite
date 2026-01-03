@@ -56,7 +56,7 @@
 	<hr>
 </template>
 
-<style lang="scss">
+<style lang="css">
 	h1 {
 		margin: 10px 0 5px;
 		font-size: 1.5rem;

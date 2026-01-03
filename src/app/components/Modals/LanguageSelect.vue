@@ -56,7 +56,7 @@
 	</UModal>
 </template>
 
-<style lang="scss">
+<style lang="css">
 	.LanguageDialog {
 		max-width: 200px;
 		.LanguageButtons {

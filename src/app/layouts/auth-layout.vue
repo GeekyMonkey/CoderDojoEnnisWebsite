@@ -2,25 +2,35 @@
 </script>
 
 <template>
-	<div class="AuthLayout flex min-h-screen w-full">
-		<main class="flex-1 overflow-auto p-4 width-full grow">
+	<div class="AuthLayout">
+		<main>
 			<slot/>
 		</main>
 
-		<ButtonGroup>
-			<ThemeSelect/>
-			<LanguageSelect/>
-		</ButtonGroup>
+		<UFooter>
+			<template #left>
+				<ButtonGroup>
+					<ThemeSelect/>
+					<LanguageSelect/>
+				</ButtonGroup>
+			</template>
+		</UFooter>
 	</div>
 </template>
 
-<style lang="scss">
-.AuthLayout {
-	display: flex;
-	flex-direction: column;
+<style lang="css">
+	.AuthLayout {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		width: 100%;
 
-	main {
-		align-content: center;
+		main {
+			padding: calc(var(--spacing) * 4);
+			width: 100%;
+			flex-grow: 1;
+			overflow: auto;
+			align-content: center;
+		}
 	}
-}
 </style>

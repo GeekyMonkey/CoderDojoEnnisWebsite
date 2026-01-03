@@ -8,6 +8,8 @@
 	</main>
 </template>
 
-<style scoped lang="scss">
-.DefaultLayout {}
+<style scoped lang="css">
+	.DefaultLayout {
+		width: 100%;
+	}
 </style>

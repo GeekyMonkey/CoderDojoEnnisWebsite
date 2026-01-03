@@ -132,9 +132,9 @@
 	</div>
 </template>
 
-<style scoped lang="scss">
-.LoginPage {
-	flex-grow: 1;
-	padding: 1rem;
-}
+<style scoped lang="css">
+	.LoginPage {
+		flex-grow: 1;
+		padding: 1rem;
+	}
 </style>

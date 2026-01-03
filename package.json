@@ -2,6 +2,9 @@
 	"private": true,
 	"packageManager": "pnpm@10.27.0",
 	"scripts": {
+		"dev": "pnpm -r --parallel dev",
+		"build": "pnpm -r --parallel build",
+		"format": "pnpm -r --parallel format",
 		"postinstall": "pnpm add -g @biomejs/biome"
 	},
 	"devDependencies": {

@@ -5,8 +5,7 @@
 	<div id="BodyOverlay2"></div>
 </template>
 
-<style lang="scss">
-	
+<style lang="css">
 	/*
 		html {
 	  height: 100%;

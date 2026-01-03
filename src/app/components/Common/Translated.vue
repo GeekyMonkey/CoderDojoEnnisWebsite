@@ -14,7 +14,7 @@
 	<span class="T">{{ translatedText }}</span>
 </template>
 
-<style lang="scss">
+<style lang="css">
 	.T {
 	}
 </style>

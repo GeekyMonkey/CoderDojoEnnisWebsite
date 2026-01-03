@@ -6,14 +6,14 @@
 <template>
 	<Teleport to="body">
 		<div id="ThemeFooter" :data-theme="currentThemeName">
-			<Theme _crt v-if="currentThemeName === 'crt'"/>
+			<ThemeCrt v-if="currentThemeName === 'crt'"/>
 		</div>
 	</Teleport>
 </template>
 
-<style lang="scss">
+<style lang="css">
 	#ThemeFooter {
-		z-index: 60; // Appear above sidebar
+		z-index: 60;
 		position: absolute;
 		inset: 0;
 		pointer-events: none;

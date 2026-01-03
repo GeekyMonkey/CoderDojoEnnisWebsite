@@ -87,54 +87,51 @@
 					<Translated t="login.title"/>
 				</h1>
 			</div>
-			<div>
-				<form @submit.prevent="handleLogin">
+			<form @submit.prevent="handleLogin">
+				<div>
+					<label for="username">
+						<Translated t="login.username"/>
+					</label>
+					<input
+						type="text"
+						id="username"
+						v-model="formState.username"
+						required
+						@keypress="clearErrorMessage()"
+					>
+				</div>
+
+				<div>
+					<label for="password">
+						<Translated t="login.password"/>
+					</label>
 					<div>
-						<label for="username">
-							<Translated t="login.username"/>
-						</label>
 						<input
-							type="text"
-							id="username"
-							v-model="formState.username"
+							:type="showPassword ? 'text' : 'password'"
+							id="password"
+							v-model="formState.password"
 							required
 							@keypress="clearErrorMessage()"
 						>
-					</div>
-
-					<div>
-						<label for="password">
-							<Translated t="login.password"/>
-						</label>
-						<div>
-							<input
-								:type="showPassword ? 'text' : 'password'"
-								id="password"
-								v-model="formState.password"
-								required
-								@keypress="clearErrorMessage()"
-							>
-							<UButton @click="togglePasswordVisibility">
-								<NuxtIcon
-									:name="showPassword
+						<UButton @click="togglePasswordVisibility">
+							<NuxtIcon
+								:name="showPassword
 									? 'mdi:show'
 									: 'mdi-show-outline'"
-								/>
-							</UButton>
-						</div>
+							/>
+						</UButton>
 					</div>
+				</div>
 
-					<UButton type="submit">{{ $t("login.loginButton") }}</UButton>
+				<UButton type="submit">{{ $t("login.loginButton") }}</UButton>
 
-					<div v-if="errorMessage">{{ errorMessage }}</div>
-				</form>
-			</div>
+				<div v-if="errorMessage">{{ errorMessage }}</div>
+			</form>
 		</div>
 	</div>
 </template>
 
-<style scoped lang="scss">
-.LoginComponent {
-	flex-grow: 1;
-}
+<style scoped lang="css">
+	.LoginComponent {
+	}
 </style>

@@ -66,13 +66,13 @@
 	</UModal>
 </template>
 
-<style lang="scss">
-.ThemeDialog {
-  max-width: 400px;
-  .ThemeButtons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
+<style lang="css">
+	.ThemeDialog {
+		max-width: 400px;
+		.ThemeButtons {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+	}
 </style>

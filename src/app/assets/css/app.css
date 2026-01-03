@@ -31,6 +31,7 @@ form {
 	padding: 10px;
 	border-radius: 10px;
 	background-color: #8888880f;
+	max-width: 600px;
 }
 
 a {
