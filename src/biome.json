@@ -1,5 +1,6 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+	"root": false,
+	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
 	"files": {
 		"includes": [
 			"app/**",
@@ -10,9 +11,9 @@
 			"package.json",
 			"drizzle.config.ts",
 			"tailwind.config.ts",
-			"!app/assets/**",
-			"!app/assets/css/**",
-			"!app/assets/images/**",
+			"!app/assets",
+			"!app/assets/css",
+			"!app/assets/images",
 			"!types/supabase.ts",
 			"!**/*.d.ts"
 		]

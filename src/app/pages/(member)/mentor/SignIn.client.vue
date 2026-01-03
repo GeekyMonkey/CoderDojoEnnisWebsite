@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Session } from "@supabase/gotrue-js";
+import type { Session } from "@supabase/supabase-js";
 import { z } from "zod";
 import SessionStats from "~/components/Attendance/SessionStats.vue";
 
@@ -69,7 +69,7 @@ const handleLogin = async () => {
 		const message: string = result.data?.message || "Welcome!";
 		alert(message); // ToDo: Replace with a nicer UI element
 	} else if (result.error) {
-		log.error("[Login] Error:", result.error);
+		log.error("[Login] Error:", { error: result.error });
 		errorMessage.value = result.error || "Could Not Complete Login";
 	}
 };

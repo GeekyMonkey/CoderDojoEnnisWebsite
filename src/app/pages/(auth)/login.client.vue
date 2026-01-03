@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Session } from "@supabase/gotrue-js";
+import type { Session } from "@supabase/supabase-js";
 import { z } from "zod";
 
 definePageMeta({

@@ -1,38 +1,39 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
-  "files": {
-    "includes": [
-      "**/*.json",
-      "src/**/*.css",
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "src/**/*.vue",
-      "!**/node_modules/**",
-      "!**/*.d.ts",
-      "!**/.nuxt/**",
+	"root": true,
+	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+	"files": {
+		"includes": [
+			"**/*.json",
+			"src/**/*.css",
+			"src/**/*.ts",
+			"src/**/*.tsx",
+			"src/**/*.vue",
+			"!**/node_modules/**",
+			"!**/*.d.ts",
+			"!**/.nuxt/**",
 			"!types/supabase.ts",
-      "!dist/**"
-    ]
-  },
-  "formatter": {
-    "indentStyle": "tab",
-    "lineWidth": 80,
-    "lineEnding": "lf"
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double",
-      "trailingCommas": "all"
-    }
-  },
-  "linter": {
-    "rules": {
-      "complexity": {
-        "noUselessSwitchCase": "off"
-      },
-      "style": {
-        "useBlockStatements": "error"
-      }
-    }
-  }
+			"!dist/**"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"lineWidth": 80,
+		"lineEnding": "lf"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"trailingCommas": "all"
+		}
+	},
+	"linter": {
+		"rules": {
+			"complexity": {
+				"noUselessSwitchCase": "off"
+			},
+			"style": {
+				"useBlockStatements": "error"
+			}
+		}
+	}
 }

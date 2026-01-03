@@ -3,9 +3,9 @@
 </script>
 
 <template>
-	<div class="MemberLayout flex min-h-screen w-full">
+	<div class="MemberLayout">
 
-		<main class="flex-1 overflow-auto p-4 width-full grow">
+		<main>
 			<slot />
 		</main>
 
@@ -20,9 +20,16 @@
 .MemberLayout {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
 
 	main {
 		align-content: center;
+		flex: 1;
+		overflow: auto;
+		padding: calc(var(--spacing) * 4);
+		width: 100%;
+		flex-grow: 1;
 	}
 }
 </style>

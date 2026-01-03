@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10",
-		"@cloudflare/workers-types": "4.20260101.0",
+		"@cloudflare/workers-types": "4.20260103.0",
 		"@nuxt/icon": "2.1.1",
 		"@tiptap/core": "3.14.0",
 		"@tiptap/pm": "3.14.0",
@@ -67,20 +67,8 @@
 		"wrangler": "4.54.0"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": [
-			"supabase"
-		]
+		"onlyBuiltDependencies": ["supabase"]
 	},
 	"packageManager": "pnpm@10.27.0",
-	"prettier": {
-		"bracketSameLine": false,
-		"endOfLine": "lf",
-		"semi": true,
-		"singleQuote": false,
-		"tabWidth": 4,
-		"trailingComma": "all",
-		"useTabs": true,
-		"vueIndentScriptAndStyle": true
-	},
 	"version": "0.1.0"
 }

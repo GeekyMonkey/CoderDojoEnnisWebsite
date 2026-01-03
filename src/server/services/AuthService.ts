@@ -84,6 +84,9 @@ export class AuthService {
 		return { member: memberModel, memberRecord: matched };
 	}
 
+	/**
+	 * Log in with username and password, returning member and supabase session
+	 */
 	async loginWithPassword(
 		username: string,
 		password: string,
