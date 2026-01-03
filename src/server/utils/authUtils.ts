@@ -169,9 +169,7 @@ export async function LoginToSupabase(
 				user_metadata: GenerateSupabaseUserMetaForMember(member),
 			});
 			if (createRes.error) {
-				logs.push(
-					`Admin create error: ${JSON.stringify(createRes.error)}`,
-				);
+				logs.push(`Admin create error: ${JSON.stringify(createRes.error)}`);
 				throw createRes.error;
 			}
 			// Explicit sign-in after admin creation (admin.createUser does not return a session)
@@ -211,9 +209,7 @@ export async function LoginToSupabase(
 
 		return authTokenResponse;
 	} catch (error) {
-		logs.push(
-			`LoginToSupabase error: ${JSON.stringify(ErrorToString(error))}`,
-		);
+		logs.push(`LoginToSupabase error: ${JSON.stringify(ErrorToString(error))}`);
 		log.error("Error generating JWT:", { logs });
 		return null;
 	}

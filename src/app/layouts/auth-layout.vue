@@ -1,17 +1,15 @@
 <script setup lang="ts">
-
 </script>
 
 <template>
 	<div class="AuthLayout flex min-h-screen w-full">
-
 		<main class="flex-1 overflow-auto p-4 width-full grow">
-			<slot />
+			<slot/>
 		</main>
 
 		<ButtonGroup>
-			<ThemeSelect />
-			<LanguageSelect />
+			<ThemeSelect/>
+			<LanguageSelect/>
 		</ButtonGroup>
 	</div>
 </template>

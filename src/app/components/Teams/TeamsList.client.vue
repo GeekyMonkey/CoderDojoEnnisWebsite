@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useBadgesStore } from "~/stores/useBadgesStore";
-import { useBeltsStore } from "~/stores/useBeltsStore";
-import { useTeamsStore } from "~/stores/useTeamsStore";
+	import { useBadgesStore } from "~/stores/useBadgesStore";
+	import { useBeltsStore } from "~/stores/useBeltsStore";
+	import { useTeamsStore } from "~/stores/useTeamsStore";
 
-const { Teams, Options, isLoading, error } = useTeamsStore();
-const { BadgeCategories, BadgesByCategory } = useBadgesStore();
-const { Belts } = useBeltsStore();
-const log = useLogger("TeamsList");
+	const { Teams, Options, isLoading, error } = useTeamsStore();
+	const { BadgeCategories, BadgesByCategory } = useBadgesStore();
+	const { Belts } = useBeltsStore();
+	const log = useLogger("TeamsList");
 
-onMounted(() => {
-	log.info("TeamsList Component Mounted");
-});
+	onMounted(() => {
+		log.info("TeamsList Component Mounted");
+	});
 </script>
 
 <template>
@@ -24,7 +24,7 @@ onMounted(() => {
 			{{ team.teamName }}
 		</p>
 	</div>
-	<hr />
+	<hr>
 
 	<h1>Belts</h1>
 	<div class="TeamsList">
@@ -36,7 +36,7 @@ onMounted(() => {
 			{{ belt.color }}
 		</p>
 	</div>
-	<hr />
+	<hr>
 
 	<h1>Badge Categories</h1>
 	<div class="TeamsList">
@@ -53,7 +53,7 @@ onMounted(() => {
 			</ul>
 		</div>
 	</div>
-	<hr />
+	<hr>
 </template>
 
 <style lang="scss">

@@ -67,7 +67,9 @@
 		"wrangler": "4.54.0"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["supabase"]
+		"onlyBuiltDependencies": [
+			"supabase"
+		]
 	},
 	"packageManager": "pnpm@10.27.0",
 	"version": "0.1.0"

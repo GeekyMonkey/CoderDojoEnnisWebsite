@@ -1,9 +1,7 @@
 <script setup lang="ts">
-
-definePageMeta({
-	layout: "default",
-});
-
+	definePageMeta({
+		layout: "default",
+	});
 </script>
 
 <template>Root Foo Page Here !</template>

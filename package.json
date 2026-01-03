@@ -1,6 +1,9 @@
 {
 	"private": true,
 	"packageManager": "pnpm@10.27.0",
+	"scripts": {
+		"postinstall": "pnpm add -g @biomejs/biome"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10"
 	},

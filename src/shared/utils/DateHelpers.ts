@@ -16,11 +16,9 @@ export function TodayYYYY_MM_dd(): string {
 	return `${yyyy}-${mm}-${dd}`;
 }
 
-export const DateStringSchema = z
-	.string()
-	.refine(IsYYYY_MM_dd, {
-        error: "date must be YYYY-MM-DD"
-    });
+export const DateStringSchema = z.string().refine(IsYYYY_MM_dd, {
+	error: "date must be YYYY-MM-DD",
+});
 export type DateString = z.infer<typeof DateStringSchema>;
 
 export const NumberToDate = (num: number): Date => {

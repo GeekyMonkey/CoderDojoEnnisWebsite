@@ -71,9 +71,7 @@ export function memberBadgeToRecord(
 		rejected_date: model.rejectedDate
 			? new Date(model.rejectedDate).toISOString()
 			: null,
-		goal_date: model.goalDate
-			? new Date(model.goalDate).toISOString()
-			: null,
+		goal_date: model.goalDate ? new Date(model.goalDate).toISOString() : null,
 	} as MemberBadgeRecord;
 }
 

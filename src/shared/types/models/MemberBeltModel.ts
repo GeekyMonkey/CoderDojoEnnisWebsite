@@ -5,18 +5,18 @@ export type MemberBeltRecord =
 	Database["coderdojo"]["Tables"]["member_belts"]["Row"];
 
 export const MemberBeltModelSchema = z.strictObject({
-		id: z.string(),
-		memberId: z.string(),
-		beltId: z.string(),
-		awardedByAdultId: z.string().nullable(),
-		applicationNotes: z.string().nullable(),
-		awardedNotes: z.string().nullable(),
-		rejectedByAdultId: z.string().nullable(),
-		rejectedNotes: z.string().nullable(),
-		applicationDate: z.number().nullable(),
-		awarded: z.number().nullable(),
-		rejectedDate: z.number().nullable(),
-	});
+	id: z.string(),
+	memberId: z.string(),
+	beltId: z.string(),
+	awardedByAdultId: z.string().nullable(),
+	applicationNotes: z.string().nullable(),
+	awardedNotes: z.string().nullable(),
+	rejectedByAdultId: z.string().nullable(),
+	rejectedNotes: z.string().nullable(),
+	applicationDate: z.number().nullable(),
+	awarded: z.number().nullable(),
+	rejectedDate: z.number().nullable(),
+});
 
 export type MemberBeltModel = z.infer<typeof MemberBeltModelSchema>;
 

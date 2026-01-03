@@ -5,10 +5,10 @@ export type MemberParentRecord =
 	Database["coderdojo"]["Tables"]["member_parents"]["Row"];
 
 export const MemberParentModelSchema = z.strictObject({
-		id: z.string(),
-		memberId: z.string(),
-		parentId: z.string(),
-	});
+	id: z.string(),
+	memberId: z.string(),
+	parentId: z.string(),
+});
 
 export type MemberParentModel = z.infer<typeof MemberParentModelSchema>;
 

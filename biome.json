@@ -8,11 +8,12 @@
 			"src/**/*.ts",
 			"src/**/*.tsx",
 			"src/**/*.vue",
-			"!**/node_modules/**",
+			"!bruno",
+			"!**/node_modules",
 			"!**/*.d.ts",
-			"!**/.nuxt/**",
+			"!**/.nuxt",
 			"!types/supabase.ts",
-			"!dist/**"
+			"!dist"
 		]
 	},
 	"formatter": {
@@ -24,6 +25,16 @@
 		"formatter": {
 			"quoteStyle": "double",
 			"trailingCommas": "all"
+		}
+	},
+	"html": {
+		"formatter": {
+			"enabled": true,
+			"indentScriptAndStyle": true
+		},
+		"experimentalFullSupportEnabled": true,
+		"parser": {
+			"interpolation": true
 		}
 	},
 	"linter": {

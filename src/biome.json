@@ -9,6 +9,7 @@
 			"types/**",
 			"nuxt.config.ts",
 			"package.json",
+			"*.json",
 			"drizzle.config.ts",
 			"tailwind.config.ts",
 			"!app/assets",
@@ -29,6 +30,16 @@
 			"trailingCommas": "all"
 		}
 	},
+	"html": {
+		"formatter": {
+			"enabled": true,
+			"indentScriptAndStyle": true
+		},
+		"experimentalFullSupportEnabled": true,
+		"parser": {
+			"interpolation": true
+		}
+	},
 	"linter": {
 		"rules": {
 			"complexity": {
@@ -38,5 +49,22 @@
 				"useBlockStatements": "error"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.vue"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useConst": "off",
+						"useImportType": "off"
+					},
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					}
+				}
+			}
+		}
+	]
 }

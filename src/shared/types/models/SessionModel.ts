@@ -4,15 +4,15 @@ import type { Database } from "../../../types/supabase";
 export type SessionRecord = Database["coderdojo"]["Tables"]["sessions"]["Row"];
 
 export const SessionModelSchema = z.strictObject({
-		id: z.string(),
-		createdDate: z.number(),
-		endDate: z.number().nullable(),
-		url: z.string().nullable(),
-		topic: z.string().nullable(),
-		adultId: z.string().nullable(),
-		adult2Id: z.string().nullable(),
-		mentorsOnly: z.boolean(),
-	});
+	id: z.string(),
+	createdDate: z.number(),
+	endDate: z.number().nullable(),
+	url: z.string().nullable(),
+	topic: z.string().nullable(),
+	adultId: z.string().nullable(),
+	adult2Id: z.string().nullable(),
+	mentorsOnly: z.boolean(),
+});
 
 export type SessionModel = z.infer<typeof SessionModelSchema>;
 

@@ -15,7 +15,8 @@
 	"editor.tabSize": 4,
 	"files.associations": {
 		"*.css": "tailwindcss",
-		"*.scss": "tailwindcss"
+		"*.scss": "tailwindcss",
+		"*.vue": "vue"
 	},
 	"files.autoSave": "onFocusChange",
 	"files.defaultLanguage": "typescript",

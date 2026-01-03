@@ -5,10 +5,10 @@ export type MemberAttendanceRecord =
 	Database["coderdojo"]["Tables"]["member_attendances"]["Row"];
 
 export const MemberAttendanceModelSchema = z.strictObject({
-		id: z.string(),
-		memberId: z.string(),
-		date: DateStringSchema,
-	});
+	id: z.string(),
+	memberId: z.string(),
+	date: DateStringSchema,
+});
 export const MemberAttendanceModelArraySchema = z.array(
 	MemberAttendanceModelSchema,
 );

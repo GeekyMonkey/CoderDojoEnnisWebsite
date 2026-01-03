@@ -1,13 +1,13 @@
 {
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "herrmannplatz.npm-dependency-links",
-    "vue.volar",
-    "bradlc.vscode-tailwindcss",
-    "nuxtr.nuxt-vscode-extentions",
-    "renesaarsoo.sql-formatter-vsc",
-    "biomejs.biome",
-    "bruno-api-client.bruno",
-    "johnpapa.vscode-peacock"
-  ]
+	"recommendations": [
+		"esbenp.prettier-vscode",
+		"herrmannplatz.npm-dependency-links",
+		"vue.volar",
+		"bradlc.vscode-tailwindcss",
+		"nuxtr.nuxt-vscode-extentions",
+		"renesaarsoo.sql-formatter-vsc",
+		"biomejs.biome",
+		"bruno-api-client.bruno",
+		"johnpapa.vscode-peacock"
+	]
 }

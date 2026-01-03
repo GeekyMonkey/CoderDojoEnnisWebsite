@@ -4,7 +4,7 @@
 <template>
 	<main class="DefaultLayout">
 		<h1>Default Layout</h1>
-		<slot />
+		<slot/>
 	</main>
 </template>
 

@@ -1,22 +1,22 @@
 {
-  "projectOverview": "This project is a website for CoderDojo Ennis, which includes pages for mentors, teams, and parents.",
-  "frameworkAndTools": {
-    "framework": "Nuxt.js v4",
-    "frontend": "Vue.js",
-    "dataFetching": "@tanstack/vue-query"
-  },
-  "projectStructure": {
-    "mentorPage": "src/app/pages/mentor/index.client.vue",
-    "teamsListComponent": "src/app/components/TeamsList.client.vue",
-    "teamsStoreComposable": "src/app/stores/TeamsStore.ts",
-    "vueQueryPlugin": "src/plugins/vue-query.ts",
-    "nuxtConfig": "src/nuxt.config.ts"
-  },
-  "specificRequirements": [
-    "Ensure that teams data is fetched and displayed correctly on the mentor page."
-  ],
-  "currentIssues": [
-    "Teams data is not loading when the mentor page is initially loaded.",
-    "Need to set default options for Vue Query in a Nuxt application."
-  ]
+	"projectOverview": "This project is a website for CoderDojo Ennis, which includes pages for mentors, teams, and parents.",
+	"frameworkAndTools": {
+		"framework": "Nuxt.js v4",
+		"frontend": "Vue.js",
+		"dataFetching": "@tanstack/vue-query"
+	},
+	"projectStructure": {
+		"mentorPage": "src/app/pages/mentor/index.client.vue",
+		"teamsListComponent": "src/app/components/TeamsList.client.vue",
+		"teamsStoreComposable": "src/app/stores/TeamsStore.ts",
+		"vueQueryPlugin": "src/plugins/vue-query.ts",
+		"nuxtConfig": "src/nuxt.config.ts"
+	},
+	"specificRequirements": [
+		"Ensure that teams data is fetched and displayed correctly on the mentor page."
+	],
+	"currentIssues": [
+		"Teams data is not loading when the mentor page is initially loaded.",
+		"Need to set default options for Vue Query in a Nuxt application."
+	]
 }

@@ -1,6 +1,6 @@
 <template>
 	<nav class="ButtonGroup">
-		<slot />
+		<slot/>
 	</nav>
 </template>
 
@@ -8,9 +8,8 @@
 </script>
 
 <style scoped>
-.ButtonGroup {
-	display: flex;
-	gap: 4px;
-	
-}
+	.ButtonGroup {
+		display: flex;
+		gap: 4px;
+	}
 </style>

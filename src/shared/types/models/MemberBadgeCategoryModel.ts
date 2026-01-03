@@ -5,10 +5,10 @@ export type MemberBadgeCategoryRecord =
 	Database["coderdojo"]["Tables"]["member_badge_categories"]["Row"];
 
 export const MemberBadgeCategoryModelSchema = z.strictObject({
-		id: z.string(),
-		memberId: z.string(),
-		badgeCategoryId: z.string(),
-	});
+	id: z.string(),
+	memberId: z.string(),
+	badgeCategoryId: z.string(),
+});
 
 export type MemberBadgeCategoryModel = z.infer<
 	typeof MemberBadgeCategoryModelSchema
