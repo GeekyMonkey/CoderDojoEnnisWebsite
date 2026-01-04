@@ -27,13 +27,13 @@
 			variant="outline"
 			:title="Translate('theme.select')"
 		>
-			<NuxtIcon
+			<Icon
 				v-if="CurrentTheme?.darkOrLight === 'dark'"
 				name="line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition"
 				class="LanguageIcon w-5 h-5"
 			/>
 
-			<NuxtIcon
+			<Icon
 				v-else
 				name="line-md:moon-filled-to-sunny-filled-loop-transition"
 				class="LanguageIcon w-5 h-5"
@@ -42,7 +42,7 @@
 		</UButton>
 
 		<template #header>
-			<NuxtIcon name="Theme" class="ThemeIcon w-8 h-8"/>
+			<Icon name="Theme" class="ThemeIcon w-8 h-8"/>
 			<Translated t="theme.select"/>
 		</template>
 
@@ -57,7 +57,7 @@
 					@click="SetTheme(theme.id); isOpen = false"
 				>
 					<Translated :t="theme.themeName"/>
-					<NuxtIcon
+					<Icon
 						:name="theme.darkOrLight === 'dark' ? 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition' : 'line-md:moon-filled-to-sunny-filled-loop-transition'"
 					/>
 				</UButton>

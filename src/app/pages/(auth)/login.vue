@@ -114,7 +114,7 @@
 							@keypress="clearErrorMessage()"
 						>
 						<UButton @click="togglePasswordVisibility">
-							<NuxtIcon
+							<Icon
 								:name="showPassword
 									? 'mdi:show'
 									: 'mdi-show-outline'"

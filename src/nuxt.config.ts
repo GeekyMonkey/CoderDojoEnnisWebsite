@@ -105,7 +105,7 @@ export default defineNuxtConfig({
 			Language: "akar-icons:language", // or heroicons:globe-alt
 			Theme: "mdi:theme-light-dark",
 		},
-		componentName: "NuxtIcon",
+		componentName: "Icon",
 		// customCollections: [
 		//   {
 		//     prefix: "asset-icon",

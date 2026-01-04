@@ -34,12 +34,12 @@
 			variant="outline"
 			:title="`${currentLanguage} ?`"
 		>
-			<NuxtIcon name="Language" class="LanguageIcon w-5 h-5"/>
+			<Icon name="Language" class="LanguageIcon w-5 h-5"/>
 			<span class="sr-only">Language</span>
 		</UButton>
 
 		<template #header>
-			<NuxtIcon name="Language" class="LanguageIcon w-8 h-8"/>
+			<Icon name="Language" class="LanguageIcon w-8 h-8"/>
 		</template>
 		<template #body>
 			<div class="LanguageButtons">
