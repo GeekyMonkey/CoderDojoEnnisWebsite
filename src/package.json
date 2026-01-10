@@ -19,13 +19,13 @@
 		"test": "cls && vitest"
 	},
 	"dependencies": {
-		"@iconify/json": "2.2.424",
+		"@iconify/json": "2.2.426",
 		"@nuxt/ui": "4.3.0",
 		"@nuxtjs/color-mode": "4.0.0",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.1",
 		"@nuxtjs/supabase": "2.0.3",
-		"@supabase/supabase-js": "2.89.0",
+		"@supabase/supabase-js": "2.90.1",
 		"@tanstack/vue-query": "5.92.5",
 		"@vueuse/nuxt": "14.1.0",
 		"crypto-js": "4.2.0",
@@ -34,18 +34,18 @@
 		"mssql": "11.0.1",
 		"nuxt": "4.2.2",
 		"tailwindcss": "4.1.18",
-		"zod": "4.3.4"
+		"zod": "4.3.5"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.10",
-		"@cloudflare/workers-types": "4.20260103.0",
-		"@nuxt/icon": "2.1.1",
-		"@tiptap/core": "3.14.0",
-		"@tiptap/pm": "3.14.0",
+		"@biomejs/biome": "2.3.11",
+		"@cloudflare/workers-types": "4.20260109.0",
+		"@nuxt/icon": "2.2.0",
+		"@tiptap/core": "3.15.3",
+		"@tiptap/pm": "3.15.3",
 		"@types/crypto-js": "4.2.2",
 		"@types/jsonwebtoken": "9.0.10",
 		"@types/mssql": "9.1.8",
-		"@types/node": "24.10.4",
+		"@types/node": "24.10.7",
 		"@vitejs/plugin-vue": "6.0.3",
 		"@vue/test-utils": "2.4.6",
 		"c12": "3.3.3",
@@ -55,13 +55,13 @@
 		"postcss-custom-properties": "14.0.6",
 		"prettier": "3.7.4",
 		"prettier-plugin-vue": "1.1.6",
-		"sass": "1.97.1",
+		"sass": "1.97.2",
 		"supabase": "^2.70.5",
 		"ts-node": "10.9.2",
 		"typescript": "5.9.3",
 		"vite": "6.4.1",
 		"vitest": "4.0.16",
-		"wrangler": "4.54.0"
+		"wrangler": "4.58.0"
 	},
 	"packageManager": "pnpm@10.27.0",
 	"version": "0.1.0"
