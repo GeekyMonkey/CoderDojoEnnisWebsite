@@ -1,0 +1,9 @@
+/*
+ * Dark theme customizations (placeholder).
+ *
+ * This file is intentionally minimal: light/dark should follow Nuxt UI defaults
+ * unless/until we add targeted overrides.
+ */
+
+html[theme="dark"] {
+}

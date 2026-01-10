@@ -1,12 +1,14 @@
 /**
  * List of theme descriptions
  */
-import brightTheme from "./bright/bright";
+import darkTheme from "./dark/dark";
 import crtTheme from "./crt/crt";
-import neonTheme from "./neon/neon";
+import lightTheme from "./light/light";
 
 const log = useLogger("Themes");
 
-export const Themes: ThemeModel[] = [brightTheme, crtTheme, neonTheme];
+export const Themes: ThemeModel[] = [lightTheme, darkTheme, crtTheme];
 log.info("Hard coded themes ",{ Themes });
+
+
 	

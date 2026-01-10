@@ -19,8 +19,8 @@ body {
 	min-height: 100%;
 	position: relative;
 	text-wrap: balance;
-	color: var(--foreground-color);
-	background-color: var(--background-color);
+	color: var(--ui-text, var(--foreground-color));
+	background-color: var(--ui-bg, var(--background-color));
 	transition:
 		background-color 1s,
 		color 0.5s;

@@ -1,8 +1,16 @@
 import { useQuery } from "@tanstack/vue-query";
-import { type UseColorModeReturn, useColorMode } from "@vueuse/core";
 
-let ColorModeService: UseColorModeReturn<string> | null = null;
+// Theme switching is built on @nuxtjs/color-mode for `light`/`dark`/`system`,
+// with an additional `theme` attribute for opt-in alternate themes (e.g. `crt`).
+
+let ColorModeService: ReturnType<typeof useColorMode> | null = null;
+let IsColorModeInitialized = false;
+
+// Shared across all callers of useUiConfig()
+const CustomThemeId = ref<string | null>(null);
 const log = useLogger("UiConfig");
+
+const ThemeStorageKey = "coderdojo.theme";
 
 /**
  * Load the UI Config from the server
@@ -63,42 +71,114 @@ export function useUiConfig() {
 	 * Set the color mode
 	 */
 	const InitColorMode = (configData: UiConfigModel) => {
-		const themes = configData.themesConfig.themes || [];
-		if (themes.length > 0) {
-			// Custom color modes = themes
-			const colorModesObj = themes.reduce(
-				(acc: Record<string, string>, mode: ThemeModel) => {
-					acc[mode.id] = mode.id;
-					return acc;
-				},
-				{},
-			);
-			ColorModeService = useColorMode({
-				modes: colorModesObj,
-				attribute: "theme",
-			});
-
-			// Set the default color mode
-			switch (ColorModeService.value) {
-				case "auto":
-				case "dark":
-					SetTheme(configData.themesConfig.defaultDarkThemeId);
-					break;
-				case "light":
-					SetTheme(configData.themesConfig.defaultLightThemeId);
-					break;
-				default:
-				// Stick with known theme
-			}
+		if (IsColorModeInitialized) {
+			return;
 		}
+
+		const themes = configData.themesConfig.themes || [];
+		if (themes.length === 0) {
+			return;
+		}
+
+		if (!ColorModeService) {
+			ColorModeService = useColorMode();
+		}
+
+		const applyThemeAttribute = (themeId: string) => {
+			if (import.meta.client) {
+				type DocumentElementLike = {
+					setAttribute?: (name: string, value: string) => void;
+				};
+				type DocumentLike = {
+					documentElement?: DocumentElementLike;
+				};
+				const root = (globalThis as unknown as { document?: DocumentLike })
+					.document?.documentElement;
+				root?.setAttribute?.("theme", themeId);
+			}
+		};
+
+		const loadStoredCustomTheme = () => {
+			if (!import.meta.client) {
+				return;
+			}
+			const stored = localStorage.getItem(ThemeStorageKey);
+			const isValid = stored && themes.some((t) => t.id === stored);
+			CustomThemeId.value = isValid ? stored : null;
+			if (stored && !isValid) {
+				localStorage.removeItem(ThemeStorageKey);
+			}
+		};
+
+		// Initialize custom theme from storage (opt-in only)
+		loadStoredCustomTheme();
+
+		// Apply initial theme attribute
+		const initialThemeId =
+			CustomThemeId.value ?? ColorModeService.value ?? "light";
+		applyThemeAttribute(initialThemeId);
+
+		// Keep theme attribute in sync with system light/dark unless a custom theme is selected
+		watch(
+			() => ColorModeService?.value,
+			(next) => {
+				if (!next) {
+					return;
+				}
+				if (CustomThemeId.value) {
+					return;
+				}
+				applyThemeAttribute(next);
+			},
+			{ immediate: true },
+		);
+
+		IsColorModeInitialized = true;
 	};
 
 	/**
 	 * Set the theme
 	 */
 	const SetTheme = (themeName: string) => {
+		const themes = data.value?.themesConfig.themes ?? [];
+		const selected = themes.find((t) => t.id === themeName);
+		if (!selected) {
+			return;
+		}
+
+		if (import.meta.client) {
+			type DocumentElementLike = {
+				setAttribute?: (name: string, value: string) => void;
+			};
+			type DocumentLike = {
+				documentElement?: DocumentElementLike;
+			};
+			const root = (globalThis as unknown as { document?: DocumentLike })
+				.document?.documentElement;
+			root?.setAttribute?.("theme", themeName);
+		}
+
+		// Standard themes are driven by Nuxt color-mode
+		if (themeName === "light" || themeName === "dark") {
+			CustomThemeId.value = null;
+			if (import.meta.client) {
+				localStorage.removeItem(ThemeStorageKey);
+			}
+			if (ColorModeService) {
+				ColorModeService.preference = themeName;
+			}
+			return;
+		}
+
+		// Alternate themes (e.g. crt) are opt-in and persisted separately.
+		CustomThemeId.value = themeName;
+		if (import.meta.client) {
+			localStorage.setItem(ThemeStorageKey, themeName);
+		}
+
+		// Keep Nuxt UI on a sensible baseline (light/dark) based on the selected theme.
 		if (ColorModeService) {
-			ColorModeService.value = themeName;
+			ColorModeService.preference = selected.darkOrLight;
 		}
 	};
 
@@ -106,13 +186,9 @@ export function useUiConfig() {
 	 * Get the current theme
 	 */
 	const CurrentTheme = computed<ThemeModel | null>(() => {
-		if (ColorModeService) {
-			const themeId = ColorModeService.value;
-			return (
-				data.value?.themesConfig.themes.find((t) => t.id === themeId) ?? null
-			);
-		}
-		return null;
+		const themes = data.value?.themesConfig.themes ?? [];
+		const themeId = CustomThemeId.value ?? ColorModeService?.value ?? "";
+		return themes.find((t) => t.id === themeId) ?? null;
 	});
 
 	return {

@@ -1,13 +1,13 @@
 import type { ThemeModel } from "~~/shared/types/ThemeModel";
 
 const theme: ThemeModel = {
-	id: "bright",
+	id: "light",
 	themeName: {
-		en: "Bright",
-		fr: "Lumineux",
+		en: "Light",
+		fr: "Clair",
 	},
 	darkOrLight: "light",
-	author: "Anonymous",
+	author: "Nuxt UI",
 };
 
 export default theme;

@@ -7,6 +7,23 @@
 		--foreground-color: var(--BrightGreen);
 		--hilight-color: var(--BrightGreen);
 		--shadow-color: transparent;
+
+		/* Nuxt UI baseline (override defaults to match CRT palette) */
+		--ui-text-dimmed: var(--foreground-color);
+		--ui-text-muted: var(--foreground-color);
+		--ui-text-toned: var(--foreground-color);
+		--ui-text: var(--foreground-color);
+		--ui-text-highlighted: var(--foreground-color);
+		--ui-text-inverted: var(--background-color);
+		--ui-bg: var(--background-color);
+		--ui-bg-muted: var(--background-color);
+		--ui-bg-elevated: var(--background-color);
+		--ui-bg-accented: var(--background-color);
+		--ui-bg-inverted: var(--foreground-color);
+		--ui-border: var(--foreground-color);
+		--ui-border-muted: var(--foreground-color);
+		--ui-border-accented: var(--foreground-color);
+		--ui-border-inverted: var(--foreground-color);
 		--sidebar-background: 240 5.9% 10%;
 		--sidebar-foreground: 240 4.8% 95.9%;
 		--sidebar-primary: 224.3 76.3% 48%;

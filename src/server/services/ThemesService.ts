@@ -1,5 +1,5 @@
-import { ThemesConfig, ThemeModel } from "~~/shared/types/ThemeModel";
 import { Themes } from "~~/app/assets/themes/Themes";
+import type { ThemeModel, ThemesConfig } from "~~/shared/types/ThemeModel";
 
 // Cache
 let themesConfig: ThemesConfig | null = null;
@@ -28,12 +28,12 @@ export class ThemesService {
 
 		// Process the themes
 		const defaultDarkThemeId =
-			themes.find((t) => t.id === "neon")?.id ??
-			themes.find((t) => t.darkOrLight == "dark")?.id ??
+			themes.find((t) => t.id === "dark")?.id ??
+			themes.find((t) => t.darkOrLight === "dark")?.id ??
 			"";
 		const defaultLightThemeId =
-			themes.find((t) => t.id === "bright")?.id ??
-			themes.find((t) => t.darkOrLight == "light")?.id ??
+			themes.find((t) => t.id === "light")?.id ??
+			themes.find((t) => t.darkOrLight === "light")?.id ??
 			"";
 
 		return {

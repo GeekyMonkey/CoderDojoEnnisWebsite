@@ -10,10 +10,12 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			title: "CoderDojo Ennis",
-			htmlAttrs: {},
+			htmlAttrs: {
+				style: "background-color:Canvas;color-scheme:light dark;",
+			},
 			bodyAttrs: {
 				class: "",
-				style: "background-color:black;",
+				style: "margin:0;min-height:100vh;",
 			},
 			meta: [
 				{
@@ -38,8 +40,8 @@ export default defineNuxtConfig({
 	// builder: "vite",
 
 	colorMode: {
-		classSuffix: "-mode",
-		preference: "neon",
+		classSuffix: "",
+		preference: "system",
 	},
 
 	compatibilityDate: "2025-05-15",

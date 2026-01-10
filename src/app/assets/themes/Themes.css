@@ -1,12 +1,7 @@
-@import "./bright/bright.css";
+@import "./light/light.css";
+@import "./dark/dark.css";
 @import "./crt/crt.css";
-@import "./neon/neon.css";
-
 @layer base, theme;
 
 @layer theme {
-	html body  {
-		/* Nuxt UI */
-		--ui-bg: var(--background-color);
-	}
 }
