@@ -20,13 +20,13 @@
 
 <template>
 	<UApp>
-		<NuxtLoadingIndicator/>
+		<NuxtLoadingIndicator />
 
 		<NuxtLayout>
-			<NuxtPage/>
+			<NuxtPage />
 		</NuxtLayout>
 	</UApp>
-	<ThemeFooter/>
+	<ThemeFooter />
 </template>
 
 <style lang="css"></style>

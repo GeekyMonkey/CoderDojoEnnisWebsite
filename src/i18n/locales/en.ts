@@ -11,6 +11,9 @@ export default {
 		password: "Password",
 		loginButton: "Login",
 	},
+	validation: {
+		minLength: "Must be at least {min} characters",
+	},
 	signIn: {
 		title: "CoderDojo Ennis Session Sign In",
 		signInButton: "Sign In",
@@ -18,6 +21,12 @@ export default {
 	theme: {
 		author: "Created by {AuthorName}",
 		select: "Select Theme",
+		description: "Choose your preferred theme",
+	},
+	language: {
+		select: "Select language",
+		description: "Select your preferred language",
+		current: "Current language: {Language}",
 	},
 } as const;
 

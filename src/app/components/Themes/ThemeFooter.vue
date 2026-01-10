@@ -6,7 +6,7 @@
 <template>
 	<Teleport to="body">
 		<div id="ThemeFooter" :data-theme="currentThemeName">
-			<ThemeCrt v-if="currentThemeName === 'crt'"/>
+			<ThemeCrt v-if="currentThemeName === 'crt'" />
 		</div>
 	</Teleport>
 </template>

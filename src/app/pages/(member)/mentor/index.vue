@@ -14,7 +14,7 @@
 <template>
 	<h2>Mentor Page</h2>
 
-	<TeamsList/>
+	<TeamsList />
 </template>
 
 <style lang="css" scoped></style>

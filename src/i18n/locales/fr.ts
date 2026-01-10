@@ -11,6 +11,9 @@ export default {
 		password: "Mot de passe",
 		loginButton: "Connexion",
 	},
+	validation: {
+		minLength: "Doit contenir au moins {min} caractères",
+	},
 	signIn: {
 		title: "CoderDojo Ennis Session Sign In",
 		signInButton: "Connexion",
@@ -18,5 +21,11 @@ export default {
 	theme: {
 		author: "Créé par {AuthorName}",
 		select: "Sélectionnez le thème",
+		description: "Choisissez votre thème préféré",
+	},
+	language: {
+		select: "Choisir la langue",
+		description: "Sélectionnez votre langue préférée",
+		current: "Langue actuelle : {Language}",
 	},
 } as const satisfies enMessagesType;

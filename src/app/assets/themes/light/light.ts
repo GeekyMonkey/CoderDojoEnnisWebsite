@@ -5,6 +5,8 @@ const theme: ThemeModel = {
 	themeName: {
 		en: "Light",
 		fr: "Clair",
+		ga: "Geal",
+		uk: "Світла",
 	},
 	darkOrLight: "light",
 	author: "Nuxt UI",

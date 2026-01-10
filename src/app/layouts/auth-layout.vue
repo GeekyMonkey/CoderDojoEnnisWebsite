@@ -4,14 +4,14 @@
 <template>
 	<div class="AuthLayout">
 		<main>
-			<slot/>
+			<slot />
 		</main>
 
 		<UFooter>
 			<template #left>
 				<ButtonGroup>
-					<ThemeSelect/>
-					<LanguageSelect/>
+					<ThemeSelect />
+					<LanguageSelect />
 				</ButtonGroup>
 			</template>
 		</UFooter>
@@ -26,11 +26,13 @@
 		width: 100%;
 
 		main {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			padding: calc(var(--spacing) * 4);
 			width: 100%;
 			flex-grow: 1;
 			overflow: auto;
-			align-content: center;
 		}
 	}
 </style>

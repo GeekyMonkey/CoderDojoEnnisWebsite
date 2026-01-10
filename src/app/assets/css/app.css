@@ -1,44 +1,38 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-:root {
-	--card-border-color: #0a0;
-	--border-radius: 10px;
-}
+@layer base {
+	:root {
+		--card-border-color: #0a0;
+		--border-radius: 10px;
+	}
 
-html {
-	height: 100%;
-}
+	html {
+		height: 100%;
+	}
 
-* {
-	box-sizing: border-box;
-	text-wrap: balance;
-}
+	* {
+		box-sizing: border-box;
+		text-wrap: balance;
+	}
 
-body {
-	min-height: 100%;
-	position: relative;
-	text-wrap: balance;
-	color: var(--ui-text, var(--foreground-color));
-	background-color: var(--ui-bg, var(--background-color));
-	transition:
-		background-color 1s,
-		color 0.5s;
-}
+	body {
+		min-height: 100%;
+		position: relative;
+		text-wrap: balance;
+		color: var(--ui-text, var(--foreground-color));
+		background-color: var(--ui-bg, var(--background-color));
+		transition:
+			background-color 1s,
+			color 0.5s;
+	}
 
-form {
-	border: solid 1px pink;
-	padding: 10px;
-	border-radius: 10px;
-	background-color: #8888880f;
-	max-width: 600px;
-}
+	a {
+		user-select: none;
+	}
 
-a {
-	user-select: none;
-}
-
-.ModalOverlay {
-	background: #00000040;
-	backdrop-filter: blur(2px);
+	.ModalOverlay {
+		background: #00000040;
+		backdrop-filter: blur(2px);
+	}
 }

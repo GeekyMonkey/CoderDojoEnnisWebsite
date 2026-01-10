@@ -4,12 +4,12 @@
 <template>
 	<div class="MemberLayout">
 		<main>
-			<slot/>
+			<slot />
 		</main>
 
 		<ButtonGroup>
-			<ThemeSelect/>
-			<LanguageSelect/>
+			<ThemeSelect />
+			<LanguageSelect />
 		</ButtonGroup>
 	</div>
 </template>

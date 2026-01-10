@@ -1,5 +1,8 @@
 <script setup lang="ts">
+	import { nextTick } from "vue";
+	import type { ComponentPublicInstance } from "vue";
 	import type { Session } from "@supabase/supabase-js";
+	import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
 
 	definePageMeta({
@@ -7,40 +10,82 @@
 	});
 
 	const router = useRouter();
+	const { t, locale } = useI18n();
 	const { supabaseClient } = UseSupabaseClient();
-	const showPassword = ref(false);
 	const errorMessage = ref<string | null>(null);
 
-	// Form Validation & State
-	const formSchema = z.object({
-		username: z.string().min(4, "Must be at least 4 characters"),
-		password: z.string().min(4, "Must be at least 4 characters"),
-	});
-	type FormSchema = z.output<typeof formSchema>;
-	const formState = reactive<FormSchema>({
-		username: "",
-		password: "",
-	});
-
-	/** Show/Hide Password text */
-	const togglePasswordVisibility = (): void => {
-		showPassword.value = !showPassword.value;
+	type FormSchema = {
+		username: string;
+		password: string;
 	};
+
+	// Form Validation (localized)
+	const formSchema = computed(() =>
+		z.object({
+			username: z.string().min(4, t("validation.minLength", { min: 4 })),
+			password: z.string().min(4, t("validation.minLength", { min: 4 })),
+		}),
+	);
+
+	const fields = computed<AuthFormField[]>(() => [
+		{
+			name: "username",
+			type: "text",
+			label: t("login.username"),
+			required: true,
+			defaultValue: "",
+			autocomplete: "username",
+		},
+		{
+			name: "password",
+			type: "password",
+			label: t("login.password"),
+			required: true,
+			defaultValue: "",
+			autocomplete: "current-password",
+		},
+	]);
 
 	/** Clear the error message when changing inputs */
 	const clearErrorMessage = () => {
 		errorMessage.value = null;
 	};
 
-	/** When formState values change, clear the error message */
-	watch(formState, () => {
-		clearErrorMessage();
-	});
+	type AuthFormExpose = {
+		state?: Partial<FormSchema>;
+		formRef?: unknown;
+	};
+
+	type ValidatableForm = {
+		validate?: (opts?: {
+			silent?: boolean;
+			nested?: boolean;
+		}) => Promise<unknown>;
+	};
+
+	const authForm = ref<(ComponentPublicInstance & AuthFormExpose) | null>(null);
+	watch(
+		() => locale.value,
+		async () => {
+			await nextTick();
+			const rawFormRef = authForm.value?.formRef;
+			const form = (Array.isArray(rawFormRef) ? rawFormRef[0] : rawFormRef) as
+				| ValidatableForm
+				| undefined;
+			await form?.validate?.({ silent: true, nested: true });
+		},
+	);
+	watch(
+		() => [authForm.value?.state?.username, authForm.value?.state?.password],
+		() => {
+			clearErrorMessage();
+		},
+	);
 
 	/**
 	 * Handle Login
 	 */
-	const handleLogin = async () => {
+	const handleLogin = async (username: string, password: string) => {
 		clearErrorMessage();
 
 		const result = await $fetch<
@@ -48,8 +93,8 @@
 		>("/api/Auth/Login", {
 			method: "POST",
 			body: {
-				username: formState.username,
-				password: formState.password,
+				username,
+				password,
 				credentials: "include", // Ensure cookies are included in the request
 			},
 		});
@@ -77,61 +122,31 @@
 			errorMessage.value = result.error || "Could Not Complete Login";
 		}
 	};
+
+	const onSubmit = async (event: FormSubmitEvent<FormSchema>) => {
+		await handleLogin(event.data.username, event.data.password);
+	};
 </script>
 
 <template>
-	<div class="LoginComponent">
-		<div>
-			<div>
-				<h1>
-					<Translated t="login.title"/>
-				</h1>
-			</div>
-			<form @submit.prevent="handleLogin">
-				<div>
-					<label for="username">
-						<Translated t="login.username"/>
-					</label>
-					<input
-						type="text"
-						id="username"
-						v-model="formState.username"
-						required
-						@keypress="clearErrorMessage()"
-					>
-				</div>
-
-				<div>
-					<label for="password">
-						<Translated t="login.password"/>
-					</label>
-					<div>
-						<input
-							:type="showPassword ? 'text' : 'password'"
-							id="password"
-							v-model="formState.password"
-							required
-							@keypress="clearErrorMessage()"
-						>
-						<UButton @click="togglePasswordVisibility">
-							<Icon
-								:name="showPassword
-									? 'mdi:show'
-									: 'mdi-show-outline'"
-							/>
-						</UButton>
-					</div>
-				</div>
-
-				<UButton type="submit">{{ $t("login.loginButton") }}</UButton>
-
-				<div v-if="errorMessage">{{ errorMessage }}</div>
-			</form>
-		</div>
-	</div>
+	<UPageCard class="w-full max-w-md">
+		<UAuthForm
+			ref="authForm"
+			:fields="fields"
+			:schema="formSchema"
+			:title="t('login.title')"
+			icon="i-lucide-lock"
+			:submit="{ label: t('login.loginButton') }"
+			@submit="onSubmit"
+		>
+			<template #validation>
+				<UAlert
+					v-if="errorMessage"
+					color="error"
+					icon="i-lucide-info"
+					:title="errorMessage"
+				/>
+			</template>
+		</UAuthForm>
+	</UPageCard>
 </template>
-
-<style scoped lang="css">
-	.LoginComponent {
-	}
-</style>

@@ -5,5 +5,10 @@
  * unless/until we add targeted overrides.
  */
 
-html[theme="dark"] {
+@layer theme {
+	@layer dojo-theme {
+		html[theme="dark"] {
+			--app-theme: dark;
+		}
+	}
 }

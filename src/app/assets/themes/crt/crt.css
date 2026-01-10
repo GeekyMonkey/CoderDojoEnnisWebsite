@@ -1,138 +1,144 @@
-@layer theme {
-	html[theme="crt"] body {
-		--BrightGreen: #77ff77;
+@layer dojo-theme {
+	html[theme="crt"] {
+		body {
+			--BrightGreen: #77ff77;
 
-		/* ShadCn */
-		--background-color: #142014;
-		--foreground-color: var(--BrightGreen);
-		--hilight-color: var(--BrightGreen);
-		--shadow-color: transparent;
+			/* ShadCn */
+			--background-color: #142014;
+			--foreground-color: var(--BrightGreen);
+			--hilight-color: var(--BrightGreen);
+			--shadow-color: transparent;
 
-		/* Nuxt UI baseline (override defaults to match CRT palette) */
-		--ui-text-dimmed: var(--foreground-color);
-		--ui-text-muted: var(--foreground-color);
-		--ui-text-toned: var(--foreground-color);
-		--ui-text: var(--foreground-color);
-		--ui-text-highlighted: var(--foreground-color);
-		--ui-text-inverted: var(--background-color);
-		--ui-bg: var(--background-color);
-		--ui-bg-muted: var(--background-color);
-		--ui-bg-elevated: var(--background-color);
-		--ui-bg-accented: var(--background-color);
-		--ui-bg-inverted: var(--foreground-color);
-		--ui-border: var(--foreground-color);
-		--ui-border-muted: var(--foreground-color);
-		--ui-border-accented: var(--foreground-color);
-		--ui-border-inverted: var(--foreground-color);
-		--sidebar-background: 240 5.9% 10%;
-		--sidebar-foreground: 240 4.8% 95.9%;
-		--sidebar-primary: 224.3 76.3% 48%;
-		--sidebar-primary-foreground: 0 0% 100%;
-		--sidebar-accent: 240 3.7% 15.9%;
-		--sidebar-accent-foreground: 240 4.8% 95.9%;
-		--sidebar-border: 240 3.7% 15.9%;
-		--sidebar-ring: 217.2 91.2% 59.8%;
+			/* Nuxt UI baseline (override defaults to match CRT palette) */
+			--ui-text-dimmed: var(--foreground-color);
+			--ui-text-muted: var(--foreground-color);
+			--ui-text-toned: var(--foreground-color);
+			--ui-text: var(--foreground-color);
+			--ui-text-highlighted: var(--foreground-color);
+			--ui-text-inverted: var(--background-color);
+			--ui-bg: var(--background-color);
+			--ui-bg-muted: var(--background-color);
+			--ui-bg-elevated: var(--background-color);
+			--ui-bg-accented: var(--background-color);
+			--ui-bg-inverted: var(--foreground-color);
+			--ui-border: var(--foreground-color);
+			--ui-border-muted: var(--foreground-color);
+			--ui-border-accented: var(--foreground-color);
+			--ui-border-inverted: var(--foreground-color);
+			--sidebar-background: 240 5.9% 10%;
+			--sidebar-foreground: 240 4.8% 95.9%;
+			--sidebar-primary: 224.3 76.3% 48%;
+			--sidebar-primary-foreground: 0 0% 100%;
+			--sidebar-accent: 240 3.7% 15.9%;
+			--sidebar-accent-foreground: 240 4.8% 95.9%;
+			--sidebar-border: 240 3.7% 15.9%;
+			--sidebar-ring: 217.2 91.2% 59.8%;
 
-		--card-border-color: var(--BrightGreen);
-		--border-radius: 0px;
+			--card-border-color: var(--BrightGreen);
+			--border-radius: 0px;
 
-		/* TailwindCSS */
-		--background: 222.2 84% 4.9%;
-		--foreground: 210 40% 98%;
+			/* TailwindCSS */
+			--background: 222.2 84% 4.9%;
+			--foreground: 210 40% 98%;
 
-		--muted: 217.2 32.6% 17.5%;
-		--muted-foreground: 215 20.2% 65.1%;
+			--muted: 217.2 32.6% 17.5%;
+			--muted-foreground: 215 20.2% 65.1%;
 
-		--popover: 222.2 84% 4.9%;
-		--popover-foreground: 210 40% 98%;
+			--popover: 222.2 84% 4.9%;
+			--popover-foreground: 210 40% 98%;
 
-		--card: 222.2 84% 4.9%;
-		--card-foreground: 210 40% 98%;
+			--card: 222.2 84% 4.9%;
+			--card-foreground: 210 40% 98%;
 
-		--border: 217.2 32.6% 17.5%;
-		--input: 217.2 32.6% 17.5%;
+			--border: 217.2 32.6% 17.5%;
+			--input: 217.2 32.6% 17.5%;
 
-		--primary: 217.2 82.6% 17.5%;
-		--primary-foreground: 222.2 47.4% 91.2%;
+			--primary: 217.2 82.6% 17.5%;
+			--primary-foreground: 222.2 47.4% 91.2%;
 
-		--secondary: 28.2deg 82.6% 17.5%;
-		--secondary-foreground: 210 40% 98%;
+			--secondary: 28.2deg 82.6% 17.5%;
+			--secondary-foreground: 210 40% 98%;
 
-		--accent: 217.2 82.6% 17.5%;
-		--accent-foreground: 210 40% 98%;
+			--accent: 217.2 82.6% 17.5%;
+			--accent-foreground: 210 40% 98%;
 
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 210 40% 98%;
+			--destructive: 0 62.8% 30.6%;
+			--destructive-foreground: 210 40% 98%;
 
-		--ring: 212.7 26.8% 83.9%;
+			--ring: 212.7 26.8% 83.9%;
 
-		background-color: var(--background-color) !important;
-		font-family: "Courier New", Courier, monospace;
-		position: relative;
-	}
-
-	#BodyOverlay1 {
-		pointer-events: none;
-		background-repeat: repeat;
-		background-image: url("/theme/retro/css/CTRLines2.png");
-		image-rendering: pixelated;
-		background-size: auto 16px;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		opacity: 0.05;
-	}
-
-	#BodyOverlay2 {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		pointer-events: none;
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-		background-image: url("/theme/retro/css/CRTVignette.png");
-		opacity: 1;
-	}
-
-	.Alert {
-		border-radius: 0 !important;
-		font-weight: 700 !important;
-		font-size: 1.1rem !important;
-		border: dashed 1px var(--background-color) !important;
-
-		&.text-destructive {
-			background-color: red !important;
-			color: black !important;
+			background-color: var(--background-color) !important;
+			font-family: "Courier New", Courier, monospace;
+			position: relative;
 		}
-	}
 
-	.Button {
-		border-radius: 0 !important;
-		border: none !important;
-		outline: 2px solid var(--background-color) !important;
-		outline-offset: -3px !important;
-		background-color: var(--BrightGreen) !important;
-		color: black !important;
-		font-weight: 700 !important;
-		font-size: 1.1rem !important;
-	}
+		#BodyOverlay1 {
+			pointer-events: none;
+			background-repeat: repeat;
+			background-image: url("/theme/retro/css/CTRLines2.png");
+			image-rendering: pixelated;
+			background-size: auto 16px;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			opacity: 0.05;
+		}
 
-	.CardHeader {
-		background-color: var(--BrightGreen) !important;
-		color: var(--background-color) !important;
-		font-style: italic !important;
-		font-weight: 700 !important;
-		font-size: 1.25rem !important;
-	}
+		#BodyOverlay2 {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			pointer-events: none;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			background-image: url("/theme/retro/css/CRTVignette.png");
+			opacity: 1;
+		}
 
-	.Input {
-		border-radius: 0 !important;
-		border-color: var(--BrightGreen) !important;
-		background-color: #00000055 !important;
+		.ModalOverlay {
+			backdrop-filter: saturate(0.1) brightness(0.2);
+		}
+
+		.Alert {
+			border-radius: 0 !important;
+			font-weight: 700 !important;
+			font-size: 1.1rem !important;
+			border: dashed 1px var(--background-color) !important;
+
+			&.text-destructive {
+				background-color: red !important;
+				color: black !important;
+			}
+		}
+
+		.Button {
+			border-radius: 0 !important;
+			border: none !important;
+			outline: 2px solid var(--background-color) !important;
+			outline-offset: -3px !important;
+			background-color: var(--BrightGreen) !important;
+			color: black !important;
+			font-weight: 700 !important;
+			font-size: 1.1rem !important;
+		}
+
+		.CardHeader {
+			background-color: var(--BrightGreen) !important;
+			color: var(--background-color) !important;
+			font-style: italic !important;
+			font-weight: 700 !important;
+			font-size: 1.25rem !important;
+		}
+
+		.Input {
+			border-radius: 0 !important;
+			border-color: var(--BrightGreen) !important;
+			background-color: #00000055 !important;
+		}
 	}
 }

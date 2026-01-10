@@ -21,11 +21,18 @@
 </script>
 
 <template>
-	<UModal v-if="themes.length > 1" class="ThemeDialog" v-model:open="isOpen">
+	<UModal
+		v-if="themes.length > 1"
+		class="ThemeDialog"
+		v-model:open="isOpen"
+		:title="Translate('theme.select') || undefined"
+		:description="Translate('theme.description') || undefined"
+	>
 		<UButton
 			class="ThemeButton"
 			variant="outline"
 			:title="Translate('theme.select')"
+			:aria-label="Translate('theme.select') || undefined"
 		>
 			<Icon
 				v-if="CurrentTheme?.darkOrLight === 'dark'"
@@ -38,41 +45,31 @@
 				name="line-md:moon-filled-to-sunny-filled-loop-transition"
 				class="LanguageIcon w-5 h-5"
 			/>
-			<span class="sr-only">Theme</span>
+			<span class="sr-only">{{ Translate('theme.select') }}</span>
 		</UButton>
-
-		<template #header>
-			<Icon name="Theme" class="ThemeIcon w-8 h-8"/>
-			<Translated t="theme.select"/>
-		</template>
-
 		<template #body>
-			<div class="ThemeButtons">
+			<ButtonsStack>
 				<UButton
 					class="ThemeButton w-full justify-between"
 					v-for="theme in themes"
 					:data-selected="CurrentTheme?.id == theme.id"
 					:key="theme.id"
 					:title="Translate('theme.author', { AuthorName: theme.author })"
+					:variant="CurrentTheme?.id === theme.id ? 'solid' : 'outline'"
 					@click="SetTheme(theme.id); isOpen = false"
 				>
-					<Translated :t="theme.themeName"/>
+					<Translated :t="theme.themeName" />
 					<Icon
 						:name="theme.darkOrLight === 'dark' ? 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition' : 'line-md:moon-filled-to-sunny-filled-loop-transition'"
 					/>
 				</UButton>
-			</div>
+			</ButtonsStack>
 		</template>
 	</UModal>
 </template>
 
-<style lang="css">
+<style scoped>
 	.ThemeDialog {
 		max-width: 400px;
-		.ThemeButtons {
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-		}
 	}
 </style>

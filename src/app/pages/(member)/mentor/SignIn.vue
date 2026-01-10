@@ -80,14 +80,14 @@
 		<div>
 			<div>
 				<h1>
-					<Translated t="signIn.title"/>
+					<Translated t="signIn.title" />
 				</h1>
 			</div>
 			<div>
 				<form @submit.prevent="handleLogin">
 					<div>
 						<label for="username">
-							<Translated t="login.username"/>
+							<Translated t="login.username" />
 						</label>
 						<input
 							type="text"
@@ -100,7 +100,7 @@
 
 					<div>
 						<label for="password">
-							<Translated t="login.password"/>
+							<Translated t="login.password" />
 						</label>
 						<div>
 							<input
@@ -127,7 +127,7 @@
 			</div>
 		</div>
 		<div>
-			<SessionStats/>
+			<SessionStats />
 		</div>
 	</div>
 </template>

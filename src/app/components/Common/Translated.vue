@@ -10,9 +10,7 @@
 	});
 </script>
 
-<template>
-	<span class="T">{{ translatedText }}</span>
-</template>
+<template><span class="T">{{ translatedText }}</span></template>
 
 <style lang="css">
 	.T {
