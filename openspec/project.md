@@ -19,6 +19,7 @@ CoderDojo Ennis Website is a modern, maintainable platform for managing CoderDoj
 ## Repository Layout
 - All active implementation changes MUST be made under `src/`.
 - `src_legacy/` is strictly reference material for the previous solution's features and SHOULD NOT be modified (except for occasional documentation notes if explicitly requested).
+- `nui/` is strictly reference material for a clean Nuxt UI setup and SHOULD NOT be modified.
 
 ### Code Style
 Use TypeScript for all new code.

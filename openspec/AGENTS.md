@@ -68,6 +68,7 @@ After deployment, create separate PR to:
 **Repository layout:**
 - Make active implementation changes in `src/`.
 - Treat `src_legacy/` as read-only reference for the previous solution.
+- Treat `nui/` as read-only reference for a clean Nuxt UI setup.
 
 **Context Checklist:**
 - [ ] Read relevant specs in `specs/[capability]/spec.md`

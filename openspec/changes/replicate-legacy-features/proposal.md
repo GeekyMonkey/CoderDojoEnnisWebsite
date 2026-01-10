@@ -36,3 +36,4 @@ TBD based on tasks.
 ## Notes
 
 Legacy source code can be referenced from `src_legacy` and can be used to gather details about how features were previously implemented.
+`\nui` can be referenced for a clean Nuxt UI setup

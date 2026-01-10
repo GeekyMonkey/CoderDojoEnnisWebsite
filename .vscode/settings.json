@@ -68,6 +68,7 @@
 		"nuxtjs",
 		"parallelizable",
 		"rgba",
+		"stylesheet",
 		"Supabase",
 		"vitest",
 		"vueuse"
