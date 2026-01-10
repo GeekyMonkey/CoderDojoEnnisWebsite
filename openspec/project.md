@@ -5,6 +5,7 @@ CoderDojo Ennis Website is a modern, maintainable platform for managing CoderDoj
 
 ## Tech Stack
 - Nuxt 4 (Vue 3)
+- NuxtUI (UI components)
 - TypeScript
 - Supabase (database & auth)
 - Cloudflare Workers (serverless backend)
@@ -14,6 +15,10 @@ CoderDojo Ennis Website is a modern, maintainable platform for managing CoderDoj
 - TailwindCSS (used sparingly, only in reusable components)
 
 ## Project Conventions
+
+## Repository Layout
+- All active implementation changes MUST be made under `src/`.
+- `src_legacy/` is strictly reference material for the previous solution's features and SHOULD NOT be modified (except for occasional documentation notes if explicitly requested).
 
 ### Code Style
 Use TypeScript for all new code.

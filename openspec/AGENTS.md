@@ -65,6 +65,10 @@ After deployment, create separate PR to:
 
 ## Before Any Task
 
+**Repository layout:**
+- Make active implementation changes in `src/`.
+- Treat `src_legacy/` as read-only reference for the previous solution.
+
 **Context Checklist:**
 - [ ] Read relevant specs in `specs/[capability]/spec.md`
 - [ ] Check pending changes in `changes/` for conflicts
@@ -160,6 +164,8 @@ New request?
 
 2. **Write proposal.md:**
 ```markdown
+# Change: [Brief description of change]
+
 ## Why
 [1-2 sentences on problem/opportunity]
 

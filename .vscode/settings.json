@@ -69,6 +69,7 @@
 		"parallelizable",
 		"rgba",
 		"Supabase",
+		"vitest",
 		"vueuse"
 	],
 	"workbench.colorCustomizations": {
