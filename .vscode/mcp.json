@@ -1,0 +1,31 @@
+{
+	"servers": {
+		"context7": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "@upstash/context7-mcp@latest"],
+			"env": {
+				"CONTEXT7_API_KEY": "${input:context7ApiKey}"
+			}
+		},
+		"playwright": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@playwright/mcp@latest",
+				"--output-dir",
+				"${workspaceFolder}/.mcp/playwright",
+				"--headless"
+			]
+		}
+	},
+	"inputs": [
+		{
+			"type": "promptString",
+			"id": "context7ApiKey",
+			"description": "Context7 API key (optional but recommended for higher rate limits). Get one from https://context7.com/dashboard",
+			"password": true
+		}
+	]
+}

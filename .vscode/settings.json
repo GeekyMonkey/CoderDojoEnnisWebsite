@@ -32,6 +32,7 @@
 	"tailwindCSS.experimental.classRegex": [
 		["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 	],
+	"chat.mcp.gallery.enabled": true,
 	"terminal.integrated.cwd": "${workspaceFolder}/src",
 	"SQL-Formatter-VSCode.dataTypeCase": "upper",
 	"SQL-Formatter-VSCode.dialect": "postgresql",
@@ -62,6 +63,7 @@
 	"git.blame.statusBarItem.enabled": true,
 	"cSpell.words": [
 		"coderdojo",
+		"devsetup",
 		"hilight",
 		"iconify",
 		"Nuxt",

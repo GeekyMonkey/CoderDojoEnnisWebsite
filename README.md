@@ -26,3 +26,12 @@ If `pnpm setup` was needed, restart your terminal after running it so `PNPM_HOME
 - Dev server: `pnpm dev`
 - Build: `pnpm build`
 - Format: `pnpm format`
+
+### MCP (Docs + browser automation)
+
+This workspace includes MCP server configuration for:
+
+- Context7 (up-to-date library docs in Copilot Chat)
+- Playwright MCP (browser automation for quick UI checks)
+
+See `docs/mcp.md`.
