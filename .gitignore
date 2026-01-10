@@ -4,3 +4,4 @@ node_modules
 .pnpm-store
 reference
 src/.yarn/install-state.gz
+nui
