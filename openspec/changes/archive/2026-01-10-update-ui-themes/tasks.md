@@ -25,4 +25,4 @@
 - [x] 5.2 Manual: verify OS light/dark changes select `light`/`dark` when preference is system.
 
 ## 6. Documentation
-- [ ] 6.1 Document theme IDs (`light`, `dark`, `crt`) and how to add future themes.
+- [x] 6.1 Document theme IDs (`light`, `dark`, `crt`) and how to add future themes.

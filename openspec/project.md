@@ -16,6 +16,12 @@ CoderDojo Ennis Website is a modern, maintainable platform for managing CoderDoj
 
 ## Project Conventions
 
+## UI Themes
+- Supported theme IDs: `light`, `dark`, `crt`.
+- Default preference follows the OS (`system`) and resolves to `light` or `dark`.
+- `crt` is opt-in only and MUST NOT be auto-selected by system mapping.
+- Canonical requirements: `openspec/specs/ui-themes/spec.md`.
+
 ## Repository Layout
 - All active implementation changes MUST be made under `src/`.
 - `src_legacy/` is strictly reference material for the previous solution's features and SHOULD NOT be modified (except for occasional documentation notes if explicitly requested).
