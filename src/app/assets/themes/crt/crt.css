@@ -70,6 +70,8 @@
 			background-color: var(--background-color) !important;
 			font-family: "Courier New", Courier, monospace;
 			position: relative;
+
+			line-height: 1.15;
 		}
 
 		#BodyOverlay1 {

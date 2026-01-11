@@ -183,7 +183,7 @@
 			:min-size="210"
 			:default-size="210"
 			:max-size="210"
-			:ui="{ footer: 'border-t border-default' }"
+			:ui="{ header: 'hidden lg:block', footer: 'border-t border-default' }"
 		>
 			<template #resize-handle="{ onMouseDown, onTouchStart, onDoubleClick }">
 				<UDashboardResizeHandle
@@ -212,9 +212,11 @@
 					:collapsed="collapsed"
 					:items="primaryNavItems"
 					:ui="{
-						link: 'items-start',
+						link: 'items-center',
 						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
-						linkLeadingIcon: 'mt-1'
+						linkLeadingIcon: 'self-center',
+						linkTrailing: 'self-center',
+						linkTrailingIcon: 'self-center'
 					}"
 					orientation="vertical"
 					class="mt-2"
@@ -225,9 +227,11 @@
 					:collapsed="collapsed"
 					:items="secondaryNavItems"
 					:ui="{
-						link: 'items-start',
+						link: 'items-center',
 						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
-						linkLeadingIcon: 'mt-1'
+						linkLeadingIcon: 'self-center',
+						linkTrailing: 'self-center',
+						linkTrailingIcon: 'self-center'
 					}"
 					orientation="vertical"
 					class="mt-auto"
@@ -243,14 +247,14 @@
 						:label="collapsed ? undefined : displayName"
 						color="neutral"
 						variant="ghost"
-						class="w-full justify-start items-start"
+						class="w-full justify-start items-center"
 						:block="collapsed"
 						icon="i-lucide-user"
 						:trailing-icon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
 						:ui="{
 							label: 'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
-							leadingIcon: 'mt-1',
-							trailingIcon: 'ml-auto'
+							leadingIcon: 'self-center',
+							trailingIcon: 'ml-auto self-center'
 						}"
 					/>
 				</UDropdownMenu>
