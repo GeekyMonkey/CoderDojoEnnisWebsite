@@ -5,7 +5,8 @@
 </script>
 
 <template>
-	<h2>Parent Page</h2>
+	<h2>Belts</h2>
+	<p>Placeholder: coder belts coming soon.</p>
 </template>
 
-<style lang="css" scoped></style>
+<style scoped lang="css"></style>

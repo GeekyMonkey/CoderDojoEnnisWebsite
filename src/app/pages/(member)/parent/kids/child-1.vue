@@ -5,7 +5,8 @@
 </script>
 
 <template>
-	<h2>Parent Page</h2>
+	<h2>Child 1</h2>
+	<p>Placeholder: "My Kids" details coming soon.</p>
 </template>
 
-<style lang="css" scoped></style>
+<style scoped lang="css"></style>

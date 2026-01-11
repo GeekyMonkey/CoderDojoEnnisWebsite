@@ -14,7 +14,6 @@ export type MemberNavItem = {
 	to?: string;
 	icon?: string;
 	roles?: MemberRole[];
-	placeholder?: boolean;
 	badge?: string;
 	children?: MemberNavItem[];
 };
@@ -86,7 +85,30 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 		{
 			items: [
 				{
-					label: "Home",
+					label: "Parent Home",
+					to: `${parentBase}`,
+					icon: "i-lucide-house",
+					roles: ["parent"],
+				},
+				{
+					label: "My Kids",
+					icon: "i-lucide-users-round",
+					roles: ["parent"],
+					children: [
+						{
+							label: "Child 1",
+							to: `${parentBase}/kids/child-1`,
+							roles: ["parent"],
+						},
+						{
+							label: "Child 2",
+							to: `${parentBase}/kids/child-2`,
+							roles: ["parent"],
+						},
+					],
+				},
+				{
+					label: "Mentor Home",
 					to: `${mentorBase}`,
 					icon: "i-lucide-house",
 					roles: ["mentor"],
@@ -96,28 +118,24 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					to: `${mentorBase}/attendance`,
 					icon: "i-lucide-calendar-check",
 					roles: ["mentor"],
-					placeholder: true,
 				},
 				{
 					label: "Members",
 					to: `${mentorBase}/members`,
 					icon: "i-lucide-users",
 					roles: ["mentor"],
-					placeholder: true,
 				},
 				{
 					label: "Parents",
 					to: `${mentorBase}/parents`,
 					icon: "i-lucide-user-round",
 					roles: ["mentor"],
-					placeholder: true,
 				},
 				{
 					label: "Mentors",
 					to: `${mentorBase}/mentors`,
 					icon: "i-lucide-graduation-cap",
 					roles: ["mentor"],
-					placeholder: true,
 				},
 				{
 					label: "Sign In Mode",
@@ -126,15 +144,39 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					roles: ["mentor"],
 				},
 				{
-					label: "Home",
-					to: `${parentBase}`,
-					icon: "i-lucide-house",
-					roles: ["parent"],
-				},
-				{
-					label: "Home",
+					label: "Coder Home",
 					to: `${coderBase}`,
 					icon: "i-lucide-house",
+					roles: ["coder"],
+				},
+				{
+					label: "Badges",
+					to: `${coderBase}/badges`,
+					icon: "i-lucide-award",
+					roles: ["coder"],
+				},
+				{
+					label: "Badges Available",
+					to: `${coderBase}/badges-available`,
+					icon: "i-lucide-badge-check",
+					roles: ["coder"],
+				},
+				{
+					label: "Belts",
+					to: `${coderBase}/belts`,
+					icon: "i-lucide-git-commit-horizontal",
+					roles: ["coder"],
+				},
+				{
+					label: "Goals",
+					to: `${coderBase}/goals`,
+					icon: "i-lucide-target",
+					roles: ["coder"],
+				},
+				{
+					label: "Attendance",
+					to: `${coderBase}/attendance`,
+					icon: "i-lucide-calendar-check",
 					roles: ["coder"],
 				},
 			],
@@ -145,43 +187,36 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					label: "Maintenance",
 					icon: "i-lucide-wrench",
 					roles: ["mentor"],
-					placeholder: true,
 					children: [
 						{
 							label: "Belts",
 							to: `${maintenanceBase}/belts`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Badges",
 							to: `${maintenanceBase}/badges`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Badge Categories",
 							to: `${maintenanceBase}/badge-categories`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Teams",
 							to: `${maintenanceBase}/teams`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Purge Members",
 							to: `${maintenanceBase}/purge-members`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Purge Registrations",
 							to: `${maintenanceBase}/purge-registrations`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 					],
 				},
@@ -189,31 +224,26 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					label: "Reports",
 					icon: "i-lucide-bar-chart-3",
 					roles: ["mentor"],
-					placeholder: true,
 					children: [
 						{
 							label: "Parent Emails CSV",
 							to: `${reportsBase}/parent-emails-csv`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Mentor Email CSV",
 							to: `${reportsBase}/mentor-email-csv`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Recent Belts",
 							to: `${reportsBase}/recent-belts`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 						{
 							label: "Recent Belts CSV",
 							to: `${reportsBase}/recent-belts-csv`,
 							roles: ["mentor"],
-							placeholder: true,
 						},
 					],
 				},
@@ -224,11 +254,12 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 
 export function toNavigationMenuItems(
 	groups: MemberNavGroup[],
+	translateLabel: (label: string) => string = (label) => label,
 ): NavigationMenuItem[][] {
 	return groups.map((g) =>
 		g.items.map((i) => {
 			const item: NavigationMenuItem = {
-				label: i.label,
+				label: translateLabel(i.label),
 				icon: i.icon,
 				badge: i.badge,
 			};
@@ -239,7 +270,7 @@ export function toNavigationMenuItems(
 
 			if (i.children?.length) {
 				item.children = i.children.map((c) => ({
-					label: c.label,
+					label: translateLabel(c.label),
 					to: c.to,
 					icon: c.icon,
 					badge: c.badge,

@@ -5,28 +5,61 @@ import type { BroadenLiterals } from "~~/shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	language: {
+		current: "Current language: {Language}",
+		description: "Select your preferred language",
+		select: "Select language",
+	},
 	login: {
+		loginButton: "Login",
+		password: "Password",
 		title: "CoderDojo Ennis Member Login",
 		username: "Username",
-		password: "Password",
-		loginButton: "Login",
 	},
-	validation: {
-		minLength: "Must be at least {min} characters",
+	nav: {
+		"Attendance": "Attendance",
+		"Badge Categories": "Badge Categories",
+		"Badges": "Badges",
+		"Badges Available": "Badges Available",
+		"Belts": "Belts",
+		"Child 1": "Child 1",
+		"Child 2": "Child 2",
+		"Coder Home": "Coder Home",
+		"Goals": "Goals",
+		"Maintenance": "Maintenance",
+		"Members": "Members",
+		"Mentor Email CSV": "Mentor Email CSV",
+		"Mentor Home": "Mentor Home",
+		"Mentors": "Mentors",
+		"My Kids": "My Kids",
+		"Parent Emails CSV": "Parent Emails CSV",
+		"Parent Home": "Parent Home",
+		"Parents": "Parents",
+		"Purge Members": "Purge Members",
+		"Purge Registrations": "Purge Registrations",
+		"Recent Belts": "Recent Belts",
+		"Recent Belts CSV": "Recent Belts CSV",
+		"Reports": "Reports",
+		"Sign In Mode": "Sign In Mode",
+		"Teams": "Teams",
 	},
 	signIn: {
-		title: "CoderDojo Ennis Session Sign In",
 		signInButton: "Sign In",
+		title: "CoderDojo Ennis Session Sign In",
 	},
 	theme: {
 		author: "Created by {AuthorName}",
-		select: "Select Theme",
 		description: "Choose your preferred theme",
+		select: "Select Theme",
 	},
-	language: {
-		select: "Select language",
-		description: "Select your preferred language",
-		current: "Current language: {Language}",
+	userMenu: {
+		language: "Language",
+		logOut: "Log out",
+		profile: "Profile",
+		theme: "Theme",
+	},
+	validation: {
+		minLength: "Must be at least {min} characters",
 	},
 } as const;
 

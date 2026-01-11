@@ -16,7 +16,7 @@
 	const user = useSupabaseUser();
 	const { TranslateOrDefault } = useTranslation();
 	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
-	const { locale, setLocale, setLocaleCookie, locales, t } = useI18n();
+	const { locale, setLocale, setLocaleCookie, locales, t, te } = useI18n();
 
 	const isThemeMenuOpen = ref(false);
 	const isLanguageMenuOpen = ref(false);
@@ -38,7 +38,11 @@
 	});
 
 	const navItems = computed<NavigationMenuItem[][]>(() => {
-		return toNavigationMenuItems(navGroups.value);
+		const translateLabel = (label: string) => {
+			const key = `nav.${label}`;
+			return te(key) ? t(key) : label;
+		};
+		return toNavigationMenuItems(navGroups.value, translateLabel);
 	});
 
 	const primaryNavItems = computed<NavigationMenuItem[][]>(() => {
@@ -139,24 +143,24 @@
 			],
 			[
 				{
-					label: "Profile",
+					label: t("userMenu.profile"),
 					icon: "i-lucide-user",
 					onSelect: openProfile,
 				},
 				{
-					label: "Theme",
+					label: t("userMenu.theme"),
 					icon: "i-lucide-sun-moon",
 					onSelect: openThemeMenu,
 				},
 				{
-					label: "Language",
+					label: t("userMenu.language"),
 					icon: "i-lucide-languages",
 					onSelect: openLanguageMenu,
 				},
 			],
 			[
 				{
-					label: "Log out",
+					label: t("userMenu.logOut"),
 					icon: "i-lucide-log-out",
 					to: "/logout",
 				},

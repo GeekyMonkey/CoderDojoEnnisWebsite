@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+	buildNavigationModel,
 	filterNavByRoles,
 	getMemberRoles,
 	getRoleFlagsFromUserMeta,
@@ -42,5 +43,31 @@ describe("memberNavigation", () => {
 				],
 			},
 		]);
+	});
+
+	it("includes 'My Kids' for parents only", () => {
+		const model = buildNavigationModel("");
+
+		const parentNav = filterNavByRoles(model, ["parent"]);
+		const parentLabels = parentNav.flatMap((g) => g.items.map((i) => i.label));
+		expect(parentLabels).toContain("Home");
+		expect(parentLabels).toContain("My Kids");
+
+		const mentorNav = filterNavByRoles(model, ["mentor"]);
+		const mentorLabels = mentorNav.flatMap((g) => g.items.map((i) => i.label));
+		expect(mentorLabels).not.toContain("My Kids");
+	});
+
+	it("includes coder menu items for coders", () => {
+		const model = buildNavigationModel("");
+		const coderNav = filterNavByRoles(model, ["coder"]);
+		const coderLabels = coderNav.flatMap((g) => g.items.map((i) => i.label));
+
+		expect(coderLabels).toContain("Coder Home");
+		expect(coderLabels).toContain("Badges");
+		expect(coderLabels).toContain("Badges Available");
+		expect(coderLabels).toContain("Belts");
+		expect(coderLabels).toContain("Goals");
+		expect(coderLabels).toContain("Attendance");
 	});
 });
