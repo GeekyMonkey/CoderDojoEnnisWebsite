@@ -137,8 +137,10 @@ export class AttendanceService {
 		// Base greeting (short, shown on hardware device)
 		if (sessionCount <= 1) {
 			message = "Welcome to your first session!";
+		} else if (sessionCount == 2) {
+			message = `Glad you decided to come back!`;
 		} else if (sessionCount < 5) {
-			message = `Great to see you again (Session #${sessionCount})!`;
+			message = `Great to see you again!`;
 		} else if (sessionCount === 5) {
 			message = "High-five for 5 sessions!";
 		} else if (sessionCount === 10) {
@@ -156,7 +158,7 @@ export class AttendanceService {
 		// Milestone notifications (keep separate from GREETING so UI can style)
 		const milestoneMap: Record<number, string> = {
 			1: "This is your first session – awesome start!",
-			5: "5 sessions – you're getting into the groove!",
+			5: "5 sessions – Ask a mentor about requesting your white belt!",
 			10: "10 sessions – double digits!",
 			25: "25 sessions – quarter to a hundred!",
 			50: "50 sessions – half a century of coding!",
@@ -218,15 +220,15 @@ export class AttendanceService {
 		if (sessionCount <= 1) {
 			message = "Thanks for joining us today.";
 		} else if (sessionCount < 5) {
-			message = `Welcome back (Session ${sessionCount}).`;
+			message = `We're glad you decided to come back.`;
 		} else if (sessionCount === 10) {
 			message = "10 sessions – thanks for your continued support.";
 		} else if (sessionCount === 25) {
 			message = "25 sessions – your commitment helps the dojo thrive.";
 		} else if (sessionCount === 50) {
-			message = "50 sessions – we appreciate all you do.";
+			message = "50 sessions – that's some real commitment.";
 		} else {
-			message = `Good to have you here (Session ${sessionCount}).`;
+			message = `Good to have you here.`;
 		}
 
 		notifications.push({ type: "GREETING", message });

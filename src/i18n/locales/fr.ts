@@ -15,7 +15,7 @@ export default {
 		minLength: "Doit contenir au moins {min} caractères",
 	},
 	signIn: {
-		title: "CoderDojo Ennis Session Sign In",
+		title: "Connexion à la session CoderDojo Ennis",
 		signInButton: "Connexion",
 	},
 	theme: {

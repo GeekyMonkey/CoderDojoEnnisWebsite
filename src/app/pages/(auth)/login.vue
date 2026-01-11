@@ -1,5 +1,4 @@
 <script setup lang="ts">
-	import { nextTick } from "vue";
 	import type { ComponentPublicInstance } from "vue";
 	import type { Session } from "@supabase/supabase-js";
 	import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
@@ -10,7 +9,7 @@
 	});
 
 	const router = useRouter();
-	const { t, locale } = useI18n();
+	const { t } = useI18n();
 	const { supabaseClient } = UseSupabaseClient();
 	const errorMessage = ref<string | null>(null);
 
@@ -56,25 +55,13 @@
 		formRef?: unknown;
 	};
 
-	type ValidatableForm = {
-		validate?: (opts?: {
-			silent?: boolean;
-			nested?: boolean;
-		}) => Promise<unknown>;
-	};
-
 	const authForm = ref<(ComponentPublicInstance & AuthFormExpose) | null>(null);
-	watch(
-		() => locale.value,
-		async () => {
-			await nextTick();
-			const rawFormRef = authForm.value?.formRef;
-			const form = (Array.isArray(rawFormRef) ? rawFormRef[0] : rawFormRef) as
-				| ValidatableForm
-				| undefined;
-			await form?.validate?.({ silent: true, nested: true });
-		},
-	);
+
+	useRevalidateFormOnLocaleChange(() => authForm.value);
+
+	/**
+	 * Watch for input changes to clear error message
+	 */
 	watch(
 		() => [authForm.value?.state?.username, authForm.value?.state?.password],
 		() => {

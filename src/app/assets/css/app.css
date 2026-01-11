@@ -35,4 +35,8 @@
 		background: #00000040;
 		backdrop-filter: blur(2px);
 	}
+
+	.BulletList {
+		list-style-type: disc;;
+	}
 }

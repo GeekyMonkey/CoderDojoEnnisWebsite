@@ -40,9 +40,7 @@
 			<span>{{ AttendanceTotal }}</span>
 		</div>
 		<div v-if="isLoading" class="status">Loading…</div>
-		<div v-else-if="isError" class="status error">
-			Error loading attendance.
-		</div>
+		<div v-else-if="isError" class="status error">Error loading attendance.</div>
 		<ul v-else-if="hasMembers" class="list">
 			<li v-for="id in memberIds" :key="id">{{ id }}</li>
 		</ul>
@@ -53,6 +51,7 @@
 			</UButton>
 		</div>
 	</div>
+
 </template>
 
 <style scoped>
