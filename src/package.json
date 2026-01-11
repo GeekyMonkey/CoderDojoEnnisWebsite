@@ -19,9 +19,8 @@
 		"test": "cls && vitest"
 	},
 	"dependencies": {
-		"@iconify/json": "2.2.426",
+		"@iconify/json": "2.2.427",
 		"@nuxt/ui": "4.3.0",
-		"@nuxtjs/color-mode": "4.0.0",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.1",
 		"@nuxtjs/supabase": "2.0.3",
@@ -38,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.11",
-		"@cloudflare/workers-types": "4.20260109.0",
+		"@cloudflare/workers-types": "4.20260111.0",
 		"@nuxt/icon": "2.2.0",
 		"@tiptap/core": "3.15.3",
 		"@tiptap/pm": "3.15.3",
@@ -63,6 +62,6 @@
 		"vitest": "4.0.16",
 		"wrangler": "4.58.0"
 	},
-	"packageManager": "pnpm@10.27.0",
+	"packageManager": "pnpm@10.28.0",
 	"version": "0.1.0"
 }

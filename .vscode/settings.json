@@ -64,6 +64,8 @@
 	"cSpell.words": [
 		"coderdojo",
 		"devsetup",
+		"Français",
+		"Gaeilge",
 		"hilight",
 		"iconify",
 		"Nuxt",
@@ -73,7 +75,8 @@
 		"stylesheet",
 		"Supabase",
 		"vitest",
-		"vueuse"
+		"vueuse",
+		"Українська"
 	],
 	"workbench.colorCustomizations": {
 		"activityBar.activeBackground": "#2f7c47",

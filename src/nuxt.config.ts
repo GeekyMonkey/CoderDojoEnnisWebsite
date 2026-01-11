@@ -144,7 +144,6 @@ export default defineNuxtConfig({
 	modules: [
 		"@nuxt/icon",
 		"@nuxt/ui",
-		"@nuxtjs/color-mode",
 		"@nuxtjs/google-fonts",
 		"@nuxtjs/i18n",
 		"@nuxtjs/supabase",
