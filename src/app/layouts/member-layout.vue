@@ -172,16 +172,17 @@
 <template>
 	<UDashboardGroup
 		class="MemberLayout"
+		:persistent="false"
 		storage="local"
 		storage-key="member-layout"
+		unit="px"
 	>
 		<UDashboardSidebar
 			collapsible
 			mode="drawer"
-			resizable
-			:min-size="22"
-			:default-size="30"
-			:max-size="40"
+			:min-size="210"
+			:default-size="210"
+			:max-size="210"
 			:ui="{ footer: 'border-t border-default' }"
 		>
 			<template #resize-handle="{ onMouseDown, onTouchStart, onDoubleClick }">
@@ -210,6 +211,11 @@
 				<UNavigationMenu
 					:collapsed="collapsed"
 					:items="primaryNavItems"
+					:ui="{
+						link: 'items-start',
+						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
+						linkLeadingIcon: 'mt-1'
+					}"
 					orientation="vertical"
 					class="mt-2"
 				/>
@@ -218,6 +224,11 @@
 					v-if="secondaryNavItems.length > 0"
 					:collapsed="collapsed"
 					:items="secondaryNavItems"
+					:ui="{
+						link: 'items-start',
+						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
+						linkLeadingIcon: 'mt-1'
+					}"
 					orientation="vertical"
 					class="mt-auto"
 				/>
@@ -232,12 +243,13 @@
 						:label="collapsed ? undefined : displayName"
 						color="neutral"
 						variant="ghost"
-						class="w-full justify-start"
+						class="w-full justify-start items-start"
 						:block="collapsed"
 						icon="i-lucide-user"
 						:trailing-icon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
 						:ui="{
-							label: 'flex-1 text-left',
+							label: 'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
+							leadingIcon: 'mt-1',
 							trailingIcon: 'ml-auto'
 						}"
 					/>
