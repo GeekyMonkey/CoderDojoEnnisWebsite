@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@theme {
+	--breakpoint-lg: 800px;
+}
+
 @layer base {
 	:root {
 		--card-border-color: #0a0;

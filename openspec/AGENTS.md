@@ -89,6 +89,9 @@ After deployment, create separate PR to:
 - Treat `src_legacy/` as read-only reference for the previous solution.
 - Treat `nui/` as read-only reference for a clean Nuxt UI setup.
 
+**Nuxt UI version:**
+- This project uses `@nuxt/ui` **v4.3.0 or greater**. Use Nuxt UI v4 docs (dashboard component slot APIs changed vs v3).
+
 **UI themes:**
 - Supported theme IDs: `light`, `dark`, `crt`.
 - System preference MUST resolve to `light` or `dark`.
