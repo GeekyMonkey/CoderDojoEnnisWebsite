@@ -199,12 +199,10 @@
 					class="flex items-center gap-2 px-1"
 				>
 					<img
-						v-if="!collapsed"
-						src="/images/logos/Logo.png"
+						src="/images/Logos/Logo.png"
 						class="h-8 w-auto"
 					>
 					<span v-if="!collapsed">CoderDojo Ennis</span>
-					<img v-else src="/images/logos/Logo.png" class="h-8 w-auto mx-auto">
 				</NuxtLink>
 			</template>
 
