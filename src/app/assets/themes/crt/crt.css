@@ -21,8 +21,8 @@
 			--ui-bg-elevated: var(--background-color);
 			--ui-bg-accented: var(--background-color);
 			--ui-bg-inverted: var(--foreground-color);
-			--ui-border: var(--foreground-color);
-			--ui-border-muted: var(--foreground-color);
+			--ui-border: oklch(from var(--foreground-color) l c h / 0.25);
+			--ui-border-muted: oklch(from var(--foreground-color) l c h / 0.15);
 			--ui-border-accented: var(--foreground-color);
 			--ui-border-inverted: var(--foreground-color);
 			--sidebar-background: 240 5.9% 10%;
@@ -141,6 +141,31 @@
 			border-radius: 0 !important;
 			border-color: var(--BrightGreen) !important;
 			background-color: #00000055 !important;
+		}
+
+		/* CoderDojo Logo Modification to CRT Green shades */
+		img.CoderDojoLogo {
+			filter:
+				saturate(0)
+				brightness(0.5)
+				sepia(1)
+				hue-rotate(90deg)
+				contrast(4);
+		}
+
+		.MemberLayout {
+			[data-slot="link"] {
+				border: solid 1px transparent;
+				transition: all 0.2s ease-in-out;
+				
+				&:not(.text-muted) {
+					border: solid 1px var(--ui-border-muted);
+					background-color: oklch(from var(--foreground-color) l c h / 0.05);
+					color: var(--ui-text-muted);
+					outline: solid 1px var(--ui-border-muted);
+					outline-offset: 2px;
+				}
+			}
 		}
 	}
 }

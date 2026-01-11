@@ -197,11 +197,11 @@
 			<template #header="{ collapsed }">
 				<NuxtLink
 					:to="section ? `/${section}` : '/'"
-					class="flex items-center gap-2 px-1"
+					class="flex items-center gap-2 px-1 MemberLayoutHeaderLogo"
 				>
 					<img
 						src="/images/Logos/Logo.png"
-						class="h-8 w-auto"
+						class="h-8 w-8 CoderDojoLogo"
 					>
 					<span v-if="!collapsed">CoderDojo Ennis</span>
 				</NuxtLink>
@@ -322,4 +322,16 @@
 	</UDashboardGroup>
 </template>
 
-<style lang="css"></style>
+<style lang="css">
+	div:has( > .MemberLayoutHeaderLogo) {
+				 border-bottom: solid 1px var(--ui-border);
+				 display: flex;
+	}
+
+	@media (max-width: 800px) {
+		div:has( > .MemberLayoutHeaderLogo) {
+			display: none;
+		}
+	}
+
+</style>
