@@ -1,7 +1,7 @@
 # Proposal: add-mentor-attendance-page
 
 ## Summary
-Add a mentor-facing attendance management page at `/mentor/attendance` that lets mentors view and edit per-session attendance via a sortable Nuxt UI table and a small set of header controls (session date, include filter, search, and “Choose Random”).
+Add a mentor-facing attendance management page at `/mentor/attendance` that lets mentors view and edit per-session attendance via sortable Nuxt UI tables and a small set of header controls (session date, include filter, search).
 
 ## Motivation
 Mentors need a single place to:
@@ -17,6 +17,7 @@ In scope:
 - “Include” selector with the required options and automatic behavior when the date changes.
 - Search filter for the displayed member rows.
 - A Nuxt UI table showing members for the selected date with fixed header/footer, sorting, and a presence toggle.
+- A “Choose Random” action in the coders table footer during the current session.
 - Attendance toggle calls a dedicated attendance API and refreshes UI state.
 
 Out of scope:

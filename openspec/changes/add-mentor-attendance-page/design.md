@@ -34,6 +34,7 @@ The mentor attendance page requires a roster (member rows with name, team, belt 
 ## Risks / Trade-offs
 - Loading all members into a normalized store simplifies server shape but increases client payload size; caching and realtime invalidation should keep the UX responsive.
 - “Choose Random” requires a clear definition of “coder”: proposal assumes `MemberModel.isNinja === true`.
+- “Choose Random” is rendered in the coders table footer and navigates to the mentor coder detail page (`/mentor/coder/[member_id]`).
 
 ## Confirmed assumptions
 - “Registered Members” includes any non-deleted member with `registeredCurrentTerm === true`, regardless of role.

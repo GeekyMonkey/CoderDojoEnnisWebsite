@@ -2,8 +2,17 @@
 	definePageMeta({
 		layout: "member-layout",
 	});
+
+	const { pageTitle } = useMemberLayoutContext();
 </script>
 
 <template>
-	<PlaceholderPage title="Purge Members" description="Maintenance tools are coming soon." />
+	<UDashboardPanel id="mentor-maintenance-purge-members">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<PlaceholderPage description="Maintenance tools are coming soon." />
+		</template>
+	</UDashboardPanel>
 </template>

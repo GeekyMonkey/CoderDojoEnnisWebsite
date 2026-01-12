@@ -9,8 +9,17 @@ export function useTeamsStore() {
 		getLabel: (team: TeamModel) => team.teamName,
 	});
 
+	const TeamsById = computed<Record<string, TeamModel>>(() => {
+		const byId: Record<string, TeamModel> = {};
+		teamsStore.Items.value?.forEach((team) => {
+			byId[team.id] = team;
+		});
+		return byId;
+	});
+
 	return {
 		...teamsStore,
 		Teams: teamsStore.Items,
+		TeamsById,
 	};
 }

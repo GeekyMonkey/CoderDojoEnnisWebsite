@@ -58,6 +58,23 @@ export default {
 		profile: "Próifíl",
 		theme: "Téama",
 	},
+	attendance: {
+		sessionDate: "Dáta Seisiúin",
+		include: {
+			label: "Cuir san áireamh",
+			presentMembers: "Baill i láthair",
+			registeredMembers: "Baill cláraithe",
+			allMembers: "Gach ball",
+		},
+		search: {
+			label: "Cuardaigh",
+			placeholder: "Cuardaigh baill…",
+		},
+		loadingRoster: "Ag lódáil an liosta…",
+		errorLoadingRoster: "Earráid ag lódáil an liosta.",
+		codersTitle: "Códóirí",
+		mentorsTitle: "Meantóirí",
+	},
 	validation: {
 		minLength: "Ní mór {min} carachtar ar a laghad",
 	},

@@ -2,11 +2,17 @@
 	definePageMeta({
 		layout: "member-layout",
 	});
+
+	const { pageTitle } = useMemberLayoutContext();
 </script>
 
 <template>
-	<PlaceholderPage
-		title="Parents"
-		description="Parent management is coming soon."
-	/>
+	<UDashboardPanel id="mentor-parents">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<PlaceholderPage description="Parent management is coming soon." />
+		</template>
+	</UDashboardPanel>
 </template>

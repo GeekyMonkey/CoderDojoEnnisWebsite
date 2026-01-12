@@ -58,6 +58,23 @@ export default {
 		profile: "Профіль",
 		theme: "Тема",
 	},
+	attendance: {
+		sessionDate: "Дата сесії",
+		include: {
+			label: "Включити",
+			presentMembers: "Присутні учасники",
+			registeredMembers: "Зареєстровані учасники",
+			allMembers: "Усі учасники",
+		},
+		search: {
+			label: "Пошук",
+			placeholder: "Пошук учасників…",
+		},
+		loadingRoster: "Завантаження списку…",
+		errorLoadingRoster: "Помилка завантаження списку.",
+		codersTitle: "Кодери",
+		mentorsTitle: "Ментори",
+	},
 	validation: {
 		minLength: "Має містити щонайменше {min} символи",
 	},

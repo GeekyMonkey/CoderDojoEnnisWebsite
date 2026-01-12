@@ -58,6 +58,23 @@ export default {
 		profile: "Profil",
 		theme: "Thème",
 	},
+	attendance: {
+		sessionDate: "Date de session",
+		include: {
+			label: "Inclure",
+			presentMembers: "Membres présents",
+			registeredMembers: "Membres inscrits",
+			allMembers: "Tous les membres",
+		},
+		search: {
+			label: "Rechercher",
+			placeholder: "Rechercher des membres…",
+		},
+		loadingRoster: "Chargement de la liste…",
+		errorLoadingRoster: "Erreur de chargement de la liste.",
+		codersTitle: "Codeurs",
+		mentorsTitle: "Mentors",
+	},
 	validation: {
 		minLength: "Doit contenir au moins {min} caractères",
 	},

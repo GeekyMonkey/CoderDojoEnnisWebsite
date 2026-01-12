@@ -2,11 +2,17 @@
 	definePageMeta({
 		layout: "member-layout",
 	});
+
+	const { pageTitle } = useMemberLayoutContext();
 </script>
 
 <template>
-	<PlaceholderPage
-		title="Profile"
-		description="Profile editing is coming soon."
-	/>
+	<UDashboardPanel id="parent-profile">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<PlaceholderPage description="Profile editing is coming soon." />
+		</template>
+	</UDashboardPanel>
 </template>

@@ -30,10 +30,19 @@ export function useBadgesStore() {
 		return badgesByCategory;
 	});
 
+	const BadgesById = computed<Record<string, BadgeModel>>(() => {
+		const byId: Record<string, BadgeModel> = {};
+		badgesStore.Items.value?.forEach((badge) => {
+			byId[badge.id] = badge;
+		});
+		return byId;
+	});
+
 	return {
 		...badgesStore,
 		Badges: badgesStore.Items,
 		BadgeCategories: BadgeCategories,
 		BadgesByCategory,
+		BadgesById,
 	};
 }

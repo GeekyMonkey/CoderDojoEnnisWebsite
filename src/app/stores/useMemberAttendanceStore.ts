@@ -10,6 +10,7 @@ import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtime
 
 interface UseMemberAttendanceStoreResult {
 	SessionStats: Ref<MemberAttendanceSessionStatsCollection["sessionStats"]>;
+	SessionYears: Ref<string[]>;
 	SessionCount: Ref<number>;
 	AttendanceTotal: Ref<number>;
 	CurrentSessionMemberIds: Ref<string[]>;
@@ -104,6 +105,16 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	});
 
 	const SessionStats = computed(() => data.value?.sessionStats || []);
+	const SessionYears = computed(() => {
+		const years = new Set<string>();
+		for (const stat of SessionStats.value) {
+			const date = stat.date;
+			// Expecting YYYY-MM-DD; be defensive.
+			const year = typeof date === "string" ? date.slice(0, 4) : "";
+			if (year.length === 4) years.add(year);
+		}
+		return [...years].sort((a, b) => b.localeCompare(a));
+	});
 	const SessionCount = computed(() => data.value?.sessionCount || 0);
 	const AttendanceTotal = computed(() => data.value?.attendance_total || 0);
 	const CurrentSessionMemberIds = computed(
@@ -198,6 +209,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		SessionStats: SessionStats as Ref<
 			MemberAttendanceSessionStatsCollection["sessionStats"]
 		>,
+		SessionYears: SessionYears as Ref<string[]>,
 		SessionCount: SessionCount as Ref<number>,
 		AttendanceTotal: AttendanceTotal as Ref<number>,
 		CurrentSessionMemberIds: CurrentSessionMemberIds as Ref<string[]>,

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	defineProps<{
-		title: string;
+		title?: string;
 		description?: string;
 	}>();
 </script>
@@ -11,7 +11,12 @@
 			<template #header>
 				<div class="flex items-start justify-between gap-4">
 					<div>
-						<h2 class="text-lg font-semibold text-highlighted">{{ title }}</h2>
+						<h2
+							v-if="title"
+							class="text-lg font-semibold text-highlighted"
+						>
+							{{ title }}
+						</h2>
 						<p v-if="description" class="text-sm text-muted mt-1">
 							{{ description }}
 						</p>

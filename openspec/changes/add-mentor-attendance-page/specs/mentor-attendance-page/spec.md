@@ -115,18 +115,33 @@ The system SHALL allow mentors to toggle a member’s attendance for the selecte
 - **AND** the member SHALL be shown as not present after a successful response
 
 ### Requirement: Choose Random is available for the most recent session
-The system SHALL provide a “Choose Random” action when the selected session date is the most recent session, and it SHALL select a random present coder.
+The system SHALL provide a “Choose Random” action in the coders table footer when the selected session date is the most recent session.
+
+When invoked, the system SHALL select a random present coder and navigate the mentor to that coder’s detail page at `/mentor/coder/[member_id]`.
 
 #### Scenario: Choose Random button is visible
 - **GIVEN** the selected session date is the most recent session date
+- **AND** there is at least one present coder
 - **WHEN** the page is displayed
-- **THEN** the page SHALL display a `Choose Random` button
+- **THEN** the coders table footer SHALL display a `Choose Random` button
+
+#### Scenario: Choose Random button is not visible for non-current sessions
+- **GIVEN** the selected session date is not the most recent session date
+- **WHEN** the page is displayed
+- **THEN** the coders table footer SHALL NOT display a `Choose Random` button
+
+#### Scenario: Choose Random button is not visible when there are no present coders
+- **GIVEN** the selected session date is the most recent session date
+- **AND** there are zero present coders
+- **WHEN** the page is displayed
+- **THEN** the coders table footer SHALL NOT display a `Choose Random` button
 
 #### Scenario: Choose Random selects a present coder
 - **GIVEN** the selected session date is the most recent session date
 - **AND** there is at least one displayed member who is present and is a coder
 - **WHEN** the mentor clicks `Choose Random`
 - **THEN** the page SHALL select one eligible member at random
+- **AND** the page SHALL navigate to `/mentor/coder/[member_id]` for the selected member
 
 ### Requirement: Footer totals show mentors and coders present
 The system SHALL show totals in fixed table footers for mentors present and coders present for the selected session date.

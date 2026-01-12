@@ -2,11 +2,21 @@
 	definePageMeta({
 		layout: "member-layout",
 	});
+
+	const { pageTitle } = useMemberLayoutContext();
 </script>
 
 <template>
-	<h2>Belts</h2>
-	<p>Placeholder: coder belts coming soon.</p>
+	<UDashboardPanel id="coder-belts">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<div class="p-4">
+				<p>Placeholder: coder belts coming soon.</p>
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <style scoped lang="css"></style>

@@ -2,8 +2,17 @@
 	definePageMeta({
 		layout: "member-layout",
 	});
+
+	const { pageTitle } = useMemberLayoutContext();
 </script>
 
 <template>
-	<PlaceholderPage title="Parent Emails CSV" description="Reporting features are coming soon." />
+	<UDashboardPanel id="mentor-report-parent-emails-csv">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<PlaceholderPage description="Reporting features are coming soon." />
+		</template>
+	</UDashboardPanel>
 </template>

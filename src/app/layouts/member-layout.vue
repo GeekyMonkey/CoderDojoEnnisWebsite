@@ -2,6 +2,7 @@
 	import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 	import type { SupabaseUserMetaType } from "~~/shared/types/Supabase";
 	import type { MemberSupabaseModel } from "~~/shared/types/models/MemberModel";
+	import { provideMemberLayoutContext } from "~/composables/useMemberLayoutContext";
 	import {
 		buildNavigationModel,
 		filterNavByRoles,
@@ -67,6 +68,10 @@
 
 	const pageTitle = computed(() => {
 		return titleByPath.value.get(route.path) || "";
+	});
+
+	provideMemberLayoutContext({
+		pageTitle,
 	});
 
 	const displayName = computed(() => {
@@ -304,21 +309,8 @@
 			</template>
 		</UDashboardSidebar>
 
-		<UDashboardPanel>
-			<template #header>
-				<UDashboardNavbar :title="pageTitle">
-					<template #toggle>
-						<UDashboardSidebarToggle variant="subtle" class="lg:hidden"/>
-					</template>
-				</UDashboardNavbar>
-			</template>
+		<slot/>
 
-			<template #body>
-				<div class="MemberLayoutMain">
-					<slot/>
-				</div>
-			</template>
-		</UDashboardPanel>
 	</UDashboardGroup>
 </template>
 

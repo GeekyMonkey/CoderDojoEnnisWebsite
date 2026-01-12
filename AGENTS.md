@@ -24,3 +24,4 @@ Important: Run all `openspec` commands from the repository root (the folder cont
 - UI library: This repo uses `@nuxt/ui` version **4.3.0 or greater**. When looking up component APIs/slots (e.g. dashboard components), use the Nuxt UI v4 documentation.
 - Data access pattern: for new UI features and specs, page/components SHOULD perform API interactions via functions exposed by the relevant client-side stores (rather than calling APIs directly) so stores can own caching, invalidation, and realtime refresh behavior.
 - API testing: any new API endpoint added under `src/server/api/**` SHOULD have a corresponding Bruno request added under `bruno/` (for example under `bruno/CoderDojoEnnisApis/**`). The `seq` value in `.bru` files is optional and can be omitted.
+- Command policy: during agentic coding steps, do NOT run `pnpm -C src format` or `pnpm -C src test` automatically. The user will run these manually.

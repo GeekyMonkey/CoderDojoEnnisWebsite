@@ -5,6 +5,8 @@
 		layout: "member-layout",
 	});
 
+	const { pageTitle } = useMemberLayoutContext();
+
 	onMounted(() => {
 		// Trigger the teams data load
 		log.info("Mounted");
@@ -12,9 +14,16 @@
 </script>
 
 <template>
-	<h2>Mentor Page</h2>
-
-	<TeamsList />
+	<UDashboardPanel id="mentor-home">
+		<template #header>
+			<DashboardHeading :page-title="pageTitle" />
+		</template>
+		<template #body>
+			<div class="p-4">
+				<TeamsList />
+			</div>
+		</template>
+	</UDashboardPanel>
 </template>
 
 <style lang="css" scoped></style>
