@@ -1,0 +1,15 @@
+meta {
+  name: Session Date
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{Host}}/api/MemberAttendance/SessionDate?sessionDate=2025-05-24
+  body: none
+  auth: none
+}
+
+params:query {
+  sessionDate: 2025-05-24
+}

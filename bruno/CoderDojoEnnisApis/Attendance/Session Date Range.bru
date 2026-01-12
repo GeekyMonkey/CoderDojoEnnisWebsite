@@ -1,0 +1,16 @@
+meta {
+  name: Session Date Range
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{Host}}/api/MemberAttendance/SessionDateRange?dateMin=2025-05-24&dateMax=2026-06-11
+  body: none
+  auth: none
+}
+
+params:query {
+  dateMin: 2025-05-24
+  dateMax: 2026-06-11
+}

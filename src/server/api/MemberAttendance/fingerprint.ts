@@ -4,11 +4,14 @@ import {
 	AttendanceService,
 	AttendanceServiceError,
 } from "~~/server/services/AttendanceService";
-import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
+import type { AttendanceSignInResponseModel, AttendanceSignInErrorResponse } from "~~/shared/types/AttendanceModels";
 
 const log = useLogger("api/MemberAttendance/fingerprint");
 
-type AttendanceSignInErrorResponse = { error: string };
+/**
+ * GET: /MemberAttendance/fingerprint?id={fingerprintId}&testing={testing}
+ * Sign in a member by fingerprint ID
+ */
 export default defineEventHandler(
 	async (
 		event,
@@ -46,7 +49,7 @@ export default defineEventHandler(
 				event.node.res.statusCode = 400;
 				return { error: err.message };
 			}
-			log.error("Unexpected sign-in error", err);
+			log.error("Unexpected sign-in error", {}, err);
 			event.node.res.statusCode = 500;
 			return { error: "Unexpected error during sign-in" };
 		}

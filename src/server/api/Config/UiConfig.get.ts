@@ -1,6 +1,6 @@
 import { defineEventHandler, type H3Event } from "h3";
 // import {
-// 	GetDrizzleConnecionString,
+// 	GetDrizzleConnectionString,
 // 	ServerContext,
 // } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
@@ -22,7 +22,7 @@ export default defineEventHandler(
 		try {
 			themesConfig = await new ThemesService().GetThemes();
 		} catch (error) {
-			errors.push(`[Uiconfig] GET error: ${ErrorToString(error)}`);
+			errors.push(`[UiConfig] GET error: ${ErrorToString(error)}`);
 		}
 
 		const uiConfig: UiConfigModel = {
@@ -38,7 +38,7 @@ export default defineEventHandler(
 
 		// try {
 		// 	// logs.push(
-		// 	// 	`Drizzle connection string: ${GetDrizzleConnecionString(event)}`,
+		// 	// 	`Drizzle connection string: ${GetDrizzleConnectionString(event)}`,
 		// 	// );
 		// 	// logs.push(
 		// 	// 	`HYPERDRIVE Cs: ${ServerContext?.cloudflare?.env?.NUXT_HYPERDRIVE?.connectionString}`,

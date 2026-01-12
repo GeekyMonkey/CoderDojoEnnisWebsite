@@ -1,14 +1,14 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import type { MemberAttendanceSessionCurrentModel } from "~~/shared/types/models/MemberAttendanceSessionCurrentModel";
-import type { MemberAttendanceSessionsModel } from "~~/shared/types/models/MemberAttendanceSessionsModel";
+import type { MemberAttendanceSessionDateModel } from "~~/shared/types/models/MemberAttendanceSessionDateModel";
+import type { MemberAttendanceSessionStatsCollection } from "~~/shared/types/models/MemberAttendanceSessionStatsCollection";
 import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtimeAllTables";
 
-// Using shared model: MemberAttendanceSessionsModel
+// Using shared model: MemberAttendanceSessionStatsCollection
 
-// Using shared model: MemberAttendanceSessionCurrentModel
+// Using shared model: MemberAttendanceSessionDateModel
 
 interface UseMemberAttendanceStoreResult {
-	SessionStats: Ref<MemberAttendanceSessionsModel["sessionStats"]>;
+	SessionStats: Ref<MemberAttendanceSessionStatsCollection["sessionStats"]>;
 	SessionCount: Ref<number>;
 	AttendanceTotal: Ref<number>;
 	CurrentSessionMemberIds: Ref<string[]>;
@@ -32,11 +32,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	const queryClient = useQueryClient();
 
 	const { data, isLoading, isError, error, refetch } =
-		useQuery<MemberAttendanceSessionsModel>({
+		useQuery<MemberAttendanceSessionStatsCollection>({
 			queryKey: ["memberAttendanceSessions"],
 			queryFn: async ({ signal }) => {
 				const response = await $fetch<
-					ApiResponse<MemberAttendanceSessionsModel>
+					ApiResponse<MemberAttendanceSessionStatsCollection>
 				>("/api/MemberAttendance/Sessions", { signal });
 				if (!response.success)
 					throw new Error(
@@ -50,11 +50,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 
 	// Current session (most recent) attendance list
 	const { data: currentData, refetch: refetchCurrent } =
-		useQuery<MemberAttendanceSessionCurrentModel>({
+		useQuery<MemberAttendanceSessionDateModel>({
 			queryKey: ["memberAttendanceSessionCurrent"],
 			queryFn: async ({ signal }) => {
 				const response = await $fetch<
-					ApiResponse<MemberAttendanceSessionCurrentModel>
+					ApiResponse<MemberAttendanceSessionDateModel>
 				>("/api/MemberAttendance/SessionCurrent", { signal });
 				if (!response.success)
 					throw new Error(
@@ -100,7 +100,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 
 	_store = {
 		SessionStats: SessionStats as Ref<
-			MemberAttendanceSessionsModel["sessionStats"]
+			MemberAttendanceSessionStatsCollection["sessionStats"]
 		>,
 		SessionCount: SessionCount as Ref<number>,
 		AttendanceTotal: AttendanceTotal as Ref<number>,

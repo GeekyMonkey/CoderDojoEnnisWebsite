@@ -1,19 +1,20 @@
 import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
 import {
-	type MemberAttendanceSessionsModel,
-	MemberAttendanceSessionsModelSchema,
-} from "~~/shared/types/models/MemberAttendanceSessionsModel";
+	type MemberAttendanceSessionStatsCollection,
+	MemberAttendanceSessionStatsCollectionSchema,
+} from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
-type ResponseBody = ApiResponse<MemberAttendanceSessionsModel>;
+type ResponseBody = ApiResponse<MemberAttendanceSessionStatsCollection>;
 
 /**
  * GET: api/memberAttendance/Sessions
+ * Get attendance session statistics
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const logs: string[] = [];
 	let resp: ResponseBody = {
-		data: MemberAttendanceSessionsModelSchema.parse({
+		data: MemberAttendanceSessionStatsCollectionSchema.parse({
 			attendance_total: 0,
 			sessionCount: 0,
 			sessionStats: [],
@@ -31,7 +32,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 			(total, stat) => total + (stat.total_count || 0),
 			0,
 		);
-		resp.data = MemberAttendanceSessionsModelSchema.parse({
+		resp.data = MemberAttendanceSessionStatsCollectionSchema.parse({
 			attendance_total,
 			sessionCount,
 			sessionStats,

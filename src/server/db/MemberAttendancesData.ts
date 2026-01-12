@@ -44,6 +44,41 @@ export const MemberAttendancesData = {
 	},
 
 	/**
+	 * Get all member attendances between two dates (inclusive)
+	 */
+	GetMemberAttendancesForDateRange: async (
+		event: H3Event<EventHandlerRequest>,
+		dateMin: string,
+		dateMax: string,
+	): Promise<MemberAttendanceModelArray> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return [];
+		}
+		try {
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("member_attendances")
+				.select("*")
+				.gte("date", dateMin)
+				.lte("date", dateMax)
+				.order("date", { ascending: true });
+			if (error || !data || data.length === 0) {
+				console.error(
+					"Error fetching member attendances for date range:",
+					error,
+				);
+				return [];
+			}
+			return memberAttendanceFromRecords(data as any);
+		} catch (error) {
+			throw new Error(
+				`Error fetching member attendances for date range: ${ErrorToString(error)}`,
+			);
+		}
+	},
+
+	/**
 	 * Get all member attendances for the date of the most recent session
 	 */
 	GetMemberAttendancesForMostRecentSession: async (

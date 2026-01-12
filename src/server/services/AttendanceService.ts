@@ -1,4 +1,3 @@
-import { log } from "console";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
 import { MembersData } from "~~/server/db/MembersData";

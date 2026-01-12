@@ -52,4 +52,13 @@ export const AttendanceSignInResponseModelSchema = z.object({
  */
 export type AttendanceSignInResponseModel = z.infer<
 	typeof AttendanceSignInResponseModelSchema
->;
+	>;
+
+/**
+ * Error response from the sign-in API
+ */
+export type AttendanceSignInErrorResponse = {
+	error: string
+};
+
+
