@@ -5,11 +5,11 @@ meta {
 }
 
 get {
-  url: {{Host}}/api/MemberAttendance/SessionDate?sessionDate=2025-05-24
+  url: {{Host}}/api/MemberAttendance/SessionDate?sessionDate={{SessionDate}}
   body: none
   auth: none
 }
 
 params:query {
-  sessionDate: 2025-05-24
+  sessionDate: {{SessionDate}}
 }

@@ -50,7 +50,7 @@ describe("memberNavigation", () => {
 
 		const parentNav = filterNavByRoles(model, ["parent"]);
 		const parentLabels = parentNav.flatMap((g) => g.items.map((i) => i.label));
-		expect(parentLabels).toContain("Home");
+		expect(parentLabels).toContain("Parent Home");
 		expect(parentLabels).toContain("My Kids");
 
 		const mentorNav = filterNavByRoles(model, ["mentor"]);

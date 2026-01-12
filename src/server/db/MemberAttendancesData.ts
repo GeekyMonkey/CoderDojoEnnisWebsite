@@ -15,6 +15,67 @@ export type MemberAttendanceRecord =
 
 export const MemberAttendancesData = {
 	/**
+	 * Delete attendance records for a member on a specific date.
+	 * (Idempotent: succeeds even if no record existed)
+	 */
+	DeleteMemberAttendanceForMemberAndDate: async (
+		event: H3Event<EventHandlerRequest>,
+		memberId: string,
+		date: string,
+	): Promise<boolean> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase) {
+			return false;
+		}
+		try {
+			const { error } = await supabase
+				.schema("coderdojo")
+				.from("member_attendances")
+				.delete()
+				.eq("member_id", memberId)
+				.eq("date", date);
+			if (error) {
+				console.error(
+					"Error deleting member attendance for member/date:",
+					error,
+				);
+				return false;
+			}
+			return true;
+		} catch (error) {
+			console.error(
+				`Error deleting member attendance for member/date: ${ErrorToString(error)}`,
+			);
+			return false;
+		}
+	},
+
+	/**
+	 * Set a member's attendance present/absent for a given date.
+	 * present=true => upsert record; present=false => delete record.
+	 */
+	SetMemberAttendancePresent: async (
+		event: H3Event<EventHandlerRequest>,
+		memberId: string,
+		date: string,
+		present: boolean,
+	): Promise<boolean> => {
+		if (present) {
+			const created = await MemberAttendancesData.CreateMemberAttendance(
+				event,
+				memberId,
+				date,
+			);
+			return Boolean(created);
+		}
+		return await MemberAttendancesData.DeleteMemberAttendanceForMemberAndDate(
+			event,
+			memberId,
+			date,
+		);
+	},
+
+	/**
 	 * Get all member attendances for a specified date
 	 */
 	GetMemberAttendancesForDate: async (

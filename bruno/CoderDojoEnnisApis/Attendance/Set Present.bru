@@ -1,0 +1,18 @@
+meta {
+  name: Set Present
+  type: http
+}
+
+post {
+  url: {{Host}}/api/MemberAttendance/SetPresent
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "memberId": "{{MemberId}}",
+    "sessionDate": "{{SessionDate}}",
+    "present": true
+  }
+}

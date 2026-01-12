@@ -12,9 +12,9 @@
 - [ ] 2.5 Update `useBadgeCategoriesStore` to continue exposing `BadgeCategories` and also expose `BadgeCategoriesById`
 
 ## 3. Backend support
-- [ ] 3.1 Ensure `/api/(tables)/members` (and any dependent list endpoints) returns the member data required by `useMembersStore`. This should be an array of the entire member model type
-- [ ] 3.2 Add attendance mutation endpoint(s) to mark a member present/absent for a session date (per the final spec/design)
-- [ ] 3.3 Add API-level validation (date format, memberId, auth assumptions) and consistent `ApiResponse` errors
+- [x] 3.1 Ensure `/api/(tables)/members` (and any dependent list endpoints) returns the member data required by `useMembersStore`. This should be an array of the entire member model type
+- [x] 3.2 Add attendance mutation endpoint(s) to mark a member present/absent for a session date (per the final spec/design)
+- [x] 3.3 Add API-level validation (date format, memberId, auth assumptions) and consistent `ApiResponse` errors
 
 ## 4. Frontend page
 - [ ] 4.1 Replace placeholder at `src/app/pages/(member)/mentor/attendance.vue` with the new mentor attendance UI

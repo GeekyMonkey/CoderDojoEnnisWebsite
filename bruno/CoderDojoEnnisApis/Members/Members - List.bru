@@ -1,10 +1,11 @@
 meta {
   name: Members - List
   type: http
+  seq: 1
 }
 
 get {
-  url: {{Host}}/api/badges/list?include_deleted=false
+  url: {{Host}}/api/members/list?include_deleted=false
   body: none
   auth: none
 }
