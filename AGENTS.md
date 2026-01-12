@@ -13,11 +13,11 @@ Use `@/openspec/AGENTS.md` to learn:
 - Spec format and conventions
 - Project structure and guidelines
 
-Important: Run all `openspec` commands from the repository root (the folder containing `openspec/`), not from `src/`. If you run from `src/`, the CLI may report missing `openspec/changes`.
-
 Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
+
+Important: Run all `openspec` commands from the repository root (the folder containing `openspec/`), not from `src/`. If you run from `src/`, the CLI may report missing `openspec/changes`.
 
 # Project Notes
 
