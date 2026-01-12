@@ -1,0 +1,14 @@
+meta {
+  name: Members - List
+  type: http
+}
+
+get {
+  url: {{Host}}/api/badges/list?include_deleted=false
+  body: none
+  auth: none
+}
+
+params:query {
+  include_deleted: false
+}

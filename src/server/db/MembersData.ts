@@ -19,16 +19,23 @@ export const MembersData = {
 	 */
 	GetMembers: async (
 		event: H3Event<EventHandlerRequest>,
+		includeDeleted: boolean = false,
 	): Promise<MemberModel[]> => {
 		const supabase = await GetSupabaseAdminClient(event);
 		if (!supabase) {
 			return [];
 		}
 		try {
-			const { data, error } = await supabase
+			const query = supabase
 				.schema("coderdojo")
 				.from("members")
-				.select("*");
+				.select("*")
+				.order("name_last", { ascending: true })
+				.order("name_first", { ascending: true });
+			if (!includeDeleted) {
+				query.eq("deleted", false);
+			}
+			const { data, error } = await query;
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching members:", error);
 				return [];
