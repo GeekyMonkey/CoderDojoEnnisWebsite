@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { MemberAttendanceSessionDateModel } from "~~/shared/types/models/MemberAttendanceSessionDateModel";
-import type { MemberAttendanceSessionStatsCollection } from "~~/shared/types/models/MemberAttendanceSessionStatsCollection";
+import type { MemberAttendanceSessionStatsCollection } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
+import { IsYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
 import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtimeAllTables";
 
 // Using shared model: MemberAttendanceSessionStatsCollection
@@ -13,6 +14,13 @@ interface UseMemberAttendanceStoreResult {
 	AttendanceTotal: Ref<number>;
 	CurrentSessionMemberIds: Ref<string[]>;
 	CurrentSessionDate: Ref<string>;
+	useSessionAttendanceForDate: (
+		sessionDate: MaybeRef<string>,
+	) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel>>;
+	useSessionAttendanceForDateRange: (args: {
+		dateMin: MaybeRef<string>;
+		dateMax: MaybeRef<string>;
+	}) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel[]>>;
 	IsMemberPresent: (memberId: string) => boolean;
 	isLoading: Ref<boolean>;
 	isError: Ref<boolean>;
@@ -75,6 +83,15 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		queryClient.invalidateQueries({
 			queryKey: ["memberAttendanceSessionCurrent"],
 		});
+		// Clear any per-date/range caches so they refetch when next used
+		queryClient.removeQueries({
+			queryKey: ["memberAttendanceSessionDate"],
+			exact: false,
+		});
+		queryClient.removeQueries({
+			queryKey: ["memberAttendanceSessionDateRange"],
+			exact: false,
+		});
 	};
 	allEvents.on("INSERT", (evt) => {
 		if (evt.table === TARGET_TABLE) invalidate("INSERT");
@@ -98,6 +115,85 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	const IsMemberPresent = (memberId: string) =>
 		CurrentSessionMemberIds.value.includes(memberId);
 
+	/**
+	 * On-demand query: get attendance for a specific session date.
+	 * Cached per date via queryKey.
+	 */
+	const useSessionAttendanceForDate = (sessionDate: MaybeRef<string>) => {
+		const sessionDateValue = computed(() => unref(sessionDate) || "");
+		return useQuery<MemberAttendanceSessionDateModel>({
+			queryKey: computed(() => [
+				"memberAttendanceSessionDate",
+				sessionDateValue.value,
+			]),
+			enabled: computed(() => IsYYYY_MM_dd(sessionDateValue.value)),
+			queryFn: async ({ signal }) => {
+				const date = sessionDateValue.value;
+				const response = await $fetch<
+					ApiResponse<MemberAttendanceSessionDateModel>
+				>("/api/MemberAttendance/SessionDate", {
+					signal,
+					query: { sessionDate: date },
+				});
+				if (!response.success) {
+					throw new Error(
+						response.error || "Failed to load session attendance",
+					);
+				}
+				return response.data;
+			},
+			staleTime: 1000 * 60 * 5,
+			refetchOnWindowFocus: false,
+		});
+	};
+
+	/**
+	 * On-demand query: get attendance for a date range (inclusive).
+	 * Cached per (dateMin,dateMax) pair via queryKey.
+	 */
+	const useSessionAttendanceForDateRange = ({
+		dateMin,
+		dateMax,
+	}: {
+		dateMin: MaybeRef<string>;
+		dateMax: MaybeRef<string>;
+	}) => {
+		const dateMinValue = computed(() => unref(dateMin) || "");
+		const dateMaxValue = computed(() => unref(dateMax) || "");
+		return useQuery<MemberAttendanceSessionDateModel[]>({
+			queryKey: computed(() => [
+				"memberAttendanceSessionDateRange",
+				dateMinValue.value,
+				dateMaxValue.value,
+			]),
+			enabled: computed(
+				() =>
+					IsYYYY_MM_dd(dateMinValue.value) &&
+					IsYYYY_MM_dd(dateMaxValue.value) &&
+					dateMinValue.value <= dateMaxValue.value,
+			),
+			queryFn: async ({ signal }) => {
+				const response = await $fetch<
+					ApiResponse<MemberAttendanceSessionDateModel[]>
+				>("/api/MemberAttendance/SessionDateRange", {
+					signal,
+					query: {
+						dateMin: dateMinValue.value,
+						dateMax: dateMaxValue.value,
+					},
+				});
+				if (!response.success) {
+					throw new Error(
+						response.error || "Failed to load session attendance range",
+					);
+				}
+				return response.data;
+			},
+			staleTime: 1000 * 60 * 5,
+			refetchOnWindowFocus: false,
+		});
+	};
+
 	_store = {
 		SessionStats: SessionStats as Ref<
 			MemberAttendanceSessionStatsCollection["sessionStats"]
@@ -106,6 +202,8 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		AttendanceTotal: AttendanceTotal as Ref<number>,
 		CurrentSessionMemberIds: CurrentSessionMemberIds as Ref<string[]>,
 		CurrentSessionDate: CurrentSessionDate as Ref<string>,
+		useSessionAttendanceForDate,
+		useSessionAttendanceForDateRange,
 		IsMemberPresent,
 		isLoading: isLoading as Ref<boolean>,
 		isError: isError as Ref<boolean>,
