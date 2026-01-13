@@ -70,6 +70,16 @@ export default {
 			label: "Rechercher",
 			placeholder: "Rechercher des membres…",
 		},
+		columns: {
+			present: "Présent",
+			name: "Nom",
+			photo: "Photo",
+			team: "Équipe",
+			beltColor: "Couleur de ceinture",
+		},
+		footer: {
+			chooseRandomCoder: "Choisir un codeur au hasard",
+		},
 		loadingRoster: "Chargement de la liste…",
 		errorLoadingRoster: "Erreur de chargement de la liste.",
 		codersTitle: "Codeurs",

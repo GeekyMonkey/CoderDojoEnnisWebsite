@@ -70,6 +70,16 @@ export default {
 			label: "Cuardaigh",
 			placeholder: "Cuardaigh baill…",
 		},
+		columns: {
+			present: "I láthair",
+			name: "Ainm",
+			photo: "Grianghraf",
+			team: "Foireann",
+			beltColor: "Dath crios",
+		},
+		footer: {
+			chooseRandomCoder: "Roghnaigh códóir go randamach",
+		},
 		loadingRoster: "Ag lódáil an liosta…",
 		errorLoadingRoster: "Earráid ag lódáil an liosta.",
 		codersTitle: "Códóirí",

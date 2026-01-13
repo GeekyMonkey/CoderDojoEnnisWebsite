@@ -19,22 +19,22 @@
 ## 4. Frontend page
 - [x] 4.1 Replace placeholder at `src/app/pages/(member)/mentor/attendance.vue` with the new mentor attendance UI
 - [x] 4.2 Implement header controls: session date dropdown (descending), include dropdown, search box
-- [ ] 4.3 Implement coders table using Nuxt UI table features:
-  - [ ] presence checkmark column toggles attendance via API
-  - [ ] columns: Name, Photo, Team, Belt Color
-  - [ ] sortable by Name, Team, Belt Color, Present (present-first; within groups sort by name)
-  - [ ] fixed header and fixed footer
-  - [ ] footer total: coders present
-  - [ ] footer action: show `Choose Random` button only when the current session date is selected AND there is at least one present coder; clicking navigates to `/mentor/coder/[member_id]`
-- [ ] 4.4 Implement mentors table beneath the coders table:
-  - [ ] presence checkmark column toggles attendance via API
-  - [ ] columns: Name, Photo
-  - [ ] sortable by Name and Present (present-first; within groups sort by name)
-  - [ ] fixed header and fixed footer
-  - [ ] footer total: mentors present
-- [ ] 4.5 Ensure filters apply to both tables:
-  - [ ] Include filter (`Present Members`, `Registered Members`, `All Members`)
-  - [ ] Search filter
+- [x] 4.3 Implement coders table using Nuxt UI table features:
+  - [x] presence checkmark column toggles attendance via API
+  - [x] columns: Name, Photo, Team, Belt Color
+  - [x] sortable by Name, Team, Belt Color, Present (present-first; within groups sort by name)
+  - [x] fixed header and fixed footer
+  - [x] footer total: coders present
+  - [x] footer action: show `Choose Random` button only when the current session date is selected AND there is at least one present coder; clicking navigates to `/mentor/coder/[member_id]`
+- [x] 4.4 Implement mentors table beneath the coders table:
+  - [x] presence checkmark column toggles attendance via API
+  - [x] columns: Name, Photo
+  - [x] sortable by Name and Present (present-first; within groups sort by name)
+  - [x] fixed header and fixed footer
+  - [x] footer total: mentors present
+- [x] 4.5 Ensure filters apply to both tables:
+  - [x] Include filter (`Present Members`, `Registered Members`, `All Members`)
+  - [x] Search filter
 - [x] 4.6 Ensure date-change rule updates “Include” option:
   - [x] non-current session -> Include becomes Present Members
   - [x] current session -> Include becomes Registered Members

@@ -70,6 +70,16 @@ export default {
 			label: "Search",
 			placeholder: "Search members…",
 		},
+		columns: {
+			present: "Present",
+			name: "Name",
+			photo: "Photo",
+			team: "Team",
+			beltColor: "Belt Color",
+		},
+		footer: {
+			chooseRandomCoder: "Choose Random Coder",
+		},
 		loadingRoster: "Loading roster…",
 		errorLoadingRoster: "Error loading roster.",
 		codersTitle: "Coders",

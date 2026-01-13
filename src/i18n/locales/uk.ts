@@ -70,6 +70,16 @@ export default {
 			label: "Пошук",
 			placeholder: "Пошук учасників…",
 		},
+		columns: {
+			present: "Присутній",
+			name: "Ім’я",
+			photo: "Фото",
+			team: "Команда",
+			beltColor: "Колір пояса",
+		},
+		footer: {
+			chooseRandomCoder: "Вибрати випадкового кодера",
+		},
 		loadingRoster: "Завантаження списку…",
 		errorLoadingRoster: "Помилка завантаження списку.",
 		codersTitle: "Кодери",
