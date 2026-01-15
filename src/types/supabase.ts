@@ -419,51 +419,24 @@ export type Database = {
       }
       sessions: {
         Row: {
-          adult_id: string | null
-          adult2_id: string | null
-          created_date: string
-          end_date: string | null
           id: string
           mentors_only: boolean
+          session_date: string
           topic: string | null
-          url: string | null
         }
         Insert: {
-          adult_id?: string | null
-          adult2_id?: string | null
-          created_date?: string
-          end_date?: string | null
           id?: string
           mentors_only?: boolean
+          session_date: string
           topic?: string | null
-          url?: string | null
         }
         Update: {
-          adult_id?: string | null
-          adult2_id?: string | null
-          created_date?: string
-          end_date?: string | null
           id?: string
           mentors_only?: boolean
+          session_date?: string
           topic?: string | null
-          url?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "sessions_adult_id_fkey"
-            columns: ["adult_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sessions_adult2_id_fkey"
-            columns: ["adult2_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       teams: {
         Row: {

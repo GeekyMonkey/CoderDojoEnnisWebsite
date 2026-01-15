@@ -1,8 +1,4 @@
 import { defineEventHandler, type H3Event } from "h3";
-// import {
-// 	GetDrizzleConnectionString,
-// 	ServerContext,
-// } from "~~/server/db/UseDrizzle";
 import { ThemesService } from "~~/server/services/ThemesService";
 import {
 	type ThemesConfig,

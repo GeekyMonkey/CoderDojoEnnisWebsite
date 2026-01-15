@@ -19,7 +19,6 @@ import {
 	ReadLegacyMemberBelts,
 	ReadLegacyMemberParents,
 	ReadLegacyNinjas,
-	ReadLegacySessions,
 	ReadLegacyTeams,
 } from "~~/server/sql/LegacyData";
 import { FromLegacyAdultAttendanceEntities } from "~~/server/sql/Models/LegacyAdultAttendanceEntity";
@@ -33,7 +32,6 @@ import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMember
 import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
 import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
 import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
-import { FromLegacySessionEntities } from "~~/server/sql/Models/LegacySessionEntity";
 import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
 import { memberFromRecords } from "~~/shared/types/models/MemberModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
@@ -162,7 +160,7 @@ async function CopyTeamsTable(
 			for (const f of fields) {
 				const sv = (src as any)[f];
 				const dv = (dest as any)[f];
-				// Treat undefined and null as equivalent empty states; also normalise trimming for strings
+				// Treat undefined and null as equivalent empty states; also normalize trimming for strings
 				const norm = (v: any) => {
 					if (v === null || v === undefined) {
 						return "";
@@ -667,149 +665,51 @@ async function CopySessionsTable(
 	} else {
 		logs.push("Sessions deleted successfully");
 	}
-	const legacy = await ReadLegacySessions();
-	logs.push(`Copying sessions table with ${legacy.length} rows`);
-	const models = FromLegacySessionEntities(legacy);
-	try {
-		// bulk upsert (assume existing Save not present -> direct upsert)
-		const pageSize = 500;
-		for (let i = 0; i < models.length; i += pageSize) {
-			const batch = models.slice(i, i + pageSize);
-			const { data, error } = await db
-				.schema("coderdojo")
-				.from("sessions")
-				.upsert(
-					batch.map((m) => ({
-						id: m.id,
-						created_date: new Date(m.createdDate).toISOString(),
-						end_date: m.endDate ? new Date(m.endDate).toISOString() : null,
-						url: m.url,
-						topic: m.topic,
-						adult_id: m.adultId,
-						adult2_id: m.adult2Id,
-						mentors_only: m.mentorsOnly,
-					})),
-					{ onConflict: "id" },
-				)
-				.select();
-			if (error) {
-				logs.push(
-					`Error inserting sessions batch ${i / pageSize + 1}: ${error.message}`,
-				);
-				return logs;
-			}
-		}
-		logs.push("Inserted sessions");
-		await new Promise((r) => setTimeout(r, 200));
-		// verification paged
-		const fetched: any[] = [];
-		let from = 0;
-		const fetchSize = 1000;
-		let page = 0;
-		while (true) {
-			const { data, error } = await db
-				.schema("coderdojo")
-				.from("sessions")
-				.select("*")
-				.range(from, from + fetchSize - 1);
-			if (error) {
-				logs.push(
-					`Sessions verification fetch error page ${page}: ${error.message}`,
-				);
-				break;
-			}
-			if (data && data.length) {
-				fetched.push(...data);
-				logs.push(
-					`Sessions verification fetched page ${page + 1} size=${data.length}`,
-				);
-				if (data.length < fetchSize) break;
-				from += fetchSize;
-				page++;
-			} else break;
-		}
-		// map for compare
-		const srcById = new Map(models.map((m) => [m.id.toLowerCase(), m]));
-		const destById = new Map(
-			fetched.map((r) => [String(r.id).toLowerCase(), r]),
-		);
-		const missing: string[] = [];
-		const extra: string[] = [];
-		const mismatches: string[] = [];
-		for (const [id, src] of srcById.entries()) {
-			const dest = destById.get(id);
-			if (!dest) {
-				missing.push(src.id);
-				continue;
-			}
-			// Generic compare with optional case-insensitive handling for UUID/id fields
-			const compare = (
-				field: string,
-				sv: any,
-				dv: any,
-				opts?: { caseInsensitive?: boolean },
-			) => {
-				// Treat null and undefined as equivalent
-				if (sv == null && dv == null) return;
-				if (
-					opts?.caseInsensitive &&
-					typeof sv === "string" &&
-					typeof dv === "string"
-				) {
-					if (sv.toLowerCase() === dv.toLowerCase()) return; // equal ignoring case
-				} else {
-					if (sv === dv) return;
-				}
-				mismatches.push(`${src.id}:${field} exp='${sv}' act='${dv}'`);
-			};
-			// Date comparisons with tolerance for possible timezone/hour shifts
-			const destCreated = dest.created_date
-				? Date.parse(dest.created_date)
-				: null;
-			const destEnd = dest.end_date ? Date.parse(dest.end_date) : null;
-			if (!(src.createdDate == null && destCreated == null)) {
-				const diff =
-					src.createdDate != null && destCreated != null
-						? Math.abs(destCreated - src.createdDate)
-						: NaN;
-				if (!(diff <= TIME_TOLERANCE_MS))
-					compare("createdDate", src.createdDate, destCreated);
-			}
-			if (!(src.endDate == null && destEnd == null)) {
-				const diff =
-					src.endDate != null && destEnd != null
-						? Math.abs(destEnd - src.endDate)
-						: NaN;
-				if (!(diff <= TIME_TOLERANCE_MS))
-					compare("endDate", src.endDate, destEnd);
-			}
-			compare("url", src.url, dest.url);
-			compare("topic", src.topic, dest.topic);
-			// Compare adultId / adult2Id case-insensitively because Supabase may normalise UUID case
-			compare("adultId", src.adultId, dest.adult_id, { caseInsensitive: true });
-			compare("adult2Id", src.adult2Id, dest.adult2_id, {
-				caseInsensitive: true,
+
+	const legacyMember = await ReadLegacyMemberAttendances();
+	const legacyAdult = await ReadLegacyAdultAttendances();
+	const memberModels: MemberAttendanceModel[] =
+		FromLegacyMemberAttendanceEntities(legacyMember);
+	const adultModels: MemberAttendanceModel[] =
+		FromLegacyAdultAttendanceEntities(legacyAdult);
+	const allAttendance: MemberAttendanceModel[] = [
+		...memberModels,
+		...adultModels,
+	].sort((a, b) => a.date.localeCompare(b.date));
+
+	const models: SessionModel[] = [];
+	for (const att of allAttendance) {
+		const sessionDate = new Date(att.date).toISOString().substring(0, 10);
+		if (!models.find(m => m.sessionDate === sessionDate)) {
+			models.push({
+				id: att.id,
+				sessionDate,
+				topic: "",
+				mentorsOnly: false,
 			});
-			compare("mentorsOnly", src.mentorsOnly, dest.mentors_only);
 		}
-		for (const [id, dest] of destById.entries())
-			if (!srcById.has(id)) extra.push(dest.id);
-		if (!missing.length && !extra.length && !mismatches.length)
+	}
+	logs.push(
+		`Copying sessions table with attendances=${allAttendance.length} sessions=${models.length}`,
+	);
+
+	try {
+		const { data, error } = await db
+			.schema("coderdojo")
+			.from("sessions")
+			.upsert(
+				models.map((m) => {
+					return sessionToRecord(m);
+				}),
+			)
+			.select();
+		if (error) {
 			logs.push(
-				`Sessions verification passed: ${fetched.length} rows match source exactly (UUID case ignored)`,
+				`Error inserting sessions: ${error.message}`,
 			);
-		else {
-			if (missing.length)
-				logs.push(`Sessions verification missing in DB: ${missing.join(",")}`);
-			if (extra.length)
-				logs.push(`Sessions verification extra in DB: ${extra.join(",")}`);
-			if (mismatches.length) {
-				logs.push(`Sessions verification mismatches (${mismatches.length}):`);
-				for (const mm of mismatches.slice(0, 25)) logs.push("  " + mm);
-				if (mismatches.length > 25)
-					logs.push(`  ... ${mismatches.length - 25} more`);
-			}
+			return logs;
 		}
+		logs.push(`Inserted ${models.length} sessions`);
 	} catch (e: any) {
 		logs.push(`Error in Sessions insert: ${e.message}`);
 	}
@@ -829,8 +729,10 @@ async function CopyAttendanceTable(
 		.from("member_attendances")
 		.delete()
 		.not("id", "is", null);
+
 	if (delError) logs.push(`Error deleting attendances: ${delError.message}`);
 	else logs.push("Attendances deleted successfully");
+
 	const legacyMember = await ReadLegacyMemberAttendances();
 	const legacyAdult = await ReadLegacyAdultAttendances();
 	logs.push(

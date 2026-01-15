@@ -5,7 +5,6 @@ import { LegacyTeamEntity } from "./Models/LegacyTeamEntity";
 import { LegacyBeltEntity } from "./Models/LegacyBeltEntity";
 import { LegacyMemberEntity } from "./Models/LegacyMemberEntity";
 import { LegacyAdultEntity } from "./Models/LegacyAdultEntity";
-import { LegacySessionEntity } from "./Models/LegacySessionEntity";
 import { LegacyMemberAttendanceEntity } from "./Models/LegacyMemberAttendanceEntity";
 import { LegacyAdultAttendanceEntity } from "./Models/LegacyAdultAttendanceEntity";
 import { LegacyAdultBadgeCategoryEntity } from "./Models/LegacyAdultBadgeCategoryEntity";
@@ -104,10 +103,6 @@ export async function ReadLegacyMemberParents(): Promise<
 	LegacyMemberParentEntity[]
 > {
 	return await ReadLegacyTable<LegacyMemberParentEntity>("MemberParent");
-}
-
-export async function ReadLegacySessions(): Promise<LegacySessionEntity[]> {
-	return await ReadLegacyTable<LegacySessionEntity>("Sessions");
 }
 
 export async function ReadLegacyTeams(): Promise<LegacyTeamEntity[]> {

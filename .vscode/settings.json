@@ -62,12 +62,14 @@
 	],
 	"git.blame.statusBarItem.enabled": true,
 	"cSpell.words": [
+		"agentic",
 		"checkmark",
 		"coderdojo",
 		"devsetup",
 		"Français",
 		"Gaeilge",
 		"Gamertag",
+		"hexcode",
 		"hilight",
 		"hyperdrive",
 		"iconify",
@@ -79,12 +81,14 @@
 		"openspec",
 		"parallelizable",
 		"prefault",
+		"recordset",
 		"refetches",
 		"reka",
 		"rgba",
 		"stylesheet",
 		"Supabase",
 		"uicons",
+		"upserts",
 		"validatable",
 		"vitest",
 		"vueuse",
@@ -108,5 +112,6 @@
 		"titleBar.activeForeground": "#e7e7e7",
 		"titleBar.inactiveBackground": "#21573299",
 		"titleBar.inactiveForeground": "#e7e7e799"
-	}
+	},
+	"chat.useNestedAgentsMdFiles": true
 }

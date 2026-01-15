@@ -10,7 +10,6 @@
 			"nuxt.config.ts",
 			"package.json",
 			"*.json",
-			"drizzle.config.ts",
 			"tailwind.config.ts",
 			"!app/assets",
 			"!app/assets/css",

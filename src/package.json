@@ -19,7 +19,7 @@
 		"test": "cls && vitest"
 	},
 	"dependencies": {
-		"@iconify/json": "2.2.427",
+		"@iconify/json": "2.2.428",
 		"@nuxt/ui": "4.3.0",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.1",
@@ -44,7 +44,7 @@
 		"@types/crypto-js": "4.2.2",
 		"@types/jsonwebtoken": "9.0.10",
 		"@types/mssql": "9.1.8",
-		"@types/node": "24.10.8",
+		"@types/node": "24.10.9",
 		"@vitejs/plugin-vue": "6.0.3",
 		"@vue/test-utils": "2.4.6",
 		"c12": "3.3.3",
@@ -52,7 +52,7 @@
 		"eslint": "9.39.2",
 		"nitro-cloudflare-dev": "0.2.2",
 		"postcss-custom-properties": "14.0.6",
-		"prettier": "3.7.4",
+		"prettier": "3.8.0",
 		"prettier-plugin-vue": "1.1.6",
 		"sass": "1.97.2",
 		"supabase": "^2.70.5",
@@ -60,7 +60,7 @@
 		"typescript": "5.9.3",
 		"vite": "6.4.1",
 		"vitest": "4.0.17",
-		"wrangler": "4.59.1"
+		"wrangler": "4.59.2"
 	},
 	"packageManager": "pnpm@10.28.0",
 	"version": "0.1.0"

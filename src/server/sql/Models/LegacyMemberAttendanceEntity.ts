@@ -17,6 +17,7 @@ export const FromLegacyMemberAttendanceEntity = (
 		id: legacy.Id,
 		memberId: legacy.MemberId,
 		date: d.toISOString().substring(0, 10),
+		deleted: false,
 	};
 };
 
