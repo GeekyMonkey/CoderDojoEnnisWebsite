@@ -1,4 +1,5 @@
-import { type User } from "@supabase/supabase-js";
+import { type Session, type User } from "@supabase/supabase-js";
+import type { MemberModel } from "~~/shared/types/models/MemberModel";
 
 interface AuthState {
 	user: Ref<User | null>;
@@ -12,6 +13,10 @@ interface AuthState {
 	setError: (e: string | null) => void;
 	markReady: () => void;
 	reset: () => void;
+	login: (
+		username: string,
+		password: string,
+	) => Promise<ApiResponse<{ session: Session; member: MemberModel }>>;
 }
 
 let _store: AuthState | null = null;
@@ -49,6 +54,27 @@ export function useAuthStore(): AuthState {
 		ready.value = true;
 	}
 
+	async function login(username: string, password: string) {
+		const result = await $fetch<
+			ApiResponse<{ session: Session; member: MemberModel }>
+		>("/api/Auth/Login", {
+			method: "POST",
+			body: {
+				username,
+				password,
+				credentials: "include",
+			},
+		});
+
+		// We do NOT handle supabaseClient.auth.setSession here because useAuthStore
+		// focuses on state, while the component or a dedicated composable might handle
+		// the side-effect of updating the Supabase client.
+		// However, typical strict store patterns might suggest putting it here.
+		// For now, mirroring the existing architecture where the component handles the result.
+
+		return result;
+	}
+
 	_store = {
 		user,
 		initializing,
@@ -61,6 +87,7 @@ export function useAuthStore(): AuthState {
 		setError,
 		markReady,
 		reset,
+		login,
 	};
 	return _store;
 }

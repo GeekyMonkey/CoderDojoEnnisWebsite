@@ -2,6 +2,7 @@
 	import { nextTick } from "vue";
 	import type { FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
+	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
 	import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
 
 	definePageMeta({
@@ -10,6 +11,7 @@
 
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
+	const { signInMember } = useMemberAttendanceStore();
 
 	const errorMessage = ref<string | null>(null);
 	const isSubmitting = ref(false);
@@ -90,13 +92,8 @@
 		clearErrorMessage();
 		isSubmitting.value = true;
 		try {
-			const result = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
-				"/api/MemberAttendance/SignIn",
-				{
-					method: "POST",
-					body: { username, password },
-				},
-			);
+			const result = await signInMember({ username, password });
+
 			log.info("[SignIn] result:", result);
 			if (result.success) {
 				signInResponse.value = result.data;

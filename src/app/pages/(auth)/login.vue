@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import type { ComponentPublicInstance } from "vue";
-	import type { Session } from "@supabase/supabase-js";
 	import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
+	import { useAuthStore } from "~/stores/useAuthStore";
 
 	definePageMeta({
 		layout: "auth-layout",
@@ -11,6 +11,7 @@
 	const router = useRouter();
 	const { t } = useI18n();
 	const { supabaseClient } = UseSupabaseClient();
+	const { login } = useAuthStore();
 	const errorMessage = ref<string | null>(null);
 
 	type FormSchema = {
@@ -75,16 +76,8 @@
 	const handleLogin = async (username: string, password: string) => {
 		clearErrorMessage();
 
-		const result = await $fetch<
-			ApiResponse<{ session: Session; member: MemberModel }>
-		>("/api/Auth/Login", {
-			method: "POST",
-			body: {
-				username,
-				password,
-				credentials: "include", // Ensure cookies are included in the request
-			},
-		});
+		const result = await login(username, password);
+
 		console.log("[Login] result:", result);
 		if (result.success) {
 			// console.log("JWT:", { session: result.data.session });

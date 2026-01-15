@@ -41,6 +41,7 @@
 		useSessionAttendanceForDate,
 		refetch,
 		refetchCurrent,
+		setMemberPresent: setMemberPresentStore,
 	} = useMemberAttendanceStore();
 	const {
 		Members,
@@ -462,22 +463,7 @@
 			[memberId]: true,
 		};
 		try {
-			const response = await $fetch<ApiResponse<unknown>>(
-				"/api/MemberAttendance/SetPresent",
-				{
-					method: "POST",
-					body: { memberId, sessionDate, present },
-				},
-			);
-			if (!response.success) {
-				throw new Error(response.error || "Failed to update attendance");
-			}
-
-			await selectedAttendanceQuery.refetch();
-			refetch();
-			if (isCurrentSessionSelected.value) {
-				refetchCurrent();
-			}
+			await setMemberPresentStore(memberId, sessionDate, present);
 		} finally {
 			const { [memberId]: _ignored, ...rest } = isSavingByMemberId.value;
 			isSavingByMemberId.value = rest;

@@ -25,6 +25,9 @@ export type LegacyMemberEntity = {
 	XboxGamertag: string | null;
 };
 
+/**
+ * Convert LegacyMemberEntity to MemberModel
+ */
 export const FromLegacyMemberEntity = (
 	legacy: LegacyMemberEntity,
 ): MemberModel => {
@@ -33,7 +36,7 @@ export const FromLegacyMemberEntity = (
 	// Use raw millisecond values (no timezone/DST adjustment; verification layer handles tolerance)
 	const adjPrev = loginDatePrev ? loginDatePrev.getTime() : null;
 	const adjDate = loginDate ? loginDate.getTime() : null;
-	return {
+	const member: MemberModel = {
 		id: legacy.Id,
 		deleted: legacy.Deleted,
 		birthYear: legacy.BirthYear,
@@ -57,8 +60,12 @@ export const FromLegacyMemberEntity = (
 		teamId: legacy.TeamId,
 		xboxGamertag: legacy.XboxGamertag,
 	};
+	return member;
 };
 
+/**
+ * Convert array of LegacyMemberEntity to array of MemberModel
+ */
 export const FromLegacyMemberEntities = (
 	legacies: LegacyMemberEntity[],
 ): MemberModel[] => {
