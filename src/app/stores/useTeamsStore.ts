@@ -5,6 +5,7 @@ import baseDbTableStore from "./baseDbTableStore";
  */
 export function useTeamsStore() {
 	const teamsStore = baseDbTableStore<TeamModel>({
+		apiPath: "teams",
 		tableName: "teams",
 		getLabel: (team: TeamModel) => team.teamName,
 	});

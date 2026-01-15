@@ -8,6 +8,7 @@ export function useBadgesStore() {
 	const { BadgeCategories } = useBadgeCategoriesStore();
 
 	const badgesStore = baseDbTableStore<BadgeModel>({
+		apiPath: "badges",
 		tableName: "badges",
 		getLabel: (badge: BadgeModel) => {
 			return badge.description;

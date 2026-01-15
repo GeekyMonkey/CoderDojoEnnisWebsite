@@ -5,6 +5,7 @@ import baseDbTableStore from "./baseDbTableStore";
  */
 export function useBeltsStore() {
 	const beltsStore = baseDbTableStore<BeltModel>({
+		apiPath: "belts",
 		tableName: "belts",
 		getLabel: (belt: BeltModel) => belt.color,
 	});

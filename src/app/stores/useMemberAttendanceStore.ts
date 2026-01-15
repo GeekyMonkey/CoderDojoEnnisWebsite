@@ -112,39 +112,48 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		useSessionAttendanceForDate(CurrentSessionDate);
 
 	// Realtime invalidation: minimal logging + background refresh (avoid removeQueries to prevent UI flicker)
-	const { events: allEvents } = UseSupabaseRealtimeAllTables();
-	const TARGET_TABLE = "member_attendances";
-	const invalidate = (action: string) => {
-		// console.log(`[MemberAttendanceStore][realtime] ${action} -> invalidate`);
-
-		// Only invalidate sessions list if strictly necessary?
-		// For now, only on INSERT/DELETE to avoid spamming on UPDATE (e.g. metadata changes)
-		// But attendance toggle might be an INSERT/DELETE of a row, or UPDATE of a `present` column.
-		// Assuming rows are present entries:
-		if (action !== "UPDATE") {
+	UseSupabaseRealtimeTable<MemberAttendanceModel>({
+		table: "member_attendances",
+		onInsert: (evt) => {
+			console.log(
+				`[MemberAttendanceStore][realtime] INSERT -> invalidate`,
+				{ evt },
+			);
+			// Invalidate relevant queries
 			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessions"] });
-		}
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDate"],
+				exact: false,
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDateRange"],
+				exact: false,
+			});
+		},
+		onUpdate: (evt) => {
+			// Nothing to do
+		},
+		onDelete: (evt) => {
+			console.log(
+				`[MemberAttendanceStore][realtime] DELETE -> invalidate`,
+				{ evt },
+			);
+			// Invalidate relevant queries
+			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessions"] });
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDate"],
+				exact: false,
+			});
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDateRange"],
+				exact: false,
+			});
+		},
+	});
 
-		// Use invalidateQueries (refetch) instead of removeQueries (destroy cache) so UI stays populated
-		queryClient.invalidateQueries({
-			queryKey: ["memberAttendanceSessionDate"],
-			exact: false,
-		});
-		queryClient.invalidateQueries({
-			queryKey: ["memberAttendanceSessionDateRange"],
-			exact: false,
-		});
-	};
-	allEvents.on("INSERT", (evt) => {
-		if (evt.table === TARGET_TABLE) invalidate("INSERT");
-	});
-	allEvents.on("UPDATE", (evt) => {
-		if (evt.table === TARGET_TABLE) invalidate("UPDATE");
-	});
-	allEvents.on("DELETE", (evt) => {
-		if (evt.table === TARGET_TABLE) invalidate("DELETE");
-	});
-
+	/**
+	 * Computed session years from complete sessions list
+	 */
 	const SessionYears = computed(() => {
 		const years = new Set<string>();
 		for (const stat of SessionStats.value) {
@@ -155,8 +164,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		}
 		return [...years].sort((a, b) => b.localeCompare(a));
 	});
+
 	const SessionCount = computed(() => data.value?.sessionCount || 0);
+
 	const AttendanceTotal = computed(() => data.value?.attendance_total || 0);
+
 	const CurrentSessionMemberIds = computed(
 		() => currentSessionData.value?.memberIds || [],
 	);

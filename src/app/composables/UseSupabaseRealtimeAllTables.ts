@@ -11,7 +11,7 @@ const log = useLogger("SupabaseRealtime-AllTables");
 export type AllTablesDbEvents = {
 	INSERT: { table: string; id: string; newData: unknown };
 	UPDATE: { table: string; id: string; newData: unknown; oldData: unknown };
-	DELETE: { table: string; id: string };
+	DELETE: { table: string; id: string; oldData: unknown };
 };
 
 let allTablesChannel: RealtimeChannel | null = null;
@@ -57,7 +57,7 @@ export function UseSupabaseRealtimeAllTables() {
 				} else if (eventType === "UPDATE") {
 					allTablesEmitter.emit("UPDATE", { ...base, newData, oldData });
 				} else if (eventType === "DELETE") {
-					allTablesEmitter.emit("DELETE", base);
+					allTablesEmitter.emit("DELETE", { ...base, oldData });
 				}
 			},
 		)

@@ -5,6 +5,7 @@ import baseDbTableStore from "./baseDbTableStore";
  */
 export function useMembersStore() {
 	const membersStore = baseDbTableStore<MemberModel>({
+		apiPath: "members",
 		tableName: "members",
 		getLabel: (member: MemberModel) => {
 			const first = member.nameFirst ?? "";

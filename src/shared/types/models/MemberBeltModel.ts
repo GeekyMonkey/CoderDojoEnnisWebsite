@@ -16,6 +16,7 @@ export const MemberBeltModelSchema = z.strictObject({
 	applicationDate: z.number().nullable(),
 	awarded: z.number().nullable(),
 	rejectedDate: z.number().nullable(),
+	deleted: z.boolean().default(false),
 });
 
 export type MemberBeltModel = z.infer<typeof MemberBeltModelSchema>;
@@ -48,6 +49,7 @@ export function memberBeltFromRecord(
 		rejectedDate: record.rejected_date
 			? Date.parse(record.rejected_date)
 			: null,
+		deleted: false,
 	});
 }
 

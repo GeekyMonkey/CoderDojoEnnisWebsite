@@ -1,12 +1,13 @@
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import mitt, { type Emitter } from "mitt";
 import { UseSupabaseClient } from "./UseSupabaseClient";
+import type { BaseModel } from "~/stores/baseDbTableStore";
 
-type DbEventTypes = "INSERT" | "UPDATE" | "DELETE";
+// type DbEventTypes = "INSERT" | "UPDATE" | "DELETE";
 export type DbEvents = {
-	INSERT: { id: string; newData: any };
-	UPDATE: { id: string; newData: any; oldData: any };
-	DELETE: { id: string };
+	INSERT: { id: string; newData: unknown };
+	UPDATE: { id: string; newData: unknown; oldData: unknown };
+	DELETE: { id: string; oldData: unknown };
 };
 
 // Singleton values
@@ -16,13 +17,19 @@ const eventEmitters: Map<string, Emitter<DbEvents>> = new Map();
 /**
  * Supabase Client Composable
  */
-export const UseSupabaseRealtimeTable = ({
+export function UseSupabaseRealtimeTable<T extends BaseModel> ({
 	table,
 	forceResubscribe = false,
+	onInsert,
+	onUpdate,
+	onDelete,
 }: {
 	table: string;
 	forceResubscribe?: boolean;
-}) => {
+	onInsert?: (evt: { id: string; newData: T }) => void;
+	onUpdate?: (evt: { id: string; newData: T; oldData: T }) => void;
+	onDelete?: (evt: { id: string; oldData: T }) => void;
+}) {
 	const { supabaseClient } = UseSupabaseClient();
 	const log = useLogger(`SupabaseRealtime-${table}`);
 
@@ -53,15 +60,19 @@ export const UseSupabaseRealtimeTable = ({
 				const { eventType, new: newData, old: oldData } = payload;
 				const id = (newData as any)?.id || (oldData as any).id;
 				log.info(`${eventType} received in ${table} table id=${id}`, newData);
-				let eventData: { id: string; newData?: any; oldData?: any } = {
+				let eventData: { id: string; newData?: unknown; oldData?: unknown } = {
 					id,
 				};
 				if (eventType === "INSERT") {
-					eventData.newData = newData;
+					onInsert?.({ id, newData: newData as T });
+					events.emit("INSERT", { ...eventData, newData });
 				} else if (eventType === "UPDATE") {
-					eventData = { ...eventData, newData, oldData };
+					onUpdate?.({ id, newData: newData as T, oldData: oldData as T });
+					events.emit("UPDATE", { ...eventData, newData, oldData });
+				} else if (eventType === "DELETE") {
+					onDelete?.({ id, oldData: oldData as T });
+					events.emit("DELETE", { ...eventData, oldData });
 				}
-				events.emit(eventType, eventData);
 			},
 		)
 		.subscribe();

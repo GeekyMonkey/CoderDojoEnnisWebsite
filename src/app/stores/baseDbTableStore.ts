@@ -13,11 +13,19 @@ export type BaseModel = {
  * Create a DB store client with auto-updating data
  */
 export default function baseDbTableStore<T extends BaseModel>({
+	apiPath,
 	tableName,
 	getLabel,
+	onInsert,
+	onUpdate,
+	onDelete
 }: {
+	apiPath: string;
 	tableName: string;
 	getLabel: (item: T) => string | null;
+	onInsert?: (evt: { table: string; id: string; newData: T }) => void;
+	onUpdate?: (evt: { table: string; id: string; newData: T; oldData: T }) => void;
+	onDelete?: (evt: { table: string; id: string; oldData: T }) => void;
 }) {
 	console.log(`[${tableName}Store] Initializing`);
 
@@ -28,13 +36,14 @@ export default function baseDbTableStore<T extends BaseModel>({
 		isLoading,
 		isError,
 		error,
+		refetch,
 	} = useQuery<T[]>({
 		queryKey: [tableName],
 		queryFn: async ({ signal }) => {
 			console.log(`[${tableName}Store] Fetching ${tableName}`);
 			const includeDeleted: boolean = false;
 			const response = await $fetch<ApiResponse<T[]>>(
-				`/api/${tableName}/list?include_deleted=${includeDeleted}`,
+				`/api/${apiPath}/list?include_deleted=${includeDeleted}`,
 				{ signal },
 			);
 			if (!response.success) {
@@ -48,18 +57,36 @@ export default function baseDbTableStore<T extends BaseModel>({
 	// Subscribe to realtime changes via global all-tables channel (single WS)
 	const { events: allEvents } = UseSupabaseRealtimeAllTables();
 	allEvents.on("INSERT", (evt) => {
-		if (evt.table !== tableName) return;
-		queryClient.invalidateQueries({ queryKey: [tableName] });
+		if (evt.table !== tableName) {
+			return;
+		}
+		if (onInsert) {
+			onInsert(evt as { table: string; id: string; newData: T });
+		} else {
+			queryClient.invalidateQueries({ queryKey: [tableName] });
+		}
 	});
 	allEvents.on("UPDATE", (evt) => {
-		if (evt.table !== tableName) return;
-		queryClient.invalidateQueries({ queryKey: [tableName] });
+		if (evt.table !== tableName) {
+			return;
+		}
+		if (onUpdate) {
+			onUpdate(evt as { table: string; id: string; newData: T; oldData: T }	);
+		} else {
+			queryClient.invalidateQueries({ queryKey: [tableName] });
+		}
 	});
 	allEvents.on("DELETE", (evt) => {
-		if (evt.table !== tableName) return;
-		queryClient.setQueryData<T[]>([tableName], (items) =>
-			items?.filter((item) => item.id !== evt.id),
-		);
+		if (evt.table !== tableName) {
+			return;
+		}
+		if (onDelete) {
+			onDelete(evt as { table: string; id: string; oldData: T });
+		} else {
+			queryClient.setQueryData<T[]>([tableName], (items) =>
+				items?.filter((item) => item.id !== evt.id),
+			);
+		}
 	});
 
 	const Options = computed<SelectOption[]>(() => {
@@ -77,5 +104,6 @@ export default function baseDbTableStore<T extends BaseModel>({
 		isLoading,
 		isError,
 		error,
+		refetch,
 	};
 }
