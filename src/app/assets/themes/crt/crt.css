@@ -147,10 +147,14 @@
 		img.CoderDojoLogo {
 			filter:
 				saturate(0)
-				brightness(0.5)
+				brightness(.7)
 				sepia(1)
-				hue-rotate(90deg)
-				contrast(4);
+				hue-rotate(70deg)
+				saturate(3)
+				brightness(1.2)
+				contrast(2);
+			border-radius : 50%;
+			border: solid 1px white;
 		}
 
 		.MemberLayout {

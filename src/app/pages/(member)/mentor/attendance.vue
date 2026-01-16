@@ -204,8 +204,7 @@
 				return;
 			}
 			const curYear = cur?.slice(0, 4) || "";
-			selectedSessionYear.value =
-				curYear || years?.[0] || new Date().getFullYear().toString();
+			selectedSessionYear.value = curYear || years?.[0] || "";
 		},
 		{ immediate: true },
 	);
@@ -733,7 +732,7 @@
 				</DashboardHeading>
 
 			<UDashboardToolbar>
-				<div class="flex flex-wrap items-end gap-10 w-full">
+				<div class="flex flex-wrap items-end gap-x-10 gap-y-2 w-full">
 					<UFormField :label="t('attendance.sessionDate')" size="xs">
 						<div class="flex items-end gap-1">
 							<USelect
