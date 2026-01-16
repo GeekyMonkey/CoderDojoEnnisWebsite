@@ -9,7 +9,6 @@
 		AttendanceTotal,
 		isLoading,
 		isError,
-		refetchCurrent,
 	} = useMemberAttendanceStore();
 
 	// Computed proxies for template consumption

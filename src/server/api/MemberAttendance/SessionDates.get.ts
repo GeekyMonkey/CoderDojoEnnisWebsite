@@ -1,24 +1,21 @@
 import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
 import {
-	type MemberAttendanceSessionStatsCollection,
 	MemberAttendanceSessionStatsCollectionSchema,
 } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
-type ResponseBody = ApiResponse<MemberAttendanceSessionStatsCollection>;
+type ResponseBody = ApiResponse<{ dates: string[] }>;
 
 /**
- * GET: api/memberAttendance/Sessions
- * Get attendance session statistics
+ * GET: api/memberAttendance/SessionDates
+ * Get attendance session date list
  */
 export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	const logs: string[] = [];
 	let resp: ResponseBody = {
-		data: MemberAttendanceSessionStatsCollectionSchema.parse({
-			attendance_total: 0,
-			sessionCount: 0,
-			sessionStats: [],
-		}),
+		data: {
+			dates: [],
+		},
 		success: true,
 		logs,
 	};
@@ -32,11 +29,12 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 			(total, stat) => total + (stat.total_count || 0),
 			0,
 		);
-		resp.data = MemberAttendanceSessionStatsCollectionSchema.parse({
+		const dates: string[] = MemberAttendanceSessionStatsCollectionSchema.parse({
 			attendance_total,
 			sessionCount,
 			sessionStats,
-		});
+		}).sessionStats.map((s) => s.date).sort((a, b) => b.localeCompare(a));
+		resp.data = { dates };
 	} catch (error) {
 		resp = {
 			success: false,

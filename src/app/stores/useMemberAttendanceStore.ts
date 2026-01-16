@@ -3,26 +3,24 @@ import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceMo
 import type { MemberAttendanceSessionDateModel } from "~~/shared/types/models/MemberAttendanceSessionDateModel";
 import type { MemberAttendanceSessionStatsCollection } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
 import { IsYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
-import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtimeAllTables";
 
 // Using shared model: MemberAttendanceSessionStatsCollection
 
 // Using shared model: MemberAttendanceSessionDateModel
 
 interface UseMemberAttendanceStoreResult {
-	SessionStats: Ref<MemberAttendanceSessionStatsCollection["sessionStats"]>;
+	SessionStats: Ref<MemberAttendanceSessionStatsCollection>;
+	SessionDates: Ref<string[]>;
 	SessionYears: Ref<string[]>;
-	SessionCount: Ref<number>;
-	AttendanceTotal: Ref<number>;
 	CurrentSessionMemberIds: Ref<string[]>;
 	CurrentSessionDate: Ref<string>;
 	useSessionAttendanceForDate: (
 		sessionDate: MaybeRef<string>,
 	) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel>>;
-	useSessionAttendanceForDateRange: (args: {
-		dateMin: MaybeRef<string>;
-		dateMax: MaybeRef<string>;
-	}) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel[]>>;
+	// useSessionAttendanceForDateRange: (args: {
+	// 	dateMin: MaybeRef<string>;
+	// 	dateMax: MaybeRef<string>;
+	// }) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel[]>>;
 	isLoading: Ref<boolean>;
 	isError: Ref<boolean>;
 	error: Ref<unknown>;
@@ -47,32 +45,68 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 
 	const queryClient = useQueryClient();
 
-	const { data, isLoading, isError, error, refetch } =
-		useQuery<MemberAttendanceSessionStatsCollection>({
-			queryKey: ["memberAttendanceSessions"],
-			queryFn: async ({ signal }) => {
+	const isSessionStatsEnabled = ref(false);
+
+	/**
+	 * Session Stats collection query
+	 */
+	const {
+		data: SessionStats,
+		isLoading: isLoadingStats,
+		isError: isErrorStats,
+		error: errorStats,
+		refetch: refetchStats,
+	} = useQuery<MemberAttendanceSessionStatsCollection>({
+		queryKey: ["memberAttendanceSessionStats"],
+		enabled: isSessionStatsEnabled,
+		queryFn: async ({ signal }) => {
 				const response = await $fetch<
 					ApiResponse<MemberAttendanceSessionStatsCollection>
-				>("/api/MemberAttendance/Sessions", { signal });
+				>("/api/MemberAttendance/SessionStats", { signal });
 				if (!response.success)
 					throw new Error(
 						response.error || "Failed to load member attendance sessions",
 					);
 				return response.data;
 			},
+			placeholderData: () => ({
+				attendance_total: 0,
+				sessionCount: 0,
+				sessionStats: [],
+			}),
 			staleTime: 1000 * 60 * 5, // 5 minutes
 			refetchOnWindowFocus: false,
 		});
 
-	const SessionStats = computed(() => data.value?.sessionStats || []);
+	/**
+	 * Session Dates list query
+	 */
+	const { data: SessionDates } =
+		useQuery<string[]>({
+			queryKey: ["memberAttendanceSessionDates"],
+			queryFn: async ({ signal }) => {
+				const response = await $fetch<
+					ApiResponse<{ dates: string[] }>
+				>("/api/MemberAttendance/SessionDates", { signal });
+				if (!response.success)
+					throw new Error(
+						response.error || "Failed to load member attendance session dates",
+					);
+				return response.data.dates;
+			},
+			placeholderData: () => [],
+			staleTime: 1000 * 60 * 5, // 5 minutes
+			refetchOnWindowFocus: false,
+		});
 
-	// Calculate current session date exclusively from the sessions list (latest date first)
+	/**
+	 * Calculate current session date exclusively from the sessions list (latest date first)
+	 */
 	const CurrentSessionDate = computed(() => {
-		if (!SessionStats.value.length) return "";
-		const dates = SessionStats.value.map((s) => s.date).sort((a, b) =>
-			b.localeCompare(a),
-		);
-		return dates[0] || "";
+		if (!SessionDates.value?.length) {
+			return "";
+		}
+		return SessionDates.value[0] || "";
 	});
 
 	/**
@@ -120,13 +154,9 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 				{ evt },
 			);
 			// Invalidate relevant queries
-			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessions"] });
+			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
 			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDate"],
-				exact: false,
-			});
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDateRange"],
+				queryKey: ["memberAttendanceSessionDate", evt.newData.date],
 				exact: false,
 			});
 		},
@@ -139,14 +169,9 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 				{ evt },
 			);
 			// Invalidate relevant queries
-			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessions"] });
+			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
 			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDate"],
-				exact: false,
-			});
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDateRange"],
-				exact: false,
+				queryKey: ["memberAttendanceSessionDate", evt.oldData.date],
 			});
 		},
 	});
@@ -156,18 +181,12 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	 */
 	const SessionYears = computed(() => {
 		const years = new Set<string>();
-		for (const stat of SessionStats.value) {
-			const date = stat.date;
-			// Expecting YYYY-MM-DD; be defensive.
-			const year = typeof date === "string" ? date.slice(0, 4) : "";
-			if (year.length === 4) years.add(year);
+		for (const date of SessionDates.value || []) {
+			const year = date.slice(0, 4);
+			years.add(year);
 		}
 		return [...years].sort((a, b) => b.localeCompare(a));
 	});
-
-	const SessionCount = computed(() => data.value?.sessionCount || 0);
-
-	const AttendanceTotal = computed(() => data.value?.attendance_total || 0);
 
 	const CurrentSessionMemberIds = computed(
 		() => currentSessionData.value?.memberIds || [],
@@ -177,48 +196,48 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	 * On-demand query: get attendance for a date range (inclusive).
 	 * Cached per (dateMin,dateMax) pair via queryKey.
 	 */
-	const useSessionAttendanceForDateRange = ({
-		dateMin,
-		dateMax,
-	}: {
-		dateMin: MaybeRef<string>;
-		dateMax: MaybeRef<string>;
-	}) => {
-		const dateMinValue = computed(() => unref(dateMin) || "");
-		const dateMaxValue = computed(() => unref(dateMax) || "");
-		return useQuery<MemberAttendanceSessionDateModel[]>({
-			queryKey: computed(() => [
-				"memberAttendanceSessionDateRange",
-				dateMinValue.value,
-				dateMaxValue.value,
-			]),
-			enabled: computed(
-				() =>
-					IsYYYY_MM_dd(dateMinValue.value) &&
-					IsYYYY_MM_dd(dateMaxValue.value) &&
-					dateMinValue.value <= dateMaxValue.value,
-			),
-			queryFn: async ({ signal }) => {
-				const response = await $fetch<
-					ApiResponse<MemberAttendanceSessionDateModel[]>
-				>("/api/MemberAttendance/SessionDateRange", {
-					signal,
-					query: {
-						dateMin: dateMinValue.value,
-						dateMax: dateMaxValue.value,
-					},
-				});
-				if (!response.success) {
-					throw new Error(
-						response.error || "Failed to load session attendance range",
-					);
-				}
-				return response.data;
-			},
-			staleTime: 1000 * 60 * 5,
-			refetchOnWindowFocus: false,
-		});
-	};
+	// const useSessionAttendanceForDateRange = ({
+	// 	dateMin,
+	// 	dateMax,
+	// }: {
+	// 	dateMin: MaybeRef<string>;
+	// 	dateMax: MaybeRef<string>;
+	// }) => {
+	// 	const dateMinValue = computed(() => unref(dateMin) || "");
+	// 	const dateMaxValue = computed(() => unref(dateMax) || "");
+	// 	return useQuery<MemberAttendanceSessionDateModel[]>({
+	// 		queryKey: computed(() => [
+	// 			"memberAttendanceSessionDateRange",
+	// 			dateMinValue.value,
+	// 			dateMaxValue.value,
+	// 		]),
+	// 		enabled: computed(
+	// 			() =>
+	// 				IsYYYY_MM_dd(dateMinValue.value) &&
+	// 				IsYYYY_MM_dd(dateMaxValue.value) &&
+	// 				dateMinValue.value <= dateMaxValue.value,
+	// 		),
+	// 		queryFn: async ({ signal }) => {
+	// 			const response = await $fetch<
+	// 				ApiResponse<MemberAttendanceSessionDateModel[]>
+	// 			>("/api/MemberAttendance/SessionDateRange", {
+	// 				signal,
+	// 				query: {
+	// 					dateMin: dateMinValue.value,
+	// 					dateMax: dateMaxValue.value,
+	// 				},
+	// 			});
+	// 			if (!response.success) {
+	// 				throw new Error(
+	// 					response.error || "Failed to load session attendance range",
+	// 				);
+	// 			}
+	// 			return response.data;
+	// 		},
+	// 		staleTime: 1000 * 60 * 5,
+	// 		refetchOnWindowFocus: false,
+	// 	});
+	// };
 
 	/**
 	 * Set a member as present/absent for a specific session date.
@@ -254,19 +273,19 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 			didOptimisticUpdate = true;
 		}
 
-		let shouldInvalidateSessions = false;
-		if (previousDateData) {
-			const oldLen = previousDateData.memberIds.length;
-			const newLen = updateMemberIds(previousDateData.memberIds).length;
-			// Only invalidate sessions list if we transition between 0 and >0 attendance
-			// (i.e. creating or deleting a session entry effectively)
-			if ((oldLen === 0 && newLen > 0) || (oldLen > 0 && newLen === 0)) {
-				shouldInvalidateSessions = true;
-			}
-		} else {
-			// If we didn't have previous data, assume we might be creating a session entry
-			shouldInvalidateSessions = true;
-		}
+		// let shouldInvalidateSessions = false;
+		// if (previousDateData) {
+		// 	const oldLen = previousDateData.memberIds.length;
+		// 	const newLen = updateMemberIds(previousDateData.memberIds).length;
+		// 	// Only invalidate sessions list if we transition between 0 and >0 attendance
+		// 	// (i.e. creating or deleting a session entry effectively)
+		// 	if ((oldLen === 0 && newLen > 0) || (oldLen > 0 && newLen === 0)) {
+		// 		shouldInvalidateSessions = true;
+		// 	}
+		// } else {
+		// 	// If we didn't have previous data, assume we might be creating a session entry
+		// 	shouldInvalidateSessions = true;
+		// }
 
 		try {
 			const response = await $fetch<ApiResponse<unknown>>(
@@ -287,17 +306,17 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 			throw err;
 		} finally {
 			// Ensure background consistency
-			if (shouldInvalidateSessions) {
-				queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessions"] });
-			}
+			// if (shouldInvalidateSessions) {
+			// 	queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
+			// }
 
 			// If optimistic update wasn't possible (no cache), we MUST refetch to show the change.
 			// Even if it was possible, invalidating here ensures eventual consistency without
 			// destroying the optimistic update state (since we use invalidateQueries not removeQueries).
 			// However, to keep it snappy and avoid redundant network if not needed:
-			if (!didOptimisticUpdate) {
-				queryClient.invalidateQueries({ queryKey: queryKeyDate });
-			}
+			// if (!didOptimisticUpdate) {
+			// 	queryClient.invalidateQueries({ queryKey: queryKeyDate });
+			// }
 		}
 	};
 
@@ -315,32 +334,31 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 				body: { username, password },
 			},
 		);
-
-		if (response.success) {
-			if (CurrentSessionDate.value) {
-				queryClient.invalidateQueries({
-					queryKey: ["memberAttendanceSessionDate", CurrentSessionDate.value],
-				});
-			}
-		}
 		return response;
 	};
 
 	_store = {
-		SessionStats: SessionStats as Ref<
-			MemberAttendanceSessionStatsCollection["sessionStats"]
-		>,
-		SessionYears: SessionYears as Ref<string[]>,
-		SessionCount: SessionCount as Ref<number>,
-		AttendanceTotal: AttendanceTotal as Ref<number>,
-		CurrentSessionMemberIds: CurrentSessionMemberIds as Ref<string[]>,
-		CurrentSessionDate: CurrentSessionDate as Ref<string>,
+		SessionDates: SessionDates as Ref<string[]>,
+		get SessionStats() {
+			isSessionStatsEnabled.value = true;
+			return SessionStats as Ref<MemberAttendanceSessionStatsCollection>;
+		},
+		SessionYears: SessionYears,
+		CurrentSessionMemberIds: CurrentSessionMemberIds,
+		CurrentSessionDate: CurrentSessionDate,
 		useSessionAttendanceForDate,
-		useSessionAttendanceForDateRange,
-		isLoading: isLoading as Ref<boolean>,
-		isError: isError as Ref<boolean>,
-		error: error as Ref<unknown>,
-		refetch: () => refetch(),
+		// useSessionAttendanceForDateRange,
+		isLoading: computed(
+			() => isSessionStatsEnabled.value && isLoadingStats.value,
+		),
+		isError: computed(() => isSessionStatsEnabled.value && isErrorStats.value),
+		error: computed(() =>
+			isSessionStatsEnabled.value ? errorStats.value : null,
+		),
+		refetch: () => {
+			isSessionStatsEnabled.value = true;
+			refetchStats();
+		},
 		setMemberPresent,
 		signInMember,
 	};

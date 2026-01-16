@@ -25,7 +25,8 @@ export const SessionsData = {
 			const { data, error } = await supabase
 				.schema("coderdojo")
 				.from("sessions")
-				.select("*");
+				.select("*")
+				.order("session_date", { ascending: false });
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching sessions:", error);
 				return [];

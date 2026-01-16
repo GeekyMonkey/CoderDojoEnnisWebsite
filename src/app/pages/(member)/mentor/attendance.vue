@@ -35,12 +35,10 @@
 	});
 
 	const {
-		SessionStats,
+		SessionDates,
 		SessionYears,
 		CurrentSessionDate,
 		useSessionAttendanceForDate,
-		refetch,
-		refetchCurrent,
 		setMemberPresent: setMemberPresentStore,
 	} = useMemberAttendanceStore();
 	const {
@@ -167,14 +165,7 @@
 
 	const sessionDatesForSelectedYear = computed(() => {
 		const year = selectedSessionYear.value;
-		const stats = [...(SessionStats.value || [])].sort((a, b) =>
-			b.date.localeCompare(a.date),
-		);
-		const dates = stats.map((s) => s.date);
-		if (!year) {
-			return dates;
-		}
-		return dates.filter((d) => d.slice(0, 4) === year);
+		return (SessionDates.value || []).filter((d) => d.slice(0, 4) === year);
 	});
 
 	const sessionDateOptionsForSelectedYear = computed(() => {
@@ -417,16 +408,15 @@
 			.filter((m) => selectedPresentSet.value.has(m.id))
 			.map((m) => m.id);
 	});
-	const codersPresentCount = computed(() => codersPresentIds.value.length);
-	const mentorsPresentCount = computed(() => {
-		let count = 0;
-		for (const m of mentorsAllMembers.value) {
-			if (selectedPresentSet.value.has(m.id)) {
-				count++;
-			}
-		}
-		return count;
+
+	const mentorsPresentIds = computed(() => {
+		return mentorsAllMembers.value
+			.filter((m) => selectedPresentSet.value.has(m.id))
+			.map((m) => m.id);
 	});
+
+	const codersPresentCount = computed(() => codersPresentIds.value.length);
+	const mentorsPresentCount = computed(() => mentorsPresentIds.value.length);
 
 	const tabItems = computed(() => [
 		{ label: t("attendance.codersTitle"), slot: "coders", value: "coders" },
