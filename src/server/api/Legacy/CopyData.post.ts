@@ -4,7 +4,7 @@ import { defineEventHandler } from "#imports";
 import { BadgeCategoriesData } from "~~/server/db/BadgeCategoriesData";
 import { BadgesData } from "~~/server/db/BadgesData";
 import { BeltsData } from "~~/server/db/BeltsData";
-import { GetSupabaseAdminClient } from "~~/server/db/DatabaseClient";
+import { GetBucketBaseUrl, GetBucketFolder, GetSupabaseAdminClient } from "~~/server/db/DatabaseClient";
 import { MembersData } from "~~/server/db/MembersData";
 import { TeamsData } from "~~/server/db/TeamsData";
 import {
@@ -33,8 +33,9 @@ import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberB
 import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
 import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
 import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
-import { memberFromRecords } from "~~/shared/types/models/MemberModel";
+import { memberFromRecords, MemberModel } from "~~/shared/types/models/MemberModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { FormatBucketFileName } from "~~/shared/types/Supabase";
 
 // Global tolerance constants
 const TIME_TOLERANCE_MS = 6 * 60 * 60 * 1000; // 6 hours tolerance for loginDate comparisons
@@ -57,7 +58,8 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		success: false,
 	};
 
-	resp.logs.push(...(await CopyData(resp, event)));
+	resp.logs.push(...(await CopyData(event)));
+	resp.logs.push(...(await FindMemberImages(event)));
 
 	return {
 		...resp,
@@ -66,13 +68,73 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 });
 
 /**
- * Copy the SQL Server data to Supabase
+ * Find member images in storage and tag the members accordingly
  */
-async function CopyData(
-	// resp: ResponseBody,
+async function FindMemberImages(
 	event: H3Event<EventHandlerRequest>,
 ): Promise<string[]> {
 	const logs: string[] = [];
+
+	try {
+		const bucketUrl = await GetBucketBaseUrl({ event });
+		logs.push(`Bucket base URL: ${bucketUrl}`);
+
+		const { files: avatars, error: avatarsError } = await GetBucketFolder({ event, folderPath: "Members/Avatars" });
+		if (avatarsError) {
+			logs.push(`Error finding avatar files: ${avatarsError}`);
+			return logs;
+		}
+		logs.push(`Found ${avatars ? avatars.length : 0} avatar files in storage`);
+		// logs.push(`Avatars: ${JSON.stringify(avatars.map((f) => f.name))}...`);
+
+		const { files: photos, error: photosError } = await GetBucketFolder({ event, folderPath: "Members/Photos" });
+		if (photosError) {
+			logs.push(`Error finding photo files: ${photosError}`);
+			return logs;
+		}
+		logs.push(`Found ${photos ? photos.length : 0} photo files in storage`);
+
+		// Load the members
+		const members: MemberModel[] = await MembersData.GetMembers(event, true);
+		logs.push(`Loaded ${members.length} members from database`);
+		
+		// Check each member for avatar/photo presence
+		const changedMembers: MemberModel[] = [];
+		let membersWithPhotoCount = 0;
+		for (const member of members) {
+			const fileName: string = FormatBucketFileName("Member", member.id, "jpg");
+			const hasAvatar: boolean = avatars.find((f) => f.name === fileName) !== undefined;
+			const hasPhoto: boolean = photos.find((f) => f.name === fileName) !== undefined;
+			if (member.hasAvatar !== hasAvatar || member.hasPhoto !== hasPhoto) {
+				member.hasAvatar = hasAvatar;
+				member.hasPhoto = hasPhoto;
+				changedMembers.push(member);
+			}
+			if (member.hasPhoto || member.hasAvatar) {
+				membersWithPhotoCount++;
+			}
+		}
+		logs.push(`Members with changed image flags: ${changedMembers.length}`);
+		logs.push(`Members with photo: ${membersWithPhotoCount}`);
+		if (changedMembers.length > 0) {
+			await MembersData.SaveMembers(event, changedMembers);
+		}
+
+	} catch (error) {
+		logs.push(`Error processing member images: ${ErrorToString(error)}`);
+	}
+
+	return logs;
+}
+
+/**
+ * Copy the SQL Server data to Supabase
+ */
+async function CopyData(
+	event: H3Event<EventHandlerRequest>,
+): Promise<string[]> {
+	const logs: string[] = [];
+	
 	try {
 		// Get a DB connection
 		const db: SupabaseClient | null = await GetSupabaseAdminClient(event);
@@ -686,6 +748,7 @@ async function CopySessionsTable(
 				sessionDate,
 				topic: "",
 				mentorsOnly: false,
+				deleted: false,
 			});
 		}
 	}

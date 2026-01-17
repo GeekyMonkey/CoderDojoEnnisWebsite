@@ -10,6 +10,35 @@ const log = useLogger("DatabaseClient");
  */
 export type DatabaseMode = "anon" | "admin";
 
+/**
+ * Supabase storage blob file info
+ */
+export type BlobFileInfo = {
+	name: string, // "Member_00000000000000000000000000000000.jpg"
+	id: string, // "989b1e47-e1b6-462b-9521-f86887af3f79"
+	updated_at: string, // "2026-01-16T21:31:11.884Z"
+	created_at: string, // "2026-01-16T21:31:11.884Z"
+	last_accessed_at: string, // "2026-01-16T21:31:11.884Z"
+	metadata: {
+		eTag: string, // "\\\"854ffeb196e4024f13e89fbce9911ada-1\\\"
+		size: number, // 68288
+		mimetype: string, // "image/jpeg"
+		cacheControl: string, // "max-age=3600"
+		lastModified: string, // "2026-01-16T21:31:12.000Z"
+		contentLength: number, // 68288
+		httpStatusCode: number, // 200
+	}
+};
+
+/**
+ * Supabase storage blob folder info
+*/
+export type BlobFolderInfo = {
+	folderName: string;
+	files: BlobFileInfo[];
+	error?: string;
+}
+
 // Common exported Supabase client type used across server services
 export type SupabaseClientType = NonNullable<
 	Awaited<ReturnType<typeof GetSupabaseAdminClient>>
@@ -147,14 +176,14 @@ export const GetMimeTypeFromExtension = (ext: string): string => {
 /**
  * Format an image file name (relative to storage root)
  */
-export const FormatImageFileName = (
-	ownerType: string,
-	ownerId: string,
-	imageId: string,
-	ext: string,
-): string => {
-	return `${ownerType}/${ownerId}/${imageId}.${ext}`.replace(/-/g, "");
-};
+// export const FormatImageFileName = (
+// 	ownerType: string,
+// 	ownerId: string,
+// 	imageId: string,
+// 	ext: string,
+// ): string => {
+// 	return `${ownerType}/${ownerId}/${imageId}.${ext}`.replace(/-/g, "");
+// };
 
 /**
  * Save a file to supabase storage
@@ -282,6 +311,75 @@ export const DeleteFile = async ({
 
 	return true;
 };
+
+/**
+ * Get the base url for a storage bucket
+ */
+export const GetBucketBaseUrl = async ({
+	event,
+	bucketName,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	bucketName?: string;
+}): Promise<string | null> => {
+	// Use default client mode for public storage operations (RLS applies)
+	const supabase = await GetSupabaseClient(event);
+	if (!supabase) {
+		log.error("Supabase client is not initialized.");
+		return null;
+	}
+	try {
+		const { data } = await supabase.storage.from(bucketName || "coderdojo").getPublicUrl("");
+		if (!data) {
+			log.error("Error getting bucket URL:", undefined);
+			return null;
+		}
+		return data.publicUrl;
+	} catch (error) {
+		log.error("Error getting bucket URL:", undefined, error);
+		return null;
+	}
+};
+
+/**
+ * Get a reference to a folder in bucket storage
+ */
+export const GetBucketFolder = async({
+	event,
+	folderPath,
+}: {
+	event: H3Event<EventHandlerRequest>;
+	folderPath: string;
+}): Promise<BlobFolderInfo> => {
+	// Use default client mode for public storage operations (RLS applies)
+	const supabase = await GetSupabaseAdminClient(event);
+	if (!supabase) {
+		log.error("Supabase client is not initialized.");
+		return { folderName: folderPath, files: [], error: "Supabase client not initialized"};
+	}
+	const bucketName: string = "coderdojo";
+	try {
+		const { data, error } = await supabase.storage
+			.from(bucketName).list(folderPath, {
+				limit: 10_0000,
+				offset: 0,
+				sortBy: { column: "name", order: "asc" },
+			});
+
+		if (error) {
+			log.error("Error getting bucket folder:", undefined, error);
+			return { folderName: folderPath, files: [], error: error.message };
+		}
+
+		return {
+			folderName: folderPath,
+			files: data as unknown as BlobFileInfo[],
+		};
+	} catch (error) {
+		log.error("Error getting bucket folder:", undefined, error);
+		return { folderName: folderPath, files: [], error: ErrorToString(error) };
+	}
+}
 
 /**
  * Get a supabase storage image URL

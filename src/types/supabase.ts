@@ -341,6 +341,8 @@ export type Database = {
           github_login: string | null
           goal_long_term: string | null
           goal_short_term: string | null
+          has_avatar: boolean
+          has_photo: boolean
           id: string
           is_mentor: boolean
           is_ninja: boolean
@@ -366,6 +368,8 @@ export type Database = {
           github_login?: string | null
           goal_long_term?: string | null
           goal_short_term?: string | null
+          has_avatar?: boolean
+          has_photo?: boolean
           id?: string
           is_mentor?: boolean
           is_ninja?: boolean
@@ -391,6 +395,8 @@ export type Database = {
           github_login?: string | null
           goal_long_term?: string | null
           goal_short_term?: string | null
+          has_avatar?: boolean
+          has_photo?: boolean
           id?: string
           is_mentor?: boolean
           is_ninja?: boolean

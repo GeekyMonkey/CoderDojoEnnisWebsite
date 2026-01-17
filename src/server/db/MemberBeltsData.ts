@@ -33,12 +33,12 @@ export const MemberBeltsData = {
 				.from("member_belts")
 				.select("*");
 			if (error || !data || data.length === 0) {
-				console.error("Error fetching member belts:", error);
+				console.error("Error 1 fetching member belts:", error);
 				return [];
 			}
 			return memberBeltFromRecords(data as unknown as MemberBeltRecord[]);
 		} catch (error) {
-			throw new Error(`Error fetching member belts: ${ErrorToString(error)}`);
+			throw new Error(`Error 2 fetching member belts: ${ErrorToString(error)}`);
 		}
 	},
 
@@ -62,7 +62,7 @@ export const MemberBeltsData = {
 				.eq("member_id", memberId);
 			if (error || !data || (data as unknown as JoinedRow[]).length === 0) {
 				if (error) {
-					console.error("Error fetching member belts by member ID:", error);
+					console.error("Error 1 fetching member belts by member ID:", error);
 				}
 				return [];
 			}
@@ -75,7 +75,7 @@ export const MemberBeltsData = {
 				}));
 		} catch (error) {
 			throw new Error(
-				`Error fetching member belts by member ID: ${ErrorToString(error)}`,
+				`Error 2 fetching member belts by member ID: ${ErrorToString(error)}`,
 			);
 		}
 	},

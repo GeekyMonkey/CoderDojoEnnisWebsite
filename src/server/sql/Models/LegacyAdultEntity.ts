@@ -47,6 +47,8 @@ export const FromLegacyAdultEntity = (
 		githubLogin: legacy.GithubLogin,
 		goalLongTerm: null,
 		goalShortTerm: null,
+		hasAvatar: false,
+		hasPhoto: false,
 		isMentor: legacy.IsMentor,
 		isNinja: false,
 		isParent: legacy.IsParent,

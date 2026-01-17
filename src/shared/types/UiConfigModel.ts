@@ -5,4 +5,5 @@ import type { ThemesConfig } from "./ThemeModel";
  */
 export type UiConfigModel = {
 	themesConfig: ThemesConfig;
+	bucketBaseUrl: string;
 };

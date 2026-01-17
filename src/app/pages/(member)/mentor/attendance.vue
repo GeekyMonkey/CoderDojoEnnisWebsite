@@ -497,6 +497,7 @@
 		{ immediate: true },
 	);
 
+	const MemberAvatar = resolveComponent("MemberAvatar") as unknown as Component;
 	const UIcon = resolveComponent("UIcon") as unknown as Component;
 	const UButton = resolveComponent("UButton") as unknown as Component;
 	const UCheckbox = resolveComponent("UCheckbox") as unknown as Component;
@@ -603,13 +604,12 @@
 				accessorFn: (row: AttendanceRow) => row.name,
 				header: sortableHeader(t("attendance.columns.photo"), "photo"),
 				cell: (ctx: unknown) => {
-					const r = (ctx as CellCtxLike).row?.original;
-					if (!r) {
+					const m = (ctx as CellCtxLike).row?.original?.member;
+					if (!m) {
 						return "";
 					}
-					return h(UAvatar, {
-						text: r.avatarText,
-						size: "xs",
+					return h(MemberAvatar, {
+						member: m,
 					});
 				},
 			},
@@ -682,13 +682,12 @@
 				accessorFn: (row: AttendanceRow) => row.name,
 				header: sortableHeader(t("attendance.columns.photo"), "photo"),
 				cell: (ctx: unknown) => {
-					const r = (ctx as CellCtxLike).row?.original;
-					if (!r) {
+					const m = (ctx as CellCtxLike).row?.original?.member;
+					if (!m) {
 						return "";
 					}
-					return h(UAvatar, {
-						text: r.avatarText,
-						size: "xs",
+					return h(MemberAvatar, {
+						member: m,
 					});
 				},
 			},

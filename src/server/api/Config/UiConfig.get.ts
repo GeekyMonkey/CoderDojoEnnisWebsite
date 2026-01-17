@@ -1,4 +1,5 @@
 import { defineEventHandler, type H3Event } from "h3";
+import { GetBucketBaseUrl } from "~~/server/db/DatabaseClient";
 import { ThemesService } from "~~/server/services/ThemesService";
 import {
 	type ThemesConfig,
@@ -21,8 +22,11 @@ export default defineEventHandler(
 			errors.push(`[UiConfig] GET error: ${ErrorToString(error)}`);
 		}
 
+		const bucketBaseUrl: string = await GetBucketBaseUrl({ event }) || "ERROR_GETTING_BUCKET_URL";
+
 		const uiConfig: UiConfigModel = {
 			themesConfig: themesConfig ?? ThemesConfigDefault,
+			bucketBaseUrl
 		};
 
 		// Temporarily output debugging info

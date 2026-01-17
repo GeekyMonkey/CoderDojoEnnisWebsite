@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/vue-query";
+import { FormatBucketFileName, FormatBucketFileUrl } from "~~/shared/types/Supabase";
 
 // Theme switching is built on @nuxtjs/color-mode for `light`/`dark`/`system`,
 // with an additional `theme` attribute for opt-in alternate themes (e.g. `crt`).
@@ -19,7 +20,7 @@ export function useUiConfig() {
 	/**
 	 * UI Config Query
 	 */
-	const { data, isLoading, isError, error } = useQuery({
+	const { data: uiConfig, isLoading, isError, error } = useQuery({
 		queryKey: ["UiConfig"],
 		queryFn: async ({ signal }) => {
 			log.info("Loading UiConfig");
@@ -61,7 +62,7 @@ export function useUiConfig() {
 	/**
 	 * Watch for changes to the UI Config (initial load)
 	 */
-	watch(data, (configData) => {
+	watch(uiConfig, (configData) => {
 		if (configData) {
 			InitColorMode(configData);
 		}
@@ -140,7 +141,7 @@ export function useUiConfig() {
 	 * Set the theme
 	 */
 	const SetTheme = (themeName: string) => {
-		const themes = data.value?.themesConfig.themes ?? [];
+		const themes = uiConfig.value?.themesConfig.themes ?? [];
 		const selected = themes.find((t) => t.id === themeName);
 		if (!selected) {
 			return;
@@ -186,20 +187,61 @@ export function useUiConfig() {
 	 * Get the current theme
 	 */
 	const CurrentTheme = computed<ThemeModel | null>(() => {
-		const themes = data.value?.themesConfig.themes ?? [];
+		const themes = uiConfig.value?.themesConfig.themes ?? [];
 		const themeId = CustomThemeId.value ?? ColorModeService?.value ?? "";
 		return themes.find((t) => t.id === themeId) ?? null;
 	});
 
+	/**
+	 * Format a full bucket image URL
+	 */
+	const BucketImageUrl = (folder: string, prefix: string, id: string): string => {
+		const bucketBaseUrl: string = uiConfig.value?.bucketBaseUrl ?? "";
+		return FormatBucketFileUrl(bucketBaseUrl, folder, FormatBucketFileName(prefix, id, "jpg"));
+	};
+
+	/**
+	 * Get the badge category logo URL
+	 */
+	const BadgeCategoryLogoUrl = (categoryId: string): string => {
+		return BucketImageUrl("Badges/Categories", "BadgeCategory", categoryId);
+	}
+
+	/**
+	 * Get the member avatar URL
+	 */
+	const MemberAvatarUrl = (memberId: string): string => {
+		return BucketImageUrl("Members/Avatars", "Member", memberId);
+	};	
+
+	/**
+	 * Get the member photo URL
+	 */
+	const MemberPhotoUrl = (memberId: string): string => {
+		return BucketImageUrl("Members/Photos", "Member", memberId);
+	}	
+
+	/**
+	 * Get the team logo URL
+	 */
+	const TeamLogoUrl = (teamId: string): string => {
+		return BucketImageUrl("Teams/Logos", "Team", teamId);
+	};	
+
 	return {
+		BadgeCategoryLogoUrl,
+		BucketImageUrl,
 		CurrentTheme,
 		isLoading,
 		isError,
 		error,
+		MemberAvatarUrl,
+		MemberPhotoUrl,
+		TeamLogoUrl,
 		SetTheme,
 		ThemesConfig: computed<ThemesConfig | null>(() => {
-			return data.value?.themesConfig ?? null;
+			return uiConfig.value?.themesConfig ?? null;
 		}),
-		UiConfig: data,
+		UiConfig: uiConfig,
 	};
 }

@@ -46,6 +46,8 @@ export const FromLegacyMemberEntity = (
 		githubLogin: legacy.GithubLogin,
 		goalLongTerm: legacy.GoalLongTerm,
 		goalShortTerm: legacy.GoalShortTerm,
+		hasAvatar: false,
+		hasPhoto: false,
 		isMentor: false,
 		isNinja: true,
 		isParent: false,
