@@ -30,7 +30,7 @@ export type AttendanceNotificationArray = z.infer<
 
 /**
  * Schema for Response from the sign-in API
- * Must contain at least the values expeced by the fingerprint scanner
+ * Must contain at least the values expected by the fingerprint scanner
  */
 export const AttendanceSignInResponseModelSchema = z.object({
 	// Required for fingerprint scanner integration
@@ -50,9 +50,14 @@ export const AttendanceSignInResponseModelSchema = z.object({
  * Response from the sign-in API
  * Failure is indicated by HTTP status code 400, not this type
  */
-export type AttendanceSignInResponseModel = z.infer<
+type tempt = z.infer<
 	typeof AttendanceSignInResponseModelSchema
-	>;
+>;
+export type AttendanceSignInResponseModel = Omit<tempt, "memberDetails" | "notifications" | "previousSignInDate"> & {
+	memberDetails: MemberModel;
+	notifications: AttendanceNotificationArray;
+	previousSignInDate?: DateString
+};
 
 /**
  * Error response from the sign-in API

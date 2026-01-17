@@ -43,4 +43,10 @@
 	.BulletList {
 		list-style-type: disc;;
 	}
+
+	.Checkbox_Root {
+		button {
+			cursor: pointer;
+		}
+	}
 }

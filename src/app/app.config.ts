@@ -1,5 +1,10 @@
 export default defineAppConfig({
 	ui: {
+		checkbox: {
+			slots: {
+				root: "Checkbox_Root",
+			},
+		},
 		icons: {
 			collections: "all",
 		},
@@ -36,5 +41,19 @@ export default defineAppConfig({
 				},
 			},
 		},
+		select: {
+			slots: {
+				content: "max-h-60 min-w-(--reka-select-trigger-width) w-fit bg-default shadow-lg rounded-md ring ring-default overflow-hidden data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in] origin-(--reka-select-content-transform-origin) pointer-events-auto flex flex-col",
+				trailing: "ms-auto flex items-center !pe-0",
+				item: "group relative w-full flex items-start select-none outline-none before:absolute before:z-[-1] before:inset-px before:rounded-md data-disabled:cursor-not-allowed data-disabled:opacity-75 text-default data-highlighted:not-data-disabled:text-highlighted data-highlighted:not-data-disabled:before:bg-[var(--ui-text-highlighted)] data-highlighted:not-data-disabled:text-[var(--ui-text-inverted)] data-[state=checked]:before:bg-[var(--ui-text-highlighted)] data-[state=checked]:text-[var(--ui-text-inverted)] transition-colors before:transition-colors",
+				itemTrailing: "hidden",
+				itemLabel: "truncate pr-[5px]",
+			},
+		},
+		table: {
+			slots: {
+				td: "py-2 first:px-0 last:px-0 px-3",
+			},
+		}
 	},
 });

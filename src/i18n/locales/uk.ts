@@ -3,8 +3,38 @@ import { type enMessagesType } from "./en";
 /**
  * Ukrainian translations
  * Requires all keys from enMessagesType
+ * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	attendance: {
+		sessionDate: "Дата сесії",
+		include: {
+			label: "Включити",
+			presentMembers: "Присутні",
+			registeredMembers: "Зареєстровані",
+			allMembers: "Усі",
+		},
+		search: {
+			label: "Пошук",
+			placeholder: "",
+		},
+		columns: {
+			present: "Присутній",
+			coder: "Кодер",
+			mentor: "Ментор",
+			name: "Ім’я",
+			photo: "Фото",
+			team: "Команда",
+			beltColor: "Пояс",
+		},
+		footer: {
+			chooseRandomCoder: "Вибрати випадкового кодера",
+		},
+		loadingRoster: "Завантаження списку…",
+		errorLoadingRoster: "Помилка завантаження списку.",
+		codersTitle: "Кодери",
+		mentorsTitle: "Ментори",
+	},
 	language: {
 		current: "Поточна мова: {Language}",
 		description: "Виберіть бажану мову",
@@ -16,14 +46,26 @@ export default {
 		title: "Вхід для учасників CoderDojo Ennis",
 		username: "Ім'я користувача",
 	},
+	memberBelt: {
+		parent: "Батьки",
+		mentor: "Ментор",
+		noob: "Новачок",
+		color: {
+			white: "Білий",
+			yellow: "Жовтий",
+			green: "Зелений",
+			blue: "Синій",
+			red: "Червоний",
+			black: "Чорний",
+		},
+		label: "{Color}",
+	},
 	nav: {
 		"Attendance": "Відвідуваність",
 		"Badge Categories": "Категорії бейджів",
 		"Badges Available": "Доступні бейджі",
 		"Badges": "Бейджі",
 		"Belts": "Пояси",
-		"Child 1": "Дитина 1",
-		"Child 2": "Дитина 2",
 		"Coder Home": "Головна (Кодер)",
 		"Goals": "Цілі",
 		"Maintenance": "Обслуговування",
@@ -44,6 +86,7 @@ export default {
 		"Teams": "Команди",
 	},
 	signIn: {
+		sessionCount: "1 сесія | {count} сесій",
 		signInButton: "Увійти",
 		title: "Реєстрація на сесію CoderDojo Ennis",
 	},
@@ -57,35 +100,6 @@ export default {
 		logOut: "Вийти",
 		profile: "Профіль",
 		theme: "Тема",
-	},
-	attendance: {
-		sessionDate: "Дата сесії",
-		include: {
-			label: "Включити",
-			presentMembers: "Присутні учасники",
-			registeredMembers: "Зареєстровані учасники",
-			allMembers: "Усі учасники",
-		},
-		search: {
-			label: "Пошук",
-			placeholder: "Пошук учасників…",
-		},
-		columns: {
-			present: "Присутній",
-			coder: "Кодер",
-			mentor: "Ментор",
-			name: "Ім’я",
-			photo: "Фото",
-			team: "Команда",
-			beltColor: "Пояс",
-		},
-		footer: {
-			chooseRandomCoder: "Вибрати випадкового кодера",
-		},
-		loadingRoster: "Завантаження списку…",
-		errorLoadingRoster: "Помилка завантаження списку.",
-		codersTitle: "Кодери",
-		mentorsTitle: "Ментори",
 	},
 	validation: {
 		minLength: "Має містити щонайменше {min} символи",

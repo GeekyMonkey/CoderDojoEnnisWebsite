@@ -5,6 +5,35 @@ import type { BroadenLiterals } from "~~/shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	attendance: {
+		sessionDate: "Session Date",
+		include: {
+			label: "Include",
+			presentMembers: "Present",
+			registeredMembers: "Registered",
+			allMembers: "All",
+		},
+		search: {
+			label: "Search",
+			placeholder: "",
+		},
+		columns: {
+			present: "Present",
+			coder: "Coder",
+			mentor: "Mentor",
+			name: "Name",
+			photo: "Photo",
+			team: "Team",
+			beltColor: "Belt",
+		},
+		footer: {
+			chooseRandomCoder: "Choose Random Coder",
+		},
+		loadingRoster: "Loading roster…",
+		errorLoadingRoster: "Error loading roster.",
+		codersTitle: "Coders",
+		mentorsTitle: "Mentors",
+	},
 	language: {
 		current: "Current language: {Language}",
 		description: "Select your preferred language",
@@ -16,14 +45,26 @@ export default {
 		title: "CoderDojo Ennis Member Login",
 		username: "Username",
 	},
+	memberBelt: {
+		parent: "Parent",
+		mentor: "Mentor",
+		noob: "Noob",
+		color: {
+			white: "White",
+			yellow: "Yellow",
+			green: "Green",
+			blue: "Blue",
+			red: "Red",
+			black: "Black",
+		},
+		label: "{Color}",
+	},
 	nav: {
 		"Attendance": "Attendance",
 		"Badge Categories": "Badge Categories",
 		"Badges": "Badges",
 		"Badges Available": "Badges Available",
 		"Belts": "Belts",
-		"Child 1": "Child 1",
-		"Child 2": "Child 2",
 		"Coder Home": "Coder Home",
 		"Goals": "Goals",
 		"Maintenance": "Maintenance",
@@ -44,6 +85,7 @@ export default {
 		"Teams": "Teams",
 	},
 	signIn: {
+		sessionCount: "1 session | {count} sessions",
 		signInButton: "Sign In",
 		title: "CoderDojo Ennis Session Sign In",
 	},
@@ -57,35 +99,6 @@ export default {
 		logOut: "Log out",
 		profile: "Profile",
 		theme: "Theme",
-	},
-	attendance: {
-		sessionDate: "Session Date",
-		include: {
-			label: "Include",
-			presentMembers: "Present Members",
-			registeredMembers: "Registered Members",
-			allMembers: "All Members",
-		},
-		search: {
-			label: "Search",
-			placeholder: "Search members…",
-		},
-		columns: {
-			present: "Present",
-			coder: "Coder",
-			mentor: "Mentor",
-			name: "Name",
-			photo: "Photo",
-			team: "Team",
-			beltColor: "Belt",
-		},
-		footer: {
-			chooseRandomCoder: "Choose Random Coder",
-		},
-		loadingRoster: "Loading roster…",
-		errorLoadingRoster: "Error loading roster.",
-		codersTitle: "Coders",
-		mentorsTitle: "Mentors",
 	},
 	validation: {
 		minLength: "Must be at least {min} characters",

@@ -204,7 +204,7 @@ export function useUiConfig() {
 	 * Get the badge category logo URL
 	 */
 	const BadgeCategoryLogoUrl = (categoryId: string): string => {
-		return BucketImageUrl("Badges/Categories", "BadgeCategory", categoryId);
+		return BucketImageUrl("BadgeCategories", "BadgeCategory", categoryId);
 	}
 
 	/**
@@ -225,7 +225,7 @@ export function useUiConfig() {
 	 * Get the team logo URL
 	 */
 	const TeamLogoUrl = (teamId: string): string => {
-		return BucketImageUrl("Teams/Logos", "Team", teamId);
+		return BucketImageUrl("Teams", "Team", teamId);
 	};	
 
 	return {

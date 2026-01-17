@@ -114,7 +114,7 @@ export class AttendanceService {
 					sessionCount,
 				));
 		}
-		return { message, notifications, logs };
+		return { message, notifications: notifications.filter(n => !!n.message), logs };
 	}
 
 	/**
@@ -217,17 +217,11 @@ export class AttendanceService {
 		const notifications: AttendanceNotificationArray = [];
 
 		if (sessionCount <= 1) {
-			message = "Thanks for joining us today.";
+			message = "Thanks for joining!";
 		} else if (sessionCount < 5) {
-			message = `We're glad you decided to come back.`;
-		} else if (sessionCount === 10) {
-			message = "10 sessions – thanks for your continued support.";
-		} else if (sessionCount === 25) {
-			message = "25 sessions – your commitment helps the dojo thrive.";
-		} else if (sessionCount === 50) {
-			message = "50 sessions – that's some real commitment.";
+			message = `We're glad you decided to come back for session ${sessionCount}.`;
 		} else {
-			message = `Good to have you here.`;
+			message = `This is your ${sessionCount}th session.`;
 		}
 
 		notifications.push({ type: "GREETING", message });

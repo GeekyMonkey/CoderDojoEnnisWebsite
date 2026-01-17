@@ -16,9 +16,14 @@
 	const errorMessage = ref<string | null>(null);
 	const isSubmitting = ref(false);
 	const signInForm = ref<unknown>(null);
-	const usernameInput = ref<unknown>(null);
 	const signInResponse = shallowRef<AttendanceSignInResponseModel | null>(null);
 	const showSignInNotifications = ref(false);
+
+	const sessionCountMessage = computed(() => {
+		if (!signInResponse.value) return "";
+		const count: number = signInResponse.value.memberSessionCount;
+		return t("signIn.sessionCount", count, { count });
+	});
 
 	useRevalidateFormOnLocaleChange(() => signInForm.value);
 
@@ -118,6 +123,11 @@
 		}
 	};
 
+	const notifications = computed(() => {
+		return (signInResponse.value?.notifications || [])
+			.filter(n => n.type !== "GREETING");
+	});
+
 	const onSubmit = async (event: FormSubmitEvent<FormSchema>) => {
 		await handleSignIn(event.data.username, event.data.password);
 	};
@@ -137,6 +147,7 @@
 					<header class="SignInHeader">
 						<h1 class="SignInTitle">
 							<Translated t="signIn.title" />
+							<CoderDojoLogo size="md" />
 						</h1>
 					</header>
 
@@ -173,21 +184,31 @@
 				</UForm>
 			</UPageCard>
 
-			<UPageCard
-				v-if="showSignInNotifications && signInResponse"
-			>
+			<UPageCard :class="`WelcomeCard WelcomeVisible_${showSignInNotifications}`">
 				<UAlert
+					v-if="signInResponse"
 					class="WelcomePanel"
 					color="success"
-					icon="i-lucide-smile"
 				>
 
 					<template #description>
 						<div class="WelcomeStats">
 							<div class="WelcomeLine">
-								<strong>{{ signInResponse.memberName }}</strong>
-								- {{ signInResponse.memberSessionCount }} sessions
+								<MemberAvatar
+									:member="signInResponse.memberDetails"
+									size="lg"
+								/>
+								<div class="MemberName">
+									{{ signInResponse.memberName }}
+								</div>
+								{{ sessionCountMessage }}
 							</div>
+
+							<MemberBelt :member="signInResponse.memberDetails" />
+
+							<TeamCard :for="signInResponse.memberDetails"
+								size="md"
+							/>
 
 							<div
 								v-if="signInResponse.notifications?.length"
@@ -195,7 +216,7 @@
 							>
 								<ul class="BulletList">
 									<li
-										v-for="(n, idx) in signInResponse.notifications"
+										v-for="(n, idx) in notifications"
 										:key="idx"
 									>
 										{{ n.message }}
@@ -210,23 +231,25 @@
 	</div>
 </template>
 
-<style scoped lang="css">
+<style lang="css">
 	.SignInPage {
 		width: 100%;
-	}
+	  
 
 	.SignInPageGrid {
 		display: flex;
-		gap: calc(var(--spacing) * 6);
+		gap: 2rem;
 		align-items: flex-start;
 		justify-content: center;
 		flex-wrap: wrap;
 		width: 100%;
+		gap: 2rem;
+		justify-content: center;
 	}
 
 	.SignInCard {
 		width: 100%;
-		max-width: 28rem;
+		max-width: 500px;
 	}
 
 	.SignInForm {
@@ -240,14 +263,40 @@
 	}
 
 	.SignInTitle {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--spacing) * 2);
 		font-size: 1.5rem;
 		line-height: 1.9rem;
 		font-weight: 700;
 	}
 
-	.WelcomePanel {
-		margin-top: calc(var(--spacing) * 4);
+	.WelcomeCard {
+		box-shadow: none;
+		border: none;
+		width: 100%;
+		max-width: 250px;
+		opacity: 1;
+		transition: all 0.3s ease-in-out;
+
+		> [data-slot="container"] {
+			padding: 0;
+		}
+		
+		.WelcomePanel {
+			margin-top: 0;
+			transition: all 0.3s ease-in-out;
+		}
+
+		&.WelcomeVisible_false {
+			opacity: 0;
+
+			.WelcomePanel {
+				scale: 0.5;
+			}
+		}
 	}
+
 
 	.WelcomeStats {
 		display: grid;
@@ -256,6 +305,15 @@
 
 	.WelcomeLine {
 		font-weight: 600;
+
+		.MemberAvatar {
+			display: block;
+			margin: 0 auto;
+		}
+
+		.MemberName {
+			font-size: 1.2rem;
+		}
 	}
 
 	.NotificationsList {
@@ -266,4 +324,5 @@
 		margin: 0;
 		padding-left: 1.1rem;
 	}
+}
 </style>

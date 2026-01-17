@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { h, resolveComponent, type Component } from "vue";
+	import type { ColumnDef } from '@tanstack/vue-table';
 	import type { MemberModel } from "~~/shared/types/models/MemberModel";
 	import { useBeltsStore } from "~/stores/useBeltsStore";
 	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
@@ -8,12 +9,6 @@
 	import { useTeamsStore } from "~/stores/useTeamsStore";
 
 	type TableSortingState = { id: string; desc: boolean }[];
-	type ColumnLike = {
-		// present for Nuxt UI / TanStack Table header context, but we don't rely on it for UI state
-		// because we inject a hidden secondary sort.
-	};
-	type HeaderCtxLike = { column?: ColumnLike };
-	type CellCtxLike = { row?: { original?: AttendanceRow } };
 
 	definePageMeta({
 		layout: "member-layout",
@@ -48,7 +43,7 @@
 	} = useMembersStore();
 	const { TeamsById } = useTeamsStore();
 	const { BeltsById } = useBeltsStore();
-	const { MemberBelts } = useMemberBeltsStore();
+	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
 
 	const initialDate = (route.query.date as string) || "";
 	const initialYear = initialDate.length >= 4 ? initialDate.slice(0, 4) : "";
@@ -282,30 +277,14 @@
 		return (member.login ?? member.id).slice(0, 2).toUpperCase();
 	};
 
-	const latestAwardedBeltIdByMemberId = computed<Record<string, string>>(() => {
-		const map: Record<string, { beltId: string; ts: number }> = {};
-		for (const mb of MemberBelts.value || []) {
-			const ts = mb.awarded ?? mb.applicationDate ?? null;
-			if (ts === null) {
-				continue;
-			}
-			const prev = map[mb.memberId];
-			if (!prev || ts > prev.ts) {
-				map[mb.memberId] = { beltId: mb.beltId, ts };
-			}
-		}
-		const out: Record<string, string> = {};
-		for (const memberId of Object.keys(map)) {
-			out[memberId] = map[memberId]?.beltId || "";
-		}
-		return out;
-	});
-
+	/**
+	 * Belt info for member
+	 */
 	const beltInfoForMember = (memberId: string): {
 		color: string | null;
 		sortOrder: number;
 	} => {
-		const beltId = latestAwardedBeltIdByMemberId.value[memberId] || "";
+		const beltId = MembersLatestBeltsByMemberId.value[memberId]?.beltId || "";
 		if (!beltId) {
 			return { color: null, sortOrder: -1 };
 		}
@@ -497,13 +476,11 @@
 		{ immediate: true },
 	);
 
-	const MemberAvatar = resolveComponent("MemberAvatar") as unknown as Component;
 	const UIcon = resolveComponent("UIcon") as unknown as Component;
-	const UButton = resolveComponent("UButton") as unknown as Component;
-	const UCheckbox = resolveComponent("UCheckbox") as unknown as Component;
-	const UAvatar = resolveComponent("UAvatar") as unknown as Component;
-	const UBadge = resolveComponent("UBadge") as unknown as Component;
 
+	/**
+	 * Creates a sortable table header renderer.
+	 */
 	const makeSortableHeader = (
 		getSort: () => SingleSortState,
 		setSort: (next: SingleSortState) => void,
@@ -561,7 +538,10 @@
 		};
 	};
 
-	const codersColumns = computed(() => {
+	/**
+	 * Coders Table Columns
+	 */
+	const codersColumns = computed<ColumnDef<AttendanceRow>[]>(() => {
 		const sortableHeader = makeSortableHeader(
 			() => codersSorting.value,
 			(next) => {
@@ -574,7 +554,7 @@
 				id: "present",
 				key: "present",
 				accessorKey: "present",
-				header: sortableHeader(t("attendance.columns.present"), "present", {
+				header: sortableHeader("" /*t("attendance.columns.present")*/, "present", {
 					canSort: includeMode.value !== "present",
 					showIcons: includeMode.value !== "present",
 				}),
@@ -601,7 +581,10 @@
 		];
 	});
 
-	const mentorsColumns = computed(() => {
+	/**
+	 * Mentors Table Columns
+	 */
+	const mentorsColumns = computed<ColumnDef<AttendanceRow>[]>(() => {
 		const sortableHeader = makeSortableHeader(
 			() => mentorsSorting.value,
 			(next) => {
@@ -628,24 +611,24 @@
 		];
 	});
 
-	const codersTableProps = computed<Record<string, unknown>>(() => ({
+	const codersTableProps = computed(() => ({
 		columns: codersColumns.value,
 		data: codersRows.value,
 		sticky: false,
 		sorting: toTableSorting(codersSorting.value),
-		"onUpdate:sorting": (v: TableSortingState) => {
-			codersSorting.value = fromTableSorting(v);
+		"onUpdate:sorting": (v: TableSortingState | undefined) => {
+			codersSorting.value = fromTableSorting(v || []);
 		},
 		loading: selectedAttendanceQuery.isLoading.value,
 	}));
 
-	const mentorsTableProps = computed<Record<string, unknown>>(() => ({
+	const mentorsTableProps = computed(() => ({
 		columns: mentorsColumns.value,
 		data: mentorsRows.value,
 		sticky: false,
 		sorting: toTableSorting(mentorsSorting.value),
-		"onUpdate:sorting": (v: TableSortingState) => {
-			mentorsSorting.value = fromTableSorting(v);
+		"onUpdate:sorting": (v: TableSortingState | undefined) => {
+			mentorsSorting.value = fromTableSorting(v || []);
 		},
 		loading: selectedAttendanceQuery.isLoading.value,
 	}));
@@ -674,7 +657,6 @@
 								value-key="value"
 								label-key="label"
 								size="xs"
-								class="w-24"
 								portal
 							/>
 							<USelect
@@ -683,7 +665,6 @@
 								value-key="value"
 								label-key="label"
 								size="xs"
-								class="w-24"
 								portal
 							/>
 						</div>
@@ -718,51 +699,66 @@
 			</UDashboardToolbar>
 		</template>
 
+		<!-- Tabs and Tables -->
 		<template #body>
-				<UTabs v-model="selectedTab" :items="tabItems">
-					<template #coders>
-						<UTable v-bind="codersTableProps">
-							<template #present-cell="{ row }">
+			<UTabs v-model="selectedTab" :items="tabItems">
+				<template #coders>
+
+					<!-- Coders Table -->
+					<UTable v-bind="codersTableProps" class="CodersTable">
+						<template #present-cell="{ row }">
+							<div>
 								<UCheckbox
+									class="PresentCheckbox"
 									:model-value="row.original.present"
 									:disabled="!!isSavingByMemberId[row.original.memberId]"
 									@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
 								/>
-							</template>
-							<template #name-cell="{ row }">
-								<div class="flex items-center gap-3">
-									<MemberAvatar
-										v-if="row.original.member"
-										:member="row.original.member"
-										size="xs"
-									/>
-									<span>{{ row.original.name }}</span>
-								</div>
-							</template>
-							<template #team-cell="{ row }">
-								{{ row.original.team || "-" }}
-							</template>
-							<template #beltColor-cell="{ row }">
-								<UBadge
-									:label="row.original.beltColor || '-'"
-									color="neutral"
-									variant="soft"
+							</div>
+						</template>
+						<template #name-cell="{ row }">
+							<div class="flex items-center gap-3">
+								<MemberAvatar
+									v-if="row.original.member"
+									:member="row.original.member"
+									size="sm"
 								/>
-							</template>
-						</UTable>
+								<span>{{ row.original.name }}</span>
+							</div>
+						</template>
+						<template #team-cell="{ row }">
+							<div class="TeamCell">
+								<TeamLogo
+									:for="row.original.member"
+									size="sm"
+								/>
+								<div class="TeamName">
+									{{ row.original.team || "-" }}
+								</div>
+							</div>
+						</template>
+						<template #beltColor-cell="{ row }">
+							<MemberBelt :member="row.original.member" size="md" />
+						</template>
+					</UTable>
+
+					<!-- Footer: Choose Random Coder -->
 					<div
 						v-if="canChooseRandomCoder"
-						class="flex items-center justify-end pt-3 border-t border-default"
+						class="CoderTableFooter flex items-center justify-end pt-3 border-t border-default"
 					>
 						<UButton size="sm" @click="chooseRandomCoder">
 							{{ t("attendance.footer.chooseRandomCoder") }}
 						</UButton>
 					</div>
 				</template>
+
+				<!-- Mentors Table -->
 				<template #mentors>
-					<UTable v-bind="mentorsTableProps">
+					<UTable v-bind="mentorsTableProps" class="MentorsTable">
 						<template #present-cell="{ row }">
 							<UCheckbox
+								class="PresentCheckbox"
 								:model-value="row.original.present"
 								:disabled="!!isSavingByMemberId[row.original.memberId]"
 								@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
@@ -773,7 +769,7 @@
 								<MemberAvatar
 									v-if="row.original.member"
 									:member="row.original.member"
-									size="xs"
+									size="sm"
 								/>
 								<span>{{ row.original.name }}</span>
 							</div>
@@ -784,3 +780,31 @@
 		</template>
 	</UDashboardPanel>
 </template>
+
+<style lang="scss">
+	.TeamCell {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		.TeamName {
+			flex-grow: 1;
+		}
+	}
+
+	.CodersTable {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.MentorsTable {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.PresentCheckbox {
+		[role="checkbox"] {
+			// padding: 20px;
+		}
+	}
+</style>

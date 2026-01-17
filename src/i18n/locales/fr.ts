@@ -3,8 +3,39 @@ import { type enMessagesType } from "./en";
 /**
  * French translations
  * Requires all keys from enMessagesType
- */
+ * spell-checker:locale en,fr
+ * spell-checker:ignoreRegExp ".*"
+*/
 export default {
+	attendance: {
+		sessionDate: "Date de session",
+		include: {
+			label: "Inclure",
+			presentMembers: "Présents",
+			registeredMembers: "Inscrits",
+			allMembers: "Tous",
+		},
+		search: {
+			label: "Rechercher",
+			placeholder: "",
+		},
+		columns: {
+			present: "Présent",
+			coder: "Codeur",
+			mentor: "Mentor",
+			name: "Nom",
+			photo: "Photo",
+			team: "Équipe",
+			beltColor: "Ceinture",
+		},
+		footer: {
+			chooseRandomCoder: "Choisir un codeur au hasard",
+		},
+		loadingRoster: "Chargement de la liste…",
+		errorLoadingRoster: "Erreur de chargement de la liste.",
+		codersTitle: "Codeurs",
+		mentorsTitle: "Mentors",
+	},
 	language: {
 		current: "Langue actuelle : {Language}",
 		description: "Sélectionnez votre langue préférée",
@@ -13,8 +44,22 @@ export default {
 	login: {
 		loginButton: "Connexion",
 		password: "Mot de passe",
-		title: "CoderDojo Ennis Membre Connexion",
+		title: "Connexion membre CoderDojo Ennis",
 		username: "Nom d'utilisateur",
+	},
+	memberBelt: {
+		parent: "Parent",
+		mentor: "Mentor",
+		noob: "Novice",
+		color: {
+			white: "Blanc",
+			yellow: "Jaune",
+			green: "Vert",
+			blue: "Bleu",
+			red: "Rouge",
+			black: "Noir",
+		},
+		label: "{Color}",
 	},
 	nav: {
 		"Attendance": "Présence",
@@ -22,8 +67,6 @@ export default {
 		"Badges": "Badges",
 		"Badges Available": "Badges disponibles",
 		"Belts": "Ceintures",
-		"Child 1": "Enfant 1",
-		"Child 2": "Enfant 2",
 		"Coder Home": "Accueil codeur",
 		"Goals": "Objectifs",
 		"Maintenance": "Maintenance",
@@ -44,6 +87,7 @@ export default {
 		"Teams": "Équipes",
 	},
 	signIn: {
+		sessionCount: "1 session | {count} sessions",
 		signInButton: "Connexion",
 		title: "Connexion à la session CoderDojo Ennis",
 	},
@@ -57,35 +101,6 @@ export default {
 		logOut: "Se déconnecter",
 		profile: "Profil",
 		theme: "Thème",
-	},
-	attendance: {
-		sessionDate: "Date de session",
-		include: {
-			label: "Inclure",
-			presentMembers: "Membres présents",
-			registeredMembers: "Membres inscrits",
-			allMembers: "Tous les membres",
-		},
-		search: {
-			label: "Rechercher",
-			placeholder: "Rechercher des membres…",
-		},
-		columns: {
-			present: "Présent",
-			coder: "Codeur",
-			mentor: "Mentor",
-			name: "Nom",
-			photo: "Photo",
-			team: "Équipe",
-			beltColor: "Ceinture",
-		},
-		footer: {
-			chooseRandomCoder: "Choisir un codeur au hasard",
-		},
-		loadingRoster: "Chargement de la liste…",
-		errorLoadingRoster: "Erreur de chargement de la liste.",
-		codersTitle: "Codeurs",
-		mentorsTitle: "Mentors",
 	},
 	validation: {
 		minLength: "Doit contenir au moins {min} caractères",

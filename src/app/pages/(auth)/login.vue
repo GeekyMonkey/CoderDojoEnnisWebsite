@@ -119,6 +119,11 @@
 			:submit="{ label: t('login.loginButton') }"
 			@submit="onSubmit"
 		>
+			<template #header>
+				<CoderDojoLogo size="md" class="mx-auto mb-4" />
+				<h1>{{ t('login.title') }}</h1>
+			</template>
+
 			<template #validation>
 				<UAlert
 					v-if="errorMessage"

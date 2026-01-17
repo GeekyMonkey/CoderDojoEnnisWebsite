@@ -3,8 +3,38 @@ import { type enMessagesType } from "./en";
 /**
  * Irish translations
  * Requires all keys from enMessagesType
+ * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	attendance: {
+		sessionDate: "Dáta Seisiúin",
+		include: {
+			label: "Cuir san áireamh",
+			presentMembers: "Anseo",
+			registeredMembers: "Cláraithe",
+			allMembers: "Gach",
+		},
+		search: {
+			label: "Cuardaigh",
+			placeholder: "",
+		},
+		columns: {
+			present: "Anseo",
+			coder: "Códóir",
+			mentor: "Meantóir",
+			name: "Ainm",
+			photo: "Grianghraf",
+			team: "Foireann",
+			beltColor: "Crios",
+		},
+		footer: {
+			chooseRandomCoder: "Roghnaigh códóir go randamach",
+		},
+		loadingRoster: "Ag lódáil an liosta…",
+		errorLoadingRoster: "Earráid ag lódáil an liosta.",
+		codersTitle: "Códóirí",
+		mentorsTitle: "Meantóirí",
+	},
 	language: {
 		current: "Teanga reatha: {Language}",
 		description: "Roghnaigh do theanga is fearr leat",
@@ -16,14 +46,26 @@ export default {
 		title: "Logáil Isteach Comhaltaí CoderDojo Ennis",
 		username: "Ainm Úsáideora",
 	},
+	memberBelt: {
+		parent: "Tuismitheoir",
+		mentor: "Meantóir",
+		noob: "Tosaitheoir",
+		color: {
+			white: "Bán",
+			yellow: "Buí",
+			green: "Glas",
+			blue: "Gorm",
+			red: "Dearg",
+			black: "Dubh",
+		},
+		label: "{Color}",
+	},
 	nav: {
 		"Attendance": "Tinreamh",
 		"Badge Categories": "Catagóirí Suaitheantais",
 		"Badges": "Suaitheantais",
 		"Badges Available": "Suaitheantais ar Fáil",
 		"Belts": "Criosanna",
-		"Child 1": "Páiste 1",
-		"Child 2": "Páiste 2",
 		"Coder Home": "Baile an Chódóra",
 		"Goals": "Spriocanna",
 		"Maintenance": "Cothabháil",
@@ -44,6 +86,7 @@ export default {
 		"Teams": "Foirne",
 	},
 	signIn: {
+		sessionCount: "1 seisiún | {count} seisiúin",
 		signInButton: "Logáil Isteach",
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",
 	},
@@ -57,35 +100,6 @@ export default {
 		logOut: "Logáil amach",
 		profile: "Próifíl",
 		theme: "Téama",
-	},
-	attendance: {
-		sessionDate: "Dáta Seisiúin",
-		include: {
-			label: "Cuir san áireamh",
-			presentMembers: "Baill i láthair",
-			registeredMembers: "Baill cláraithe",
-			allMembers: "Gach ball",
-		},
-		search: {
-			label: "Cuardaigh",
-			placeholder: "Cuardaigh baill…",
-		},
-		columns: {
-			present: "Anseo",
-			coder: "Códóir",
-			mentor: "Meantóir",
-			name: "Ainm",
-			photo: "Grianghraf",
-			team: "Foireann",
-			beltColor: "Crios",
-		},
-		footer: {
-			chooseRandomCoder: "Roghnaigh códóir go randamach",
-		},
-		loadingRoster: "Ag lódáil an liosta…",
-		errorLoadingRoster: "Earráid ag lódáil an liosta.",
-		codersTitle: "Códóirí",
-		mentorsTitle: "Meantóirí",
 	},
 	validation: {
 		minLength: "Ní mór {min} carachtar ar a laghad",

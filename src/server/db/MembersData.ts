@@ -124,7 +124,7 @@ export const MembersData = {
 				.schema("coderdojo")
 				.from("members")
 				.select("*")
-				.or(`login.eq.${usernameLower},email.eq.${usernameLower}`)
+				.or(`login.ilike.${usernameLower},email.ilike.${usernameLower}`)
 				.eq("deleted", false);
 			if (byLoginEmail) {
 				candidates.push(...(byLoginEmail as MemberRecord[]));
@@ -315,14 +315,15 @@ export const MembersData = {
 
 		for (const m of legacyMembers) {
 			const shouldGenerate = m.isMentor && !m.deleted;
-			if (!shouldGenerate) {
-				skipped++;
-				continue;
-			}
+			// if (!shouldGenerate) {
+			// 	skipped++;
+			// 	continue;
+			// }
 			const firstInitial = (m.nameFirst || "").trim().substring(0, 1);
 			const last = (m.nameLast || "").trim();
 			const shortId = m.id ? m.id.substring(0, 8) : "";
-			const plain = (firstInitial + last + shortId).toLowerCase().trim();
+			let plain: string = (firstInitial + last + shortId).toLowerCase().trim();
+			plain = "1234"; // TEMPORARY OVERRIDE FOR TESTING PURPOSES
 			if (!plain) {
 				skipped++;
 				continue;

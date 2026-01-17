@@ -11,9 +11,29 @@ export function useMemberBeltsStore() {
 		getLabel: (item) => `${item.memberId}-${item.beltId}`,
 	});
 
+	/**
+	 * Map of memberId to their latest awarded MemberBeltModel
+	 */
+	const MembersLatestBeltsByMemberId = computed(() => {
+		const map: Record<string, MemberBeltModel> = {};
+		const items = store.Items.value;
+		if (!items) {
+			return map;
+		}
+		for (const memberBelt of items) {
+			if (!map[memberBelt.memberId] ||
+				(map[memberBelt.memberId]?.awarded ?? 0) < (memberBelt.awarded ?? 0)
+			) {
+				map[memberBelt.memberId] = memberBelt;
+			}	
+		}
+		return map;
+	});
+
 	return {
 		...store,
 		MemberBelts: store.Items,
+		MembersLatestBeltsByMemberId,
 	};
 }
 
