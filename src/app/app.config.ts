@@ -52,7 +52,7 @@ export default defineAppConfig({
 		},
 		table: {
 			slots: {
-				td: "py-2 first:px-0 last:px-0 px-3",
+				td: "TableCell py-2 first:px-0 last:px-0 px-3",
 			},
 		}
 	},

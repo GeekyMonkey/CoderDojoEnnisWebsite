@@ -115,7 +115,7 @@
 		}
 
 		&.Color_noob {
-			border: dashed 1px var(--ui-border);
+			border: dashed 2px var(--ui-border);
 			color: var(--ui-text);
 		}
 	}

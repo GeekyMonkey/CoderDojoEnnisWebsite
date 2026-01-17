@@ -701,7 +701,7 @@
 
 		<!-- Tabs and Tables -->
 		<template #body>
-			<UTabs v-model="selectedTab" :items="tabItems">
+			<UTabs v-model="selectedTab" :items="tabItems" class="AttendanceTabs">
 				<template #coders>
 
 					<!-- Coders Table -->
@@ -792,19 +792,20 @@
 		}
 	}
 
+	.AttendanceTabs {
+		max-width: 800px;
+	}
+
 	.CodersTable {
 		max-width: 800px;
-		margin: 0 auto;
 	}
 
 	.MentorsTable {
-		max-width: 800px;
-		margin: 0 auto;
+		max-width: 500px;
 	}
 
 	.PresentCheckbox {
 		[role="checkbox"] {
-			// padding: 20px;
 		}
 	}
 </style>

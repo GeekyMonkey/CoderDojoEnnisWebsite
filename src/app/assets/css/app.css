@@ -49,4 +49,12 @@
 			cursor: pointer;
 		}
 	}
+
+	.TableCell {
+		&:has([role="checkbox"]) {
+			padding-left: 0 !important;
+			padding-right: 0 !important;
+			width: 40px !important;
+		}
+	}
 }
