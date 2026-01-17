@@ -72,10 +72,12 @@ export default {
 		},
 		columns: {
 			present: "Присутній",
+			coder: "Кодер",
+			mentor: "Ментор",
 			name: "Ім’я",
 			photo: "Фото",
 			team: "Команда",
-			beltColor: "Колір пояса",
+			beltColor: "Пояс",
 		},
 		footer: {
 			chooseRandomCoder: "Вибрати випадкового кодера",

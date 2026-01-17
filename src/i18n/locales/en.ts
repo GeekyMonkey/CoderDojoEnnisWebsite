@@ -72,10 +72,12 @@ export default {
 		},
 		columns: {
 			present: "Present",
+			coder: "Coder",
+			mentor: "Mentor",
 			name: "Name",
 			photo: "Photo",
 			team: "Team",
-			beltColor: "Belt Color",
+			beltColor: "Belt",
 		},
 		footer: {
 			chooseRandomCoder: "Choose Random Coder",

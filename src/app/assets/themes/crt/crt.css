@@ -143,6 +143,12 @@
 			background-color: #00000055 !important;
 		}
 
+		[type="button"][role="tab"][aria-selected="false"] {
+			border-width: 1px;
+			border-color: var(--primary-foreground);
+			opacity: 0.5;
+		}
+
 		/* CoderDojo Logo Modification to CRT Green shades */
 		img.CoderDojoLogo {
 			filter:

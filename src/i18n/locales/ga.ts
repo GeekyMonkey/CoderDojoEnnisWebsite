@@ -71,11 +71,13 @@ export default {
 			placeholder: "Cuardaigh baill…",
 		},
 		columns: {
-			present: "I láthair",
+			present: "Anseo",
+			coder: "Códóir",
+			mentor: "Meantóir",
 			name: "Ainm",
 			photo: "Grianghraf",
 			team: "Foireann",
-			beltColor: "Dath crios",
+			beltColor: "Crios",
 		},
 		footer: {
 			chooseRandomCoder: "Roghnaigh códóir go randamach",

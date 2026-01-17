@@ -572,69 +572,31 @@
 		return [
 			{
 				id: "present",
+				key: "present",
 				accessorKey: "present",
 				header: sortableHeader(t("attendance.columns.present"), "present", {
 					canSort: includeMode.value !== "present",
 					showIcons: includeMode.value !== "present",
 				}),
-				cell: (ctx: unknown) => {
-					const r = (ctx as CellCtxLike).row?.original;
-					if (!r) {
-						return "";
-					}
-					const disabled = !!isSavingByMemberId.value[r.memberId];
-					return h(UCheckbox, {
-						modelValue: r.present,
-						disabled,
-						"onUpdate:modelValue": (value: boolean) => {
-							setMemberPresent(r.memberId, !!value);
-						},
-					});
-				},
 			},
 			{
 				id: "name",
+				key: "name",
 				accessorKey: "name",
-				header: sortableHeader(t("attendance.columns.name"), "name"),
-				cell: (ctx: unknown) => (ctx as CellCtxLike).row?.original?.name || "",
-			},
-			{
-				id: "photo",
-				// Make the column sortable (required by the UI spec) but sort by name.
-				accessorFn: (row: AttendanceRow) => row.name,
-				header: sortableHeader(t("attendance.columns.photo"), "photo"),
-				cell: (ctx: unknown) => {
-					const m = (ctx as CellCtxLike).row?.original?.member;
-					if (!m) {
-						return "";
-					}
-					return h(MemberAvatar, {
-						member: m,
-					});
-				},
+				header: sortableHeader(t("attendance.columns.coder"), "name"),
 			},
 			{
 				id: "team",
+				key: "team",
 				accessorKey: "team",
 				header: sortableHeader(t("attendance.columns.team"), "team"),
-				cell: (ctx: unknown) => (ctx as CellCtxLike).row?.original?.team || "-",
 			},
 			{
 				id: "beltColor",
+				key: "beltColor",
 				// Sort by belt order, not the display label.
 				accessorFn: (row: AttendanceRow) => row.beltSortOrder,
 				header: sortableHeader(t("attendance.columns.beltColor"), "beltColor"),
-				cell: (ctx: unknown) => {
-					const r = (ctx as CellCtxLike).row?.original;
-					if (!r) {
-						return "";
-					}
-					return h(UBadge, {
-						label: r.beltColor || "-",
-						color: "neutral",
-						variant: "soft",
-					});
-				},
 			},
 		];
 	});
@@ -650,46 +612,18 @@
 		return [
 			{
 				id: "present",
+				key: "present",
 				accessorKey: "present",
 				header: sortableHeader(t("attendance.columns.present"), "present", {
 					canSort: includeMode.value !== "present",
 					showIcons: includeMode.value !== "present",
 				}),
-				cell: (ctx: unknown) => {
-					const r = (ctx as CellCtxLike).row?.original;
-					if (!r) {
-						return "";
-					}
-					const disabled = !!isSavingByMemberId.value[r.memberId];
-					return h(UCheckbox, {
-						modelValue: r.present,
-						disabled,
-						"onUpdate:modelValue": (value: boolean) => {
-							setMemberPresent(r.memberId, !!value);
-						},
-					});
-				},
 			},
 			{
 				id: "name",
+				key: "name",
 				accessorKey: "name",
-				header: sortableHeader(t("attendance.columns.name"), "name"),
-				cell: (ctx: unknown) => (ctx as CellCtxLike).row?.original?.name || "",
-			},
-			{
-				id: "photo",
-				// Make the column sortable (required by the UI spec) but sort by name.
-				accessorFn: (row: AttendanceRow) => row.name,
-				header: sortableHeader(t("attendance.columns.photo"), "photo"),
-				cell: (ctx: unknown) => {
-					const m = (ctx as CellCtxLike).row?.original?.member;
-					if (!m) {
-						return "";
-					}
-					return h(MemberAvatar, {
-						member: m,
-					});
-				},
+				header: sortableHeader(t("attendance.columns.mentor"), "name"),
 			},
 		];
 	});
@@ -787,7 +721,35 @@
 		<template #body>
 				<UTabs v-model="selectedTab" :items="tabItems">
 					<template #coders>
-						<UTable v-bind="codersTableProps" />
+						<UTable v-bind="codersTableProps">
+							<template #present-cell="{ row }">
+								<UCheckbox
+									:model-value="row.original.present"
+									:disabled="!!isSavingByMemberId[row.original.memberId]"
+									@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
+								/>
+							</template>
+							<template #name-cell="{ row }">
+								<div class="flex items-center gap-3">
+									<MemberAvatar
+										v-if="row.original.member"
+										:member="row.original.member"
+										size="xs"
+									/>
+									<span>{{ row.original.name }}</span>
+								</div>
+							</template>
+							<template #team-cell="{ row }">
+								{{ row.original.team || "-" }}
+							</template>
+							<template #beltColor-cell="{ row }">
+								<UBadge
+									:label="row.original.beltColor || '-'"
+									color="neutral"
+									variant="soft"
+								/>
+							</template>
+						</UTable>
 					<div
 						v-if="canChooseRandomCoder"
 						class="flex items-center justify-end pt-3 border-t border-default"
@@ -798,7 +760,25 @@
 					</div>
 				</template>
 				<template #mentors>
-					<UTable v-bind="mentorsTableProps" />
+					<UTable v-bind="mentorsTableProps">
+						<template #present-cell="{ row }">
+							<UCheckbox
+								:model-value="row.original.present"
+								:disabled="!!isSavingByMemberId[row.original.memberId]"
+								@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
+							/>
+						</template>
+						<template #name-cell="{ row }">
+							<div class="flex items-center gap-3">
+								<MemberAvatar
+									v-if="row.original.member"
+									:member="row.original.member"
+									size="xs"
+								/>
+								<span>{{ row.original.name }}</span>
+							</div>
+						</template>
+					</UTable>
 				</template>
 			</UTabs>
 		</template>
