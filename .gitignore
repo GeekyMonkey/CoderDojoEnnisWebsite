@@ -5,6 +5,7 @@ node_modules
 reference
 src/.yarn/install-state.gz
 nui
+supabase
 
 # MCP server output (Playwright traces, screenshots, etc.)
 .mcp
