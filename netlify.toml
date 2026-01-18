@@ -1,6 +1,0 @@
-# Netlify configuration
-
-[build]
-  # Don't clone the private submodule
-  # The supabase submodule is optional and contains sensitive data
-  ignore_submodules = true
