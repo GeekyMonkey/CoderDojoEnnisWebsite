@@ -6,33 +6,30 @@ import type { BroadenLiterals } from "~~/shared/utils/TypeHelpers";
  */
 export default {
 	attendance: {
-		sessionDate: "Session Date",
-		include: {
-			label: "Include",
-			presentMembers: "Present",
-			registeredMembers: "Registered",
-			allMembers: "All",
-		},
-		search: {
-			label: "Search",
-			placeholder: "",
-		},
 		columns: {
-			present: "Present",
-			coder: "Coder",
-			mentor: "Mentor",
+			beltColor: "Belt",
 			name: "Name",
 			photo: "Photo",
+			present: "Present",
 			team: "Team",
-			beltColor: "Belt",
 		},
 		footer: {
 			chooseRandomCoder: "Choose Random Coder",
 		},
-		loadingRoster: "Loading roster…",
-		errorLoadingRoster: "Error loading roster.",
-		codersTitle: "Coders",
-		mentorsTitle: "Mentors",
+		include: {
+			allMembers: "All",
+			label: "Include",
+			presentMembers: "Present",
+			registeredMembers: "Registered",
+		},
+		sessionDate: "Session Date",
+	},
+	coders: {
+		label: "Coder",
+		plural: "Coders",
+	},
+	labels: {
+		search: "Search",
 	},
 	language: {
 		current: "Current language: {Language}",
@@ -46,18 +43,20 @@ export default {
 		username: "Username",
 	},
 	memberBelt: {
-		parent: "Parent",
-		mentor: "Mentor",
-		noob: "Noob",
 		color: {
+			black: "Black",
+			blue: "Blue",
+			green: "Green",
+			red: "Red",
 			white: "White",
 			yellow: "Yellow",
-			green: "Green",
-			blue: "Blue",
-			red: "Red",
-			black: "Black",
 		},
 		label: "{Color}",
+		noob: "Noob",
+	},
+	mentors: {
+		label: "Mentor",
+		plural: "Mentors",
 	},
 	nav: {
 		"Attendance": "Attendance",
@@ -83,6 +82,10 @@ export default {
 		"Reports": "Reports",
 		"Sign In Mode": "Sign In Mode",
 		"Teams": "Teams",
+	},
+	parents: {
+		label: "Parent",
+		plural: "Parents",
 	},
 	signIn: {
 		sessionCount: "1 session | {count} sessions",

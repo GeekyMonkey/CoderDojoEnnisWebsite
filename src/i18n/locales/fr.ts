@@ -8,33 +8,30 @@ import { type enMessagesType } from "./en";
 */
 export default {
 	attendance: {
-		sessionDate: "Date de session",
-		include: {
-			label: "Inclure",
-			presentMembers: "Présents",
-			registeredMembers: "Inscrits",
-			allMembers: "Tous",
-		},
-		search: {
-			label: "Rechercher",
-			placeholder: "",
-		},
 		columns: {
-			present: "Présent",
-			coder: "Codeur",
-			mentor: "Mentor",
+			beltColor: "Ceinture",
 			name: "Nom",
 			photo: "Photo",
+			present: "Présent",
 			team: "Équipe",
-			beltColor: "Ceinture",
 		},
 		footer: {
 			chooseRandomCoder: "Choisir un codeur au hasard",
 		},
-		loadingRoster: "Chargement de la liste…",
-		errorLoadingRoster: "Erreur de chargement de la liste.",
-		codersTitle: "Codeurs",
-		mentorsTitle: "Mentors",
+		include: {
+			allMembers: "Tous",
+			label: "Inclure",
+			presentMembers: "Présents",
+			registeredMembers: "Inscrits",
+		},
+		sessionDate: "Date de session",
+	},
+	coders: {
+		label: "Codeur",
+		plural: "Codeurs",
+	},
+	labels: {
+		search: "Rechercher",
 	},
 	language: {
 		current: "Langue actuelle : {Language}",
@@ -48,18 +45,20 @@ export default {
 		username: "Nom d'utilisateur",
 	},
 	memberBelt: {
-		parent: "Parent",
-		mentor: "Mentor",
-		noob: "Novice",
 		color: {
+			black: "Noir",
+			blue: "Bleu",
+			green: "Vert",
+			red: "Rouge",
 			white: "Blanc",
 			yellow: "Jaune",
-			green: "Vert",
-			blue: "Bleu",
-			red: "Rouge",
-			black: "Noir",
 		},
 		label: "{Color}",
+		noob: "Novice",
+	},
+	mentors: {
+		label: "Mentor",
+		plural: "Mentors",
 	},
 	nav: {
 		"Attendance": "Présence",
@@ -85,6 +84,10 @@ export default {
 		"Reports": "Rapports",
 		"Sign In Mode": "Mode d'inscription",
 		"Teams": "Équipes",
+	},
+	parents: {
+		label: "Parent",
+		plural: "Parents",
 	},
 	signIn: {
 		sessionCount: "1 session | {count} sessions",

@@ -4,6 +4,16 @@
 	import { z } from "zod";
 	import { useAuthStore } from "~/stores/useAuthStore";
 
+	type FormSchema = {
+		username: string;
+		password: string;
+	};
+
+	type AuthFormExpose = {
+		state?: Partial<FormSchema>;
+		formRef?: unknown;
+	};
+
 	definePageMeta({
 		layout: "auth-layout",
 	});
@@ -13,13 +23,11 @@
 	const { supabaseClient } = UseSupabaseClient();
 	const { login } = useAuthStore();
 	const errorMessage = ref<string | null>(null);
+	const authForm = ref<(ComponentPublicInstance & AuthFormExpose) | null>(null);
 
-	type FormSchema = {
-		username: string;
-		password: string;
-	};
-
-	// Form Validation (localized)
+	/**
+	 * Form Validation (localized)
+	 */
 	const formSchema = computed(() =>
 		z.object({
 			username: z.string().min(4, t("validation.minLength", { min: 4 })),
@@ -27,6 +35,9 @@
 		}),
 	);
 
+	/**
+	 * Form Fields
+	 */
 	const fields = computed<AuthFormField[]>(() => [
 		{
 			name: "username",
@@ -46,34 +57,19 @@
 		},
 	]);
 
-	/** Clear the error message when changing inputs */
+	/**
+	 * Clear the error message when changing inputs
+	 */
 	const clearErrorMessage = () => {
 		errorMessage.value = null;
 	};
 
-	type AuthFormExpose = {
-		state?: Partial<FormSchema>;
-		formRef?: unknown;
-	};
-
-	const authForm = ref<(ComponentPublicInstance & AuthFormExpose) | null>(null);
-
-	useRevalidateFormOnLocaleChange(() => authForm.value);
-
-	/**
-	 * Watch for input changes to clear error message
-	 */
-	watch(
-		() => [authForm.value?.state?.username, authForm.value?.state?.password],
-		() => {
-			clearErrorMessage();
-		},
-	);
-
 	/**
 	 * Handle Login
 	 */
-	const handleLogin = async (username: string, password: string) => {
+	const handleLogin = async (event: FormSubmitEvent<FormSchema>) => {
+		const { username, password } = event.data;
+		
 		clearErrorMessage();
 
 		const result = await login(username, password);
@@ -103,9 +99,20 @@
 		}
 	};
 
-	const onSubmit = async (event: FormSubmitEvent<FormSchema>) => {
-		await handleLogin(event.data.username, event.data.password);
-	};
+	// -- Watchers --
+
+	useRevalidateFormOnLocaleChange(() => authForm.value);
+
+	/**
+	 * Watch for input changes to clear error message
+	 */
+	watch(
+		() => [authForm.value?.state?.username, authForm.value?.state?.password],
+		() => {
+			clearErrorMessage();
+		},
+	);
+
 </script>
 
 <template>
@@ -117,7 +124,7 @@
 			:title="t('login.title')"
 			icon="i-lucide-lock"
 			:submit="{ label: t('login.loginButton') }"
-			@submit="onSubmit"
+			@submit="handleLogin"
 		>
 			<template #header>
 				<CoderDojoLogo size="md" class="mx-auto mb-4" />

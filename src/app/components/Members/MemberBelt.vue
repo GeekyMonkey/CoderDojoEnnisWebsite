@@ -37,9 +37,9 @@
 		const colorKey = beltColorKey.value;
 		switch (colorKey) {
 			case 'mentor':
-				return t('memberBelt.mentor');
+				return t('mentors.label');
 			case 'parent':
-				return t('memberBelt.parent');
+				return t('parents.label');
 			case 'noob':
 				return t('memberBelt.noob');
 			default:

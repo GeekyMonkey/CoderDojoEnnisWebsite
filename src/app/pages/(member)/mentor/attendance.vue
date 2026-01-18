@@ -8,7 +8,20 @@
 	import { useMembersStore } from "~/stores/useMembersStore";
 	import { useTeamsStore } from "~/stores/useTeamsStore";
 
-	type TableSortingState = { id: string; desc: boolean }[];
+	type SingleSortState = { id: string; desc: boolean };
+	type TableSortingState = SingleSortState[];
+
+	type IncludeMode = "present" | "registered" | "all";
+
+	type AttendanceRow = {
+		memberId: string;
+		name: string;
+		team: string | null;
+		beltColor: string | null;
+		beltSortOrder: number;
+		present: boolean;
+		member: MemberModel;
+	};
 
 	definePageMeta({
 		layout: "member-layout",
@@ -18,8 +31,6 @@
 	const { t } = useI18n();
 	const route = useRoute();
 	const router = useRouter();
-
-	type IncludeMode = "present" | "registered" | "all";
 
 	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(() => {
 		return [
@@ -36,81 +47,39 @@
 		useSessionAttendanceForDate,
 		setMemberPresent: setMemberPresentStore,
 	} = useMemberAttendanceStore();
+
 	const {
 		Members,
 		isLoading: isMembersLoading,
 		isError: isMembersError,
 	} = useMembersStore();
+
 	const { TeamsById } = useTeamsStore();
 	const { BeltsById } = useBeltsStore();
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
 
 	const initialDate = (route.query.date as string) || "";
 	const initialYear = initialDate.length >= 4 ? initialDate.slice(0, 4) : "";
+	const defaultSort: SingleSortState = { id: "name", desc: false };
+	const codersSorting = ref<SingleSortState>({ ...defaultSort });
+	const mentorsSorting = ref<SingleSortState>({ ...defaultSort });
+
+	const UIcon = resolveComponent("UIcon") as unknown as Component;
 
 	const selectedSessionYear = ref<string>(initialYear);
 	const selectedSessionDate = ref<string>(initialDate);
 	const includeMode = ref<IncludeMode>((route.query.include as IncludeMode) || "registered");
 	const searchText = ref<string>((route.query.search as string) || "");
+	const selectedAttendanceQuery = useSessionAttendanceForDate(selectedSessionDate);
 
 	const initTab = (route.query.tab as string) || "coders";
 	const selectedTab = ref<string>(
 		["coders", "mentors"].includes(initTab) ? initTab : "coders",
 	);
 
-
-	// State syncing with URL query params
-	// Sync In (URL -> State)
-	watch(
-		() => route.query,
-		(q) => {
-			// Date & Year
-			const d = (q.date as string) || "";
-			if (d !== selectedSessionDate.value) {
-				selectedSessionDate.value = d;
-				if (!d) {
-					// Reset year to empty so the default-year logic picks up the current session year
-					selectedSessionYear.value = "";
-				} else if (d.length >= 4) {
-					// Ensure year matches the URL date
-					const y = d.slice(0, 4);
-					if (y !== selectedSessionYear.value) {
-						selectedSessionYear.value = y;
-					}
-				}
-			}
-
-			// Include Mode
-			const inc = q.include as IncludeMode;
-			if (inc && inc !== includeMode.value) {
-				includeMode.value = inc;
-			} else if (!inc) {
-				// Reset to default logic if no param
-				// We don't force it here because applyIncludeModeForDate watcher on selectedSessionDate handles it naturally
-				// when selectedSessionDate changes. But if selectedSessionDate didn't change (e.g. only include param removed),
-				// we must trigger it.
-				applyIncludeModeForDate();
-			}
-
-			// Search
-			const s = (q.search as string) || "";
-			if (s !== searchText.value) {
-				searchText.value = s;
-			}
-
-			// Tab (handled in its own watcher setup or we can move it here)
-			const tabVal = (q.tab as string) || "coders";
-			if (
-				["coders", "mentors"].includes(tabVal) &&
-				tabVal !== selectedTab.value
-			) {
-				selectedTab.value = tabVal;
-			}
-		},
-		{ deep: true },
-	);
-
-	// Sync Out (State -> URL)
+	/**
+	 * Sync Out (State -> URL)
+	 */
 	const updateUrl = () => {
 		const query: Record<string, any> = { ...route.query };
 		let changed = false;
@@ -147,37 +116,40 @@
 		}
 	};
 
-	watch(
-		[selectedSessionDate, includeMode, searchText, selectedTab],
-		() => {
-			updateUrl();
-		},
-	);
-
+	/**
+	 * Session year options
+	 */
 	const sessionYearOptions = computed(() => {
 		return (SessionYears.value || []).map((y) => ({ value: y, label: y }));
 	});
 
-	const sessionDatesForSelectedYear = computed(() => {
-		const year = selectedSessionYear.value;
-		return (SessionDates.value || []).filter((d) => d.slice(0, 4) === year);
-	});
-
+	/**
+	 * Session dates for selected year
+	 */
 	const sessionDateOptionsForSelectedYear = computed(() => {
-		return (sessionDatesForSelectedYear.value || []).map((d) => ({
-			value: d,
-			label: d.slice(5), // MM-DD
-		}));
-	});
-
-	const currentSessionDate = computed(() => CurrentSessionDate.value || "");
-	const isCurrentSessionSelected = computed(() => {
-		return (
-			!!selectedSessionDate.value &&
-			selectedSessionDate.value === currentSessionDate.value
+		const year = selectedSessionYear.value;
+		return (SessionDates.value || [])
+			.filter((d) => d.slice(0, 4) === year)
+			.map((d) => ({
+				value: d,
+				label: d.slice(5), // MM-DD
+			})
 		);
 	});
 
+	/**
+	 * Is the selected date the most recent session date?
+	 */
+	const isCurrentSessionSelected = computed(() => {
+		return (
+			!!selectedSessionDate.value &&
+			selectedSessionDate.value === CurrentSessionDate.value
+		);
+	});
+
+	/**
+	 * When the selected session date changes, apply the default include mode logic
+	 */
 	const applyIncludeModeForDate = () => {
 		if (!selectedSessionDate.value) {
 			return;
@@ -185,97 +157,44 @@
 		// Default to 'registered' if we are on the current session OR if the current session
 		// date isn't loaded yet (avoiding a race condition that would flip to 'present').
 		// Only switch to 'present' if we definitely know we are viewing a past session.
-		if (isCurrentSessionSelected.value || !currentSessionDate.value) {
+		if (isCurrentSessionSelected.value || !CurrentSessionDate.value) {
 			includeMode.value = "registered";
 		} else {
 			includeMode.value = "present";
 		}
 	};
 
-	watch(
-		[() => currentSessionDate.value, () => SessionYears.value, selectedSessionYear],
-		([cur, years, yearVal]) => {
-			if (yearVal) {
-				return;
-			}
-			const curYear = cur?.slice(0, 4) || "";
-			selectedSessionYear.value = curYear || years?.[0] || "";
-		},
-		{ immediate: true },
-	);
-
-	watch(
-		[
-			() => selectedSessionYear.value,
-			() => sessionDatesForSelectedYear.value,
-			() => currentSessionDate.value,
-		],
-		([_year, dates, cur]) => {
-			if (!dates?.length) {
-				return;
-			}
-			if (selectedSessionDate.value && dates.includes(selectedSessionDate.value)) {
-				// If the current internal date is valid for the list, keep it.
-				// However, if we are in a "recovery" scenario where year is empty but date is set, ensure year is set.
-				if (selectedSessionDate.value && !selectedSessionYear.value) {
-					selectedSessionYear.value = selectedSessionDate.value.slice(0, 4);
-				}
-				return;
-			}
-			
-			const target = (cur && dates.includes(cur) ? cur : "") || dates[0] || "";
-			selectedSessionDate.value = target;
-
-			if (target && !selectedSessionYear.value) {
-				selectedSessionYear.value = target.slice(0, 4);
-			}
-
-			applyIncludeModeForDate();
-		},
-		{ immediate: true },
-	);
-
-	watch(
-		() => selectedSessionDate.value,
-		() => {
-			applyIncludeModeForDate();
-		},
-	);
-
-	const selectedAttendanceQuery = useSessionAttendanceForDate(selectedSessionDate);
-	const selectedAttendanceData = computed(() => selectedAttendanceQuery.data.value);
-	const selectedAttendanceMemberIds = computed(
-		() => selectedAttendanceData.value?.memberIds || [],
-	);
+	/**
+	 * Set of member IDs marked present for the selected session date
+	 */
 	const selectedPresentSet = computed(() => {
-		return new Set(selectedAttendanceMemberIds.value);
+		return new Set(selectedAttendanceQuery.data.value?.memberIds || []);
 	});
 
-	const teamNameForMember = (member: MemberModel): string | null => {
-		const teamId = member.teamId || "";
-		if (!teamId) {
-			return null;
+	/**
+	 * Team names by member ID
+	 */
+	const teamNamesByMemberId = computed(() => {
+		const map: Record<string, string | null> = {};
+		for (const member of includeFilteredMembers.value) {
+			const teamId = member.teamId || "";
+			map[member.id] = !teamId ? null : TeamsById.value[teamId]?.teamName || null;
 		}
-		return TeamsById.value[teamId]?.teamName || null;
-	};
+		return map;
+	});
 
-	const fullNameForMember = (member: MemberModel): string => {
-		const first = member.nameFirst ?? "";
-		const last = member.nameLast ?? "";
-		return `${first} ${last}`.trim() || member.login || member.id;
-	};
-
-	const avatarTextForMember = (member: MemberModel): string => {
-		const first = (member.nameFirst ?? "").trim();
-		const last = (member.nameLast ?? "").trim();
-		const a = first ? first[0] || "" : "";
-		const b = last ? last[0] || "" : "";
-		const initials = `${a}${b}`.toUpperCase();
-		if (initials) {
-			return initials;
+	/**
+	 * Full names by member ID
+	 */
+	const fullNamesByMemberId = computed(() => {
+		const map: Record<string, string> = {};
+		for (const member of includeFilteredMembers.value) {
+			const first = member.nameFirst ?? "";
+			const last = member.nameLast ?? "";
+			map[member.id] = `${first} ${last}`.trim() || member.login || member.id;
 		}
-		return (member.login ?? member.id).slice(0, 2).toUpperCase();
-	};
+		return map;
+	});
 
 	/**
 	 * Belt info for member
@@ -298,13 +217,19 @@
 		};
 	};
 
+	/**
+	 * All members (not deleted)
+	 */
 	const allMembers = computed(() => {
 		return (Members.value || []).filter((m) => !m.deleted);
 	});
 
-	const includeFilteredMembers = computed(() => {
+	/**
+	 * Members filtered by include mode
+	 */
+	const includeFilteredMembers = computed<MemberModel[]>(() => {
 		const mode = includeMode.value;
-	if (mode === "all") {
+		if (mode === "all") {
 			return allMembers.value;
 		}
 		if (mode === "registered") {
@@ -322,7 +247,10 @@
 		return allMembers.value.filter((m) => selectedPresentSet.value.has(m.id));
 	});
 
-	const searchedMembers = computed(() => {
+	/**
+	 * Members filtered by search text
+	 */
+	const searchedMembers = computed<MemberModel[]>(() => {
 		const q = searchText.value.trim().toLowerCase();
 		if (!q) {
 			return includeFilteredMembers.value;
@@ -340,72 +268,110 @@
 		});
 	});
 
-	type AttendanceRow = {
-		memberId: string;
-		name: string;
-		avatarText: string;
-		team: string | null;
-		beltColor: string | null;
-		beltSortOrder: number;
-		present: boolean;
-		member: MemberModel;
-	};
+	/**
+	 * Coders Member List
+	 */
+	const codersAllMembers = computed(() => {
+		return allMembers.value.filter((m) => m.isNinja && !m.isMentor);
+	});
 
-	const toRow = (member: MemberModel): AttendanceRow => {
-		const belt = beltInfoForMember(member.id);
+	/**
+	 * Mentors Member List
+	 */
+	const mentorsAllMembers = computed(() => {
+		return allMembers.value.filter((m) => m.isMentor);
+	});
+
+	/**
+	 * Coders Table Rows
+	 */
+	const codersRows = computed(() => {
+		return searchedMembers.value
+			.filter((m) => m.isNinja && !m.isMentor)
+			.map((member) => {
+				const belt = beltInfoForMember(member.id);
 		return {
 			memberId: member.id,
-			name: fullNameForMember(member),
-			avatarText: avatarTextForMember(member),
-			team: teamNameForMember(member),
+			name: fullNamesByMemberId.value[member.id],
+			team: teamNamesByMemberId.value[member.id],
 			beltColor: belt.color,
 			beltSortOrder: belt.sortOrder,
 			present: selectedPresentSet.value.has(member.id),
 			member,
 		};
-	};
-
-	const codersAllMembers = computed(() => {
-		return allMembers.value.filter((m) => m.isNinja && !m.isMentor);
-	});
-	const mentorsAllMembers = computed(() => {
-		return allMembers.value.filter((m) => m.isMentor);
+			});
 	});
 
-	const codersRows = computed(() => {
-		return searchedMembers.value
-			.filter((m) => m.isNinja && !m.isMentor)
-			.map(toRow);
-	});
+	/**
+	 * Mentors Table Rows
+	 */
 	const mentorsRows = computed(() => {
-		return searchedMembers.value.filter((m) => m.isMentor).map(toRow);
+		return searchedMembers.value
+			.filter((m) => m.isMentor)
+			.map((member) => {
+				return {
+					memberId: member.id,
+					name: fullNamesByMemberId.value[member.id],
+					team: teamNamesByMemberId.value[member.id],
+					beltColor: "",
+					beltSortOrder: 0,
+					present: selectedPresentSet.value.has(member.id),
+					member,
+				};
+			});
 	});
 
-	const codersPresentIds = computed(() => {
+	/**
+	 * Present Coder IDs
+	 */
+	const codersPresentIds = computed<string[]>(() => {
 		return codersAllMembers.value
 			.filter((m) => selectedPresentSet.value.has(m.id))
 			.map((m) => m.id);
 	});
 
-	const mentorsPresentIds = computed(() => {
+	/**
+	 * Mentors Present IDs
+	 */
+	const mentorsPresentIds = computed<string[]>(() => {
 		return mentorsAllMembers.value
 			.filter((m) => selectedPresentSet.value.has(m.id))
 			.map((m) => m.id);
 	});
 
-	const codersPresentCount = computed(() => codersPresentIds.value.length);
-	const mentorsPresentCount = computed(() => mentorsPresentIds.value.length);
+	/**
+	 * Coders Present Count
+	 */
+	const codersPresentCount = computed<number>(() => codersPresentIds.value.length);
 
+	/**
+	 * Mentors Present Count
+	 */
+	const mentorsPresentCount = computed<number>(() => mentorsPresentIds.value.length);
+
+	/**
+	 * Tab Items
+	 */
 	const tabItems = computed(() => [
-		{ label: t("attendance.codersTitle"), slot: "coders", value: "coders" },
-		{ label: t("attendance.mentorsTitle"), slot: "mentors", value: "mentors" },
+		{ label: t("coders.plural"), slot: "coders", value: "coders" },
+		{ label: t("mentors.plural"), slot: "mentors", value: "mentors" },
 	]);
 
-
-	const codersPresentAll = computed(() => {
+	/**
+	 * All Present Coders
+	 */
+	const codersPresentAll = computed<MemberModel[]>(() => {
 		return codersAllMembers.value.filter((m) => selectedPresentSet.value.has(m.id));
 	});
+
+	/**
+	 * Should the choose random coder button be shown?
+	 */
 	const canChooseRandomCoder = computed(() => codersPresentAll.value.length > 0);
+
+	/**
+	 * Choose a random coder from those present and navigate to their coder page
+	 */
 	const chooseRandomCoder = async () => {
 		const candidates = codersPresentAll.value;
 		if (!candidates.length) {
@@ -420,7 +386,10 @@
 
 	const isSavingByMemberId = ref<Record<string, true>>({});
 
-	const setMemberPresent = async (memberId: string, present: boolean) => {
+	/**
+	 * Set Member Present status for the selected session date
+	 */
+	const setMemberPresent = async (memberId: string, present: boolean): Promise<void> => {
 		const sessionDate = selectedSessionDate.value;
 		if (!sessionDate) {
 			return;
@@ -438,10 +407,9 @@
 		}
 	};
 
-	type SingleSortState = { id: string; desc: boolean };
-
-	const defaultSort: SingleSortState = { id: "name", desc: false };
-
+	/**
+	 * Convert single-column sort state to table sorting state
+	 */
 	const toTableSorting = (single: SingleSortState): TableSortingState => {
 		const primary = single?.id ? { id: single.id, desc: !!single.desc } : defaultSort;
 		// Spec: only one user-selected sort column.
@@ -450,6 +418,9 @@
 		return primary.id === "name" ? [primary] : [primary, { id: "name", desc: false }];
 	};
 
+	/**
+	 * Convert table sorting state to single-column sort state
+	 */
 	const fromTableSorting = (sorting: TableSortingState): SingleSortState => {
 		const first = Array.isArray(sorting) && sorting.length ? sorting[0] : null;
 		if (!first?.id) {
@@ -457,26 +428,6 @@
 		}
 		return { id: first.id, desc: !!first.desc };
 	};
-
-	const codersSorting = ref<SingleSortState>({ ...defaultSort });
-	const mentorsSorting = ref<SingleSortState>({ ...defaultSort });
-
-	watch(
-		() => selectedSessionDate.value,
-		(next, prev) => {
-			if (!next) {
-				return;
-			}
-			if (next === prev) {
-				return;
-			}
-			codersSorting.value = { ...defaultSort };
-			mentorsSorting.value = { ...defaultSort };
-		},
-		{ immediate: true },
-	);
-
-	const UIcon = resolveComponent("UIcon") as unknown as Component;
 
 	/**
 	 * Creates a sortable table header renderer.
@@ -563,7 +514,7 @@
 				id: "name",
 				key: "name",
 				accessorKey: "name",
-				header: sortableHeader(t("attendance.columns.coder"), "name"),
+				header: sortableHeader(t("coders.label"), "name"),
 			},
 			{
 				id: "team",
@@ -606,11 +557,14 @@
 				id: "name",
 				key: "name",
 				accessorKey: "name",
-				header: sortableHeader(t("attendance.columns.mentor"), "name"),
+				header: sortableHeader(t("mentors.label"), "name"),
 			},
 		];
 	});
 
+	/**
+	 * Coders Table Props
+	 */
 	const codersTableProps = computed(() => ({
 		columns: codersColumns.value,
 		data: codersRows.value,
@@ -622,6 +576,9 @@
 		loading: selectedAttendanceQuery.isLoading.value,
 	}));
 
+	/**
+	 * Mentors Table Props
+	 */
 	const mentorsTableProps = computed(() => ({
 		columns: mentorsColumns.value,
 		data: mentorsRows.value,
@@ -633,6 +590,134 @@
 		loading: selectedAttendanceQuery.isLoading.value,
 	}));
 
+	// --- Watches for state syncing ---
+
+	/**
+	 * State syncing with URL query params
+	 * Sync In (URL -> State)
+	 */
+	watch(
+		() => route.query,
+		(q) => {
+			// Date & Year
+			const d = (q.date as string) || "";
+			if (d !== selectedSessionDate.value) {
+				selectedSessionDate.value = d;
+				if (!d) {
+					// Reset year to empty so the default-year logic picks up the current session year
+					selectedSessionYear.value = "";
+				} else if (d.length >= 4) {
+					// Ensure year matches the URL date
+					const y = d.slice(0, 4);
+					if (y !== selectedSessionYear.value) {
+						selectedSessionYear.value = y;
+					}
+				}
+			}
+
+			// Include Mode
+			const inc = q.include as IncludeMode;
+			if (inc && inc !== includeMode.value) {
+				includeMode.value = inc;
+			} else if (!inc) {
+				// Reset to default logic if no param
+				// We don't force it here because applyIncludeModeForDate watcher on selectedSessionDate handles it naturally
+				// when selectedSessionDate changes. But if selectedSessionDate didn't change (e.g. only include param removed),
+				// we must trigger it.
+				applyIncludeModeForDate();
+			}
+
+			// Search
+			const s = (q.search as string) || "";
+			if (s !== searchText.value) {
+				searchText.value = s;
+			}
+
+			// Tab (handled in its own watcher setup or we can move it here)
+			const tabVal = (q.tab as string) || "coders";
+			if (
+				["coders", "mentors"].includes(tabVal) &&
+				tabVal !== selectedTab.value
+			) {
+				selectedTab.value = tabVal;
+			}
+		},
+		{ deep: true },
+	);
+
+	/**
+	 * State syncing with URL query params
+	 * Sync Out (State -> URL)
+	 */
+	watch(
+		[selectedSessionDate, includeMode, searchText, selectedTab],
+		() => {
+			updateUrl();
+		},
+	);
+
+	/**
+	 * When the session years or current session date change, ensure selected year is valid
+	 * (probably not necessary but a safety measure)
+	 */
+	watch(
+		[() => CurrentSessionDate.value, () => SessionYears.value, selectedSessionYear],
+		([cur, years, yearVal]) => {
+			if (yearVal) {
+				return;
+			}
+			const curYear = cur?.slice(0, 4) || "";
+			selectedSessionYear.value = curYear || years?.[0] || "";
+		},
+		{ immediate: true },
+	);
+
+	/**
+	 * When session year, session dates, or current session date change,
+	 * ensure selected date is valid and apply include mode logic
+	 * (probably not necessary but a safety measure)
+	 */
+	watch(
+		[
+			() => selectedSessionYear.value,
+			() => sessionDateOptionsForSelectedYear.value,
+			() => CurrentSessionDate.value,
+		],
+		([_year, dates, cur]) => {
+			if (!dates?.length) {
+				return;
+			}
+			const dateValues = dates.map((d) => d.value);
+			if (selectedSessionDate.value && dateValues.includes(selectedSessionDate.value)) {
+				// If the current internal date is valid for the list, keep it.
+				// However, if we are in a "recovery" scenario where year is empty but date is set, ensure year is set.
+				if (selectedSessionDate.value && !selectedSessionYear.value) {
+					selectedSessionYear.value = selectedSessionDate.value.slice(0, 4);
+				}
+				return;
+			}
+			
+			const target = (cur && dateValues.includes(cur) ? cur : "") || dates[0]?.value || "";
+			selectedSessionDate.value = target;
+
+			if (target && !selectedSessionYear.value) {
+				selectedSessionYear.value = target.slice(0, 4);
+			}
+
+			applyIncludeModeForDate();
+		},
+		{ immediate: true },
+	);
+
+	/**
+	 * When selected session date changes, apply default include mode logic
+	 */
+	watch(
+		() => selectedSessionDate.value,
+		() => {
+			applyIncludeModeForDate();
+		},
+	);
 </script>
 
 <template>
@@ -681,20 +766,13 @@
 						/>
 					</UFormField>
 
-					<UFormField :label="t('attendance.search.label')" size="xs">
+					<UFormField :label="t('labels.search')" size="xs">
 						<UInput
 							v-model="searchText"
 							size="xs"
-							:placeholder="t('attendance.search.placeholder')"
+							placeholder=""
 						/>
 					</UFormField>
-
-					<div v-if="isMembersLoading" class="text-xs opacity-70">
-						{{ t("attendance.loadingRoster") }}
-					</div>
-					<div v-else-if="isMembersError" class="text-xs opacity-70">
-						{{ t("attendance.errorLoadingRoster") }}
-					</div>
 				</div>
 			</UDashboardToolbar>
 		</template>

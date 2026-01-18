@@ -7,33 +7,30 @@ import { type enMessagesType } from "./en";
  */
 export default {
 	attendance: {
-		sessionDate: "Дата сесії",
-		include: {
-			label: "Включити",
-			presentMembers: "Присутні",
-			registeredMembers: "Зареєстровані",
-			allMembers: "Усі",
-		},
-		search: {
-			label: "Пошук",
-			placeholder: "",
-		},
 		columns: {
-			present: "Присутній",
-			coder: "Кодер",
-			mentor: "Ментор",
-			name: "Ім’я",
-			photo: "Фото",
-			team: "Команда",
 			beltColor: "Пояс",
+			name: "Ім'я",
+			photo: "Фото",
+			present: "Присутній",
+			team: "Команда",
 		},
 		footer: {
 			chooseRandomCoder: "Вибрати випадкового кодера",
 		},
-		loadingRoster: "Завантаження списку…",
-		errorLoadingRoster: "Помилка завантаження списку.",
-		codersTitle: "Кодери",
-		mentorsTitle: "Ментори",
+		include: {
+			allMembers: "Усі",
+			label: "Включити",
+			presentMembers: "Присутні",
+			registeredMembers: "Зареєстровані",
+		},
+		sessionDate: "Дата сесії",
+	},
+	coders: {
+		label: "Кодер",
+		plural: "Кодери",
+	},
+	labels: {
+		search: "Пошук",
 	},
 	language: {
 		current: "Поточна мова: {Language}",
@@ -47,24 +44,26 @@ export default {
 		username: "Ім'я користувача",
 	},
 	memberBelt: {
-		parent: "Батьки",
-		mentor: "Ментор",
-		noob: "Новачок",
 		color: {
+			black: "Чорний",
+			blue: "Синій",
+			green: "Зелений",
+			red: "Червоний",
 			white: "Білий",
 			yellow: "Жовтий",
-			green: "Зелений",
-			blue: "Синій",
-			red: "Червоний",
-			black: "Чорний",
 		},
 		label: "{Color}",
+		noob: "Новачок",
+	},
+	mentors: {
+		label: "Ментор",
+		plural: "Ментори",
 	},
 	nav: {
 		"Attendance": "Відвідуваність",
 		"Badge Categories": "Категорії бейджів",
-		"Badges Available": "Доступні бейджі",
 		"Badges": "Бейджі",
+		"Badges Available": "Доступні бейджі",
 		"Belts": "Пояси",
 		"Coder Home": "Головна (Кодер)",
 		"Goals": "Цілі",
@@ -79,11 +78,15 @@ export default {
 		"Parents": "Батьки",
 		"Purge Members": "Очистити учасників",
 		"Purge Registrations": "Очистити реєстрації",
-		"Recent Belts CSV": "Останні пояси (CSV)",
 		"Recent Belts": "Останні пояси",
+		"Recent Belts CSV": "Останні пояси (CSV)",
 		"Reports": "Звіти",
 		"Sign In Mode": "Режим реєстрації",
 		"Teams": "Команди",
+	},
+	parents: {
+		label: "Батьки",
+		plural: "Батьки",
 	},
 	signIn: {
 		sessionCount: "1 сесія | {count} сесій",

@@ -19,52 +19,48 @@
 	const signInResponse = shallowRef<AttendanceSignInResponseModel | null>(null);
 	const showSignInNotifications = ref(false);
 
-	const sessionCountMessage = computed(() => {
-		if (!signInResponse.value) return "";
-		const count: number = signInResponse.value.memberSessionCount;
-		return t("signIn.sessionCount", count, { count });
-	});
-
-	useRevalidateFormOnLocaleChange(() => signInForm.value);
-
+	/**
+	 * Form Schema Type
+	 */
 	type FormSchema = {
 		username: string;
 		password: string;
 	};
 
-	const formSchema = computed(() =>
+	/**
+	 * Form Validation (localized)
+	 */
+	const formSchemaValidation = computed(() =>
 		z.object({
 			username: z.string().min(4, t("validation.minLength", { min: 4 })),
 			password: z.string().min(4, t("validation.minLength", { min: 4 })),
 		}),
 	);
 
+	/**
+	 * Form State
+	 */
 	const formState = reactive<FormSchema>({
 		username: "",
 		password: "",
 	});
 
+	/**
+	 * Clear the error message
+	 */
 	const clearErrorMessage = () => {
 		errorMessage.value = null;
 	};
 
-	watch(() => [formState.username, formState.password], () => {
-		clearErrorMessage();
-	});
-
-	watch(
-		() => formState.username,
-		(next, prev) => {
-			// Keep notifications visible after success until the next member begins
-			// entering a username (typing/paste/autofill): "" -> non-empty
-			if (showSignInNotifications.value && prev === "" && next !== "") {
-				showSignInNotifications.value = false;
-			}
-		},
-	);
-
+	/**
+	 * Focus the username input field
+	 * (Why is this so hard to get right???)
+	 */
 	const focusUsername = async () => {
-		if (!process.client) return;
+		if (!process.client) {
+			return;
+		}
+
 		// Two ticks + rAF to avoid focusing a DOM node that is about to be replaced
 		// by reactive updates (UInput/UForm validation + v-model clears).
 		await nextTick();
@@ -93,7 +89,20 @@
 		}
 	};
 
-	const handleSignIn = async (username: string, password: string) => {
+	/**
+	 * Notifications to display to signed in member (excluding greeting)
+	 */
+	const notifications = computed(() => {
+		return (signInResponse.value?.notifications || [])
+			.filter(n => n.type !== "GREETING");
+	});
+
+	/** 
+	 * Handle Form Submit
+	 */
+	const handleSignIn = async (event: FormSubmitEvent<FormSchema>) => {
+		const { username, password } = event.data;
+		
 		clearErrorMessage();
 		isSubmitting.value = true;
 		try {
@@ -123,14 +132,46 @@
 		}
 	};
 
-	const notifications = computed(() => {
-		return (signInResponse.value?.notifications || [])
-			.filter(n => n.type !== "GREETING");
+		/**
+	 * Session Count Message displayed for signed in member
+	 */
+	const sessionCountMessage = computed(() => {
+		if (!signInResponse.value) {
+			return "";
+		}
+		const count: number = signInResponse.value.memberSessionCount;
+		return t("signIn.sessionCount", count, { count });
 	});
 
-	const onSubmit = async (event: FormSubmitEvent<FormSchema>) => {
-		await handleSignIn(event.data.username, event.data.password);
-	};
+	/**
+	 * Revalidate form on language change to update validation messages
+	 */
+	useRevalidateFormOnLocaleChange(() => signInForm.value);
+
+	// -- Watchers --
+
+	/**
+	 * Clear error message on input change
+	 */
+	watch(() => [formState.username, formState.password], () => {
+		clearErrorMessage();
+	});
+
+	/**
+	 * Hide sign-in notifications when username input begins
+	 * being filled in (typing/paste/autofill)
+	 */
+	watch(
+		() => formState.username,
+		(next, prev) => {
+			// Keep notifications visible after success until the next member begins
+			// entering a username (typing/paste/autofill): "" -> non-empty
+			if (showSignInNotifications.value && prev === "" && next !== "") {
+				showSignInNotifications.value = false;
+			}
+		},
+	);
+
 </script>
 
 <template>
@@ -140,8 +181,8 @@
 				<UForm
 					ref="signInForm"
 					:state="formState"
-					:schema="formSchema"
-					@submit="onSubmit"
+					:schema="formSchemaValidation"
+					@submit="handleSignIn"
 					class="SignInForm"
 				>
 					<header class="SignInHeader">
@@ -296,7 +337,6 @@
 			}
 		}
 	}
-
 
 	.WelcomeStats {
 		display: grid;

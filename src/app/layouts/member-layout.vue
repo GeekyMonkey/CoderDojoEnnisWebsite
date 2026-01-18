@@ -15,12 +15,11 @@
 	const route = useRoute();
 	const router = useRouter();
 	const user = useSupabaseUser();
-	const { TranslateOrDefault } = useTranslation();
 	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
 	const { locale, setLocale, setLocaleCookie, locales, t, te } = useI18n();
 
-	const isThemeMenuOpen = ref(false);
-	const isLanguageMenuOpen = ref(false);
+	const themeSelectRef = ref<{ isOpen: Ref<boolean> } | null>(null);
+	const languageSelectRef = ref<{ isOpen: Ref<boolean> } | null>(null);
 
 	const section = computed<string | null>(() => {
 		const seg = route.path.split("/")[1];
@@ -87,58 +86,21 @@
 		router.push(`${base}/profile`);
 	}
 
-	type LocaleCode = Parameters<typeof setLocale>[0];
-	const availableLocales = computed(
-		() => locales.value as Array<{ code: LocaleCode; language: string }>,
-	);
-
-	function setLang(lang: LocaleCode) {
-		setLocale(lang);
-		setLocaleCookie(lang);
-	}
-
 	function openThemeMenu() {
-		isThemeMenuOpen.value = true;
+		if (themeSelectRef.value) {
+			themeSelectRef.value.isOpen = true;
+		}
 	}
 
 	function openLanguageMenu() {
-		isLanguageMenuOpen.value = true;
+		if (languageSelectRef.value) {
+			languageSelectRef.value.isOpen = true;
+		}
 	}
 
-	const sortedThemes = computed(() => {
-		const themes = ThemesConfig.value?.themes ?? [];
-		return [...themes].sort((a, b) => {
-			const aName = TranslateOrDefault(a.themeName, a.id).toLowerCase();
-			const bName = TranslateOrDefault(b.themeName, b.id).toLowerCase();
-			return aName.localeCompare(bName, undefined, { sensitivity: "base" });
-		});
-	});
+
 
 	const userMenuItems = computed<DropdownMenuItem[][]>(() => {
-		const themeItems: DropdownMenuItem[] = sortedThemes.value.map((theme) => ({
-			label: TranslateOrDefault(theme.themeName, theme.id),
-			type: "checkbox",
-			checked: CurrentTheme.value?.id === theme.id,
-			onUpdateChecked(checked) {
-				if (checked) {
-					SetTheme(theme.id);
-				}
-			},
-		}));
-
-		const languageItems: DropdownMenuItem[] = availableLocales.value.map(
-			(lang) => ({
-				label: lang.language,
-				type: "checkbox",
-				checked: lang.code === locale.value,
-				onUpdateChecked(checked) {
-					if (checked) {
-						setLang(lang.code);
-					}
-				},
-			}),
-		);
-
 		return [
 			[
 				{
@@ -264,54 +226,14 @@
 					/>
 				</UDropdownMenu>
 
-				<UModal
-					v-model:open="isThemeMenuOpen"
-					:description="t('theme.description')"
-					:title="t('theme.select')"
-				>
-					<template #body>
-						<ButtonsStack>
-							<UButton
-								v-for="theme in sortedThemes"
-								:key="theme.id"
-								class="w-full justify-between"
-								:variant="CurrentTheme?.id === theme.id ? 'solid' : 'outline'"
-								@click="SetTheme(theme.id); isThemeMenuOpen = false"
-							>
-								<Translated :t="theme.themeName" />
-								<Icon
-									:name="theme.darkOrLight === 'dark' ? 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition' : 'line-md:moon-filled-to-sunny-filled-loop-transition'"
-								/>
-							</UButton>
-						</ButtonsStack>
-					</template>
-				</UModal>
+			<ThemeSelect ref="themeSelectRef" :showTriggerButton="false" />
+			<LanguageSelect ref="languageSelectRef" :showTriggerButton="false" />
+		</template>
+	</UDashboardSidebar>
 
-				<UModal
-					v-model:open="isLanguageMenuOpen"
-					:description="t('language.description')"
-					:title="t('language.select')"
-				>
-					<template #body>
-						<ButtonsStack>
-							<UButton
-								v-for="lang in availableLocales"
-								:key="lang.code"
-								class="w-full"
-								:variant="lang.code === locale ? 'solid' : 'outline'"
-								@click="setLang(lang.code); isLanguageMenuOpen = false"
-							>
-								{{ lang.language }}
-							</UButton>
-						</ButtonsStack>
-					</template>
-				</UModal>
-			</template>
-		</UDashboardSidebar>
+	<slot/>
 
-		<slot/>
-
-	</UDashboardGroup>
+</UDashboardGroup>
 </template>
 
 <style lang="css">

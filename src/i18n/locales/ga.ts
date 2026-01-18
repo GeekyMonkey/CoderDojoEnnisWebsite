@@ -7,33 +7,30 @@ import { type enMessagesType } from "./en";
  */
 export default {
 	attendance: {
-		sessionDate: "Dáta Seisiúin",
-		include: {
-			label: "Cuir san áireamh",
-			presentMembers: "Anseo",
-			registeredMembers: "Cláraithe",
-			allMembers: "Gach",
-		},
-		search: {
-			label: "Cuardaigh",
-			placeholder: "",
-		},
 		columns: {
-			present: "Anseo",
-			coder: "Códóir",
-			mentor: "Meantóir",
+			beltColor: "Crios",
 			name: "Ainm",
 			photo: "Grianghraf",
+			present: "Anseo",
 			team: "Foireann",
-			beltColor: "Crios",
 		},
 		footer: {
 			chooseRandomCoder: "Roghnaigh códóir go randamach",
 		},
-		loadingRoster: "Ag lódáil an liosta…",
-		errorLoadingRoster: "Earráid ag lódáil an liosta.",
-		codersTitle: "Códóirí",
-		mentorsTitle: "Meantóirí",
+		include: {
+			allMembers: "Gach",
+			label: "Cuir san áireamh",
+			presentMembers: "Anseo",
+			registeredMembers: "Cláraithe",
+		},
+		sessionDate: "Dáta Seisiúin",
+	},
+	coders: {
+		label: "Códóir",
+		plural: "Códóirí",
+	},
+	labels: {
+		search: "Cuardaigh",
 	},
 	language: {
 		current: "Teanga reatha: {Language}",
@@ -47,18 +44,20 @@ export default {
 		username: "Ainm Úsáideora",
 	},
 	memberBelt: {
-		parent: "Tuismitheoir",
-		mentor: "Meantóir",
-		noob: "Tosaitheoir",
 		color: {
+			black: "Dubh",
+			blue: "Gorm",
+			green: "Glas",
+			red: "Dearg",
 			white: "Bán",
 			yellow: "Buí",
-			green: "Glas",
-			blue: "Gorm",
-			red: "Dearg",
-			black: "Dubh",
 		},
 		label: "{Color}",
+		noob: "Tosaitheoir",
+	},
+	mentors: {
+		label: "Meantóir",
+		plural: "Meantóirí",
 	},
 	nav: {
 		"Attendance": "Tinreamh",
@@ -84,6 +83,10 @@ export default {
 		"Reports": "Tuarascálacha",
 		"Sign In Mode": "Mód Sínithe Isteach",
 		"Teams": "Foirne",
+	},
+	parents: {
+		label: "Tuismitheoir",
+		plural: "Tuismitheoirí",
 	},
 	signIn: {
 		sessionCount: "1 seisiún | {count} seisiúin",
