@@ -1,14 +1,15 @@
-# Supabase Submodule: Team Access & Collaboration Guide
+````mdc
+# Supabase Shared Migrations: Team Access & Collaboration Guide
 
 This document explains how to manage team access to the shared Supabase repository and handle different collaboration scenarios.
 
 ## Overview
 
-The **GeekyMonkeyData** repository is **PRIVATE** and contains sensitive database information. Not all team members need access to it.
+The **GeekyMonkeyData** repository is **PRIVATE** and contains sensitive database information. Not all team members need access to it. This is simplified with the new dynamic clone approach—developers can clone and work on the main project without any git submodule complexity.
 
 ## Access Levels
 
-### 👤 Level 1: No Submodule Access Required
+### 👤 Level 1: No Shared Repo Access Required
 
 **Who**: Frontend developers, UI/UX designers, junior developers, contractors
 
@@ -32,9 +33,9 @@ cd CoderDojoEnnisWebsite/src
 pnpm install && pnpm dev
 ```
 
-**Note:** The submodule is optional and won't initialize unless they explicitly request it.
+**Note:** Everything works perfectly without access. Trying to run migration commands will fail at the git clone step if they don't have access, which is expected.
 
-### 👥 Level 2: Submodule Access Required
+### 👥 Level 2: Shared Repo Access Required
 
 **Who**: Database administrators, backend developers, DevOps engineers, tech leads
 
@@ -46,19 +47,17 @@ pnpm install && pnpm dev
 - Regenerate TypeScript types
 - Coordinate database changes across projects
 
-**How they clone** (standard clone + one command):
+**How they clone** (standard clone - same as everyone):
 ```powershell
 # Standard clone (same as everyone else)
 git clone https://github.com/GeekyMonkey/CoderDojoEnnisWebsite.git
-cd CoderDojoEnnisWebsite
-
-# Initialize the submodule (requires access to GeekyMonkeyData)
-git submodule update --init --recursive
-
-# Setup and verify
-cd src
+cd CoderDojoEnnisWebsite/src
 pnpm install
-pnpm supabase:check-sync
+
+# All features available once you have access to GeekyMonkeyData
+pnpm supabase-migrate
+pnpm supabase-types
+pnpm supabase:sync
 ```
 
 ## Granting Access
@@ -100,13 +99,13 @@ Better approach: Create a GitHub team
 
 - [ ] Provide standard clone command
 - [ ] Share the workflow doc
-- [ ] Clarify they don't need submodule access
+- [ ] Clarify they don't need shared repo access
 - [ ] Add to the project GitHub team (main project only)
 - [ ] Document in team wiki
 
 **Send them:**
 ```powershell
-# Clone the project (standard clone)
+# Clone the project (standard clone - same as everyone)
 git clone https://github.com/GeekyMonkey/CoderDojoEnnisWebsite.git
 
 # Setup
@@ -119,13 +118,13 @@ pnpm dev
 # For questions about database, contact @GeekyMonkey/database-admins
 ```
 
-**Note:** The database migration files won't be available (submodule is optional), but this doesn't affect your work on the main project.
+**Note:** They can work on everything except migration commands. The application and development server work perfectly fine without the shared migrations.
 
-### For New Database Developer (With Submodule Access)
+### For New Database Developer (With Shared Repo Access)
 
 - [ ] Add to GeekyMonkeyData repository on GitHub
 - [ ] Add to database-admins GitHub team
-- [ ] Provide standard clone command
+- [ ] Provide standard clone command (same as everyone)
 - [ ] Share full workflow documentation
 - [ ] Walk through migration workflow once
 - [ ] Set up SSH key for easier access (optional)
@@ -133,22 +132,19 @@ pnpm dev
 
 **Send them:**
 ```powershell
-# Clone the project (standard clone)
+# Clone the project (standard clone - same as everyone)
 git clone https://github.com/GeekyMonkey/CoderDojoEnnisWebsite.git
 
 # Setup
-cd CoderDojoEnnisWebsite
-
-# Initialize the submodule (requires GeekyMonkeyData access)
-git submodule update --init --recursive
-
-cd src
+cd CoderDojoEnnisWebsite/src
 pnpm install
 
-# Verify access to migrations
-pnpm supabase:check-sync
+# With access to GeekyMonkeyData, all features are available
+pnpm supabase-migrate
+pnpm supabase-types
+pnpm supabase:sync
 
-# See full workflow: docs/database/supabase-submodule-workflow.md
+# See full workflow: docs/database/supabase-shared-migrations-workflow.md
 ```
 
 ## Handling Access Requests
@@ -157,59 +153,45 @@ pnpm supabase:check-sync
 
 1. **Review the request**: Do they actually need it?
 2. **Grant access**: Add to GeekyMonkeyData repository
-3. **Verify access**: Have them run `pnpm supabase:check-sync`
+3. **Verify access**: Have them run `pnpm supabase:sync`
 4. **Document it**: Update your team access list
 
 ### Developer No Longer Needs Access
 
 1. **Remove from GeekyMonkeyData** on GitHub
-2. **Optional**: Have them switch to no-recurse-submodules clone
-3. **Update records**: Keep access list current
+2. **Update records**: Keep access list current
+3. **Note**: They can still work on the main project normally
 
 ## Troubleshooting Access Issues
 
 ### "fatal: could not read Username" Error
 
-**Cause**: Trying to initialize submodule without access to GeekyMonkeyData
+**Cause**: Trying to sync without access to GeekyMonkeyData
 
 **Solution:**
 ```powershell
-# 1. If you don't need migrations, you can ignore this error
-#    and continue working on the main project:
+# 1. If you don't need migrations, you can skip this and continue working:
 cd src
 pnpm install && pnpm dev
 
 # 2. If you NEED migrations:
 #    - Request access to GeekyMonkeyData repository
 #    - Once granted, run:
-#      git submodule update --init --recursive
+#      pnpm supabase:sync
 #    - Verify:
-#      pnpm supabase:check-sync
-```
-
-### User Needs to Disable Submodule Locally
-
-If they want to remove the submodule from their local clone:
-
-```powershell
-git submodule deinit --force supabase
-rm -r supabase
-
-# They can now work on main project without any warnings
-cd src
-pnpm install && pnpm dev
+#      pnpm supabase-migrate
 ```
 
 ## Documentation to Share
 
-### For Level 1 Developers (No Submodule Access)
+### For Level 1 Developers (No Database Access)
 
 **Minimal onboarding:**
 ```markdown
-# Setup Instr
+# Setup Instructions
 
 1. Clone the project:
-   git clone --no-recurse-submodules https://github.com/GeekyMonkey/CoderDojoEnnisWebsite.git
+   git clone https://github.com/GeekyMonkey/CoderDojoEnnisWebsite.git
 
 2. Install and run:
    cd CoderDojoEnnisWebsite/src
@@ -220,23 +202,23 @@ pnpm install && pnpm dev
 4. Database questions? Contact @GeekyMonkey/database-admins
 ```
 
-### For Level 2 Developers (With Submodule Access)
+### For Level 2 Developers (With Database Access)
 
 **Full onboarding:**
 Share these documents:
-- [docs/database/supabase-submodule-workflow.md](supabase-submodule-workflow.md) - Complete workflow guide
+- [docs/database/supabase-shared-migrations-workflow.md](supabase-shared-migrations-workflow.md) - Complete workflow guide
 - This file - Access and team structure
 
 ### For Managers
 
 **Quick reference:**
 ```markdown
-# Database Access Model
+# Shared Migrations Access Model
 
-- **GeekyMonkeyData**: Private repo with sensitive unrelated project info
-- **Frontend developers**: Don't have/need access
+- **GeekyMonkeyData**: Private repo with sensitive database information
+- **Frontend developers**: Don't have/need access - main project works fine without it
 - **Database developers**: Full access via private repository
-- **Shared submodule**: Safely references shared migrations
+- **Dynamic cloning**: The supabase folder is created on-demand when needed
 
 **Access Requests**: Contact tech lead to add developers to GeekyMonkeyData
 ```
@@ -268,40 +250,25 @@ Share these documents:
 - Rotate credentials if a developer with access leaves
 - Consider branch protection rules
 
-## Multi-Project Setup
-
-If using the same GeekyMonkeyData repository in multiple projects:
-
-```
-CoderDojoEnnisWebsite/
-  └─ supabase/ (submodule pointing to GeekyMonkeyData)
-
-OtherProject/
-  └─ supabase/ (submodule pointing to GeekyMonkeyData)
-```
-
-**Keep these in sync:**
-- When migrations are added in GeekyMonkeyData
-- Update both projects' submodules
-- Notify all teams of schema changes
-- Coordinate deployment schedules
-
 ## FAQ
 
-**Q: Can someone clone without the submodule and add it later?**  
-A: Yes! Use `git clone --no-recurse-submodules` initially, then add it later if access is granted.
+**Q: Can someone clone without the shared repo and add migrations later?**  
+A: Yes! Clone normally. If they need access to migrations, request access to GeekyMonkeyData and run `pnpm supabase:sync`.
 
-**Q: What if someone tries to initialize the submodule but doesn't have access?**  
-A: They'll see an error message like "fatal: could not read Username". They can either request access or skip this step—the main project works fine without it.
+**Q: What if someone tries to sync but doesn't have access?**  
+A: They'll see an error message like "fatal: could not read Username". They can either request access or skip this—the main project works fine without it.
 
-**Q: Can we use SSH instead of HTTPS for submodule?**  
-A: Yes, update `.gitmodules` to use SSH URL instead. This can work better for some teams.
+**Q: Can we use SSH instead of HTTPS for the repo?**  
+A: Yes, the scripts can be modified to use SSH URL instead. This can work better for some teams.
 
 **Q: How do we handle merge conflicts in migrations?**  
-A: Coordinate with the database team. Have a process for reviewing migration conflicts.
+A: Coordinate with the database team. Have a process for reviewing migration conflicts in the shared repo.
 
 **Q: What happens when we remove someone's access?**  
-A: They can still work on the main project normally. If they try to reinitialize the submodule, they'll see an access error, but they can ignore it.
+A: They can still work on the main project normally. If they try to run migration commands, they'll see an access error, but they can ignore it.
+
+**Q: Do developers need to do anything special when pulling new migrations?**  
+A: No! Running any migration command (like `pnpm supabase-migrate`) automatically syncs the latest version.
 
 ## Contacts & Escalation
 
@@ -319,6 +286,8 @@ For security issues: Contact [Ops/Security Lead]
 
 ## Additional Resources
 
-- [Git Submodules - What They Are & How to Use Them](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+- [Git Clone Documentation](https://git-scm.com/docs/git-clone)
 - [GitHub - Managing Team Access](https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories)
 - [Supabase Security Best Practices](https://supabase.com/docs/guides/security)
+
+````
