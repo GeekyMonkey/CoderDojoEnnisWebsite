@@ -88,6 +88,7 @@ export default {
 		plural: "Parents",
 	},
 	signIn: {
+		qrPlaceholder: "Enable the camera to scan a QR code.",
 		sessionCount: "1 session | {count} sessions",
 		signInButton: "Sign In",
 		title: "CoderDojo Ennis Session Sign In",

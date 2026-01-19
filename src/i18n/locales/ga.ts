@@ -89,6 +89,7 @@ export default {
 		plural: "Tuismitheoirí",
 	},
 	signIn: {
+		qrPlaceholder: "Cumasaigh an ceamara chun cód QR a scanadh.",
 		sessionCount: "1 seisiún | {count} seisiúin",
 		signInButton: "Logáil Isteach",
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",

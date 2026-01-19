@@ -89,6 +89,7 @@ export default {
 		plural: "Батьки",
 	},
 	signIn: {
+		qrPlaceholder: "Увімкніть камеру, щоб сканувати QR-код.",
 		sessionCount: "1 сесія | {count} сесій",
 		signInButton: "Увійти",
 		title: "Реєстрація на сесію CoderDojo Ennis",

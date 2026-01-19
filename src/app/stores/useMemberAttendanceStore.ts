@@ -33,6 +33,9 @@ interface UseMemberAttendanceStoreResult {
 	signInMember: (
 		args: { username: string; password?: string },
 	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
+	signInMemberByGuid: (
+		args: { memberGuid: string },
+	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
 }
 
 let _store: UseMemberAttendanceStoreResult | null = null;
@@ -337,6 +340,22 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		return response;
 	};
 
+	/**
+	 * Sign in a member using their GUID
+	 */
+	const signInMemberByGuid = async ({
+		memberGuid,
+	}: { memberGuid: string }) => {
+		const response = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
+			"/api/MemberAttendance/SignInGuid",
+			{
+				method: "POST",
+				body: { memberGuid },
+			},
+		);
+		return response;
+	};
+
 	_store = {
 		SessionDates: SessionDates as Ref<string[]>,
 		get SessionStats() {
@@ -361,6 +380,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		},
 		setMemberPresent,
 		signInMember,
+		signInMemberByGuid,
 	};
 
 	return _store;

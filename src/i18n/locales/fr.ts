@@ -90,6 +90,7 @@ export default {
 		plural: "Parents",
 	},
 	signIn: {
+		qrPlaceholder: "Activez la caméra pour scanner un code QR.",
 		sessionCount: "1 session | {count} sessions",
 		signInButton: "Connexion",
 		title: "Connexion à la session CoderDojo Ennis",

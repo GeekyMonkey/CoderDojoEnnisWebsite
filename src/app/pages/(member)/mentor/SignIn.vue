@@ -11,10 +11,11 @@
 
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
-	const { signInMember } = useMemberAttendanceStore();
+	const { signInMember, signInMemberByGuid } = useMemberAttendanceStore();
 
 	const errorMessage = ref<string | null>(null);
 	const isSubmitting = ref(false);
+	const scannerActive = ref(false);
 	const signInForm = ref<unknown>(null);
 	const signInResponse = shallowRef<AttendanceSignInResponseModel | null>(null);
 	const showSignInNotifications = ref(false);
@@ -97,12 +98,25 @@
 			.filter(n => n.type !== "GREETING");
 	});
 
-	/** 
+	/**
+	 * Apply successful sign-in result to UI
+	 */
+	const applySignInSuccess = async (payload: AttendanceSignInResponseModel) => {
+		signInResponse.value = payload;
+		showSignInNotifications.value = true;
+
+		formState.username = "";
+		formState.password = "";
+		isSubmitting.value = false;
+		await focusUsername();
+	};
+
+	/**
 	 * Handle Form Submit
 	 */
 	const handleSignIn = async (event: FormSubmitEvent<FormSchema>) => {
 		const { username, password } = event.data;
-		
+
 		clearErrorMessage();
 		isSubmitting.value = true;
 		try {
@@ -110,16 +124,7 @@
 
 			log.info("[SignIn] result:", result);
 			if (result.success) {
-				signInResponse.value = result.data;
-				showSignInNotifications.value = true;
-
-				// Clear the form for the next member
-				formState.username = "";
-				formState.password = "";
-				// The username input is disabled while isSubmitting is true.
-				// Clear it early so focus works immediately for the next member.
-				isSubmitting.value = false;
-				await focusUsername();
+				await applySignInSuccess(result.data);
 				return;
 			}
 			errorMessage.value = result.error || "Could Not Complete Sign In";
@@ -130,6 +135,51 @@
 		} finally {
 			isSubmitting.value = false;
 		}
+	};
+
+	/**
+	 * Handle QR decode -> GUID sign in
+	 */
+	const handleGuidDecoded = async (memberGuid: string) => {
+		const trimmed = memberGuid?.trim();
+		if (!trimmed) return;
+
+		log.info("[SignIn][QR] decoded GUID", { memberGuid: trimmed });
+
+		clearErrorMessage();
+		isSubmitting.value = true;
+		try {
+			const result = await signInMemberByGuid({ memberGuid: trimmed });
+			log.info("[SignIn][QR] result:", result);
+			if (result.success) {
+				await applySignInSuccess(result.data);
+				return;
+			}
+			errorMessage.value = result.error || t("signIn.qrErrorFallback");
+		} catch (err) {
+			const message: string = ErrorToString(err);
+			log.error("[SignIn][QR] POST error", undefined, err);
+			errorMessage.value = message;
+		} finally {
+			isSubmitting.value = false;
+		}
+	};
+
+	/**
+	 * Surface scanner/camera errors inline
+	 */
+	const handleScannerError = (message: string) => {
+		errorMessage.value = message;
+	};
+
+	const enableScanner = () => {
+		log.info("[SignIn][QR] scanner enabled");
+		scannerActive.value = true;
+	};
+
+	const disableScanner = () => {
+		log.info("[SignIn][QR] scanner disabled");
+		scannerActive.value = false;
 	};
 
 		/**
@@ -215,13 +265,22 @@
 						:title="errorMessage"
 					/>
 
-					<UButton
-						type="submit"
-						block
-						:loading="isSubmitting"
-					>
-						{{ t("signIn.signInButton") }}
-					</UButton>
+					<div class="SubmitRow">
+						<UButton
+							type="submit"
+							flex-grow
+							:loading="isSubmitting"
+						>
+							{{ t("signIn.signInButton") }}
+						</UButton>
+						<UButton
+							variant="ghost"
+							color="secondary"
+							icon="i-lucide-camera"
+							aria-label="Toggle QR scanner"
+							@click="scannerActive = !scannerActive"
+						/>
+					</div>
 				</UForm>
 			</UPageCard>
 
@@ -267,102 +326,130 @@
 						</div>
 					</template>
 				</UAlert>
+
+				<div v-if="scannerActive" class="ScannerInline">
+					<QrCodeReader
+						:active="scannerActive"
+						@decoded="handleGuidDecoded"
+						@error="handleScannerError"
+					>
+					</QrCodeReader>
+				</div>
 			</UPageCard>
 		</div>
 	</div>
 </template>
 
 <style lang="css">
-	.SignInPage {
-		width: 100%;
-	  
+.SignInPage {
+	width: 100%;
+}
 
+.SignInPageGrid {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	align-items: stretch;
+}
+
+@media (min-width: 960px) {
 	.SignInPageGrid {
-		display: flex;
-		gap: 2rem;
+		flex-direction: row;
 		align-items: flex-start;
 		justify-content: center;
-		flex-wrap: wrap;
+	}
+}
+
+.SignInCard {
+	width: 100%;
+	max-width: 500px;
+}
+
+.SignInForm {
+	display: grid;
+	gap: calc(var(--spacing) * 4);
+}
+
+.SignInHeader {
+	display: grid;
+	gap: calc(var(--spacing) * 1);
+}
+
+.SignInTitle {
+	display: flex;
+	align-items: center;
+	gap: calc(var(--spacing) * 2);
+	font-size: 1.5rem;
+	line-height: 1.9rem;
+	font-weight: 700;
+}
+
+.SubmitRow {
+	display: flex;
+	width: 100%;
+	gap: calc(var(--spacing) * 1);
+	align-items: center;
+
+	button[type="submit"] {
 		width: 100%;
-		gap: 2rem;
-		justify-content: center;
 	}
+}
 
-	.SignInCard {
-		width: 100%;
-		max-width: 500px;
+.ScannerInline {
+	margin-top: calc(var(--spacing) * 2);
+	max-width: 250px;
+}
+
+.WelcomeCard {
+	box-shadow: none;
+	border: none;
+	width: 100%;
+	max-width: 250px;
+	transition: all 0.3s ease-in-out;
+	
+	> [data-slot="container"] {
+		padding: 0;
 	}
-
-	.SignInForm {
-		display: grid;
-		gap: calc(var(--spacing) * 4);
-	}
-
-	.SignInHeader {
-		display: grid;
-		gap: calc(var(--spacing) * 1);
-	}
-
-	.SignInTitle {
-		display: flex;
-		align-items: center;
-		gap: calc(var(--spacing) * 2);
-		font-size: 1.5rem;
-		line-height: 1.9rem;
-		font-weight: 700;
-	}
-
-	.WelcomeCard {
-		box-shadow: none;
-		border: none;
-		width: 100%;
-		max-width: 250px;
+	
+	.WelcomePanel {
 		opacity: 1;
+		margin-top: 0;
 		transition: all 0.3s ease-in-out;
+	}
 
-		> [data-slot="container"] {
-			padding: 0;
-		}
+	&.WelcomeVisible_false {
 		
 		.WelcomePanel {
-			margin-top: 0;
-			transition: all 0.3s ease-in-out;
-		}
-
-		&.WelcomeVisible_false {
 			opacity: 0;
-
-			.WelcomePanel {
-				scale: 0.5;
-			}
+			scale: 0.5;
 		}
 	}
+}
 
-	.WelcomeStats {
-		display: grid;
-		gap: calc(var(--spacing) * 1);
+.WelcomeStats {
+	display: grid;
+	gap: calc(var(--spacing) * 1);
+}
+
+.WelcomeLine {
+	font-weight: 600;
+
+	.MemberAvatar {
+		display: block;
+		margin: 0 auto;
 	}
 
-	.WelcomeLine {
-		font-weight: 600;
-
-		.MemberAvatar {
-			display: block;
-			margin: 0 auto;
-		}
-
-		.MemberName {
-			font-size: 1.2rem;
-		}
+	.MemberName {
+		font-size: 1.2rem;
 	}
+}
 
-	.NotificationsList {
-		margin-top: calc(var(--spacing) * 2);
-	}
+.NotificationsList {
+	margin-top: calc(var(--spacing) * 2);
+}
 
-	.NotificationsList ul {
-		margin: 0;
-		padding-left: 1.1rem;
-	}
+.NotificationsList ul {
+	margin: 0;
+	padding-left: 1.1rem;
 }
 </style>
