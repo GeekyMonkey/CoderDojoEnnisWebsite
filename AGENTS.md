@@ -1,7 +1,7 @@
 <!-- OPENSPEC:START -->
 # OpenSpec Instructions
 
-These instructions are for AI assistants working in this project
+These instructions are for AI assistants working in this project.
 
 Always open `@/openspec/AGENTS.md` when the request:
 - Mentions planning or proposals (words like proposal, spec, change, plan)
@@ -13,7 +13,7 @@ Use `@/openspec/AGENTS.md` to learn:
 - Spec format and conventions
 - Project structure and guidelines
 
-Keep this managed block so 'openspec update' can refresh the instructions
+Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
 
