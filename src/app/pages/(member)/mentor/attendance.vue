@@ -31,6 +31,7 @@
 	const { t } = useI18n();
 	const route = useRoute();
 	const router = useRouter();
+	const { width: windowWidth } = useWindowSize();
 
 	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(() => {
 		return [
@@ -548,7 +549,7 @@
 				id: "present",
 				key: "present",
 				accessorKey: "present",
-				header: sortableHeader(t("attendance.columns.present"), "present", {
+				header: sortableHeader("" /*t("attendance.columns.present")*/, "present", {
 					canSort: includeMode.value !== "present",
 					showIcons: includeMode.value !== "present",
 				}),
@@ -723,17 +724,17 @@
 <template>
 	<UDashboardPanel id="mentor-attendance">
 		<template #header>
-				<DashboardHeading :page-title="pageTitle">
-					<template #right>
-						<div class="text-xs text-muted leading-tight mt-1 whitespace-nowrap">
-							<div>Coders: {{ codersPresentCount }}</div>
-							<div>Mentors: {{ mentorsPresentCount }}</div>
-						</div>
-					</template>
-				</DashboardHeading>
+			<DashboardHeading :page-title="pageTitle">
+				<template #right>
+					<div class="text-xs text-muted leading-tight mt-1 whitespace-nowrap">
+						<div>Coders: {{ codersPresentCount }}</div>
+						<div>Mentors: {{ mentorsPresentCount }}</div>
+					</div>
+				</template>
+			</DashboardHeading>
 
 			<UDashboardToolbar>
-				<div class="flex flex-wrap items-end gap-x-10 gap-y-2 w-full">
+				<div class="flex flex-wrap items-end gap-x-10 gap-y-2 w-full pb-1">
 					<UFormField :label="t('attendance.sessionDate')" size="xs">
 						<div class="flex items-end gap-1">
 							<USelect
@@ -816,7 +817,7 @@
 							</div>
 						</template>
 						<template #beltColor-cell="{ row }">
-							<MemberBelt :member="row.original.member" size="md" />
+							<MemberBelt :member="row.original.member" :size="windowWidth >= 768 ? 'md' : 'sm'" />
 						</template>
 					</UTable>
 
@@ -882,8 +883,22 @@
 		max-width: 500px;
 	}
 
+	.CodersTable,.MentorsTable {
+			thead {
+				tr {
+					th:first-child {
+						padding: 0;
+					}
+				}
+			}
+	}
+
 	.PresentCheckbox {
 		[role="checkbox"] {
 		}
+	}
+
+	.MemberBelt {
+		margin: 0 auto;
 	}
 </style>

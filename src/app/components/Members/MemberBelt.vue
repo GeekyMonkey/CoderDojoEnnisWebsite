@@ -90,7 +90,7 @@
 	<div class="MemberBelt"
 		:class="`Size_${[props.size || 'md']} Color_${beltColorKey}`"
 		:style="{backgroundColor:beltColor}">
-		{{ label }}
+		<label>{{ label }}</label>
 	</div>
 </template>
 
@@ -117,6 +117,14 @@
 		&.Color_noob {
 			border: dashed 2px var(--ui-border);
 			color: var(--ui-text);
+		}
+
+		&.Size_sm {
+			height: 32px;
+			width: 10px;
+			label {
+				display: none;
+			}
 		}
 	}
 </style>
