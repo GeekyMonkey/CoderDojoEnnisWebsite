@@ -19,6 +19,10 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 
 Important: Run all `openspec` commands from the repository root (the folder containing `openspec/`), not from `src/`. If you run from `src/`, the CLI may report missing `openspec/changes`
 
+# Development Environment
+
+This is being developed on Windows machines with PowerShell. Ensure any commands you suggest are compatible with this environment.
+
 # Project Notes
 
 - UI library: This repo uses `@nuxt/ui` version **4.3.0 or greater**. When looking up component APIs/slots (e.g. dashboard components), use the Nuxt UI v4 documentation
