@@ -4,6 +4,7 @@
 	import { z } from "zod";
 	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
 	import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
+	import { useRouteQuery } from "@vueuse/router";
 
 	definePageMeta({
 		layout: "auth-layout",
@@ -12,13 +13,15 @@
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
 	const { signInMember, signInMemberByGuid } = useMemberAttendanceStore();
+	const { speak } = useSpeechSynth();
 
 	const errorMessage = ref<string | null>(null);
 	const isSubmitting = ref(false);
-	const scannerActive = ref(false);
+	const scannerActive = useRouteQuery<number>("qr", 0);
 	const signInForm = ref<unknown>(null);
 	const signInResponse = shallowRef<AttendanceSignInResponseModel | null>(null);
 	const showSignInNotifications = ref(false);
+	
 
 	/**
 	 * Form Schema Type
@@ -105,6 +108,11 @@
 		signInResponse.value = payload;
 		showSignInNotifications.value = true;
 
+		// Speak the member's name
+		if (payload.memberName) {
+			speak(payload.memberName);
+		}
+
 		formState.username = "";
 		formState.password = "";
 		isSubmitting.value = false;
@@ -172,17 +180,7 @@
 		errorMessage.value = message;
 	};
 
-	const enableScanner = () => {
-		log.info("[SignIn][QR] scanner enabled");
-		scannerActive.value = true;
-	};
-
-	const disableScanner = () => {
-		log.info("[SignIn][QR] scanner disabled");
-		scannerActive.value = false;
-	};
-
-		/**
+	/**
 	 * Session Count Message displayed for signed in member
 	 */
 	const sessionCountMessage = computed(() => {
@@ -274,11 +272,12 @@
 							{{ t("signIn.signInButton") }}
 						</UButton>
 						<UButton
+							v-if="scannerActive == 0"
 							variant="ghost"
 							color="secondary"
 							icon="i-lucide-camera"
 							aria-label="Toggle QR scanner"
-							@click="scannerActive = !scannerActive"
+							@click="scannerActive = 1"
 						/>
 					</div>
 				</UForm>
@@ -327,11 +326,12 @@
 					</template>
 				</UAlert>
 
-				<div v-if="scannerActive" class="ScannerInline">
+				<div v-if="scannerActive" class="QrScanner">
 					<QrCodeReader
-						:active="scannerActive"
+						:active="scannerActive == 1"
 						@decoded="handleGuidDecoded"
 						@error="handleScannerError"
+						@toggle="scannerActive = 0"
 					>
 					</QrCodeReader>
 				</div>
@@ -395,7 +395,7 @@
 	}
 }
 
-.ScannerInline {
+.QrScanner {
 	margin-top: calc(var(--spacing) * 2);
 	max-width: 250px;
 }

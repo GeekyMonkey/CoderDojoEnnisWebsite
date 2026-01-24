@@ -46,8 +46,8 @@ export function UseSupabaseRealtimeAllTables() {
 				const table = payload?.table || "";
 				const newData = payload?.new || null;
 				const oldData = payload?.old || null;
-				log.info(`${eventType} on ${table}`);
 				const rawId = newData?.id ?? oldData?.id;
+				log.info(`${eventType} on ${table} (id: ${rawId})`);
 				if (!rawId || typeof rawId !== "string" || !allTablesEmitter) {
 					return;
 				}

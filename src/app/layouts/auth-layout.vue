@@ -7,7 +7,7 @@
 			<slot />
 		</main>
 
-		<UFooter>
+		<UFooter class="AuthFooter">
 			<template #left>
 				<ButtonGroup>
 					<ThemeSelect />
@@ -33,6 +33,12 @@
 			width: 100%;
 			flex-grow: 1;
 			overflow: auto;
+		}
+
+		.AuthFooter {
+			> * {
+			padding-top: 0;
+			}
 		}
 	}
 </style>

@@ -27,7 +27,8 @@ export default function baseDbTableStore<T extends BaseModel>({
 	onUpdate?: (evt: { table: string; id: string; newData: T; oldData: T }) => void;
 	onDelete?: (evt: { table: string; id: string; oldData: T }) => void;
 }) {
-	console.log(`[${tableName}Store] Initializing`);
+	const log = useLogger(`${tableName}Store`);
+	log.info(`Initializing ${tableName}Store`);
 
 	const queryClient = useQueryClient();
 
@@ -40,8 +41,8 @@ export default function baseDbTableStore<T extends BaseModel>({
 	} = useQuery<T[]>({
 		queryKey: [tableName],
 		queryFn: async ({ signal }) => {
-			console.log(`[${tableName}Store] Fetching ${tableName}`);
 			const includeDeleted: boolean = false;
+			log.info(`Fetching table ${tableName}`, { includeDeleted });
 			const response = await $fetch<ApiResponse<T[]>>(
 				`/api/${apiPath}/list?include_deleted=${includeDeleted}`,
 				{ signal },

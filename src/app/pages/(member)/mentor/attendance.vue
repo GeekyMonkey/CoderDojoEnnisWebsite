@@ -32,6 +32,7 @@
 	const route = useRoute();
 	const router = useRouter();
 	const { width: windowWidth } = useWindowSize();
+	const { speak } = useSpeechSynth();
 
 	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(() => {
 		return [
@@ -51,6 +52,7 @@
 
 	const {
 		Members,
+		MembersById,
 		isLoading: isMembersLoading,
 		isError: isMembersError,
 	} = useMembersStore();
@@ -58,12 +60,17 @@
 	const { TeamsById } = useTeamsStore();
 	const { BeltsById } = useBeltsStore();
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
-
+	const { signInMemberByGuid } = useMemberAttendanceStore();
+	const log = useLogger("mentor/attendance");
+	
 	const initialDate = (route.query.date as string) || "";
 	const initialYear = initialDate.length >= 4 ? initialDate.slice(0, 4) : "";
 	const defaultSort: SingleSortState = { id: "name", desc: false };
 	const codersSorting = ref<SingleSortState>({ ...defaultSort });
 	const mentorsSorting = ref<SingleSortState>({ ...defaultSort });
+	const scannerActive = ref(route.query.qr === "1" || false);
+	const isSubmitting = ref(false);
+	const highlightedMemberId = ref<string | null>(null);
 
 	const UIcon = resolveComponent("UIcon") as unknown as Component;
 
@@ -103,6 +110,7 @@
 		setQuery("date", selectedSessionDate.value || undefined);
 		setQuery("include", includeMode.value || undefined);
 		setQuery("search", searchText.value || undefined);
+		setQuery("qr", scannerActive.value ? "1" : undefined);
 		
 		// Tab: default "coders" is implied by absence
 		setQuery(
@@ -385,6 +393,20 @@
 		await navigateTo(`/mentor/coder/${chosen.id}`);
 	};
 
+	/**
+	 * Member clicked - navigate to their coder page
+	 */
+	const MemberClicked = async (member: MemberModel) => {
+		if (!member.id) {
+			return;
+		}
+		if (member.isMentor) {
+			await navigateTo(`/mentor/mentor/${member.id}`);
+		} else {
+			await navigateTo(`/mentor/coder/${member.id}`);
+		}
+	};
+
 	const isSavingByMemberId = ref<Record<string, true>>({});
 
 	/**
@@ -394,6 +416,16 @@
 		const sessionDate = selectedSessionDate.value;
 		if (!sessionDate) {
 			return;
+		}
+
+		// Highlight changed member
+		highlightedMemberId.value = memberId;
+
+		if (present) {
+			const member = MembersById.value[memberId];
+			if (member) {
+				await applySignInSuccess(member);
+			}
 		}
 
 		isSavingByMemberId.value = {
@@ -456,7 +488,7 @@
 					type: "button",
 					disabled: !canSort,
 					class:
-						"flex items-center gap-2 select-none disabled:cursor-default disabled:opacity-60",
+						`Header_${columnId} flex items-center gap-2 select-none disabled:cursor-default disabled:opacity-60`,
 					onClick: () => {
 						if (!canSort) {
 							return;
@@ -469,7 +501,7 @@
 					},
 				},
 				[
-					h("span", { class: "text-sm font-semibold text-highlighted" }, label),
+					h("span", { class: `HeaderText text-sm font-semibold text-highlighted` }, label),
 					showIcons
 						? isActive
 							? h(UIcon, {
@@ -591,6 +623,81 @@
 		loading: selectedAttendanceQuery.isLoading.value,
 	}));
 
+	/**
+	 * Handle QR decode -> GUID sign in
+	 */
+	const handleGuidDecoded = async (memberGuid: string) => {
+		const trimmed = memberGuid?.trim();
+		if (!trimmed) {
+			return;
+		}
+
+		log.info("[SignIn][QR] decoded GUID", { memberGuid: trimmed });
+
+		isSubmitting.value = true;
+		try {
+			const result = await signInMemberByGuid({ memberGuid: trimmed });
+			log.info("[SignIn][QR] result:", result);
+			if (result.success) {
+				await applySignInSuccess(result.data.memberDetails);
+				return;
+			}
+		// 	errorMessage.value = result.error || t("signIn.qrErrorFallback");
+		} catch (err) {
+			const message: string = ErrorToString(err);
+			log.error("[SignIn][QR] POST error", undefined, err);
+		// 	errorMessage.value = message;
+		} finally {
+			isSubmitting.value = false;
+		}
+	};
+
+	const handleScannerError = (message: string): void => {
+		console.error("QR Scanner Error:", message);
+	};
+
+	/**
+	 * Apply successful sign-in result to UI
+	 */
+	const applySignInSuccess = async (member: MemberModel) => {
+		isSubmitting.value = false;
+		const memberId: string = member.id;
+		if (!member) {
+			log.warn("Signed-in member not found in store", { memberId });
+			return;
+		}
+		log.info("QR Signed in", { member });
+
+		// Speak the member's name
+		const memberName = `${member.nameFirst || ""} ${member.nameLast || ""}`.trim();
+		if (memberName) {
+			speak(memberName);
+		}
+
+		// Highlight the member row
+		highlightedMemberId.value = memberId;
+
+		// Focus the correct tab
+		if (member.isMentor) {
+			selectedTab.value = "mentors";
+			log.info("Switching to mentors tab for signed-in mentor");
+		} else {
+			selectedTab.value = "coders";
+			log.info("Switching to coders tab for signed-in coder");
+		}
+
+		// Let the screen refresh, and then scroll the member into view
+		await nextTick();
+		await sleep(500);
+		const rowId = `MemberRow_${memberId}`;
+		log.info("Scrolling to member row", { rowId });
+		const memberRow = document.getElementById(rowId);
+		if (memberRow) {
+			memberRow.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	};
+
+
 	// --- Watches for state syncing ---
 
 	/**
@@ -651,7 +758,7 @@
 	 * Sync Out (State -> URL)
 	 */
 	watch(
-		[selectedSessionDate, includeMode, searchText, selectedTab],
+		[selectedSessionDate, includeMode, searchText, selectedTab, scannerActive],
 		() => {
 			updateUrl();
 		},
@@ -734,59 +841,84 @@
 			</DashboardHeading>
 
 			<UDashboardToolbar>
-				<div class="flex flex-wrap items-end gap-x-10 gap-y-2 w-full pb-1">
-					<UFormField :label="t('attendance.sessionDate')" size="xs">
-						<div class="flex items-end gap-1">
+				<div class="AttendanceDashboardToolbar w-full">
+					<div class="AttendanceHeaderInputs items-end gap-x-10 gap-y-2 pb-1">
+
+						<UFormField :label="t('attendance.sessionDate')" size="xs">
+							<div class="flex items-end gap-1">
+								<USelect
+									v-model="selectedSessionYear"
+									:items="sessionYearOptions"
+									value-key="value"
+									label-key="label"
+									size="xs"
+									portal
+									/>
+								<USelect
+									v-model="selectedSessionDate"
+									:items="sessionDateOptionsForSelectedYear"
+									value-key="value"
+									label-key="label"
+									size="xs"
+									portal
+								/>
+							</div>
+						</UFormField>
+
+						<UFormField :label="t('attendance.include.label')" size="xs">
 							<USelect
-								v-model="selectedSessionYear"
-								:items="sessionYearOptions"
+								v-model="includeMode"
+								:items="includeOptions"
 								value-key="value"
 								label-key="label"
 								size="xs"
 								portal
-							/>
-							<USelect
-								v-model="selectedSessionDate"
-								:items="sessionDateOptionsForSelectedYear"
-								value-key="value"
-								label-key="label"
+								/>
+							</UFormField>
+							
+							<UFormField :label="t('labels.search')" size="xs">
+								<UInput
+								v-model="searchText"
 								size="xs"
-								portal
+								placeholder=""
+								/>
+							</UFormField>
+						</div>
+
+						<div class="QrScanner">
+							<QrCodeReader
+								v-if="scannerActive"
+								:active="scannerActive"
+								@decoded="handleGuidDecoded"
+								@error="handleScannerError"
+								@toggle="scannerActive = !scannerActive"
+								>
+							</QrCodeReader>
+							<UButton
+								v-if="!scannerActive"
+								variant="ghost"
+								color="primary"
+								icon="i-lucide-camera"
+								aria-label="Toggle QR scanner"
+								@click="scannerActive = !scannerActive"
 							/>
 						</div>
-					</UFormField>
-
-					<UFormField :label="t('attendance.include.label')" size="xs">
-						<USelect
-							v-model="includeMode"
-							:items="includeOptions"
-							value-key="value"
-							label-key="label"
-							size="xs"
-							portal
-						/>
-					</UFormField>
-
-					<UFormField :label="t('labels.search')" size="xs">
-						<UInput
-							v-model="searchText"
-							size="xs"
-							placeholder=""
-						/>
-					</UFormField>
-				</div>
-			</UDashboardToolbar>
-		</template>
-
-		<!-- Tabs and Tables -->
-		<template #body>
-			<UTabs v-model="selectedTab" :items="tabItems" class="AttendanceTabs">
+					</div>
+				</UDashboardToolbar>
+			</template>
+			
+			<!-- Tabs and Tables -->
+			<template #body>
+				<UTabs v-model="selectedTab" :items="tabItems" class="AttendanceTabs">
 				<template #coders>
 
 					<!-- Coders Table -->
 					<UTable v-bind="codersTableProps" class="CodersTable">
 						<template #present-cell="{ row }">
-							<div>
+							<div 
+								:id="`MemberRow_${row.original.memberId}`"
+								:data-highlighted="row.original.memberId === highlightedMemberId ? 'true' : 'false'"
+							>
 								<UCheckbox
 									class="PresentCheckbox"
 									:model-value="row.original.present"
@@ -802,7 +934,7 @@
 									:member="row.original.member"
 									size="sm"
 								/>
-								<span>{{ row.original.name }}</span>
+								<span class="MemberName" @click="MemberClicked(row.original.member)">{{ row.original.name }}</span>
 							</div>
 						</template>
 						<template #team-cell="{ row }">
@@ -836,21 +968,26 @@
 				<template #mentors>
 					<UTable v-bind="mentorsTableProps" class="MentorsTable">
 						<template #present-cell="{ row }">
-							<UCheckbox
-								class="PresentCheckbox"
-								:model-value="row.original.present"
-								:disabled="!!isSavingByMemberId[row.original.memberId]"
-								@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
-							/>
+							<div 
+								:id="`MemberRow_${row.original.memberId}`"
+								:data-highlighted="row.original.memberId === highlightedMemberId ? 'true' : 'false'"
+							>
+								<UCheckbox
+									class="PresentCheckbox"
+									:model-value="row.original.present"
+									:disabled="!!isSavingByMemberId[row.original.memberId]"
+									@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
+								/>
+							</div>
 						</template>
 						<template #name-cell="{ row }">
-							<div class="flex items-center gap-3">
+							<div class="MemberAvatarNameCell flex items-center gap-3">
 								<MemberAvatar
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
 								/>
-								<span>{{ row.original.name }}</span>
+								<span class="MemberName" @click="MemberClicked(row.original.member)">{{ row.original.name }}</span>
 							</div>
 						</template>
 					</UTable>
@@ -884,13 +1021,42 @@
 	}
 
 	.CodersTable,.MentorsTable {
-			thead {
-				tr {
-					th:first-child {
-						padding: 0;
+		thead {
+			tr {
+				th:first-child {
+					padding: 0;
+				}
+
+				.Header_beltColor {
+					.HeaderText {
+						@media (max-width: 640px) {
+							display: none;
+						}
 					}
 				}
 			}
+		}
+		tbody {
+			.MemberName {
+				cursor: pointer;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			/* Target rows containing a highlighted cell */
+			tr:has([data-highlighted="true"]) {
+				td:not(:has([role="checkbox"])) {
+					background: var(--ui-bg-inverted);
+					color: var(--ui-text-inverted);
+				}
+			}
+
+			.HighlightedRow_true {
+				background: var(--ui-bg-inverted);
+				color: var(--ui-text-inverted);
+			}
+		}
 	}
 
 	.PresentCheckbox {
@@ -900,5 +1066,22 @@
 
 	.MemberBelt {
 		margin: 0 auto;
+	}
+
+	.AttendanceDashboardToolbar {
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+
+		.AttendanceHeaderInputs {
+			display: flex;
+			flex-wrap: wrap;
+			flex-grow: 1;
+		}
+		.QrScanner {
+			max-width: min(30vw, 170px);
+			margin-bottom: 0.5rem;
+		}
 	}
 </style>

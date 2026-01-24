@@ -117,7 +117,7 @@ export default defineNuxtConfig({
 		serverBundle: {
 			collections: ["heroicons", "logos", "mdi", "util"],
 		},
-		size: "24px", // default <Icon> size applied
+		size: "1.9rem", // default <Icon> size applied
 		class: "icon", // default <Icon> class applied
 		mode: "css", // default <Icon> mode applied
 	},

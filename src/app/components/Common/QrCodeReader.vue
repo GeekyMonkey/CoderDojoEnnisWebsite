@@ -20,26 +20,36 @@ const log = useLogger("common/QrCodeReader");
 
 const isActive = ref<boolean>(false);
 const errorMessage = ref<string | null>(null);
+const mirror = ref<boolean>(false);
 
+/**
+ * Detected Code Type
+ */
 type DetectedCode = {
 	boundingBox?: { x: number; y: number; width: number; height: number };
 	rawValue?: string;
 };
 
-/** Start scanning and reset any existing error */
+/**
+ * Start scanning and reset any existing error
+ */
 const startScanning = () => {
 	errorMessage.value = null;
 	isActive.value = true;
 	log.info("[QR] start scanning");
 };
 
-/** Stop scanning and release the camera */
+/**
+ * Stop scanning and release the camera
+ */
 const stopScanning = () => {
 	isActive.value = false;
 	log.info("[QR] stop scanning");
 };
 
-/** Handle decoded QR payload */
+/**
+ * Handle decoded QR payload
+ */
 const handleDecode = (decoded: string) => {
 	if (!decoded) {
 		log.warn("[QR] decoded empty payload");
@@ -70,7 +80,9 @@ const emitToggle = () => {
 	emit("toggle");
 };
 
-/** Surface camera or decoding errors */
+/**
+ * Surface camera or decoding errors
+ */
 const handleError = (error: Error) => {
 	const message: string = error?.message || "Unable to access camera";
 	errorMessage.value = message;
@@ -78,7 +90,17 @@ const handleError = (error: Error) => {
 	emit("error", message);
 };
 
-/** Draw a thick green border around detected QR codes */
+/**
+ * If it's a selfie camera, mirror the preview
+ */
+const handleCameraOn = (capabilities: Partial<MediaTrackCapabilities>) => {
+	log.info("[QR] camera on", { capabilities });
+	mirror.value = (capabilities.facingMode?.[0] == "user");
+};
+
+/**
+ * Draw a thick green border around detected QR codes
+ */
 const drawBoundingBox = (detectedCodes: DetectedCode[], ctx: CanvasRenderingContext2D) => {
 	if (!ctx || !ctx.canvas) return;
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -110,12 +132,13 @@ watch(
 <template>
 	<div class="QrCodeReader" :data-active="isActive" @click="emitToggle">
 		<ClientOnly>
-			<div v-if="isActive" class="QrLive" data-test="qr-live">
+			<div v-if="isActive" :class="`QrLive Mirror_${mirror}`" data-test="qr-live">
 				<QrcodeStream
 					:track="drawBoundingBox"
 					@detect="handleDetect"
 					@decode="handleDecode"
 					@error="handleError"
+					@camera-on="handleCameraOn"
 				/>
 			</div>
 			<div v-else class="QrPlaceholder" data-test="qr-placeholder">
@@ -140,21 +163,19 @@ watch(
 .QrCodeReader {
 	display: grid;
 	gap: calc(var(--spacing) * 1);
-	border: 1px dashed var(--color-gray-300, #d1d5db);
+	border: 1px solid var(--ui-border);
 	border-radius: var(--radius-md, 12px);
-	padding: calc(var(--spacing) * 1.5);
-	background: var(--color-gray-50, #f9fafb);
 	cursor: pointer;
-}
-
-.QrCodeReader[data-active="true"] {
-	background: var(--color-gray-100, #f3f4f6);
 }
 
 .QrLive {
 	width: 100%;
 	border-radius: var(--radius-md, 12px);
 	overflow: hidden;
+
+	&.Mirror_true {
+		transform: scaleX(-1);
+	}
 }
 
 .QrPlaceholder {

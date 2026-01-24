@@ -15,8 +15,22 @@ export function useMembersStore() {
 		},
 	});
 
+	/**
+	 * Map of Members by ID
+	 */
+	const MembersById = computed(() => {
+		const map: Record<string, MemberModel> = {};
+		if (membersStore.Items) {
+			for (const member of membersStore.Items.value || []) {
+				map[member.id] = member;
+			}
+		}
+		return map;
+	});
+
 	return {
 		...membersStore,
 		Members: membersStore.Items,
+		MembersById,
 	};
 }
