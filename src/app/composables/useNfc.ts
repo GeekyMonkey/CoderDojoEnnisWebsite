@@ -1,6 +1,6 @@
 import { ref, onUnmounted, watch, unref } from 'vue';
 
-type NfcMessageCallback = (message: NDEFMessage) => void;
+type NfcMessageCallback = (serialNumber: string, message: NDEFMessage) => void;
 type NfcErrorCallback = (error: string) => void;
 
 let ndef: NDEFReader | null = null;
@@ -32,7 +32,7 @@ export function useNfc(
 			abortController = new AbortController();
 
 			ndef.onreading = (event: NDEFReadingEvent) => {
-				onMessage(event.message);
+				onMessage(event.serialNumber, event.message);
 			};
 
 			ndef.onreadingerror = (event: Event) => {

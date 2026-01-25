@@ -191,10 +191,10 @@
 		return t("signIn.sessionCount", count, { count });
 	});
 
-	const handleNfcMessage = (message: NDEFMessage): void => {
+	const handleNfcMessage = ({serialNumber, message}: {serialNumber: string, message: NDEFMessage}): void => {
 		const records = message.records;
-		log.info("NFC tag detected", { message });
-		alert(JSON.stringify(message));
+		log.info("NFC tag detected", { serialNumber, message });
+		alert("TAG: " + JSON.stringify({ serialNumber, message, records, recordCount: records?.length }));
 
 		// if (!records || records.length === 0) {
 		// 	log.warn("[SignIn][NFC] No NDEF records found");
