@@ -191,7 +191,12 @@
 		return t("signIn.sessionCount", count, { count });
 	});
 
-	const handleNfcMessage = ({serialNumber, message}: {serialNumber: string, message: NDEFMessage}): void => {
+	const handleNfcError: NfcErrorCallback = (error): void => {
+		log.error("NFC Error", { error });
+		alert("NFC Error: " + error);
+	};
+
+	const handleNfcMessage: NfcMessageCallback = ({serialNumber, message}): void => {
 		const records = message.records;
 		log.info("NFC tag detected", { serialNumber, message });
 		alert("TAG: " + JSON.stringify({ serialNumber, message, records, recordCount: records?.length }));
@@ -302,7 +307,7 @@
 							aria-label="Toggle QR scanner"
 							@click="scannerActive = 1"
 						/>
-						<NfcToggle @message="handleNfcMessage" />
+						<NfcToggle @message="handleNfcMessage" @error="handleNfcError" />
 					</div>
 				</UForm>
 			</UPageCard>

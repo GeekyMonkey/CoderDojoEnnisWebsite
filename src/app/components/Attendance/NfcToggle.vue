@@ -3,8 +3,8 @@ import { computed } from "vue";
 import { useNfc } from "~/composables/useNfc";
 
 const props = defineProps<{
-	onMessage: (serialNumber: string, message: NDEFMessage) => void;
-	onError?: (error: string) => void;
+	onMessage: NfcMessageCallback;
+	onError?: NfcErrorCallback;
 }>();
 
 const nfcActive = useLocalStorage("nfc-active", false);
