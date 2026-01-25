@@ -180,12 +180,6 @@
 
 			<template #footer>
 				<div class="flex items-center gap-2 justify-end">
-					<UButton
-						type="submit"
-						:loading="isSubmitting"
-					>
-						{{ t('login.loginButton') }}
-					</UButton>
 					<NfcToggle
 						@message="handleNfcMessage"
 						@error="handleNfcError"

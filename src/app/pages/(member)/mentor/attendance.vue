@@ -918,7 +918,7 @@
 							</UFormField>
 						</div>
 
-						<div class="QrScanner">
+						<div class="QrScanner" v-if="isCurrentSessionSelected">
 							<QrCodeReader
 								v-if="scannerActive"
 								:active="scannerActive"

@@ -69,7 +69,7 @@ export function useNfc(
 				stopScanning();
 			}
 		}
-	);
+		, { immediate: true });
 
 	onUnmounted(() => {
 		stopScanning();
