@@ -36,7 +36,7 @@ importers:
         specifier: 5.92.8
         version: 5.92.8(vue@3.5.26(typescript@5.9.3))
       '@tanstack/vue-table':
-        specifier: ^8.21.3
+        specifier: 8.21.3
         version: 8.21.3(vue@3.5.26(typescript@5.9.3))
       '@vueuse/nuxt':
         specifier: 14.1.0
@@ -96,6 +96,9 @@ importers:
       '@types/node':
         specifier: 24.10.9
         version: 24.10.9
+      '@types/w3c-web-nfc':
+        specifier: 1.0.4
+        version: 1.0.4
       '@vitejs/plugin-vue':
         specifier: 6.0.3
         version: 6.0.3(vite@6.4.1(@types/node@24.10.9)(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.97.3)(terser@5.44.1)(yaml@2.8.2))(vue@3.5.26(typescript@5.9.3))
@@ -2679,6 +2682,9 @@ packages:
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+
+  '@types/w3c-web-nfc@1.0.4':
+    resolution: {integrity: sha512-AxTfPROOzdBhpBhrmwNn19gk36nK9SwRppSVe2C2y0TFuz/nzJ1m9oYC5DNoMeajEhHL44M+zxcH8GTkhgYteQ==}
 
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
@@ -8598,6 +8604,8 @@ snapshots:
       '@types/node': 24.10.9
 
   '@types/resolve@1.20.2': {}
+
+  '@types/w3c-web-nfc@1.0.4': {}
 
   '@types/web-bluetooth@0.0.20': {}
 

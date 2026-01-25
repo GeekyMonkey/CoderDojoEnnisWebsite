@@ -23,7 +23,7 @@
 		// Include DOM types for client-side components
 		"lib": ["es2022", "DOM", "DOM.Iterable"],
 
-		// Cloudflare Workers
-		"types": ["@cloudflare/workers-types/2023-07-01"]
+		// Cloudflare Workers & Web NFC types
+		"types": ["@cloudflare/workers-types/2023-07-01", "w3c-web-nfc"]
 	}
 }

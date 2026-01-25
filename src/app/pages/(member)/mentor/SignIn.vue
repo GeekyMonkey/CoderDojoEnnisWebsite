@@ -191,6 +191,29 @@
 		return t("signIn.sessionCount", count, { count });
 	});
 
+	const handleNfcMessage = (message: NDEFMessage): void => {
+		const records = message.records;
+		log.info("NFC tag detected", { message });
+		alert(JSON.stringify(message));
+
+		// if (!records || records.length === 0) {
+		// 	log.warn("[SignIn][NFC] No NDEF records found");
+		// 	return;
+		// }
+
+		// for (const record of records) {
+		// 	if (record.recordType === "text") {
+		// 		const textDecoder = new TextDecoder(record.encoding || "utf-8");
+		// 		const memberGuid = textDecoder.decode(record.data);
+		// 		log.info("[SignIn][NFC] Decoded member GUID from NFC", { memberGuid });
+		// 		await handleGuidDecoded(memberGuid);
+		// 		return;
+		// 	}
+		// }
+
+		// log.warn("[SignIn][NFC] No text record found in NDEF message");
+	};
+
 	/**
 	 * Revalidate form on language change to update validation messages
 	 */
@@ -279,6 +302,7 @@
 							aria-label="Toggle QR scanner"
 							@click="scannerActive = 1"
 						/>
+						<NfcToggle @message="handleNfcMessage" />
 					</div>
 				</UForm>
 			</UPageCard>
