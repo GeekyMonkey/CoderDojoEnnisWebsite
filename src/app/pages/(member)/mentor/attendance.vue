@@ -60,7 +60,7 @@
 	const { TeamsById } = useTeamsStore();
 	const { BeltsById } = useBeltsStore();
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
-	const { signInMemberByGuid } = useMemberAttendanceStore();
+	const { signInMemberByGuid, signInMemberByNfcTag } = useMemberAttendanceStore();
 	const log = useLogger("mentor/attendance");
 	
 	const initialDate = (route.query.date as string) || "";
@@ -69,6 +69,7 @@
 	const codersSorting = ref<SingleSortState>({ ...defaultSort });
 	const mentorsSorting = ref<SingleSortState>({ ...defaultSort });
 	const scannerActive = ref(route.query.qr === "1" || false);
+	const nfcActive = ref(route.query.nfc === "1" || false);
 	const isSubmitting = ref(false);
 	const highlightedMemberId = ref<string | null>(null);
 
@@ -111,6 +112,7 @@
 		setQuery("include", includeMode.value || undefined);
 		setQuery("search", searchText.value || undefined);
 		setQuery("qr", scannerActive.value ? "1" : undefined);
+		setQuery("nfc", nfcActive.value ? "1" : undefined);
 		
 		// Tab: default "coders" is implied by absence
 		setQuery(
@@ -408,6 +410,31 @@
 	};
 
 	const isSavingByMemberId = ref<Record<string, true>>({});
+
+	/**
+	 * Handle NFC message -> NFC tag sign in
+	 */
+	const handleNfcMessage = async ({ serialNumber, message }: { serialNumber: string; message: NDEFMessage }): Promise<void> => {
+		log.info("[SignIn][NFC] detected NFC tag", { serialNumber });
+
+		isSubmitting.value = true;
+		try {
+			const result = await signInMemberByNfcTag({ nfcTag: serialNumber });
+			log.info("[SignIn][NFC] result:", result);
+			if (result.success) {
+				await applySignInSuccess(result.data.memberDetails);
+				return;
+			}
+		} catch (err) {
+			log.error("[SignIn][NFC] POST error", { error: ErrorToString(err) }, err);
+		} finally {
+			isSubmitting.value = false;
+		}
+	};
+
+	const handleNfcError = async (message: string): Promise<void> => {
+		log.error("NFC Error", { error: message });
+	};
 
 	/**
 	 * Set Member Present status for the selected session date
@@ -749,6 +776,12 @@
 			) {
 				selectedTab.value = tabVal;
 			}
+
+			// NFC Active
+			const nfcVal = q.nfc === "1";
+			if (nfcVal !== nfcActive.value) {
+				nfcActive.value = nfcVal;
+			}
 		},
 		{ deep: true },
 	);
@@ -758,7 +791,7 @@
 	 * Sync Out (State -> URL)
 	 */
 	watch(
-		[selectedSessionDate, includeMode, searchText, selectedTab, scannerActive],
+		[selectedSessionDate, includeMode, searchText, selectedTab, scannerActive, nfcActive],
 		() => {
 			updateUrl();
 		},
@@ -901,6 +934,10 @@
 								icon="i-lucide-camera"
 								aria-label="Toggle QR scanner"
 								@click="scannerActive = !scannerActive"
+							/>
+							<NfcToggle
+								:on-message="handleNfcMessage"
+								:on-error="handleNfcError"
 							/>
 						</div>
 					</div>
