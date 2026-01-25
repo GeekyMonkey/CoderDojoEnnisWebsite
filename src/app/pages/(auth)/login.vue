@@ -20,10 +20,12 @@
 
 	const router = useRouter();
 	const { t } = useI18n();
+	const log = useLogger("auth/login");
 	const { supabaseClient } = UseSupabaseClient();
-	const { login } = useAuthStore();
+	const { login, loginWithNfc } = useAuthStore();
 	const errorMessage = ref<string | null>(null);
 	const authForm = ref<(ComponentPublicInstance & AuthFormExpose) | null>(null);
+	const isSubmitting = ref(false);
 
 	/**
 	 * Form Validation (localized)
@@ -65,38 +67,74 @@
 	};
 
 	/**
+	 * Complete login and redirect
+	 */
+	const completeLogin = async (result: ApiResponse<{ session: any; member: any }>) => {
+		if (result.success) {
+			const authResponse = await supabaseClient.auth.setSession(
+				result.data.session,
+			);
+			log.info("[Login] Auth Response:", authResponse);
+
+			const userRef = useSupabaseUser();
+			const user = await waitForRefValue(userRef, 5000);
+
+			if (user) {
+				log.info("[Login] User:", { user: user.value });
+				router.replace("/logged_in");
+			} else {
+				errorMessage.value = "Could Not Complete Login";
+			}
+		} else if (result.error) {
+			log.error("[Login] Error:", { error: result.error });
+			errorMessage.value = result.error || "Could Not Complete Login";
+		}
+	};
+
+	/**
 	 * Handle Login
 	 */
 	const handleLogin = async (event: FormSubmitEvent<FormSchema>) => {
 		const { username, password } = event.data;
 		
 		clearErrorMessage();
+		isSubmitting.value = true;
 
-		const result = await login(username, password);
-
-		console.log("[Login] result:", result);
-		if (result.success) {
-			// console.log("JWT:", { session: result.data.session });
-			const authResponse = await supabaseClient.auth.setSession(
-				result.data.session,
-			);
-			console.log("[Login] Auth Response:", authResponse);
-
-			const userRef = useSupabaseUser();
-			const user = await waitForRefValue(userRef, 5000);
-
-			if (user) {
-				// todo - save member and session in the store?
-				// This will continue with a redirect to the /logged_in page
-				console.log("[Login] User:", user);
-				router.replace("/logged_in");
-			} else {
-				errorMessage.value = "Could Not Complete Login";
-			}
-		} else if (result.error) {
-			console.error("[Login] Error:", result.error);
-			errorMessage.value = result.error || "Could Not Complete Login";
+		try {
+			const result = await login(username, password);
+			log.info("[Login] result:", result);
+			await completeLogin(result);
+		} finally {
+			isSubmitting.value = false;
 		}
+	};
+
+	/**
+	 * Handle NFC message
+	 */
+	const handleNfcMessage: NfcMessageCallback = async ({ serialNumber, message }): Promise<void> => {
+		log.info("NFC tag detected", { serialNumber, message });
+
+		clearErrorMessage();
+		isSubmitting.value = true;
+		try {
+			const result = await loginWithNfc(serialNumber);
+			log.info("[Login][NFC] result:", result);
+			await completeLogin(result);
+		} catch (err) {
+			log.error("[Login][NFC] Error:", { error: err });
+			errorMessage.value = t("login.nfcErrorFallback");
+		} finally {
+			isSubmitting.value = false;
+		}
+	};
+
+	/**
+	 * Handle NFC error
+	 */
+	const handleNfcError: NfcErrorCallback = async (error): Promise<void> => {
+		log.error("NFC Error", { error });
+		errorMessage.value = `NFC Error: ${error}`;
 	};
 
 	// -- Watchers --
@@ -138,6 +176,21 @@
 					icon="i-lucide-info"
 					:title="errorMessage"
 				/>
+			</template>
+
+			<template #footer>
+				<div class="flex items-center gap-2 justify-end">
+					<UButton
+						type="submit"
+						:loading="isSubmitting"
+					>
+						{{ t('login.loginButton') }}
+					</UButton>
+					<NfcToggle
+						@message="handleNfcMessage"
+						@error="handleNfcError"
+					/>
+				</div>
 			</template>
 		</UAuthForm>
 	</UPageCard>

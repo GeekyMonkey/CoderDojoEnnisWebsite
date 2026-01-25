@@ -40,7 +40,11 @@ export type ValidateCredentialsResult = {
 export type LoginWithPasswordResult = {
 	member: MemberModel;
 	session: Session;
-	memberRecord: MemberRecord;
+};
+
+export type LoginWithNfcTagResult = {
+	member: MemberModel;
+	session: Session;
 };
 
 export class AuthService {
@@ -101,7 +105,32 @@ export class AuthService {
 		if (!session) {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);
 		}
-		return { member, session, memberRecord };
+		return { member, session };
+	}
+
+	/**
+	 * Log in with NFC tag, returning member and supabase session
+	 */
+	async loginWithNfcTag(
+		nfcTag: string,
+		logs: string[] = [],
+	): Promise<LoginWithNfcTagResult> {
+		const trimmedTag = (nfcTag || "").trim();
+		if (!trimmedTag) {
+			throw new AuthServiceError("NFC tag required", "INVALID_INPUT", logs);
+		}
+
+		const member = await MembersData.GetMemberByNfcTag(this.event, trimmedTag);
+		if (!member || member.deleted) {
+			throw new AuthServiceError("Invalid login", "NO_MATCHING_MEMBER", logs);
+		}
+
+		const session = await this.createSupabaseSession(member, logs);
+		if (!session) {
+			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);
+		}
+
+		return { member, session };
 	}
 
 	/**

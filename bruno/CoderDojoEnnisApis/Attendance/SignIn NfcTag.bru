@@ -1,0 +1,22 @@
+meta {
+  name: SignIn NfcTag
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{Host}}/api/MemberAttendance/SignInNfcTag
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nfcTag": "{{NfcTag}}",
+    "testing": true
+  }
+}
+
+vars:pre-request {
+  NfcTag: 04:7b:ac:32:29:5e:80
+}

@@ -36,6 +36,9 @@ interface UseMemberAttendanceStoreResult {
 	signInMemberByGuid: (
 		args: { memberGuid: string },
 	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
+	signInMemberByNfcTag: (
+		args: { nfcTag: string },
+	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
 }
 
 let _store: UseMemberAttendanceStoreResult | null = null;
@@ -191,6 +194,9 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		return [...years].sort((a, b) => b.localeCompare(a));
 	});
 
+	/**
+	 * Computed member IDs for the current session date
+	 */
 	const CurrentSessionMemberIds = computed(
 		() => currentSessionData.value?.memberIds || [],
 	);
@@ -356,6 +362,22 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		return response;
 	};
 
+	/**
+	 * Sign in a member using their NFC tag
+	 */
+	const signInMemberByNfcTag = async ({
+		nfcTag,
+	}: { nfcTag: string }) => {
+		const response = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
+			"/api/MemberAttendance/SignInNfcTag",
+			{
+				method: "POST",
+				body: { nfcTag },
+			},
+		);
+		return response;
+	};
+
 	_store = {
 		SessionDates: SessionDates as Ref<string[]>,
 		get SessionStats() {
@@ -366,7 +388,6 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		CurrentSessionMemberIds: CurrentSessionMemberIds,
 		CurrentSessionDate: CurrentSessionDate,
 		useSessionAttendanceForDate,
-		// useSessionAttendanceForDateRange,
 		isLoading: computed(
 			() => isSessionStatsEnabled.value && isLoadingStats.value,
 		),
@@ -381,6 +402,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		setMemberPresent,
 		signInMember,
 		signInMemberByGuid,
+		signInMemberByNfcTag,
 	};
 
 	return _store;

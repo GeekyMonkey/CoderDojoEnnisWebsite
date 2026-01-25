@@ -12,7 +12,7 @@
 
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
-	const { signInMember, signInMemberByGuid } = useMemberAttendanceStore();
+	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } = useMemberAttendanceStore();
 	const { speak } = useSpeechSynth();
 
 	const errorMessage = ref<string | null>(null);
@@ -150,7 +150,9 @@
 	 */
 	const handleGuidDecoded = async (memberGuid: string) => {
 		const trimmed = memberGuid?.trim();
-		if (!trimmed) return;
+		if (!trimmed) {
+			return;
+		}
 
 		log.info("[SignIn][QR] decoded GUID", { memberGuid: trimmed });
 
@@ -191,42 +193,31 @@
 		return t("signIn.sessionCount", count, { count });
 	});
 
-	const handleNfcError: NfcErrorCallback = (error): void => {
+	const handleNfcError: NfcErrorCallback = async (error): Promise<void> => {
 		log.error("NFC Error", { error });
 		alert("NFC Error: " + error);
 	};
 
-	const handleNfcMessage: NfcMessageCallback = ({serialNumber, message}): void => {
-		const records = message.records;
+	const handleNfcMessage: NfcMessageCallback = async({serialNumber, message}): Promise<void> => {
 		log.info("NFC tag detected", { serialNumber, message });
-		alert("TAG: " + JSON.stringify({
-			serialNumber,
-			message,
-			records,
-			recordCount: records?.length,
-			recordType: records?.[0]?.recordType,
-			toStr: records?.[0]?.toString(),
-			toRec: records?.[0]?.toRecords?.(),	
-			data: records?.[0]?.data ? new TextDecoder().decode(records[0].data) : null,
 
-		}));
-
-		// if (!records || records.length === 0) {
-		// 	log.warn("[SignIn][NFC] No NDEF records found");
-		// 	return;
-		// }
-
-		// for (const record of records) {
-		// 	if (record.recordType === "text") {
-		// 		const textDecoder = new TextDecoder(record.encoding || "utf-8");
-		// 		const memberGuid = textDecoder.decode(record.data);
-		// 		log.info("[SignIn][NFC] Decoded member GUID from NFC", { memberGuid });
-		// 		await handleGuidDecoded(memberGuid);
-		// 		return;
-		// 	}
-		// }
-
-		// log.warn("[SignIn][NFC] No text record found in NDEF message");
+		clearErrorMessage();
+		isSubmitting.value = true;
+		try {
+			const result = await signInMemberByNfcTag({ nfcTag: serialNumber });
+			log.info("[SignIn][NFC] result:", result);
+			if (result.success) {
+				await applySignInSuccess(result.data);
+				return;
+			}
+			errorMessage.value = result.error || t("signIn.nfcErrorFallback");
+		} catch (err) {
+			const message: string = ErrorToString(err);
+			log.error("[SignIn][NFC] POST error", undefined, err);
+			errorMessage.value = message;
+		} finally {
+			isSubmitting.value = false;
+		}
 	};
 
 	/**

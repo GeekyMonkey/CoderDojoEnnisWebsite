@@ -1,7 +1,7 @@
 import { ref, onUnmounted, watch, unref } from 'vue';
 
-export type NfcMessageCallback = ({serialNumber, message}: {serialNumber: string, message: NDEFMessage}) => void;
-export type NfcErrorCallback = (error: string) => void;
+export type NfcMessageCallback = ({serialNumber, message}: {serialNumber: string, message: NDEFMessage}) => Promise<void>;
+export type NfcErrorCallback = (error: string) => Promise<void>;
 
 let ndef: NDEFReader | null = null;
 

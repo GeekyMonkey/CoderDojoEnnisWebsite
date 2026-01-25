@@ -5,7 +5,16 @@
 		"dev": "pnpm -r --parallel dev",
 		"build": "pnpm -r --parallel build",
 		"format": "pnpm -r --parallel format",
-		"postinstall": "pnpm -r postinstall"
+		"openspec-update": "npm i -g @fission-ai/openspec",
+		"postinstall": "pnpm -r postinstall",
+		"supabase:sync": "node scripts/sync-supabase.js",
+		"supabase:commit": "node scripts/commit-supabase.js",
+		"supabase:migrate": "pnpm supabase:sync && pnpx supabase db push && pnpm supabase:commit",
+		"supabase:migrate:force": "pnpm supabase:sync && pnpx supabase db push --force-db-reset && pnpm supabase:commit",
+		"supabase:types": "pnpm supabase:sync && pnpx supabase gen types typescript --project-id newsofwpimzmfbqsooka --schema coderdojo > src/types/supabase.ts",
+		"supabase:reset": "pnpm supabase:sync && pnpx supabase db reset",
+		"supabase:list": "pnpx supabase migration list",
+		"supabase:link": "pnpx supabase link --project-ref newsofwpimzmfbqsooka"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.12"

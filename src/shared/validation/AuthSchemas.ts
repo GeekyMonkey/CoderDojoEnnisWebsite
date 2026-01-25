@@ -17,11 +17,22 @@ export const passwordSchema = z
 	.min(PASSWORD_LENGTH_MIN, { error: "Password too short" })
 	.max(120, { error: "Password too long" });
 
+export const nfcTagSchema = z
+	.string()
+	.trim()
+	.min(1, { error: "NFC tag cannot be blank" })
+	.max(120, { error: "NFC tag too long" });
+
 export const loginRequestSchema = z.object({
 	username: usernameSchema,
 	password: passwordSchema,
 });
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
+
+export const loginNfcTagRequestSchema = z.object({
+	nfcTag: nfcTagSchema,
+});
+export type LoginNfcTagRequest = z.infer<typeof loginNfcTagRequestSchema>;
 
 export const passwordChangeRequestSchema = z
 	.object({

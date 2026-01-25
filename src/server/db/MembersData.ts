@@ -107,6 +107,38 @@ export const MembersData = {
 	},
 
 	/**
+	 * Get one active member by NFC tag
+	 */
+	GetMemberByNfcTag: async (
+		event: H3Event<EventHandlerRequest>,
+		nfcTag: string,
+	): Promise<MemberModel | null> => {
+		const supabase = await GetSupabaseAdminClient(event);
+		if (!supabase || !nfcTag) {
+			return null;
+		}
+
+		try {
+			const { data, error } = await supabase
+				.schema("coderdojo")
+				.from("members")
+				.select("*")
+				.eq("nfc_tag", nfcTag)
+				.eq("deleted", false)
+				.single();
+			if (error || !data) {
+				console.error("Error fetching member by NFC tag:", error);
+				return null;
+			}
+			return memberFromRecords([data])[0];
+		} catch (error) {
+			throw new Error(
+				`Error fetching member by NFC tag: ${ErrorToString(error)}`,
+			);
+		}
+	},
+
+	/**
 	 * Get active members by login username (or email)
 	 */
 	GetMembersByLoginUsername: async (

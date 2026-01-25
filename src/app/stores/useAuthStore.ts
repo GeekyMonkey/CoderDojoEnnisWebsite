@@ -17,6 +17,9 @@ interface AuthState {
 		username: string,
 		password: string,
 	) => Promise<ApiResponse<{ session: Session; member: MemberModel }>>;
+	loginWithNfc: (
+		nfcTag: string,
+	) => Promise<ApiResponse<{ session: Session; member: MemberModel }>>;
 }
 
 let _store: AuthState | null = null;
@@ -54,6 +57,9 @@ export function useAuthStore(): AuthState {
 		ready.value = true;
 	}
 
+	/**
+	 * Log in with username and password
+	 */
 	async function login(username: string, password: string) {
 		const result = await $fetch<
 			ApiResponse<{ session: Session; member: MemberModel }>
@@ -75,6 +81,23 @@ export function useAuthStore(): AuthState {
 		return result;
 	}
 
+	/**
+	 * Log in with NFC tag value
+	 */
+	async function loginWithNfc(nfcTag: string) {
+		const result = await $fetch<
+			ApiResponse<{ session: Session; member: MemberModel }>
+		>("/api/Auth/LoginNfcTag", {
+			method: "POST",
+			body: {
+				nfcTag,
+				credentials: "include",
+			},
+		});
+
+		return result;
+	}
+
 	_store = {
 		user,
 		initializing,
@@ -88,6 +111,7 @@ export function useAuthStore(): AuthState {
 		markReady,
 		reset,
 		login,
+		loginWithNfc,
 	};
 	return _store;
 }

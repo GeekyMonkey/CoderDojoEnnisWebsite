@@ -337,6 +337,7 @@ export type Database = {
           deleted: boolean
           email: string | null
           fingerprint_id: number | null
+          nfc_tag: string | null
           garda_vetted: boolean
           github_login: string | null
           goal_long_term: string | null
@@ -364,6 +365,7 @@ export type Database = {
           deleted?: boolean
           email?: string | null
           fingerprint_id?: number | null
+          nfc_tag?: string | null
           garda_vetted?: boolean
           github_login?: string | null
           goal_long_term?: string | null
@@ -391,6 +393,7 @@ export type Database = {
           deleted?: boolean
           email?: string | null
           fingerprint_id?: number | null
+          nfc_tag?: string | null
           garda_vetted?: boolean
           github_login?: string | null
           goal_long_term?: string | null

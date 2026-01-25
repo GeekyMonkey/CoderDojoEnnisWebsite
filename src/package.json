@@ -14,22 +14,16 @@
 		"preview2": "npm run build && wrangler pages dev",
 		"postinstall": "nuxt prepare",
 		"start": "node .output/server/index.mjs",
-		"supabase:sync": "node ../scripts/sync-supabase.js",
-		"supabase:commit": "node ../scripts/commit-supabase.js",
-		"supabase-migrate": "pnpm supabase:sync && supabase db push --workdir ../supabase && pnpm supabase:commit",
-		"supabase-migrate:force": "pnpm supabase:sync && supabase db push --workdir ../supabase --force-db-reset && pnpm supabase:commit",
-		"supabase-types": "pnpm supabase:sync && supabase gen types typescript --workdir ../supabase --project-id newsofwpimzmfbqsooka --schema coderdojo > types/supabase.ts",
-		"supabase-reset": "pnpm supabase:sync && supabase db reset --workdir ../supabase",
 		"test": "cls && vitest"
 	},
 	"dependencies": {
-		"@iconify/json": "2.2.429",
+		"@iconify/json": "2.2.431",
 		"@nuxt/ui": "4.3.0",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.1",
 		"@nuxtjs/supabase": "2.0.3",
-		"@supabase/supabase-js": "2.90.1",
-		"@tanstack/vue-query": "5.92.8",
+		"@supabase/supabase-js": "2.91.1",
+		"@tanstack/vue-query": "5.92.9",
 		"@tanstack/vue-table": "8.21.3",
 		"@vueuse/nuxt": "14.1.0",
 		"@vueuse/router": "14.1.0",
@@ -44,7 +38,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.12",
-		"@cloudflare/workers-types": "4.20260118.0",
+		"@cloudflare/workers-types": "4.20260124.0",
 		"@nuxt/icon": "2.2.0",
 		"@tiptap/core": "3.15.3",
 		"@tiptap/pm": "3.15.3",
@@ -68,7 +62,7 @@
 		"typescript": "5.9.3",
 		"vite": "6.4.1",
 		"vitest": "4.0.18",
-		"wrangler": "4.59.2"
+		"wrangler": "4.59.3"
 	},
 	"packageManager": "pnpm@10.28.1",
 	"version": "0.1.0"
