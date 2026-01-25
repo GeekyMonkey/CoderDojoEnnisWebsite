@@ -199,7 +199,17 @@
 	const handleNfcMessage: NfcMessageCallback = ({serialNumber, message}): void => {
 		const records = message.records;
 		log.info("NFC tag detected", { serialNumber, message });
-		alert("TAG: " + JSON.stringify({ serialNumber, message, records, recordCount: records?.length }));
+		alert("TAG: " + JSON.stringify({
+			serialNumber,
+			message,
+			records,
+			recordCount: records?.length,
+			recordType: records?.[0]?.recordType,
+			toStr: records?.[0]?.toString(),
+			toRec: records?.[0]?.toRecords?.(),	
+			data: records?.[0]?.data ? new TextDecoder().decode(records[0].data) : null,
+
+		}));
 
 		// if (!records || records.length === 0) {
 		// 	log.warn("[SignIn][NFC] No NDEF records found");
