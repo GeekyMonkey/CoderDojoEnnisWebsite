@@ -6,15 +6,15 @@
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
-		"dev": "cls && pnpm install && nuxt dev",
+		"dev": "node -e \"console.clear()\" && pnpm install && nuxt dev",
 		"deploy": "npm run build && wrangler pages deploy",
-		"format": "cls && biome format . --write",
+		"format": "node -e \"console.clear()\" && biome format . --write",
 		"generate": "nuxt generate",
 		"preview1": "nuxt preview",
 		"preview2": "npm run build && wrangler pages dev",
 		"postinstall": "nuxt prepare",
 		"start": "node .output/server/index.mjs",
-		"test": "cls && vitest"
+		"test": "node -e \"console.clear()\" && vitest"
 	},
 	"dependencies": {
 		"@iconify/json": "2.2.431",
