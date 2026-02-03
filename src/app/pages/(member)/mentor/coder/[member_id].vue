@@ -1,10 +1,6 @@
 <script setup lang="ts">
 	import { useMembersStore } from "~/stores/useMembersStore";
 
-	definePageMeta({
-		layout: "member-layout",
-	});
-
 	const route = useRoute();
 	const { Members, isLoading, isError } = useMembersStore();
 

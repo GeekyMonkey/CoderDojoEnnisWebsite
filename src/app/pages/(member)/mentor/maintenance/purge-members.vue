@@ -1,8 +1,4 @@
 <script setup lang="ts">
-	definePageMeta({
-		layout: "member-layout",
-	});
-
 	const { pageTitle } = useMemberLayoutContext();
 </script>
 

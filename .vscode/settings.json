@@ -57,10 +57,10 @@
 	],
 	"dotnet.server.createSolution": false,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.biome": "always",
-		"source.organizeImports.biome": "always"
+		"source.fixAll.biome": "never",
+		"source.organizeImports.biome": "never"
 	},
-	"editor.defaultFormatter": "biomejs.biome",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.detectIndentation": true,
 	"editor.formatOnSave": true,
 	"editor.gotoLocation.multipleDefinitions": "goto",

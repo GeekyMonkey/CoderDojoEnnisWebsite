@@ -202,6 +202,12 @@ export default defineNuxtConfig({
     },
   },
 
+  routeRules: {
+    "/(auth)/**": { appLayout: "auth-layout" },
+    "/(member)/**": { appLayout: "member-layout" },
+    "/(public)/**": { appLayout: "default" },
+  },
+
   runtimeConfig: {
     public: {
       environment: {

@@ -1,10 +1,5 @@
 <script setup lang="ts">
 	const log = useLogger("MentorPage");
-
-	definePageMeta({
-		layout: "member-layout",
-	});
-
 	const { pageTitle } = useMemberLayoutContext();
 
 	onMounted(() => {

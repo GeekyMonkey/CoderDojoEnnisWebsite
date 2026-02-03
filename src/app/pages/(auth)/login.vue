@@ -14,10 +14,6 @@
 		formRef?: unknown;
 	};
 
-	definePageMeta({
-		layout: "auth-layout",
-	});
-
 	const router = useRouter();
 	const { t } = useI18n();
 	const log = useLogger("auth/login");

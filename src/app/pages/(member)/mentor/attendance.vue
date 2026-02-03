@@ -23,10 +23,6 @@
 		member: MemberModel;
 	};
 
-	definePageMeta({
-		layout: "member-layout",
-	});
-
 	const { pageTitle } = useMemberLayoutContext();
 	const { t } = useI18n();
 	const route = useRoute();
