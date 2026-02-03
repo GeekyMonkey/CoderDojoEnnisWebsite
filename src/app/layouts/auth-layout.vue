@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
 	<div class="AuthLayout">
@@ -37,7 +36,7 @@
 
 		.AuthFooter {
 			> * {
-			padding-top: 0;
+				padding-top: 0;
 			}
 		}
 	}

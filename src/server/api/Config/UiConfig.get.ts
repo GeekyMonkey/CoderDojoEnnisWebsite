@@ -22,11 +22,12 @@ export default defineEventHandler(
 			errors.push(`[UiConfig] GET error: ${ErrorToString(error)}`);
 		}
 
-		const bucketBaseUrl: string = await GetBucketBaseUrl({ event }) || "ERROR_GETTING_BUCKET_URL";
+		const bucketBaseUrl: string =
+			(await GetBucketBaseUrl({ event })) || "ERROR_GETTING_BUCKET_URL";
 
 		const uiConfig: UiConfigModel = {
 			themesConfig: themesConfig ?? ThemesConfigDefault,
-			bucketBaseUrl
+			bucketBaseUrl,
 		};
 
 		// Temporarily output debugging info

@@ -1,7 +1,5 @@
 import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
-import {
-	MemberAttendanceSessionStatsCollectionSchema,
-} from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
+import { MemberAttendanceSessionStatsCollectionSchema } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
 import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<{ dates: string[] }>;
@@ -33,7 +31,9 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 			attendance_total,
 			sessionCount,
 			sessionStats,
-		}).sessionStats.map((s) => s.date).sort((a, b) => b.localeCompare(a));
+		})
+			.sessionStats.map((s) => s.date)
+			.sort((a, b) => b.localeCompare(a));
 		resp.data = { dates };
 	} catch (error) {
 		resp = {

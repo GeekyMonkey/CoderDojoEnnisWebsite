@@ -8,7 +8,8 @@
 
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
-	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } = useMemberAttendanceStore();
+	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } =
+		useMemberAttendanceStore();
 	const { speak } = useSpeechSynth();
 
 	const errorMessage = ref<string | null>(null);
@@ -17,7 +18,6 @@
 	const signInForm = ref<unknown>(null);
 	const signInResponse = shallowRef<AttendanceSignInResponseModel | null>(null);
 	const showSignInNotifications = ref(false);
-	
 
 	/**
 	 * Form Schema Type
@@ -65,13 +65,15 @@
 		// by reactive updates (UInput/UForm validation + v-model clears).
 		await nextTick();
 		await nextTick();
-		await new Promise<void>((resolve) =>
-			(globalThis as any).requestAnimationFrame?.(() => resolve()) ?? resolve(),
+		await new Promise<void>(
+			(resolve) =>
+				(globalThis as any).requestAnimationFrame?.(() => resolve()) ??
+				resolve(),
 		);
 
 		const doc = (globalThis as any).document;
 		if (doc) {
-			const inputEl = doc.querySelector?.('input');
+			const inputEl = doc.querySelector?.("input");
 			if (inputEl) {
 				inputEl.focus();
 				inputEl.select();
@@ -80,7 +82,10 @@
 				(globalThis as any).setTimeout(() => {
 					inputEl.focus();
 					try {
-						console.log("[SignIn] focusUsername after timeout active:", doc?.activeElement);
+						console.log(
+							"[SignIn] focusUsername after timeout active:",
+							doc?.activeElement,
+						);
 					} catch {
 						// ignore
 					}
@@ -93,8 +98,9 @@
 	 * Notifications to display to signed in member (excluding greeting)
 	 */
 	const notifications = computed(() => {
-		return (signInResponse.value?.notifications || [])
-			.filter(n => n.type !== "GREETING");
+		return (signInResponse.value?.notifications || []).filter(
+			(n) => n.type !== "GREETING",
+		);
 	});
 
 	/**
@@ -194,7 +200,10 @@
 		alert("NFC Error: " + error);
 	};
 
-	const handleNfcMessage: NfcMessageCallback = async({serialNumber, message}): Promise<void> => {
+	const handleNfcMessage: NfcMessageCallback = async ({
+		serialNumber,
+		message,
+	}): Promise<void> => {
 		log.info("NFC tag detected", { serialNumber, message });
 
 		clearErrorMessage();
@@ -226,9 +235,12 @@
 	/**
 	 * Clear error message on input change
 	 */
-	watch(() => [formState.username, formState.password], () => {
-		clearErrorMessage();
-	});
+	watch(
+		() => [formState.username, formState.password],
+		() => {
+			clearErrorMessage();
+		},
+	);
 
 	/**
 	 * Hide sign-in notifications when username input begins
@@ -244,7 +256,6 @@
 			}
 		},
 	);
-
 </script>
 
 <template>
@@ -289,11 +300,7 @@
 					/>
 
 					<div class="SubmitRow">
-						<UButton
-							type="submit"
-							flex-grow
-							:loading="isSubmitting"
-						>
+						<UButton type="submit" flex-grow :loading="isSubmitting">
 							{{ t("signIn.signInButton") }}
 						</UButton>
 						<UButton
@@ -309,13 +316,10 @@
 				</UForm>
 			</UPageCard>
 
-			<UPageCard :class="`WelcomeCard WelcomeVisible_${showSignInNotifications}`">
-				<UAlert
-					v-if="signInResponse"
-					class="WelcomePanel"
-					color="success"
-				>
-
+			<UPageCard
+				:class="`WelcomeCard WelcomeVisible_${showSignInNotifications}`"
+			>
+				<UAlert v-if="signInResponse" class="WelcomePanel" color="success">
 					<template #description>
 						<div class="WelcomeStats">
 							<div class="WelcomeLine">
@@ -331,19 +335,14 @@
 
 							<MemberBelt :member="signInResponse.memberDetails" />
 
-							<TeamCard :for="signInResponse.memberDetails"
-								size="md"
-							/>
+							<TeamCard :for="signInResponse.memberDetails" size="md" />
 
 							<div
 								v-if="signInResponse.notifications?.length"
 								class="NotificationsList"
 							>
 								<ul class="BulletList">
-									<li
-										v-for="(n, idx) in notifications"
-										:key="idx"
-									>
+									<li v-for="(n, idx) in notifications" :key="idx">
 										{{ n.message }}
 									</li>
 								</ul>
@@ -367,115 +366,114 @@
 </template>
 
 <style lang="css">
-.SignInPage {
-	width: 100%;
-}
-
-.SignInPageGrid {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	align-items: stretch;
-}
-
-@media (min-width: 960px) {
-	.SignInPageGrid {
-		flex-direction: row;
-		align-items: flex-start;
-		justify-content: center;
-	}
-}
-
-.SignInCard {
-	width: 100%;
-	max-width: 500px;
-}
-
-.SignInForm {
-	display: grid;
-	gap: calc(var(--spacing) * 4);
-}
-
-.SignInHeader {
-	display: grid;
-	gap: calc(var(--spacing) * 1);
-}
-
-.SignInTitle {
-	display: flex;
-	align-items: center;
-	gap: calc(var(--spacing) * 2);
-	font-size: 1.5rem;
-	line-height: 1.9rem;
-	font-weight: 700;
-}
-
-.SubmitRow {
-	display: flex;
-	width: 100%;
-	gap: calc(var(--spacing) * 1);
-	align-items: center;
-
-	button[type="submit"] {
+	.SignInPage {
 		width: 100%;
 	}
-}
 
-.QrScanner {
-	margin-top: calc(var(--spacing) * 2);
-	max-width: 250px;
-}
-
-.WelcomeCard {
-	box-shadow: none;
-	border: none;
-	width: 100%;
-	max-width: 250px;
-	transition: all 0.3s ease-in-out;
-	
-	> [data-slot="container"] {
-		padding: 0;
-	}
-	
-	.WelcomePanel {
-		opacity: 1;
-		margin-top: 0;
-		transition: all 0.3s ease-in-out;
+	.SignInPageGrid {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: stretch;
 	}
 
-	&.WelcomeVisible_false {
-		
-		.WelcomePanel {
-			opacity: 0;
-			scale: 0.5;
+	@media (min-width: 960px) {
+		.SignInPageGrid {
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: center;
 		}
 	}
-}
 
-.WelcomeStats {
-	display: grid;
-	gap: calc(var(--spacing) * 1);
-}
-
-.WelcomeLine {
-	font-weight: 600;
-
-	.MemberAvatar {
-		display: block;
-		margin: 0 auto;
+	.SignInCard {
+		width: 100%;
+		max-width: 500px;
 	}
 
-	.MemberName {
-		font-size: 1.2rem;
+	.SignInForm {
+		display: grid;
+		gap: calc(var(--spacing) * 4);
 	}
-}
 
-.NotificationsList {
-	margin-top: calc(var(--spacing) * 2);
-}
+	.SignInHeader {
+		display: grid;
+		gap: calc(var(--spacing) * 1);
+	}
 
-.NotificationsList ul {
-	margin: 0;
-	padding-left: 1.1rem;
-}
+	.SignInTitle {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--spacing) * 2);
+		font-size: 1.5rem;
+		line-height: 1.9rem;
+		font-weight: 700;
+	}
+
+	.SubmitRow {
+		display: flex;
+		width: 100%;
+		gap: calc(var(--spacing) * 1);
+		align-items: center;
+
+		button[type="submit"] {
+			width: 100%;
+		}
+	}
+
+	.QrScanner {
+		margin-top: calc(var(--spacing) * 2);
+		max-width: 250px;
+	}
+
+	.WelcomeCard {
+		box-shadow: none;
+		border: none;
+		width: 100%;
+		max-width: 250px;
+		transition: all 0.3s ease-in-out;
+
+		> [data-slot="container"] {
+			padding: 0;
+		}
+
+		.WelcomePanel {
+			opacity: 1;
+			margin-top: 0;
+			transition: all 0.3s ease-in-out;
+		}
+
+		&.WelcomeVisible_false {
+			.WelcomePanel {
+				opacity: 0;
+				scale: 0.5;
+			}
+		}
+	}
+
+	.WelcomeStats {
+		display: grid;
+		gap: calc(var(--spacing) * 1);
+	}
+
+	.WelcomeLine {
+		font-weight: 600;
+
+		.MemberAvatar {
+			display: block;
+			margin: 0 auto;
+		}
+
+		.MemberName {
+			font-size: 1.2rem;
+		}
+	}
+
+	.NotificationsList {
+		margin-top: calc(var(--spacing) * 2);
+	}
+
+	.NotificationsList ul {
+		margin: 0;
+		padding-left: 1.1rem;
+	}
 </style>

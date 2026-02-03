@@ -11,7 +11,10 @@ export function provideMemberLayoutContext(context: MemberLayoutContext) {
 }
 
 export function useMemberLayoutContext(): MemberLayoutContext {
-	const context = inject<MemberLayoutContext | null>(MemberLayoutContextKey, null);
+	const context = inject<MemberLayoutContext | null>(
+		MemberLayoutContextKey,
+		null,
+	);
 	if (context) return context;
 
 	return {

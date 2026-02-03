@@ -1,250 +1,590 @@
 ﻿<!-- Start TOPICS Section -->
-<div class="section-modal modal fade" id="TopicsModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-        <div class="close-modal" data-dismiss="modal">
-            <div class="lr">
-                <div class="rl">
-                </div>
-            </div>
-        </div>
+<div
+	class="section-modal modal fade"
+	id="TopicsModal"
+	tabindex="-1"
+	role="dialog"
+	aria-hidden="true"
+>
+	<div class="modal-content">
+		<div class="close-modal" data-dismiss="modal">
+			<div class="lr">
+				<div class="rl"></div>
+			</div>
+		</div>
 
-        <div class="container">
-            <div class="row">
-                <div class="section-title text-center">
-                    <h3>Topics + Resources</h3>
-                </div>
-            </div>
+		<div class="container">
+			<div class="row">
+				<div class="section-title text-center">
+					<h3>Topics + Resources</h3>
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="col-md-6">
+					<h4>Topics</h4>
 
-            <div class="row">
+					<div>
+						<p>
+							The types of projects we’re currently covering. Click on one of
+							these selections to see more details.
+						</p>
+						<h3>Current Topics:</h3>
+						<ul>
+							<li>Robotics (Microbits, Raspberry Pi)</li>
+							<li>Git (Source Control + Collaboration)</li>
+							<li>Godot (Game Engine)</li>
+							<li>HTML/JAVASCRIPT</li>
+							<li>Scratch (Beginners Game Programming)</li>
+						</ul>
+						<h3>Previous topics have included:</h3>
+						<ul>
+							<li>Roblox Studio</li>
+							<li>ANDROID APP INVENTOR</li>
+							<li>KODU</li>
+							<li>ROBOCODE</li>
+							<li>Unity</li>
+						</ul>
+					</div>
 
-                <div class="col-md-6">
-                    <h4>Topics</h4>
+					<div>
+						<h3>Godot</h3>
+						<img
+							style="
+								float: left;
+								margin-right: 20px;
+								max-width: 25%;
+								height: auto;
+							"
+							alt="GoDot Logo"
+							src="data:image/png;base64,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"
+						/><br />
+						<p>
+							<strong>Godot</strong> is a game development tool that helps
+							people create 2D and 3D games. It’s great for beginners and
+							experienced developers. Godot is open-source, meaning it’s free to
+							use and constantly improved by a community of developers.
+						</p>
+						<p>
+							With Godot, you can start making games without needing to know
+							complex coding right away. It uses an easy-to-understand system of
+							Nodes and Scenes to build projects. You can make anything from
+							simple animations to full games. Godot supports different
+							programming languages like GDScript, C#, and C++, so you can
+							choose what works best for you.
+						</p>
+						<p>
+							Godot is available for Windows, Mac Os and Linux. The source code
+							is made available under a license that allows modifications for
+							non-commercial uses.
+						</p>
+						<p>
+							You can download GODOT for free from the
+							<a href="https://godotengine.org">Official Website</a> or try the
+							website version
+							<a href="https://editor.godotengine.org/releases/latest/"
+								>Version 4.3</a
+							>
+							which adds loads of new features.
+						</p>
+						<p>
+							There is a good introduction document that you can read here:
+							<a href="https://github.com/CoderDojo-Ennis/ScratchyGodot">
+								Scratchy Godot</a
+							>
+							<a
+								href="https://opengraph.githubassets.com/b8846d9b82c7e097e9880a476f582553384a730e6963d9459230b3eecd42a0ae/CoderDojo-Ennis/ScratchyGodot"
+							>
+							</a
+							>. And lots of introductory videos on YouTube,
+							<a
+								href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=video&cd=&cad=rja&uact=8&ved=2ahUKEwiFvpKih_eIAxW2QEEAHWXJAQIQtwJ6BAgKEAI&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DS8lMTwSRoRg&usg=AOvVaw3DH0x24HY67raQenjNmMtz&opi=89978449"
+								>like this one</a
+							>.
+						</p>
+					</div>
 
-                    <div>
-                        <p>The types of projects we’re currently covering.  Click on one of these selections to see more details.</p>
-                        <h3>Current Topics:</h3>
-                        <ul>
-                            <li>Robotics (Microbits, Rasberry Pi)</li>
-                            <li>Git (Source Control + Collaboration)</li>
-                            <li>Godot (Game Engine)
-                            <li>HTML/JAVASCRIPT</li>
-                            <li>Scratch (Beginners Game Programming)</li>
-                        </ul>
-                        <h3>Previous topics have included:</h3>
-                        <ul>
-                            <li>Roblox Studio</li>
-                            <li>ANDROID APP INVENTOR</li>
-                            <li>KODU</li>
-                            <li>ROBOCODE</li>
-                            <li>Unity</li>
-                        </ul>
-                    </div>
+					<div>
+						<h3>HTML / JavaScript</h3>
+						<p>
+							HTML and Javascript are what make web pages work. But they’re
+							becoming more and more useful in other platforms as well. With
+							HTML/Javascript you can create apps for IOS, Android, and Windows.
+						</p>
+						<p>
+							We’ll be getting into this in the future. Let us know if you’re
+							interested.
+						</p>
+						<h4>Online Tutorials:</h4>
+						<ul>
+							<li>
+								<a
+									href="https://channel9.msdn.com/Series/HTML5-CSS3-Fundamentals-Development-for-Absolute-Beginners"
+									>HTML5/CSS3 for Absolute Beginners</a
+								>
+							</li>
+							<li>
+								<a
+									href="https://channel9.msdn.com/Series/Javascript-Fundamentals-Development-for-Absolute-Beginners"
+									>JavaScript for Absolute Beginners</a
+								>
+							</li>
+						</ul>
+						<h4>Editors:</h4>
+						<ul>
+							<li>
+								<a href="https://code.visualstudio.com/">Visual Studio Code</a>
+							</li>
+							<li>
+								<a
+									href="https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx"
+									>Visual Studio Community</a
+								>
+							</li>
+						</ul>
+						<h4>Online Mini-Editors:</h4>
+						<ul>
+							<li><a href="https://plnkr.co">Plunkr</a></li>
+							<li>
+								<a href="https://plnkr.co/edit/3FTFN2zXM3X1lDnHReEq?p=preview"
+									>Processing template project</a
+								>
+							</li>
+							<li><a href="https://jsbin.com/">Js Bin</a></li>
+						</ul>
+					</div>
 
-                    <div>
-                        <h3>Godot</h3>
-                        <img style="float:left; margin-right: 20px;max-width:25%;height:auto" alt="GoDot Logo" src="data:image/png;base64,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"><br>
-                        <p>
-                            <strong>Godot</strong> is a game development tool that helps people create 2D and 3D games. It’s great for beginners and experienced developers. Godot is open-source, meaning it’s free to use and constantly improved by a community of developers.
-                        </p>
-                        <p>With Godot, you can start making games without needing to know complex coding right away. It uses an easy-to-understand system of Nodes and Scenes to build projects. You can make anything from simple animations to full games. Godot supports different programming languages like GDScript, C#, and C++, so you can choose what works best for you.</p>
-                        <p>Godot is available for Windows, Mac Os and Linux. The source code is made available under a license that allows modifications for non-commercial uses.</p>
-                        <p>You can download GODOT for free from the <a href="https://godotengine.org">Official Website</a> or try the website version  <a href="https://editor.godotengine.org/releases/latest/">Version 4.3</a> which adds loads of new features.  </p>
-                        <p>There is a good introduction document that you can read here:</a> <a href="https://github.com/CoderDojo-Ennis/ScratchyGodot"> Scratchy Godot</a> <a href="https://opengraph.githubassets.com/b8846d9b82c7e097e9880a476f582553384a730e6963d9459230b3eecd42a0ae/CoderDojo-Ennis/ScratchyGodot"> </a>.  And lots of introductory videos on YouTube, <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=video&cd=&cad=rja&uact=8&ved=2ahUKEwiFvpKih_eIAxW2QEEAHWXJAQIQtwJ6BAgKEAI&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DS8lMTwSRoRg&usg=AOvVaw3DH0x24HY67raQenjNmMtz&opi=89978449">like this one</a>.</p>
-                    </div>
+					<div>
+						<h3>Scratch</h3>
+						<img
+							style="
+								float: left;
+								margin-right: 20px;
+								max-width: 25%;
+								height: auto;
+							"
+							alt="Scratch Logo"
+							src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Scratch_Logo.svg/200px-Scratch_Logo.svg.png"
+						/><br />
+						<p>
+							<strong>Scratch</strong> is an early computer language learning
+							environment enabling young beginners to get results without having
+							to learn syntactically correct writing first. Created by the MIT
+							Media Lab, it is intended to motivate for further learning through
+							playfully experimenting and creating projects, such as interactive
+							animations etc.
+						</p>
+						<p>
+							The name Scratch derived from the turntablism’s technique of
+							scratching and stresses the similarity of the process of
+							programming to the process of mixing/scratching instead of its
+							similarity to the processes of writing (i.e. scripting).
+						</p>
+						<p>
+							Scratch is available for Windows, Mac OS X, and Linux. The source
+							code is made available under a license that allows modifications
+							for non-commercial uses.
+						</p>
+						<p>
+							You can download SCRATCH for free from the
+							<a href="https://scratch.mit.edu/">Official Website</a> or try the
+							<a href="https://scratch.mit.edu/scratch2download/"
+								>Version 2.0</a
+							>
+							which adds loads of new features. There you can also setup an
+							online account to share your projects with the world. When you
+							upload your projects from Scratch, others will be able to play
+							your games from the Scratch website.
+						</p>
+						<p>
+							There is a good
+							<a
+								href="https://scratched.media.mit.edu/resources/getting-started-guide"
+							>
+								introduction document that you can download and read</a
+							>. And lots of introductory videos on YouTube,
+							<a href="https://www.youtube.com/watch?v=Nc6IgQIhxbU"
+								>like this one</a
+							>.
+						</p>
+					</div>
+				</div>
+			</div>
 
-                    <div>
-                        <h3>HTML / JavaScript</h3>
-                        <p>HTML and Javascript are what make web pages work. But they’re becoming more and more useful in other platforms as well. With HTML/Javascript you can create apps for IOS, Android, and Windows.</p>
-                        <p>We’ll be getting into this in the future. Let us know if you’re interested.</p>
-                        <h4>Online Tutorials:</h4>
-                        <ul>
-                            <li><a href="https://channel9.msdn.com/Series/HTML5-CSS3-Fundamentals-Development-for-Absolute-Beginners">HTML5/CSS3 for Absolute Beginners</a></li>
-                            <li><a href="https://channel9.msdn.com/Series/Javascript-Fundamentals-Development-for-Absolute-Beginners">JavaScript for Absolute Beginners</a></li>
-                        </ul>
-                        <h4>Editors:</h4>
-                        <ul>
-                            <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-                            <li><a href="https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx">Visual Studio Community</a></li>
-                        </ul>
-                        <h4>Online Mini-Editors:</h4>
-                        <ul>
-                            <li><a href="https://plnkr.co">Plunkr</a></li>
-                            <li><a href="https://plnkr.co/edit/3FTFN2zXM3X1lDnHReEq?p=preview">Processing template project</a></li>
-                            <li><a href="https://jsbin.com/">Js Bin</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h3>Scratch</h3>
-                        <img style="float:left; margin-right: 20px;max-width:25%;height:auto" alt="Scratch Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Scratch_Logo.svg/200px-Scratch_Logo.svg.png"><br>
-                        <p>
-                            <strong>Scratch</strong> is an early computer language learning environment enabling young beginners to get results without having to learn syntactically correct writing first. Created by the MIT Media Lab, it is intended to motivate for further learning through playfully experimenting and creating projects, such as interactive animations etc.
-                        </p>
-                        <p>The name Scratch derived from the turntablism’s technique of scratching and stresses the similarity of the process of programming to the process of mixing/scratching instead of its similarity to the processes of writing (i.e. scripting).</p>
-                        <p>Scratch is available for Windows, Mac OS X, and Linux. The source code is made available under a license that allows modifications for non-commercial uses.</p>
-                        <p>You can download SCRATCH for free from the <a href="https://scratch.mit.edu/">Official Website</a> or try the <a href="https://scratch.mit.edu/scratch2download/">Version 2.0</a> which adds loads of new features.  There you can also setup an online account to share your projects with the world.  When you upload your projects from Scratch, others will be able to play your games from the Scratch website.</p>
-                        <p>There is a good <a href="https://scratched.media.mit.edu/resources/getting-started-guide"> introduction document that you can download and read</a>.  And lots of introductory videos on YouTube, <a href="https://www.youtube.com/watch?v=Nc6IgQIhxbU">like this one</a>.</p>
-                    </div>
-                    
-                    </div>
+			<div class="col-md-6">
+				<h4>Moving on from Scratch</h4>
+				<div>
+					Looking to go to the next level? Check out our
+					<a href="https://coderdojo-ennis.github.io/MovingOn/Pages/index.html"
+						>Moving On</a
+					>
+					page.
+				</div>
 
-                </div>
+				<h4>Resources</h4>
+				<div>
+					<p>
+						Here we’ll keep shortcuts to resources to jump start your projects.
+						Everything below is FREE.
+					</p>
+					<p>GRAPHICS EDITING SOFTWARE</p>
+					<ul>
+						<li>
+							<a href="https://www.gimp.org/">GIMP</a> is a free bitmap graphics
+							editing and basic painting program.
+						</li>
+						<li>
+							<a href="https://inkscape.org/">Inkscape</a> is a free vector
+							graphics creation program.
+						</li>
+						<li>
+							<a href="https://www.mapeditor.org/">TILED</a> does two things –
+							Create tile graphics, and assemble these into game levels
+						</li>
+						<li>
+							<a href="https://renderhjs.net/shoebox/">Shoebox</a> is a
+							collection of graphics tools including: tilemap extractor, sprite
+							editing, bitmap font creation, etc.
+						</li>
+						<li>
+							<a href="https://blender.org">Blender</a> is for creating 3D game
+							assets, creating animations, and editing video
+						</li>
+					</ul>
+					<p>SOUND EDITING SOFTWARE</p>
+					<ul>
+						<li>
+							<a href="https://audacity.sourceforge.net/">Audacity</a> is a free
+							audio editing program.
+						</li>
+						<li>
+							<a href="https://www.bfxr.net/">BFXR</a> and
+							<a href="https://www.drpetter.se/project_sfxr.html">SFXR</a> will
+							both generate random sounds suitable for games.
+						</li>
+						<li>
+							<a href="https://soundation.com/studio">Soundation</a> lets you
+							easily compose songs from a collection of grooves.
+						</li>
+					</ul>
+					<p>TEAM TOOLS</p>
+					<ul>
+						<li>
+							<a href="https://trello.com//">Trello</a> is an online and phone
+							tool for assigning tasks to a team. It’s a shared to-do list.
+						</li>
+						<li>
+							<a href="https://github.com/studio">GitHub</a> is version control
+							software. This means it keeps track of the changes you make to a
+							project, and lets multiple people work on the same project and
+							merge their changes. It also lets you go back in time to before
+							you messed something up.
+						</li>
+						<li>
+							<a href="https://conjure.io">Conjure.io</a> is used for
+							collaborating on visual designs. Add notes to images and keep
+							track of changes
+						</li>
+					</ul>
+					<p>3D OBJECT MODELS</p>
+					<ul>
+						<li>
+							<a href="https://www.nasa.gov/multimedia/3d_resources/models.html"
+								>NASA 3D Models</a
+							>. Other NASA resources (textures, sounds, heightmaps, data) are
+							availalble here:
+							<a href="https://www.darksidejam.com/assets/"
+								>http://www.darksidejam.com/assets/</a
+							>
+						</li>
+					</ul>
+					<p>REFERENCE IMAGES for 3D Modelling</p>
+					<ul>
+						<li>
+							<span style="line-height: 13px">
+								Blueprints -
+								<a href="https://www.the-blueprints.com/"
+									>https://www.the-blueprints.com/</a
+								><br />
+							</span>
+						</li>
+					</ul>
+					<p>ENVIRONMENTS</p>
+					<ul>
+						<li>
+							<span style="line-height: 13px">
+								<a href="https://www.hdri-hub.com/hdrishop/freesamples/freehdri"
+									>http://www.hdri-hub.com/hdrishop/freesamples/freehdri</a
+								><br />
+							</span>
+						</li>
+					</ul>
+					<p>TEXTURES</p>
+					<ul>
+						<li>
+							<span style="line-height: 13px">
+								<a
+									href="https://www.hdri-hub.com/hdrishop/freesamples/freetextures"
+									>http://www.hdri-hub.com/hdrishop/freesamples/freetextures</a
+								><br />
+							</span>
+						</li>
+					</ul>
+					<p>FONTS</p>
+					<ul>
+						<li>
+							<a href="https://www.nubik.com/SpriteFont/">SpriteFont2</a> is a
+							free utility that converts fonts to PNG sprite map images allowing
+							you to set colors, outlines, shadows, glows, and other effects. To
+							use these in XNA games set the Content Processor value to “Sprite
+							Font Texture – XNA Framework”
+						</li>
+					</ul>
+					<p>ICONS</p>
+					<ul>
+						<li>
+							<a
+								title="Templarian - Windows 8 Style Icon Pack"
+								href="https://github.com/Templarian/WindowsIcons"
+								>Templarian Windows 8 Style Icon Pack</a
+							>
+						</li>
+					</ul>
+					<p>SPRITES</p>
+					<ul>
+						<li><a href="https://opengameart.org/">Open Game Art</a></li>
+						<li><a href="https://hasgraphics.com/">Has Graphics</a></li>
+						<li>
+							<a
+								href="https://www.coderdojoennis.com/wp-content/uploads/2014/09/InvadersSprites.zip"
+								>Space Invaders / Galaga Sprites</a
+							>
+						</li>
+					</ul>
+					<p>SOUND FX</p>
+					<ul>
+						<li><a href="https://www.freesfx.co.uk/">Free SFX</a></li>
+						<li><a href="https://www.freesound.org/browse/">FreeSound</a></li>
+						<li>
+							<a
+								href="https://www.coderdojoennis.com/wp-content/uploads/2014/09/InvadersSounds.zip"
+								>Space Invaders / Galaga Sounds</a
+							>
+						</li>
+					</ul>
+					<p>MUSIC</p>
+					<ul>
+						<li>
+							<a
+								href="https://incompetech.com/music/royalty-free/collections.php"
+								>Incompetech</a
+							>
+						</li>
+					</ul>
+					<p>WEBSITES WITH TUTORIALS</p>
+					<ul>
+						<li>
+							<a href="https://www.code.org">Code.org</a> Free online courses
+							for beginners
+						</li>
+						<li>
+							<a href="https://www.codecademy.com">Codecademy</a> Learn to code
+							HTML, Javascript, Python, Ruby and more
+						</li>
+						<li>
+							<a href="https://www.khanacademy.org">Khan Academy</a> Free online
+							learning with Javascript, Math and variety of subjects
+						</li>
+					</ul>
+					<p>ELECTRONICS</p>
+					<ul>
+						<li><a href="https://littlebits.cc/about">Little Bits</a></li>
+					</ul>
 
-
-
-                <div class="col-md-6">
-                    <h4>Moving on from Scratch</h4>
-                    <div>Looking to go to the next level? Check out our <a href="https://coderdojo-ennis.github.io/MovingOn/Pages/index.html">Moving On</a> page.</div>
-
-                    <h4>Resources</h4>
-                    <div>
-                        <p>Here we’ll keep shortcuts to resources to jump start your projects.  Everything below is FREE.</p>
-                        <p>GRAPHICS EDITING SOFTWARE</p>
-                        <ul>
-                            <li><a href="https://www.gimp.org/">GIMP</a> is a free bitmap graphics editing and basic painting program.</li>
-                            <li><a href="https://inkscape.org/">Inkscape</a> is a free vector graphics creation program.</li>
-                            <li><a href="https://www.mapeditor.org/">TILED</a> does two things – Create tile graphics, and assemble these into game levels</li>
-                            <li><a href="https://renderhjs.net/shoebox/">Shoebox</a> is a collection of graphics tools including: tilemap extractor, sprite editing, bitmap font creation, etc.</li>
-                            <li><a href="https://blender.org">Blender</a> is for creating 3D game assets, creating animations, and editing video</li>
-                        </ul>
-                        <p>SOUND EDITING SOFTWARE</p>
-                        <ul>
-                            <li><a href="https://audacity.sourceforge.net/">Audacity</a> is a free audio editing program.</li>
-                            <li><a href="https://www.bfxr.net/">BFXR</a> and <a href="https://www.drpetter.se/project_sfxr.html">SFXR</a> will both generate random sounds suitable for games.</li>
-                            <li><a href="https://soundation.com/studio">Soundation</a> lets you easily compose songs from a collection of grooves.</li>
-                        </ul>
-                        <p>TEAM TOOLS</p>
-                        <ul>
-                            <li><a href="https://trello.com//">Trello</a> is an online and phone tool for assigning tasks to a team. It’s a shared to-do list.</li>
-                            <li><a href="https://github.com/studio">GitHub</a> is version control software. This means it keeps track of the changes you make to a project, and lets multiple people work on the same project and merge their changes. It also lets you go back in time to before you messed something up.</li>
-                            <li><a href="https://conjure.io" <="" a="">Conjure.io</a> is used for collaborating on visual designs. Add notes to images and keep track of changes</li>
-                        </ul>
-                        <p>3D OBJECT MODELS</p>
-                        <ul>
-                            <li><a href="https://www.nasa.gov/multimedia/3d_resources/models.html">NASA 3D Models</a>.  Other NASA resources (textures, sounds, heightmaps, data) are availalble here: <a href="https://www.darksidejam.com/assets/">http://www.darksidejam.com/assets/</a></li>
-                        </ul>
-                        <p>REFERENCE IMAGES for 3D Modelling</p>
-                        <ul>
-                            <li>
-                                <span style="line-height: 13px;">
-                                    Blueprints - <a href="https://www.the-blueprints.com/">https://www.the-blueprints.com/</a><br>
-                                </span>
-                            </li>
-                        </ul>
-                        <p>ENVIRONMENTS</p>
-                        <ul>
-                            <li>
-                                <span style="line-height: 13px;">
-                                    <a href="https://www.hdri-hub.com/hdrishop/freesamples/freehdri">http://www.hdri-hub.com/hdrishop/freesamples/freehdri</a><br>
-                                </span>
-                            </li>
-                        </ul>
-                        <p>TEXTURES</p>
-                        <ul>
-                            <li>
-                                <span style="line-height: 13px;">
-                                    <a href="https://www.hdri-hub.com/hdrishop/freesamples/freetextures">http://www.hdri-hub.com/hdrishop/freesamples/freetextures</a><br>
-                                </span>
-                            </li>
-                        </ul>
-                        <p>FONTS</p>
-                        <ul>
-                            <li><a href="https://www.nubik.com/SpriteFont/">SpriteFont2</a> is a free utility that converts fonts to PNG sprite map images allowing you to set colors, outlines, shadows, glows, and other effects.  To use these in XNA games set the Content Processor value to “Sprite Font Texture – XNA Framework”</li>
-                        </ul>
-                        <p>ICONS</p>
-                        <ul>
-                            <li><a title="Templarian - Windows 8 Style Icon Pack" href="https://github.com/Templarian/WindowsIcons">Templarian Windows 8 Style Icon Pack</a></li>
-                        </ul>
-                        <p>SPRITES</p>
-                        <ul>
-                            <li><a href="https://opengameart.org/">Open Game Art</a></li>
-                            <li><a href="https://hasgraphics.com/">Has Graphics</a></li>
-                            <li><a href="https://www.coderdojoennis.com/wp-content/uploads/2014/09/InvadersSprites.zip">Space Invaders / Galaga Sprites</a></li>
-                        </ul>
-                        <p>SOUND FX</p>
-                        <ul>
-                            <li><a href="https://www.freesfx.co.uk/">Free SFX</a></li>
-                            <li><a href="https://www.freesound.org/browse/">FreeSound</a></li>
-                            <li><a href="https://www.coderdojoennis.com/wp-content/uploads/2014/09/InvadersSounds.zip">Space Invaders / Galaga Sounds</a></li>
-                        </ul>
-                        <p>MUSIC</p>
-                        <ul>
-                            <li><a href="https://incompetech.com/music/royalty-free/collections.php">Incompetech</a></li>
-                        </ul>
-                        <p>WEBSITES WITH TUTORIALS</p>
-                        <ul>
-                            <li><a href="https://www.code.org">Code.org</a> Free online courses for beginners</li>
-                            <li><a href="https://www.codecademy.com">Codecademy</a> Learn to code HTML, Javascript, Python, Ruby and more</li>
-                            <li><a href="https://www.khanacademy.org">Khan Academy</a> Free online learning with Javascript, Math and variety of subjects</li>
-                        </ul>
-                        <p>ELECTRONICS</p>
-                        <ul>
-                            <li><a href="https://littlebits.cc/about">Little Bits</a></li>
-                        </ul>
-
-                        <hr>
-                        <h2>SCRATCH PROJECTS</h2>
-                        <h3>MINI PROJECTS</h3>
-                        <p>There’s a PDF you can download with some very quick (one page each) mini-projects.  It’s a great way to have some quick success and get exposed to the types of things you can do in scratch.  You can download the file here: <a href="https://info.scratch.mit.edu/Support/Scratch_Cards">http://info.scratch.mit.edu/Support/Scratch_Cards</a></p>
-                        <p>Just doing a search will lead you to other project sheets such as this schools: <a href="https://nebomusic.net/scratch.html">Scratch Programming Projects</a>.</p>
-                        <h3><strong>SPACE INVADERS</strong></h3>
-                        <p>We talked about how to use the keyboard to move a space ship left and right on the screen, and how to fire a missile.  We created aliens who attacked from above.  And at the end of the session everyone had some sort of Space Invaders type game.</p>
-                        <p><img class="alignnone" alt="" src="https://cdn.scratch.mit.edu/static/site/projects/thumbnails/245/7087.png" width="480" height="360"></p>
-                        <p>Quinn Painter continued on with his project.  He was trying to get as close to the original as possible.  His project is shared at <a href="https://scratch.mit.edu/projects/quinnpainter/2457087">http://scratch.mit.edu/projects/quinnpainter/2457087</a></p>
-                        <h3>Gravity and Platforms</h3>
-                        <p>As a first step torwards building a Super Mario type game, we talked about how gravity can be simulated with 2 variables.  One for the gravity strength (constant), and one for the vertical speed of the player.  We check if the player is touching the ground.  If he is, then we set his vertical speed to 0 and don’t change his position, otherwise we increase his vertical speed by the gravity strength and then updade his position by his speed.  Jumping was performed by just giving him a large upward vertical speed which would be taken away by gravity.</p>
-                        <p>
-                            <img class="alignnone" alt="" src="https://cdn.scratch.mit.edu/static/site/projects/thumbnails/246/9637.png" width="480" height="360"><br>
-                            You can <a href="https://scratch.mit.edu/projects/GeekyMonkey/2469637"> download the project here</a>.
-                        </p>
-                        <h3>Broadcast</h3>
-                        <div>
-                            <i>
-                                Project demonstrated on 24/1/15.<br>
-                            </i>
-                        </div>
-                        <div>
-                            <p><i>This is a simple project demonstrating how to use the ‘broadcast message’ feature. You use the mouse to move the first sprite towards the other sprite on the screen. When they touch, another sprite appears. You move this sprite to touch the last sprite that appeared and then another one appears – and so on.</i></p>
-                            <p><i>When two sprites touch (‘meet’) a message is broadcast that the next sprite receives. Receiving this message is what tells that latter sprite to reveal itself.</i></p>
-                            <p><a href="https://scratch.mit.edu/projects/44763492/#editor">You can see the project here.</a></p>
-                        </div>
-                        <h3></h3>
-                        <h3>Maze with Dots</h3>
-                        <div>
-                            <i>
-                                Project demonstrated on 7/2/15.<br>
-                            </i>
-                        </div>
-                        <div></div>
-                        <div><i>This is the maze we demonstrated in the beginner class.  It uses multiple sprites to act as the little red dots that get ‘eaten’ by the ball.  This allows us to delete the sprite as soon as it’s touched so that the score only goes up by increments of 1. </i></div>
-                        <div></div>
-                        <div><i>When the ball gets to the end it uses the Broadcast feature to says it’s completed. Before displaying a finish screen, the score will be checked to see if all the red dots were eaten. Depending on the final score, one of two final screen sprites will be displayed.</i></div>
-                        <div></div>
-                        <div><a href="https://scratch.mit.edu/projects/46947730/#editor">You can see the project here.</a></div>
-                        <h3></h3>
-                        <h3>Number Guessing Game</h3>
-                        <div><em>Project demonstrated on 21/3/15.</em></div>
-                        <div></div>
-                        <div><em>This is the number guessing game where a monkey sprite comes up with a number between 1 and 100 and asks the user to guess it.  The monkey tells the user if the guess is too low or two high and the user gets to guess again.</em></div>
-                        <div></div>
-                        <div><em>This project demonstrates how to use variables and respond to data that’s entered on request.</em></div>
-                        <p><a href="https://scratch.mit.edu/projects/56636078/#editor">You can see the project here.</a></p>
-                        <div></div>
-                        <p><span style="font-size: 1.5em; line-height: 1.5em;">BOOKS TO BUY</span></p>
-                        <p>You can also find numerous books on the subject. Here are a couple recommended by parents at our dojo:</p>
-                        <p><a href="https://www.amazon.com/Scratch-Programming-Easy-Steps-versions/dp/1840786124">Scratch Programming in Easy Steps</a></p>
-                        <p><a href="https://www.amazon.com/Scratch-Programming-Adventure-Covers-Version/dp/1593275315/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1411919463&amp;sr=1-1&amp;keywords=super+scratch+programming+adventure">Super Scratch Programming Adventure</a></p>
-                        <p><a href="https://www.amazon.com/Scratch-Programming-Teens-Jerry-Ford/dp/1305075196/ref=dp_ob_title_bk">Scratch 2.0 Programming for Teens</a></p>
-                        <p>Of course, if you find any great resources yourself, please share with us!</p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </div>
+					<hr />
+					<h2>SCRATCH PROJECTS</h2>
+					<h3>MINI PROJECTS</h3>
+					<p>
+						There’s a PDF you can download with some very quick (one page each)
+						mini-projects. It’s a great way to have some quick success and get
+						exposed to the types of things you can do in scratch. You can
+						download the file here:
+						<a href="https://info.scratch.mit.edu/Support/Scratch_Cards"
+							>http://info.scratch.mit.edu/Support/Scratch_Cards</a
+						>
+					</p>
+					<p>
+						Just doing a search will lead you to other project sheets such as
+						this schools:
+						<a href="https://nebomusic.net/scratch.html"
+							>Scratch Programming Projects</a
+						>.
+					</p>
+					<h3><strong>SPACE INVADERS</strong></h3>
+					<p>
+						We talked about how to use the keyboard to move a space ship left
+						and right on the screen, and how to fire a missile. We created
+						aliens who attacked from above. And at the end of the session
+						everyone had some sort of Space Invaders type game.
+					</p>
+					<p>
+						<img
+							class="alignnone"
+							alt=""
+							src="https://cdn.scratch.mit.edu/static/site/projects/thumbnails/245/7087.png"
+							width="480"
+							height="360"
+						/>
+					</p>
+					<p>
+						Quinn Painter continued on with his project. He was trying to get as
+						close to the original as possible. His project is shared at
+						<a href="https://scratch.mit.edu/projects/quinnpainter/2457087"
+							>http://scratch.mit.edu/projects/quinnpainter/2457087</a
+						>
+					</p>
+					<h3>Gravity and Platforms</h3>
+					<p>
+						As a first step towards building a Super Mario type game, we talked
+						about how gravity can be simulated with 2 variables. One for the
+						gravity strength (constant), and one for the vertical speed of the
+						player. We check if the player is touching the ground. If he is,
+						then we set his vertical speed to 0 and don’t change his position,
+						otherwise we increase his vertical speed by the gravity strength and
+						then updade his position by his speed. Jumping was performed by just
+						giving him a large upward vertical speed which would be taken away
+						by gravity.
+					</p>
+					<p>
+						<img
+							class="alignnone"
+							alt=""
+							src="https://cdn.scratch.mit.edu/static/site/projects/thumbnails/246/9637.png"
+							width="480"
+							height="360"
+						/><br />
+						You can
+						<a href="https://scratch.mit.edu/projects/GeekyMonkey/2469637">
+							download the project here</a
+						>.
+					</p>
+					<h3>Broadcast</h3>
+					<div>
+						<i> Project demonstrated on 24/1/15.<br /> </i>
+					</div>
+					<div>
+						<p>
+							<i
+								>This is a simple project demonstrating how to use the
+								‘broadcast message’ feature. You use the mouse to move the first
+								sprite towards the other sprite on the screen. When they touch,
+								another sprite appears. You move this sprite to touch the last
+								sprite that appeared and then another one appears – and so
+								on.</i
+							>
+						</p>
+						<p>
+							<i
+								>When two sprites touch (‘meet’) a message is broadcast that the
+								next sprite receives. Receiving this message is what tells that
+								latter sprite to reveal itself.</i
+							>
+						</p>
+						<p>
+							<a href="https://scratch.mit.edu/projects/44763492/#editor"
+								>You can see the project here.</a
+							>
+						</p>
+					</div>
+					<h3></h3>
+					<h3>Maze with Dots</h3>
+					<div>
+						<i> Project demonstrated on 7/2/15.<br /> </i>
+					</div>
+					<div></div>
+					<div>
+						<i
+							>This is the maze we demonstrated in the beginner class. It uses
+							multiple sprites to act as the little red dots that get ‘eaten’ by
+							the ball. This allows us to delete the sprite as soon as it’s
+							touched so that the score only goes up by increments of 1.
+						</i>
+					</div>
+					<div></div>
+					<div>
+						<i
+							>When the ball gets to the end it uses the Broadcast feature to
+							says it’s completed. Before displaying a finish screen, the score
+							will be checked to see if all the red dots were eaten. Depending
+							on the final score, one of two final screen sprites will be
+							displayed.</i
+						>
+					</div>
+					<div></div>
+					<div>
+						<a href="https://scratch.mit.edu/projects/46947730/#editor"
+							>You can see the project here.</a
+						>
+					</div>
+					<h3></h3>
+					<h3>Number Guessing Game</h3>
+					<div><em>Project demonstrated on 21/3/15.</em></div>
+					<div></div>
+					<div>
+						<em
+							>This is the number guessing game where a monkey sprite comes up
+							with a number between 1 and 100 and asks the user to guess it. The
+							monkey tells the user if the guess is too low or two high and the
+							user gets to guess again.</em
+						>
+					</div>
+					<div></div>
+					<div>
+						<em
+							>This project demonstrates how to use variables and respond to
+							data that’s entered on request.</em
+						>
+					</div>
+					<p>
+						<a href="https://scratch.mit.edu/projects/56636078/#editor"
+							>You can see the project here.</a
+						>
+					</p>
+					<div></div>
+					<p>
+						<span style="font-size: 1.5em; line-height: 1.5em"
+							>BOOKS TO BUY</span
+						>
+					</p>
+					<p>
+						You can also find numerous books on the subject. Here are a couple
+						recommended by parents at our dojo:
+					</p>
+					<p>
+						<a
+							href="https://www.amazon.com/Scratch-Programming-Easy-Steps-versions/dp/1840786124"
+							>Scratch Programming in Easy Steps</a
+						>
+					</p>
+					<p>
+						<a
+							href="https://www.amazon.com/Scratch-Programming-Adventure-Covers-Version/dp/1593275315/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1411919463&amp;sr=1-1&amp;keywords=super+scratch+programming+adventure"
+							>Super Scratch Programming Adventure</a
+						>
+					</p>
+					<p>
+						<a
+							href="https://www.amazon.com/Scratch-Programming-Teens-Jerry-Ford/dp/1305075196/ref=dp_ob_title_bk"
+							>Scratch 2.0 Programming for Teens</a
+						>
+					</p>
+					<p>
+						Of course, if you find any great resources yourself, please share
+						with us!
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<!-- End TOPICS Section -->
+<!-- End TOPICS SECTION -->

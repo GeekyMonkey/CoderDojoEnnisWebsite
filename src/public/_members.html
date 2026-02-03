@@ -1,54 +1,67 @@
 ﻿<!-- Start MEMBERS Section -->
-<div class="section-modal modal fade" id="MembersModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-        <div class="close-modal" data-dismiss="modal">
-            <div class="lr">
-                <div class="rl">
-                </div>
-            </div>
-        </div>
+<div
+	class="section-modal modal fade"
+	id="MembersModal"
+	tabindex="-1"
+	role="dialog"
+	aria-hidden="true"
+>
+	<div class="modal-content">
+		<div class="close-modal" data-dismiss="modal">
+			<div class="lr">
+				<div class="rl"></div>
+			</div>
+		</div>
 
-        <div class="container">
-            <div class="row">
-                <div class="section-title text-center">
-                    <h3>Members + Volunteers</h3>
-                </div>
-            </div>
+		<div class="container">
+			<div class="row">
+				<div class="section-title text-center">
+					<h3>Members + Volunteers</h3>
+				</div>
+			</div>
 
-            <div class="row">
-                <div class="col-md-3 col-sm-3 col-xs-12 text-center">
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12 text-center">
-                    <p>Our members and volunteers can setup a personal profile and index of their projects on GitHub.com and then link this to their CoderDojo Ennis member account.</p>
-                    <p>Select a member or volunteer to see their personal page and projects.</p>
-                </div>
-                <div class="col-md-3 col-sm-3 col-xs-12 text-center">
-                </div>
-            </div>
+			<div class="row">
+				<div class="col-md-3 col-sm-3 col-xs-12 text-center"></div>
+				<div class="col-md-6 col-sm-6 col-xs-12 text-center">
+					<p>
+						Our members and volunteers can setup a personal profile and index of
+						their projects on GitHub.com and then link this to their CoderDojo
+						Ennis member account.
+					</p>
+					<p>
+						Select a member or volunteer to see their personal page and
+						projects.
+					</p>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12 text-center"></div>
+			</div>
 
-            <div class="row" id="GithubUsers">
-                <div class="col-md-6 col-sm-6 col-xs-12 text-left">
-                    <h4>Members</h4>
-                    <div ng-repeat="user in GithubUsers.Members">
-                        <a ng-href="https://{{user.GithubLogin}}.github.io">
-                            <img ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}" />
-                            <span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
-                        </a>
-                    </div>
-                </div>
+			<div class="row" id="GithubUsers">
+				<div class="col-md-6 col-sm-6 col-xs-12 text-left">
+					<h4>Members</h4>
+					<div ng-repeat="user in GithubUsers.Members">
+						<a ng-href="https://{{user.GithubLogin}}.github.io">
+							<img
+								ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}"
+							/>
+							<span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
+						</a>
+					</div>
+				</div>
 
-                <div class="col-md-6 col-sm-6 col-xs-12 text-left">
-                    <h4>Volunteers</h4>
-                    <div ng-repeat="user in GithubUsers.Mentors">
-                        <a ng-href="https://{{user.GithubLogin}}.github.io">
-                            <img ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}" />
-                            <span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-    <!-- End MEMBERS Section -->
+				<div class="col-md-6 col-sm-6 col-xs-12 text-left">
+					<h4>Volunteers</h4>
+					<div ng-repeat="user in GithubUsers.Mentors">
+						<a ng-href="https://{{user.GithubLogin}}.github.io">
+							<img
+								ng-src="https://avatars.githubusercontent.com/{{user.GithubLogin}}"
+							/>
+							<span>{{user.FirstName}}&nbsp;{{user.LastName}}</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End MEMBERS Section -->
+</div>

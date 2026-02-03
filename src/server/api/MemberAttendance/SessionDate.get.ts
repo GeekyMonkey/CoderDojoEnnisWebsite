@@ -29,7 +29,9 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 		const rawDate = query.sessionDate ?? query.date;
 
 		if (typeof rawDate !== "string" || !IsYYYY_MM_dd(rawDate)) {
-			throw new Error("sessionDate query param is required and must be YYYY-MM-DD");
+			throw new Error(
+				"sessionDate query param is required and must be YYYY-MM-DD",
+			);
 		}
 
 		const attendance = await MemberAttendancesData.GetMemberAttendancesForDate(

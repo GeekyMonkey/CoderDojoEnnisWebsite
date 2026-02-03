@@ -1,61 +1,60 @@
 ﻿<!doctype html>
 <html lang="en" ng-app="DojoWebApp">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Coder Dojo in Ennis, County Clare, Ireland"
-    />
-    <meta name="author" content="Tiernan" />
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta
+			name="description"
+			content="Coder Dojo in Ennis, County Clare, Ireland"
+		/>
+		<meta name="author" content="Tiernan" />
 
-    <title>Coder Dojo - Ennis</title>
+		<title>Coder Dojo - Ennis</title>
 
-    <!-- Theme Styles -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-    <link href="../theme/elevator/css/animate.css" rel="stylesheet" />
-    <link href="../theme/elevator/css/style.css" rel="stylesheet" />
+		<!-- Theme Styles -->
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css"
+			rel="stylesheet"
+		/>
+		<link href="../theme/elevator/css/animate.css" rel="stylesheet" />
+		<link href="../theme/elevator/css/style.css" rel="stylesheet" />
 
-    <!-- Theme Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Electrolize"
-      rel="stylesheet"
-      type="text/css"
-    />
+		<!-- Theme Fonts -->
+		<link
+			href="https://fonts.googleapis.com/css?family=Electrolize"
+			rel="stylesheet"
+			type="text/css"
+		/>
 
-    <!-- JQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<!-- JQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-    <!-- Bootstrap Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  </head>
+		<!-- Bootstrap Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</head>
 
-  <body ng-controller="DojoWebController">
-    
-    <!-- Start Logo Section -->
-    <section id="logo-section" class="text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="logo text-center">
-              <a href="/">
-                <h1>
-                  <!-- ToDo: use SVG -->
-                  <img src="/images/Logos/Logo.png" style="width: 100px" />
-                  <span style="font-size: 16px">CoderDojo Ennis</span>
-                </h1>
-              </a>
-            </div>
+	<body ng-controller="DojoWebController">
+		<!-- Start Logo Section -->
+		<section id="logo-section" class="text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="logo text-center">
+							<a href="/">
+								<h1>
+									<!-- ToDo: use SVG -->
+									<img src="/images/Logos/Logo.png" style="width: 100px" />
+									<span style="font-size: 16px">CoderDojo Ennis</span>
+								</h1>
+							</a>
+						</div>
 
-            <!-- <div>
+						<!-- <div>
           </div>
           <div class="col-md-4">
             <div class="logo text-center">
@@ -71,379 +70,381 @@
               </a>
             </div>
              </div> -->
-             
-          </div>
-          <div class="col-md-4"></div>
-        </div>
-      </div>
-    </section>
-    <!-- End Logo Section -->
+					</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+		</section>
+		<!-- End Logo Section -->
 
-    <!-- Start Main Body Section -->
-    <div class="mainbody-section text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12" id="Ideas">
-            <ul>
-              <!-- Basic Laptop -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/Dell-Inspiron-Processor-Graphics-Keyboard/dp/B0CZ7H33YQ/ref=sr_1_3?crid=1HSE128KEHF1B&dib=eyJ2IjoiMSJ9.ELHtkrndgWvdb_R3iXV3A8kwI8DNCO10iqH1lBlz3JsPV2ECR0pR5rCTHtCgIohFXK2GKu6opBOdovLSGf8zA4weLnFL6kAugAiz3Uj15AF4iXnaccaDf9MdvIvcU3wjxsHvwLl_I-hRtIlsbj5mA8VUNpOGzJ8LLOobB1TCZ-NUxgzfPDJUFwB05uGC_jt5FIpZ9QfiasdLrkJylqJjKRhFT-edqOTRmrLmzqatNqY.Cy6ztMILUNJ8zcNeuVRoyoMvRxr1MJFDlhRPQei9EMs&dib_tag=se&keywords=basic+laptop+8gb+ram+ryzen+5&nsdOptOutParam=true&qid=1732362462&sprefix=basic+laptop+8gb+ram+ryzon+5%2Caps%2C98&sr=8-3"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/711C1r6IjHL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Laptop: <i>Basic</i></h3>
-                    <p>
-                      <i
-                        >A basic laptop that will suffice for Scratch, and
-                        simple tasks. OK for a beginner who's not sure how far
-                        they'll go, but not suitable for moving up to more
-                        serious programming.</i
-                      >
-                    </p>
-                    <ul>
-                      <li>RAM: 8GB minimum</li>
-                      <li>Processor: Core-I5 or Ryzen-5, NOT Celeron</li>
-                      <li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
-                    </ul>
-                  </div>
-                </a>
-              </li>
+		<!-- Start Main Body Section -->
+		<div class="mainbody-section text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12" id="Ideas">
+						<ul>
+							<!-- Basic Laptop -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/Dell-Inspiron-Processor-Graphics-Keyboard/dp/B0CZ7H33YQ/ref=sr_1_3?crid=1HSE128KEHF1B&dib=eyJ2IjoiMSJ9.ELHtkrndgWvdb_R3iXV3A8kwI8DNCO10iqH1lBlz3JsPV2ECR0pR5rCTHtCgIohFXK2GKu6opBOdovLSGf8zA4weLnFL6kAugAiz3Uj15AF4iXnaccaDf9MdvIvcU3wjxsHvwLl_I-hRtIlsbj5mA8VUNpOGzJ8LLOobB1TCZ-NUxgzfPDJUFwB05uGC_jt5FIpZ9QfiasdLrkJylqJjKRhFT-edqOTRmrLmzqatNqY.Cy6ztMILUNJ8zcNeuVRoyoMvRxr1MJFDlhRPQei9EMs&dib_tag=se&keywords=basic+laptop+8gb+ram+ryzen+5&nsdOptOutParam=true&qid=1732362462&sprefix=basic+laptop+8gb+ram+ryzon+5%2Caps%2C98&sr=8-3"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/711C1r6IjHL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Laptop: <i>Basic</i></h3>
+										<p>
+											<i
+												>A basic laptop that will suffice for Scratch, and
+												simple tasks. OK for a beginner who's not sure how far
+												they'll go, but not suitable for moving up to more
+												serious programming.</i
+											>
+										</p>
+										<ul>
+											<li>RAM: 8GB minimum</li>
+											<li>Processor: Core-I5 or Ryzen-5, NOT Celeron</li>
+											<li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
+										</ul>
+									</div>
+								</a>
+							</li>
 
-              <!-- Better Laptop -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/sspa/click?ie=UTF8&spc=MToyMjIyMzMyNTM5OTQwMjAxOjE3MzIzNTk2NTY6c3BfYXRmOjMwMDI0ODY0ODQxMjIzMjo6MDo6&url=%2FAcer-Aspire-A315-59-Laptop-Integrated%2Fdp%2FB0CW1N5WP5%2Fref%3Dsr_1_2_sspa%3Fcrid%3DFF5XC1IIO6FB%26dib%3DeyJ2IjoiMSJ9.EIIfqLqHpMuNPPXD-0Kketw-cT64TCaBoF9dL4rgnaXII36owxZBvZwiHcK4SEZhqXluEmlyqeYbioy8vKlU0P1FGTGDP9JOqMxjD6Cyr49DLUw2KX6v9qerFNnlsY6wQSkPbcL-hW-RNOzPV66G-2LjFXEHVdXA0Wq2uPOK40tEs_luryTKiGtXzSZigEBK2HcTkNWLHRlkyRZMwvPUU0adX0c72RW0FlUKe7TGFpY.Q_ixgD_TDVKPixtskMB8G3UV-jYL6NVIU13SIRRLN-g%26dib_tag%3Dse%26keywords%3DAcer%2BAspire%2B5%2BIntel%2BCore%2Bi3%2BRyzen%2B3%26nsdOptOutParam%3Dtrue%26qid%3D1732359656%26sprefix%3Dacer%2Baspire%2B5%2Bintel%2Bcore%2Bi3%2Bryzen%2B3%252Caps%252C179%26sr%3D8-2-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/71MjF0pLfPL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Laptop: <i>Better</i></h3>
-                    <p>
-                      <i
-                        >This one will manage anything we want to do at
-                        CoderDojo.</i
-                      >
-                    </p>
-                    <ul>
-                      <li>RAM: 8-16GB minimum</li>
-                      <li>Processor: Core-I5 or Ryzen-5</li>
-                      <li>Graphics: RTX-3000 or higher</li>
-                      <li>Windows, Mac, or Linux, <b>NOT Chromebook</b></li>
-                    </ul>
-                  </div>
-                </a>
-              </li>
+							<!-- Better Laptop -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/sspa/click?ie=UTF8&spc=MToyMjIyMzMyNTM5OTQwMjAxOjE3MzIzNTk2NTY6c3BfYXRmOjMwMDI0ODY0ODQxMjIzMjo6MDo6&url=%2FAcer-Aspire-A315-59-Laptop-Integrated%2Fdp%2FB0CW1N5WP5%2Fref%3Dsr_1_2_sspa%3Fcrid%3DFF5XC1IIO6FB%26dib%3DeyJ2IjoiMSJ9.EIIfqLqHpMuNPPXD-0Kketw-cT64TCaBoF9dL4rgnaXII36owxZBvZwiHcK4SEZhqXluEmlyqeYbioy8vKlU0P1FGTGDP9JOqMxjD6Cyr49DLUw2KX6v9qerFNnlsY6wQSkPbcL-hW-RNOzPV66G-2LjFXEHVdXA0Wq2uPOK40tEs_luryTKiGtXzSZigEBK2HcTkNWLHRlkyRZMwvPUU0adX0c72RW0FlUKe7TGFpY.Q_ixgD_TDVKPixtskMB8G3UV-jYL6NVIU13SIRRLN-g%26dib_tag%3Dse%26keywords%3DAcer%2BAspire%2B5%2BIntel%2BCore%2Bi3%2BRyzen%2B3%26nsdOptOutParam%3Dtrue%26qid%3D1732359656%26sprefix%3Dacer%2Baspire%2B5%2Bintel%2Bcore%2Bi3%2Bryzen%2B3%252Caps%252C179%26sr%3D8-2-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9hdGY%26psc%3D1"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/71MjF0pLfPL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Laptop: <i>Better</i></h3>
+										<p>
+											<i
+												>This one will manage anything we want to do at
+												CoderDojo.</i
+											>
+										</p>
+										<ul>
+											<li>RAM: 8-16GB minimum</li>
+											<li>Processor: Core-I5 or Ryzen-5</li>
+											<li>Graphics: RTX-3000 or higher</li>
+											<li>Windows, Mac, or Linux, <b>NOT Chromebook</b></li>
+										</ul>
+									</div>
+								</a>
+							</li>
 
-              <!-- Gaming Laptop -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/Razer-Blade-Pro-i7-10875H-processor/dp/B08T9GZ1QN/ref=sr_1_1_sspa?crid=1KWYLP9LIPWT7&dib=eyJ2IjoiMSJ9.1tdkIf5eCtefrjd_8_ZsGokbrY75DL6gKlRLwkzNIHehuynl_ib0o8MkmksZS_QUMJ_rcRnltrU5nWPMUefWk1VAXN-xuc-n-JBv6V2vrQ3ndZj-wIC8YG0Qq5Y7Bk8ZHs7f2hnuH2UmrCPJDZlS9r8iofRpbKKiTb1L6u_S6ftyAzFKofBGucVbUnjgfQM8pOVYOS2r3EiX-oA-gDoFu8z6UUzEBfR1N_A9xpMdMYPHnR9r7e3eeF_izfI82UwRkqqVIS46sdeK8zgPDixzA0pKYh0ySEnoxlxPCclYryc.RgHJ60-z-yCOLbOHMJO5ABmQCMIbn-k4vclWp0LpfXY&dib_tag=se&keywords=MSI+GE76+Raider+%28Gaming+Laptop%29&nsdOptOutParam=true&qid=1732359998&sprefix=msi+ge76+raider+gaming+laptop+%2Caps%2C261&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/51gF-cxcLKL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Laptop: <i>Best</i></h3>
-                    <p>
-                      <i
-                        >More hard-core gamer machine that will be great now,
-                        and won't be obsolete any time soon.</i
-                      >
-                    </p>
-                    <ul>
-                      <li>RAM: 16GB minimum</li>
-                      <li>Processor: Core-I7 or Ryzen-7</li>
-                      <li>Graphics: RTX-3000 or higher</li>
-                      <li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
-                    </ul>
-                  </div>
-                </a>
-              </li>
+							<!-- Gaming Laptop -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/Razer-Blade-Pro-i7-10875H-processor/dp/B08T9GZ1QN/ref=sr_1_1_sspa?crid=1KWYLP9LIPWT7&dib=eyJ2IjoiMSJ9.1tdkIf5eCtefrjd_8_ZsGokbrY75DL6gKlRLwkzNIHehuynl_ib0o8MkmksZS_QUMJ_rcRnltrU5nWPMUefWk1VAXN-xuc-n-JBv6V2vrQ3ndZj-wIC8YG0Qq5Y7Bk8ZHs7f2hnuH2UmrCPJDZlS9r8iofRpbKKiTb1L6u_S6ftyAzFKofBGucVbUnjgfQM8pOVYOS2r3EiX-oA-gDoFu8z6UUzEBfR1N_A9xpMdMYPHnR9r7e3eeF_izfI82UwRkqqVIS46sdeK8zgPDixzA0pKYh0ySEnoxlxPCclYryc.RgHJ60-z-yCOLbOHMJO5ABmQCMIbn-k4vclWp0LpfXY&dib_tag=se&keywords=MSI+GE76+Raider+%28Gaming+Laptop%29&nsdOptOutParam=true&qid=1732359998&sprefix=msi+ge76+raider+gaming+laptop+%2Caps%2C261&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/51gF-cxcLKL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Laptop: <i>Best</i></h3>
+										<p>
+											<i
+												>More hard-core gamer machine that will be great now,
+												and won't be obsolete any time soon.</i
+											>
+										</p>
+										<ul>
+											<li>RAM: 16GB minimum</li>
+											<li>Processor: Core-I7 or Ryzen-7</li>
+											<li>Graphics: RTX-3000 or higher</li>
+											<li>Windows, Mac, or Linux, <b>NOT Chromebook</b>.</li>
+										</ul>
+									</div>
+								</a>
+							</li>
 
-              <!-- Lego Robot -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/LEGO-MINDSTORMS-Inventor-Inspiring-Edutainment/dp/B08586NDKT/ref=sr_1_5?crid=1ST9D5JCOIY4G&dib=eyJ2IjoiMSJ9.zE-0nFuoGGVOVjj0T2SDnlz2zkk6pkguBXTwjd9YsUbZ8xudYyhDekkJoWjCWsF7nioWh_JAfwmYoiBuMPxKEhvaqgsdRxHzSmpO6RkgwSvRF69oHGVl7cC0J1kb2q4pUqf_Z7powVrjJHyXIcSkXqxsyAMCToV5IbKHBejwJNPkDXzqgi4ZHydWGkmXek9kw7Fo62MMUymWI0ccW0Uhkbr5bB-RN-jurJkgW66MwkGZqyYvbfWU7O8eGG9TUscAeBUhKm8YteyWIidQ8l26Z2aLnR9hX5to0iJt1TvdeoM.NyeOAVdlq8U2sLFmFmjC-pe1DdrGhbP_qXlDQRrH0tU&dib_tag=se&keywords=lego+mindstorms+robot&nsdOptOutParam=true&qid=1732361945&sprefix=lego+mindstorms+robot%2Caps%2C123&sr=8-5"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/71m-OHH8d7L._AC_SX425_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Lego Robot Kit</h3>
-                    <p>
-                      Mindstorms kits are avaibile on amazon. Altho they are
-                      quite costly they have everything you need to start making
-                      your own robots.
-                    </p>
-                    <p>This Lego kit is the Mindstorms Kit.</p>
-                  </div>
-                </a>
-              </li>
+							<!-- Lego Robot -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/LEGO-MINDSTORMS-Inventor-Inspiring-Edutainment/dp/B08586NDKT/ref=sr_1_5?crid=1ST9D5JCOIY4G&dib=eyJ2IjoiMSJ9.zE-0nFuoGGVOVjj0T2SDnlz2zkk6pkguBXTwjd9YsUbZ8xudYyhDekkJoWjCWsF7nioWh_JAfwmYoiBuMPxKEhvaqgsdRxHzSmpO6RkgwSvRF69oHGVl7cC0J1kb2q4pUqf_Z7powVrjJHyXIcSkXqxsyAMCToV5IbKHBejwJNPkDXzqgi4ZHydWGkmXek9kw7Fo62MMUymWI0ccW0Uhkbr5bB-RN-jurJkgW66MwkGZqyYvbfWU7O8eGG9TUscAeBUhKm8YteyWIidQ8l26Z2aLnR9hX5to0iJt1TvdeoM.NyeOAVdlq8U2sLFmFmjC-pe1DdrGhbP_qXlDQRrH0tU&dib_tag=se&keywords=lego+mindstorms+robot&nsdOptOutParam=true&qid=1732361945&sprefix=lego+mindstorms+robot%2Caps%2C123&sr=8-5"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/71m-OHH8d7L._AC_SX425_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Lego Robot Kit</h3>
+										<p>
+											Mindstorms kits are avaibile on amazon. Altho they are
+											quite costly they have everything you need to start making
+											your own robots.
+										</p>
+										<p>This Lego kit is the Mindstorms Kit.</p>
+									</div>
+								</a>
+							</li>
 
-              <!-- Arcade Handheld -->
-              <li>
-                <a target="_blank" href="https://www.amazon.co.uk/Kittenbot-Card-Sized-Computer-Microsoft-Compatible/dp/B07QK1LWK5/ref=sr_1_5?crid=BY2WRWTL82JP&dib=eyJ2IjoiMSJ9.1aF_tAFxSj-LfNvm4C0K8smZEtKGQVUi66IQdapLSRLh0515TEO8QKjwyTCeWxyJ1M1JGkZOfI2es1LP5m12rLfIOKGFGlWAYvBjuIicSIh38LWodezjt0jHU0vyowSOYl8kmCu7JRJpIq4eqc2MZA6mvu_kRI4SOagxrbndT0DuE_TtdYLIGRsE54qI8aYUFpz01ykOE3m3vyEGSJNuz8vKPXoG6PXPSdDzXT6a7mU.OLQfPdGLWKt5QZw66tUC_mGD9xZxntjXh5xd5LpUtM8&dib_tag=se&keywords=microsoft+arcade&nsdOptOutParam=true&qid=1732965020&sprefix=microsoft+arcade%2Caps%2C117&sr=8-5">
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/51J3knQi0lL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>DIY Handheld Game System</h3>
-                    <p>
-                      Program your own games using Make Code Arcade, then load
-                      them onto your own handheld system to play anywhere.
-                    </p>
-                  </div>
-                </a>
-              </li>
+							<!-- Arcade Handheld -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/Kittenbot-Card-Sized-Computer-Microsoft-Compatible/dp/B07QK1LWK5/ref=sr_1_5?crid=BY2WRWTL82JP&dib=eyJ2IjoiMSJ9.1aF_tAFxSj-LfNvm4C0K8smZEtKGQVUi66IQdapLSRLh0515TEO8QKjwyTCeWxyJ1M1JGkZOfI2es1LP5m12rLfIOKGFGlWAYvBjuIicSIh38LWodezjt0jHU0vyowSOYl8kmCu7JRJpIq4eqc2MZA6mvu_kRI4SOagxrbndT0DuE_TtdYLIGRsE54qI8aYUFpz01ykOE3m3vyEGSJNuz8vKPXoG6PXPSdDzXT6a7mU.OLQfPdGLWKt5QZw66tUC_mGD9xZxntjXh5xd5LpUtM8&dib_tag=se&keywords=microsoft+arcade&nsdOptOutParam=true&qid=1732965020&sprefix=microsoft+arcade%2Caps%2C117&sr=8-5"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/51J3knQi0lL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>DIY Handheld Game System</h3>
+										<p>
+											Program your own games using Make Code Arcade, then load
+											them onto your own handheld system to play anywhere.
+										</p>
+									</div>
+								</a>
+							</li>
 
-              <!-- Grapics Tablet -->
-              <li>
-                <a target="_blank" href="https://amzn.to/3OtXe3V">
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/71jSMnjmNsL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Drawing Tablet</h3>
-                    <p>
-                      Desktop/Laptop accessory to let your aspiring artist get
-                      creative. These are much more than touch-screen inputs,
-                      they allow fine control with a stylus and even pressure
-                      sensitivity. Press harder for thicker lines. Wacom and
-                      XP-Pen are great brands.
-                    </p>
-                  </div>
-                </a>
-              </li>
+							<!-- Grapics Tablet -->
+							<li>
+								<a target="_blank" href="https://amzn.to/3OtXe3V">
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/71jSMnjmNsL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Drawing Tablet</h3>
+										<p>
+											Desktop/Laptop accessory to let your aspiring artist get
+											creative. These are much more than touch-screen inputs,
+											they allow fine control with a stylus and even pressure
+											sensitivity. Press harder for thicker lines. Wacom and
+											XP-Pen are great brands.
+										</p>
+									</div>
+								</a>
+							</li>
 
-              <!-- Gamepad -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.microsoft.com/en-ie/p/xbox-wireless-controller/8xn59crbsqgz?cid=msft_web_collection"
-                >
-                  <div>
-                    <img
-                      src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4FlSK?ver=3eb6&q=90&m=6&h=270&w=270&b=%23FFFFFFFF&f=jpg&o=f&aim=true"
-                    />
-                  </div>
-                  <div>
-                    <h3>Gamepad</h3>
-                    <p>
-                      These are compatibile with PCs, and you can use them to
-                      control your own game characters.
-                    </p>
-                    <small
-                      >The latest XBox Series controller also work wirelessly
-                      with your PC. Previous models required a USB cable.</small
-                    >
-                  </div>
-                </a>
-              </li>
+							<!-- Gamepad -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.microsoft.com/en-ie/p/xbox-wireless-controller/8xn59crbsqgz?cid=msft_web_collection"
+								>
+									<div>
+										<img
+											src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4FlSK?ver=3eb6&q=90&m=6&h=270&w=270&b=%23FFFFFFFF&f=jpg&o=f&aim=true"
+										/>
+									</div>
+									<div>
+										<h3>Gamepad</h3>
+										<p>
+											These are compatibile with PCs, and you can use them to
+											control your own game characters.
+										</p>
+										<small
+											>The latest XBox Series controller also work wirelessly
+											with your PC. Previous models required a USB cable.</small
+										>
+									</div>
+								</a>
+							</li>
 
-              <!-- Mouse -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/Corsair-NIGHTSWORD-Gaming-Mouse-MOBA/dp/B07RJ1678R/ref=sr_1_3?crid=6Q1CJK6FTND3&dib=eyJ2IjoiMSJ9.mQHp6Jx7opRvMcznAZClzWKLvDGlInDqChQVyD0I4pI346NxYM6gMIIHcZm1DT1pTfgHMub1JiT8wsEsIIyiIMLu5MIv2OY0O3a_-4Hzb6ZPnSXk_cxClJOpOMxcSR_qakknxzC1HvkNjjpiorZetl2H995ZnlE8k7sOuw4ohPHb16Fso57H0Mv04W_0Tt1B4oihTxXLH9wqXmLQ_Dvjs2f-LMz7hKFJ36diGKHBmY8.HkrkOsGzxzevcUgeCjQe_7QntibTO4vcrgpwlS9TkNU&dib_tag=se&keywords=corsair+mouse&nsdOptOutParam=true&qid=1732362215&sprefix=corsair+mous%2Caps%2C154&sr=8-3"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/41Wgy3ZmS4L._AC_SY879_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Mouse</h3>
-                    <p>
-                      That laptop touchpad isn't cutting it. A 3 button mouse is
-                      a necessity. This mouse comes with 10 programmable
-                      buttons.
-                    </p>
-                    <small
-                      >Wireless mice ones are cool. But if you don't want to
-                      mess with charging it weekly, a wired one is the way to
-                      go.</small
-                    >
-                  </div>
-                </a>
-              </li>
+							<!-- Mouse -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/Corsair-NIGHTSWORD-Gaming-Mouse-MOBA/dp/B07RJ1678R/ref=sr_1_3?crid=6Q1CJK6FTND3&dib=eyJ2IjoiMSJ9.mQHp6Jx7opRvMcznAZClzWKLvDGlInDqChQVyD0I4pI346NxYM6gMIIHcZm1DT1pTfgHMub1JiT8wsEsIIyiIMLu5MIv2OY0O3a_-4Hzb6ZPnSXk_cxClJOpOMxcSR_qakknxzC1HvkNjjpiorZetl2H995ZnlE8k7sOuw4ohPHb16Fso57H0Mv04W_0Tt1B4oihTxXLH9wqXmLQ_Dvjs2f-LMz7hKFJ36diGKHBmY8.HkrkOsGzxzevcUgeCjQe_7QntibTO4vcrgpwlS9TkNU&dib_tag=se&keywords=corsair+mouse&nsdOptOutParam=true&qid=1732362215&sprefix=corsair+mous%2Caps%2C154&sr=8-3"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/41Wgy3ZmS4L._AC_SY879_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Mouse</h3>
+										<p>
+											That laptop touchpad isn't cutting it. A 3 button mouse is
+											a necessity. This mouse comes with 10 programmable
+											buttons.
+										</p>
+										<small
+											>Wireless mice ones are cool. But if you don't want to
+											mess with charging it weekly, a wired one is the way to
+											go.</small
+										>
+									</div>
+								</a>
+							</li>
 
-              <!-- Headset -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/CORSAIR-WIRELESS-Multiplatform-Gaming-Headset/dp/B09B836TTQ/ref=asc_df_B09B836TTQ?mcid=013ee41c24383491b1458e552142d54b&th=1&psc=1&tag=googshopuk-21&linkCode=df0&hvadid=697324016078&hvpos=&hvnetw=g&hvrand=16112253172647727426&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1007850&hvtargid=pla-1410535942205&psc=1&gad_source=1"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/71yULbWE8KL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Headset</h3>
-                    <p>
-                      They'll love the rgb and sound, you'll love the quiet. 😊
-                    </p>
-                  </div>
-                </a>
-              </li>
+							<!-- Headset -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/CORSAIR-WIRELESS-Multiplatform-Gaming-Headset/dp/B09B836TTQ/ref=asc_df_B09B836TTQ?mcid=013ee41c24383491b1458e552142d54b&th=1&psc=1&tag=googshopuk-21&linkCode=df0&hvadid=697324016078&hvpos=&hvnetw=g&hvrand=16112253172647727426&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1007850&hvtargid=pla-1410535942205&psc=1&gad_source=1"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/71yULbWE8KL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Headset</h3>
+										<p>
+											They'll love the rgb and sound, you'll love the quiet. 😊
+										</p>
+									</div>
+								</a>
+							</li>
 
-              <!-- Arduino starter kit -->
-              <li>
-                <a target="_blank" href="https://amzn.to/3UVD6tW">
-                  <div>
-                    <img
-                      src="https://images-na.ssl-images-amazon.com/images/I/91g7PUlmfxL._AC_SX425_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Ardiuno Starter Kit</h3>
-                    <p>
-                      Get started with electronics experimentation. A
-                      micro-processor that you can program and attach to sensors
-                      and other devices.
-                    </p>
-                    <small
-                      >Make sure to get a kit with an appropriate power supply
-                      like this one.</small
-                    >
-                  </div>
-                </a>
-              </li>
+							<!-- Arduino starter kit -->
+							<li>
+								<a target="_blank" href="https://amzn.to/3UVD6tW">
+									<div>
+										<img
+											src="https://images-na.ssl-images-amazon.com/images/I/91g7PUlmfxL._AC_SX425_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Ardiuno Starter Kit</h3>
+										<p>
+											Get started with electronics experimentation. A
+											micro-processor that you can program and attach to sensors
+											and other devices.
+										</p>
+										<small
+											>Make sure to get a kit with an appropriate power supply
+											like this one.</small
+										>
+									</div>
+								</a>
+							</li>
 
-              <!-- ESP32 starter kit -->
-              <li>
-                <a target="_blank" href="https://amzn.to/3ASMOp9">
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/81zGxM7ZcFL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>ESP321 Starter Kit</h3>
-                    <p>A bit more modern than Arduino.</p>
-                    <small>We can help them work through the tutorials</small>
-                  </div>
-                </a>
-              </li>
+							<!-- ESP32 starter kit -->
+							<li>
+								<a target="_blank" href="https://amzn.to/3ASMOp9">
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/81zGxM7ZcFL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>ESP321 Starter Kit</h3>
+										<p>A bit more modern than Arduino.</p>
+										<small>We can help them work through the tutorials</small>
+									</div>
+								</a>
+							</li>
 
-              <!-- Rpi Starter Kit -->
-              <li>
-                <a
-                  target="_blank"
-                  href="https://www.amazon.co.uk/SunFounder-Raspberry-Ultimate-Detailed-Tutorials/dp/B09D774YWQ?crid=2NHG7SSOIWN59&keywords=raspberry+pi+starter+kit&qid=1668951968&sprefix=raspberry+pi+starter+ki,aps,108&sr=8-6&linkCode=sl1&tag=geekymonkey01-21&linkId=d0a055618863cf9f80343677f5bcb022&language=en_GB&ref_=as_li_ss_tl"
-                >
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/81WACKUfWtL._AC_SX679_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Raspberry Pi Starter Kit</h3>
-                    <p>
-                      Your own mini-computer to program and use as the basis for
-                      more advanced robotics projects.
-                    </p>
-                  </div>
-                </a>
-              </li>
+							<!-- Rpi Starter Kit -->
+							<li>
+								<a
+									target="_blank"
+									href="https://www.amazon.co.uk/SunFounder-Raspberry-Ultimate-Detailed-Tutorials/dp/B09D774YWQ?crid=2NHG7SSOIWN59&keywords=raspberry+pi+starter+kit&qid=1668951968&sprefix=raspberry+pi+starter+ki,aps,108&sr=8-6&linkCode=sl1&tag=geekymonkey01-21&linkId=d0a055618863cf9f80343677f5bcb022&language=en_GB&ref_=as_li_ss_tl"
+								>
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/81WACKUfWtL._AC_SX679_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Raspberry Pi Starter Kit</h3>
+										<p>
+											Your own mini-computer to program and use as the basis for
+											more advanced robotics projects.
+										</p>
+									</div>
+								</a>
+							</li>
 
-              <!-- Pixel Display -->
-              <li>
-                <a target="_blank" href="https://amzn.to/3GsWOsE">
-                  <div>
-                    <img
-                      src="https://m.media-amazon.com/images/I/719cXJ1cmQL.__AC_SX300_SY300_QL70_ML2_.jpg"
-                    />
-                  </div>
-                  <div>
-                    <h3>Pixel Display Bluetooth Speaker</h3>
-                    <p>
-                      A bit of fun with pixel art by linking to your smartphone.
-                    </p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
+							<!-- Pixel Display -->
+							<li>
+								<a target="_blank" href="https://amzn.to/3GsWOsE">
+									<div>
+										<img
+											src="https://m.media-amazon.com/images/I/719cXJ1cmQL.__AC_SX300_SY300_QL70_ML2_.jpg"
+										/>
+									</div>
+									<div>
+										<h3>Pixel Display Bluetooth Speaker</h3>
+										<p>
+											A bit of fun with pixel art by linking to your smartphone.
+										</p>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
 
 <style>
-  #Ideas ul li {
-    margin: 20px;
-  }
+	#Ideas ul li {
+		margin: 20px;
+	}
 
-  #Ideas ul li a {
-    display: block;
-    background-color: #500;
-    border: solid 2px #ddd;
-    padding: 20px 40px;
-    font-size: 25px;
-    color: #ddd;
-    display: flex;
-    flex-wrap: wrap;
-  }
+	#Ideas ul li a {
+		display: block;
+		background-color: #500;
+		border: solid 2px #ddd;
+		padding: 20px 40px;
+		font-size: 25px;
+		color: #ddd;
+		display: flex;
+		flex-wrap: wrap;
+	}
 
-  #Ideas ul li a div {
-    flex-grow: 1;
-    max-width: 400px;
-    margin: 0 auto;
-  }
+	#Ideas ul li a div {
+		flex-grow: 1;
+		max-width: 400px;
+		margin: 0 auto;
+	}
 
-  #Ideas ul li a:hover {
-    background-color: #600;
-  }
+	#Ideas ul li a:hover {
+		background-color: #600;
+	}
 
-  #Ideas ul li:nth-child(2n + 1) a {
-    background-color: #040;
-  }
+	#Ideas ul li:nth-child(2n + 1) a {
+		background-color: #040;
+	}
 
-  #Ideas ul li:nth-child(2n + 1) a:hover {
-    background-color: #050;
-  }
+	#Ideas ul li:nth-child(2n + 1) a:hover {
+		background-color: #050;
+	}
 
-  #Ideas ul li img {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-  }
+	#Ideas ul li img {
+		width: 100%;
+		max-width: 300px;
+		margin: 0 auto;
+	}
 
-  #Ideas ul li a h3 {
-    font-size: 30px;
-  }
+	#Ideas ul li a h3 {
+		font-size: 30px;
+	}
 
-  #Ideas ul li a p {
-    line-height: 1.2;
-    font-size: 24px;
-    padding: 20px;
-  }
+	#Ideas ul li a p {
+		line-height: 1.2;
+		font-size: 24px;
+		padding: 20px;
+	}
 
-  #Ideas ul li a small {
-    line-height: 1.2;
-    display: block;
-    font-size: 16px;
-  }
+	#Ideas ul li a small {
+		line-height: 1.2;
+		display: block;
+		font-size: 16px;
+	}
 </style>

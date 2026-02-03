@@ -24,7 +24,7 @@
 			{{ team.teamName }}
 		</p>
 	</div>
-	<hr>
+	<hr />
 
 	<h1>Belts</h1>
 	<div class="TeamsList">
@@ -36,7 +36,7 @@
 			{{ belt.color }}
 		</p>
 	</div>
-	<hr>
+	<hr />
 
 	<h1>Badge Categories</h1>
 	<div class="TeamsList">
@@ -53,7 +53,7 @@
 			</ul>
 		</div>
 	</div>
-	<hr>
+	<hr />
 </template>
 
 <style lang="css">

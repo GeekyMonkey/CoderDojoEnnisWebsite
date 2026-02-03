@@ -4,11 +4,14 @@
 	const log = useLogger("ThemeSelect");
 	const isOpen = ref(false);
 
-	const props = withDefaults(defineProps<{
-		showTriggerButton?: boolean;
-	}>(), {
-		showTriggerButton: true,
-	});
+	const props = withDefaults(
+		defineProps<{
+			showTriggerButton?: boolean;
+		}>(),
+		{
+			showTriggerButton: true,
+		},
+	);
 
 	defineExpose({
 		isOpen,
@@ -60,7 +63,7 @@
 						name="line-md:moon-filled-to-sunny-filled-loop-transition"
 						class="LanguageIcon w-5 h-5"
 					/>
-					<span class="sr-only">{{ Translate('theme.select') }}</span>
+					<span class="sr-only">{{ Translate("theme.select") }}</span>
 				</UButton>
 			</slot>
 		</template>
@@ -73,11 +76,18 @@
 					:key="theme.id"
 					:title="Translate('theme.author', { AuthorName: theme.author })"
 					:variant="CurrentTheme?.id === theme.id ? 'solid' : 'outline'"
-					@click="SetTheme(theme.id); isOpen = false"
+					@click="
+						SetTheme(theme.id);
+						isOpen = false;
+					"
 				>
 					<Translated :t="theme.themeName" />
 					<Icon
-						:name="theme.darkOrLight === 'dark' ? 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition' : 'line-md:moon-filled-to-sunny-filled-loop-transition'"
+						:name="
+							theme.darkOrLight === 'dark'
+								? 'line-md:sunny-filled-loop-to-moon-filled-alt-loop-transition'
+								: 'line-md:moon-filled-to-sunny-filled-loop-transition'
+						"
 					/>
 				</UButton>
 			</ButtonsStack>

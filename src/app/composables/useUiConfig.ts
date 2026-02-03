@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/vue-query";
-import { FormatBucketFileName, FormatBucketFileUrl } from "~~/shared/types/Supabase";
+import {
+	FormatBucketFileName,
+	FormatBucketFileUrl,
+} from "~~/shared/types/Supabase";
 
 // Theme switching is built on @nuxtjs/color-mode for `light`/`dark`/`system`,
 // with an additional `theme` attribute for opt-in alternate themes (e.g. `crt`).
@@ -20,7 +23,12 @@ export function useUiConfig() {
 	/**
 	 * UI Config Query
 	 */
-	const { data: uiConfig, isLoading, isError, error } = useQuery({
+	const {
+		data: uiConfig,
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
 		queryKey: ["UiConfig"],
 		queryFn: async ({ signal }) => {
 			log.info("Loading UiConfig");
@@ -195,9 +203,17 @@ export function useUiConfig() {
 	/**
 	 * Format a full bucket image URL
 	 */
-	const BucketImageUrl = (folder: string, prefix: string, id: string): string => {
+	const BucketImageUrl = (
+		folder: string,
+		prefix: string,
+		id: string,
+	): string => {
 		const bucketBaseUrl: string = uiConfig.value?.bucketBaseUrl ?? "";
-		return FormatBucketFileUrl(bucketBaseUrl, folder, FormatBucketFileName(prefix, id, "jpg"));
+		return FormatBucketFileUrl(
+			bucketBaseUrl,
+			folder,
+			FormatBucketFileName(prefix, id, "jpg"),
+		);
 	};
 
 	/**
@@ -205,28 +221,28 @@ export function useUiConfig() {
 	 */
 	const BadgeCategoryLogoUrl = (categoryId: string): string => {
 		return BucketImageUrl("BadgeCategories", "BadgeCategory", categoryId);
-	}
+	};
 
 	/**
 	 * Get the member avatar URL
 	 */
 	const MemberAvatarUrl = (memberId: string): string => {
 		return BucketImageUrl("Members/Avatars", "Member", memberId);
-	};	
+	};
 
 	/**
 	 * Get the member photo URL
 	 */
 	const MemberPhotoUrl = (memberId: string): string => {
 		return BucketImageUrl("Members/Photos", "Member", memberId);
-	}	
+	};
 
 	/**
 	 * Get the team logo URL
 	 */
 	const TeamLogoUrl = (teamId: string): string => {
 		return BucketImageUrl("Teams", "Team", teamId);
-	};	
+	};
 
 	return {
 		BadgeCategoryLogoUrl,

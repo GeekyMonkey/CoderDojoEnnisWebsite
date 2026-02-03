@@ -114,7 +114,11 @@ export class AttendanceService {
 					sessionCount,
 				));
 		}
-		return { message, notifications: notifications.filter(n => !!n.message), logs };
+		return {
+			message,
+			notifications: notifications.filter((n) => !!n.message),
+			logs,
+		};
 	}
 
 	/**

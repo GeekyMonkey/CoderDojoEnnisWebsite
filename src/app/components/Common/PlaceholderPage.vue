@@ -11,10 +11,7 @@
 			<template #header>
 				<div class="flex items-start justify-between gap-4">
 					<div>
-						<h2
-							v-if="title"
-							class="text-lg font-semibold text-highlighted"
-						>
+						<h2 v-if="title" class="text-lg font-semibold text-highlighted">
 							{{ title }}
 						</h2>
 						<p v-if="description" class="text-sm text-muted mt-1">

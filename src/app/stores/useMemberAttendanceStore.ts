@@ -30,15 +30,16 @@ interface UseMemberAttendanceStoreResult {
 		sessionDate: string,
 		present: boolean,
 	) => Promise<void>;
-	signInMember: (
-		args: { username: string; password?: string },
-	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
-	signInMemberByGuid: (
-		args: { memberGuid: string },
-	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
-	signInMemberByNfcTag: (
-		args: { nfcTag: string },
-	) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
+	signInMember: (args: {
+		username: string;
+		password?: string;
+	}) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
+	signInMemberByGuid: (args: {
+		memberGuid: string;
+	}) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
+	signInMemberByNfcTag: (args: {
+		nfcTag: string;
+	}) => Promise<ApiResponse<AttendanceSignInResponseModel>>;
 }
 
 let _store: UseMemberAttendanceStoreResult | null = null;
@@ -66,44 +67,44 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		queryKey: ["memberAttendanceSessionStats"],
 		enabled: isSessionStatsEnabled,
 		queryFn: async ({ signal }) => {
-				const response = await $fetch<
-					ApiResponse<MemberAttendanceSessionStatsCollection>
-				>("/api/MemberAttendance/SessionStats", { signal });
-				if (!response.success)
-					throw new Error(
-						response.error || "Failed to load member attendance sessions",
-					);
-				return response.data;
-			},
-			placeholderData: () => ({
-				attendance_total: 0,
-				sessionCount: 0,
-				sessionStats: [],
-			}),
-			staleTime: 1000 * 60 * 5, // 5 minutes
-			refetchOnWindowFocus: false,
-		});
+			const response = await $fetch<
+				ApiResponse<MemberAttendanceSessionStatsCollection>
+			>("/api/MemberAttendance/SessionStats", { signal });
+			if (!response.success)
+				throw new Error(
+					response.error || "Failed to load member attendance sessions",
+				);
+			return response.data;
+		},
+		placeholderData: () => ({
+			attendance_total: 0,
+			sessionCount: 0,
+			sessionStats: [],
+		}),
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		refetchOnWindowFocus: false,
+	});
 
 	/**
 	 * Session Dates list query
 	 */
-	const { data: SessionDates } =
-		useQuery<string[]>({
-			queryKey: ["memberAttendanceSessionDates"],
-			queryFn: async ({ signal }) => {
-				const response = await $fetch<
-					ApiResponse<{ dates: string[] }>
-				>("/api/MemberAttendance/SessionDates", { signal });
-				if (!response.success)
-					throw new Error(
-						response.error || "Failed to load member attendance session dates",
-					);
-				return response.data.dates;
-			},
-			placeholderData: () => [],
-			staleTime: 1000 * 60 * 5, // 5 minutes
-			refetchOnWindowFocus: false,
-		});
+	const { data: SessionDates } = useQuery<string[]>({
+		queryKey: ["memberAttendanceSessionDates"],
+		queryFn: async ({ signal }) => {
+			const response = await $fetch<ApiResponse<{ dates: string[] }>>(
+				"/api/MemberAttendance/SessionDates",
+				{ signal },
+			);
+			if (!response.success)
+				throw new Error(
+					response.error || "Failed to load member attendance session dates",
+				);
+			return response.data.dates;
+		},
+		placeholderData: () => [],
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		refetchOnWindowFocus: false,
+	});
 
 	/**
 	 * Calculate current session date exclusively from the sessions list (latest date first)
@@ -155,12 +156,13 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	UseSupabaseRealtimeTable<MemberAttendanceModel>({
 		table: "member_attendances",
 		onInsert: (evt) => {
-			console.log(
-				`[MemberAttendanceStore][realtime] INSERT -> invalidate`,
-				{ evt },
-			);
+			console.log(`[MemberAttendanceStore][realtime] INSERT -> invalidate`, {
+				evt,
+			});
 			// Invalidate relevant queries
-			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionStats"],
+			});
 			queryClient.invalidateQueries({
 				queryKey: ["memberAttendanceSessionDate", evt.newData.date],
 				exact: false,
@@ -170,12 +172,13 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 			// Nothing to do
 		},
 		onDelete: (evt) => {
-			console.log(
-				`[MemberAttendanceStore][realtime] DELETE -> invalidate`,
-				{ evt },
-			);
+			console.log(`[MemberAttendanceStore][realtime] DELETE -> invalidate`, {
+				evt,
+			});
 			// Invalidate relevant queries
-			queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
+			queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionStats"],
+			});
 			queryClient.invalidateQueries({
 				queryKey: ["memberAttendanceSessionDate", evt.oldData.date],
 			});
@@ -318,7 +321,6 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 			// if (shouldInvalidateSessions) {
 			// 	queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
 			// }
-
 			// If optimistic update wasn't possible (no cache), we MUST refetch to show the change.
 			// Even if it was possible, invalidating here ensures eventual consistency without
 			// destroying the optimistic update state (since we use invalidateQueries not removeQueries).
@@ -335,7 +337,10 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	const signInMember = async ({
 		username,
 		password,
-	}: { username: string; password?: string }) => {
+	}: {
+		username: string;
+		password?: string;
+	}) => {
 		const response = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
 			"/api/MemberAttendance/SignIn",
 			{
@@ -349,9 +354,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	/**
 	 * Sign in a member using their GUID
 	 */
-	const signInMemberByGuid = async ({
-		memberGuid,
-	}: { memberGuid: string }) => {
+	const signInMemberByGuid = async ({ memberGuid }: { memberGuid: string }) => {
 		const response = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
 			"/api/MemberAttendance/SignInGuid",
 			{
@@ -365,9 +368,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	/**
 	 * Sign in a member using their NFC tag
 	 */
-	const signInMemberByNfcTag = async ({
-		nfcTag,
-	}: { nfcTag: string }) => {
+	const signInMemberByNfcTag = async ({ nfcTag }: { nfcTag: string }) => {
 		const response = await $fetch<ApiResponse<AttendanceSignInResponseModel>>(
 			"/api/MemberAttendance/SignInNfcTag",
 			{

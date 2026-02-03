@@ -21,11 +21,12 @@ export function useMemberBeltsStore() {
 			return map;
 		}
 		for (const memberBelt of items) {
-			if (!map[memberBelt.memberId] ||
+			if (
+				!map[memberBelt.memberId] ||
 				(map[memberBelt.memberId]?.awarded ?? 0) < (memberBelt.awarded ?? 0)
 			) {
 				map[memberBelt.memberId] = memberBelt;
-			}	
+			}
 		}
 		return map;
 	});
@@ -36,4 +37,3 @@ export function useMemberBeltsStore() {
 		MembersLatestBeltsByMemberId,
 	};
 }
-

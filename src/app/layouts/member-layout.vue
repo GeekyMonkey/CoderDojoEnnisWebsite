@@ -27,7 +27,8 @@
 	});
 
 	const roles = computed<MemberRole[]>(() => {
-		const meta = (user.value?.user_metadata ?? null) as SupabaseUserMetaType | null;
+		const meta = (user.value?.user_metadata ??
+			null) as SupabaseUserMetaType | null;
 		const flags = getRoleFlagsFromUserMeta(meta);
 		return getMemberRoles(flags);
 	});
@@ -74,7 +75,8 @@
 	});
 
 	const displayName = computed(() => {
-		const meta = (user.value?.user_metadata ?? null) as MemberSupabaseModel | null;
+		const meta = (user.value?.user_metadata ??
+			null) as MemberSupabaseModel | null;
 		const first = meta?.nameFirst;
 		const last = meta?.nameLast;
 		const full = [first, last].filter(Boolean).join(" ");
@@ -97,8 +99,6 @@
 			languageSelectRef.value.isOpen = true;
 		}
 	}
-
-
 
 	const userMenuItems = computed<DropdownMenuItem[][]>(() => {
 		return [
@@ -166,10 +166,7 @@
 					:to="section ? `/${section}` : '/'"
 					class="flex items-center gap-2 px-1 MemberLayoutHeaderLogo"
 				>
-					<img
-						src="/images/Logos/Logo.png"
-						class="h-8 w-8 CoderDojoLogo"
-					>
+					<img src="/images/Logos/Logo.png" class="h-8 w-8 CoderDojoLogo" />
 					<span v-if="!collapsed">CoderDojo Ennis</span>
 				</NuxtLink>
 			</template>
@@ -180,10 +177,11 @@
 					:items="primaryNavItems"
 					:ui="{
 						link: 'items-center',
-						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
+						linkLabel:
+							'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
 						linkLeadingIcon: 'self-center',
 						linkTrailing: 'self-center',
-						linkTrailingIcon: 'self-center'
+						linkTrailingIcon: 'self-center',
 					}"
 					orientation="vertical"
 					class="mt-2"
@@ -195,10 +193,11 @@
 					:items="secondaryNavItems"
 					:ui="{
 						link: 'items-center',
-						linkLabel: 'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
+						linkLabel:
+							'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
 						linkLeadingIcon: 'self-center',
 						linkTrailing: 'self-center',
-						linkTrailingIcon: 'self-center'
+						linkTrailingIcon: 'self-center',
 					}"
 					orientation="vertical"
 					class="mt-auto"
@@ -219,33 +218,32 @@
 						icon="i-lucide-user"
 						:trailing-icon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
 						:ui="{
-							label: 'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
+							label:
+								'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
 							leadingIcon: 'self-center',
-							trailingIcon: 'ml-auto self-center'
+							trailingIcon: 'ml-auto self-center',
 						}"
 					/>
 				</UDropdownMenu>
 
-			<ThemeSelect ref="themeSelectRef" :showTriggerButton="false" />
-			<LanguageSelect ref="languageSelectRef" :showTriggerButton="false" />
-		</template>
-	</UDashboardSidebar>
+				<ThemeSelect ref="themeSelectRef" :showTriggerButton="false" />
+				<LanguageSelect ref="languageSelectRef" :showTriggerButton="false" />
+			</template>
+		</UDashboardSidebar>
 
-	<slot/>
-
-</UDashboardGroup>
+		<slot />
+	</UDashboardGroup>
 </template>
 
 <style lang="css">
-	div:has( > .MemberLayoutHeaderLogo) {
-				 border-bottom: solid 1px var(--ui-border);
-				 display: flex;
+	div:has(> .MemberLayoutHeaderLogo) {
+		border-bottom: solid 1px var(--ui-border);
+		display: flex;
 	}
 
 	@media (max-width: 800px) {
-		div:has( > .MemberLayoutHeaderLogo) {
+		div:has(> .MemberLayoutHeaderLogo) {
 			display: none;
 		}
 	}
-
 </style>

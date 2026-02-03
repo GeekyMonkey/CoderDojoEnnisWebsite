@@ -36,11 +36,12 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 			throw new Error("dateMin must be <= dateMax");
 		}
 
-		const attendances = await MemberAttendancesData.GetMemberAttendancesForDateRange(
-			event,
-			dateMin,
-			dateMax,
-		);
+		const attendances =
+			await MemberAttendancesData.GetMemberAttendancesForDateRange(
+				event,
+				dateMin,
+				dateMax,
+			);
 
 		// Group by date
 		const byDate = new Map<string, string[]>();

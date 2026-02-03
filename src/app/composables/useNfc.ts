@@ -1,6 +1,12 @@
-import { ref, onUnmounted, watch, unref } from 'vue';
+import { ref, onUnmounted, watch, unref } from "vue";
 
-export type NfcMessageCallback = ({serialNumber, message}: {serialNumber: string, message: NDEFMessage}) => Promise<void>;
+export type NfcMessageCallback = ({
+	serialNumber,
+	message,
+}: {
+	serialNumber: string;
+	message: NDEFMessage;
+}) => Promise<void>;
 export type NfcErrorCallback = (error: string) => Promise<void>;
 
 let ndef: NDEFReader | null = null;
@@ -11,16 +17,16 @@ let ndef: NDEFReader | null = null;
 export function useNfc(
 	active: MaybeRef<boolean>,
 	onMessage: NfcMessageCallback,
-	onError?: NfcErrorCallback
+	onError?: NfcErrorCallback,
 ) {
-	const isNfcSupported = 'NDEFReader' in window;
+	const isNfcSupported = "NDEFReader" in window;
 	const nfcError = ref<string | null>(null);
 	const scanning = ref<boolean>(false);
 	let abortController: AbortController | null = null;
 
 	const startScanning = async (): Promise<void> => {
 		if (!isNfcSupported) {
-			nfcError.value = 'NFC is not supported on this device.';
+			nfcError.value = "NFC is not supported on this device.";
 			return;
 		}
 
@@ -36,7 +42,7 @@ export function useNfc(
 			};
 
 			ndef.onreadingerror = (event: Event) => {
-				const errorMsg = 'Error reading NFC tag.';
+				const errorMsg = "Error reading NFC tag.";
 				nfcError.value = errorMsg;
 				onError?.(errorMsg);
 			};
@@ -44,7 +50,10 @@ export function useNfc(
 			await ndef.scan({ signal: abortController.signal });
 			scanning.value = true;
 		} catch (error) {
-			const errorMsg = error instanceof Error ? error.message : 'Failed to start NFC scanning.';
+			const errorMsg =
+				error instanceof Error
+					? error.message
+					: "Failed to start NFC scanning.";
 			nfcError.value = errorMsg;
 			onError?.(errorMsg);
 			scanning.value = false;
@@ -68,8 +77,9 @@ export function useNfc(
 			} else if (!isActive && scanning.value) {
 				stopScanning();
 			}
-		}
-		, { immediate: true });
+		},
+		{ immediate: true },
+	);
 
 	onUnmounted(() => {
 		stopScanning();

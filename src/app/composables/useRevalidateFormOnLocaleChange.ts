@@ -1,6 +1,9 @@
 import { nextTick, unref, watch, type Ref } from "vue";
 
-export type RevalidateFormOnLocaleChangeValidateOptions = Record<string, unknown>;
+export type RevalidateFormOnLocaleChangeValidateOptions = Record<
+	string,
+	unknown
+>;
 
 export type RevalidateFormOnLocaleChangeOptions = {
 	/**
@@ -26,7 +29,9 @@ const defaultValidateOptions: RevalidateFormOnLocaleChangeValidateOptions = {
 	nested: true,
 };
 
-function resolveValidatableForm(target: unknown): ValidatableFormLike | undefined {
+function resolveValidatableForm(
+	target: unknown,
+): ValidatableFormLike | undefined {
 	if (!target) return undefined;
 
 	// Nuxt/Vue can expose template refs as arrays in some scenarios

@@ -17,7 +17,7 @@ const eventEmitters: Map<string, Emitter<DbEvents>> = new Map();
 /**
  * Supabase Client Composable
  */
-export function UseSupabaseRealtimeTable<T extends BaseModel> ({
+export function UseSupabaseRealtimeTable<T extends BaseModel>({
 	table,
 	forceResubscribe = false,
 	onInsert,
@@ -85,7 +85,7 @@ export function UseSupabaseRealtimeTable<T extends BaseModel> ({
 		channel,
 		events,
 	};
-};
+}
 
 /**
  * Example payload

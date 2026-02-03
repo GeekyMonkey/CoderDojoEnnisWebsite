@@ -65,7 +65,9 @@
 	/**
 	 * Complete login and redirect
 	 */
-	const completeLogin = async (result: ApiResponse<{ session: any; member: any }>) => {
+	const completeLogin = async (
+		result: ApiResponse<{ session: any; member: any }>,
+	) => {
 		if (result.success) {
 			const authResponse = await supabaseClient.auth.setSession(
 				result.data.session,
@@ -92,7 +94,7 @@
 	 */
 	const handleLogin = async (event: FormSubmitEvent<FormSchema>) => {
 		const { username, password } = event.data;
-		
+
 		clearErrorMessage();
 		isSubmitting.value = true;
 
@@ -108,7 +110,10 @@
 	/**
 	 * Handle NFC message
 	 */
-	const handleNfcMessage: NfcMessageCallback = async ({ serialNumber, message }): Promise<void> => {
+	const handleNfcMessage: NfcMessageCallback = async ({
+		serialNumber,
+		message,
+	}): Promise<void> => {
 		log.info("NFC tag detected", { serialNumber, message });
 
 		clearErrorMessage();
@@ -146,7 +151,6 @@
 			clearErrorMessage();
 		},
 	);
-
 </script>
 
 <template>
@@ -162,7 +166,7 @@
 		>
 			<template #header>
 				<CoderDojoLogo size="md" class="mx-auto mb-4" />
-				<h1>{{ t('login.title') }}</h1>
+				<h1>{{ t("login.title") }}</h1>
 			</template>
 
 			<template #validation>
@@ -176,10 +180,7 @@
 
 			<template #footer>
 				<div class="flex items-center gap-2 justify-end">
-					<NfcToggle
-						@message="handleNfcMessage"
-						@error="handleNfcError"
-					/>
+					<NfcToggle @message="handleNfcMessage" @error="handleNfcError" />
 				</div>
 			</template>
 		</UAuthForm>

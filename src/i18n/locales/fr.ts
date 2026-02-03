@@ -5,7 +5,7 @@ import { type enMessagesType } from "./en";
  * Requires all keys from enMessagesType
  * spell-checker:locale en,fr
  * spell-checker:ignoreRegExp ".*"
-*/
+ */
 export default {
 	attendance: {
 		columns: {
@@ -61,29 +61,29 @@ export default {
 		plural: "Mentors",
 	},
 	nav: {
-		"Attendance": "Présence",
+		Attendance: "Présence",
 		"Badge Categories": "Catégories de badges",
-		"Badges": "Badges",
+		Badges: "Badges",
 		"Badges Available": "Badges disponibles",
-		"Belts": "Ceintures",
+		Belts: "Ceintures",
 		"Coder Home": "Accueil codeur",
-		"Goals": "Objectifs",
-		"Maintenance": "Maintenance",
-		"Members": "Membres",
+		Goals: "Objectifs",
+		Maintenance: "Maintenance",
+		Members: "Membres",
 		"Mentor Email CSV": "Emails des mentors (CSV)",
 		"Mentor Home": "Accueil mentor",
-		"Mentors": "Mentors",
+		Mentors: "Mentors",
 		"My Kids": "Mes enfants",
 		"Parent Emails CSV": "Emails des parents (CSV)",
 		"Parent Home": "Accueil parents",
-		"Parents": "Parents",
+		Parents: "Parents",
 		"Purge Members": "Purger les membres",
 		"Purge Registrations": "Purger les inscriptions",
 		"Recent Belts": "Ceintures récentes",
 		"Recent Belts CSV": "Ceintures récentes (CSV)",
-		"Reports": "Rapports",
+		Reports: "Rapports",
 		"Sign In Mode": "Mode d'inscription",
-		"Teams": "Équipes",
+		Teams: "Équipes",
 	},
 	parents: {
 		label: "Parent",

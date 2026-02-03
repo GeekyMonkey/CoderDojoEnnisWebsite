@@ -1,17 +1,20 @@
 <script setup lang="ts">
 	import { ref } from "vue";
-	
+
 	type LocaleCode = Parameters<typeof setLocale>[0];
 
 	const isOpen = ref(false);
 	const { locale, setLocale, setLocaleCookie, locales, t } = useI18n();
 	const log = useLogger("LanguageSelect");
 
-	const props = withDefaults(defineProps<{
-		showTriggerButton?: boolean;
-	}>(), {
-		showTriggerButton: true,
-	});
+	const props = withDefaults(
+		defineProps<{
+			showTriggerButton?: boolean;
+		}>(),
+		{
+			showTriggerButton: true,
+		},
+	);
 
 	defineExpose({
 		isOpen,
@@ -69,7 +72,7 @@
 					:aria-label="t('language.select')"
 				>
 					<Icon name="Language" class="LanguageIcon w-5 h-5" />
-					<span class="sr-only">{{ t('language.select') }}</span>
+					<span class="sr-only">{{ t("language.select") }}</span>
 				</UButton>
 			</slot>
 		</template>

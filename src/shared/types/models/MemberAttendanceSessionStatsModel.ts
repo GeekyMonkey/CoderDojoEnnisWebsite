@@ -27,7 +27,7 @@ export const MemberAttendanceSessionStatsCollectionSchema = z.strictObject({
  */
 export type MemberAttendanceSessionStat = z.infer<
 	typeof MemberAttendanceSessionStatSchema
-	>;
+>;
 
 /**
  * Types for a collection of attendance sessions statistics

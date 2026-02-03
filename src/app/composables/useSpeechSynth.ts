@@ -7,7 +7,7 @@ const log = useLogger("useSpeechSynth");
 type LangAndVoice = {
 	lang: string;
 	voiceName: string;
-}
+};
 
 /**
  * Map locale codes to speech synthesis language codes
@@ -26,7 +26,9 @@ const resolveVoice = (
 ): SpeechSynthesisVoice | undefined => {
 	const filtered = voices.filter((v) => v.lang === lang);
 	if (voiceName) {
-		const matchedVoice = filtered.find((v) => v.name.toLowerCase().includes(voiceName.toLowerCase()));
+		const matchedVoice = filtered.find((v) =>
+			v.name.toLowerCase().includes(voiceName.toLowerCase()),
+		);
 		if (matchedVoice) {
 			return matchedVoice;
 		}
@@ -42,22 +44,33 @@ export function useSpeechSynth() {
 	const { locale } = useI18n();
 	const textToSpeak = ref("");
 	const voices = ref<SpeechSynthesisVoice[]>([]);
-	const currentLang = ref(localeToSpeechLangAndVoiceName[locale.value as LangCode]?.lang || defaultLang);
+	const currentLang = ref(
+		localeToSpeechLangAndVoiceName[locale.value as LangCode]?.lang ||
+			defaultLang,
+	);
 	const currentVoice = ref<SpeechSynthesisVoice | undefined>(undefined);
 
 	const updateVoiceForLocale = (targetLocale: LangCode): void => {
-		const { lang, voiceName } =
-			localeToSpeechLangAndVoiceName[targetLocale] || {
-				lang: defaultLang,
-				voiceName: defaultVoice,
-			};
+		const { lang, voiceName } = localeToSpeechLangAndVoiceName[
+			targetLocale
+		] || {
+			lang: defaultLang,
+			voiceName: defaultVoice,
+		};
 		currentLang.value = lang;
 		currentVoice.value = resolveVoice(voices.value, lang, voiceName);
-		log.info("locale changed", { newLang: lang, voice: currentVoice.value?.name });
+		log.info("locale changed", {
+			newLang: lang,
+			voice: currentVoice.value?.name,
+		});
 	};
 
 	const loadVoices = (): boolean => {
-		if (!process.client || typeof window === "undefined" || !window.speechSynthesis) {
+		if (
+			!process.client ||
+			typeof window === "undefined" ||
+			!window.speechSynthesis
+		) {
 			return false;
 		}
 
@@ -71,8 +84,10 @@ export function useSpeechSynth() {
 	};
 
 	const speech = useSpeechSynthesis(textToSpeak, {
-			lang: currentLang,
-			voice: computed(() => currentVoice.value) as unknown as MaybeRef<SpeechSynthesisVoice>,
+		lang: currentLang,
+		voice: computed(
+			() => currentVoice.value,
+		) as unknown as MaybeRef<SpeechSynthesisVoice>,
 	});
 	console.log("Speech Initialized", {
 		isSupported: speech.isSupported.value,
@@ -99,11 +114,17 @@ export function useSpeechSynth() {
 
 		const handleVoicesChanged = () => {
 			if (loadVoices()) {
-				window.speechSynthesis.removeEventListener("voiceschanged", handleVoicesChanged);
+				window.speechSynthesis.removeEventListener(
+					"voiceschanged",
+					handleVoicesChanged,
+				);
 			}
 		};
 
-		window.speechSynthesis.addEventListener("voiceschanged", handleVoicesChanged);
+		window.speechSynthesis.addEventListener(
+			"voiceschanged",
+			handleVoicesChanged,
+		);
 		// Trigger voice loading on some browsers
 		window.speechSynthesis.getVoices();
 	});

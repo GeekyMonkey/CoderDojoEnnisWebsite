@@ -19,7 +19,7 @@
 		&.Size_sm {
 			width: 32px;
 		}
-		
+
 		&.Size_lg {
 			width: 128px;
 		}

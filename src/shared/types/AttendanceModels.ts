@@ -50,20 +50,19 @@ export const AttendanceSignInResponseModelSchema = z.object({
  * Response from the sign-in API
  * Failure is indicated by HTTP status code 400, not this type
  */
-type tempt = z.infer<
-	typeof AttendanceSignInResponseModelSchema
->;
-export type AttendanceSignInResponseModel = Omit<tempt, "memberDetails" | "notifications" | "previousSignInDate"> & {
+type tempt = z.infer<typeof AttendanceSignInResponseModelSchema>;
+export type AttendanceSignInResponseModel = Omit<
+	tempt,
+	"memberDetails" | "notifications" | "previousSignInDate"
+> & {
 	memberDetails: MemberModel;
 	notifications: AttendanceNotificationArray;
-	previousSignInDate?: DateString
+	previousSignInDate?: DateString;
 };
 
 /**
  * Error response from the sign-in API
  */
 export type AttendanceSignInErrorResponse = {
-	error: string
+	error: string;
 };
-
-

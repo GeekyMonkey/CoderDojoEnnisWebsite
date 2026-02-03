@@ -1,12 +1,12 @@
 import { defineEventHandler } from "h3";
 import { MembersData } from "~~/server/db/MembersData";
 import {
-  AttendanceService,
-  AttendanceServiceError,
+	AttendanceService,
+	AttendanceServiceError,
 } from "~~/server/services/AttendanceService";
 import type {
-  AttendanceSignInErrorResponse,
-  AttendanceSignInResponseModel,
+	AttendanceSignInErrorResponse,
+	AttendanceSignInResponseModel,
 } from "~~/shared/types/AttendanceModels";
 import { useLogger } from "~~/shared/utils/Logger";
 
@@ -17,45 +17,45 @@ const log = useLogger("api/MemberAttendance/fingerprint");
  * Sign in a member by fingerprint ID
  */
 export default defineEventHandler(
-  async (
-    event,
-  ): Promise<AttendanceSignInResponseModel | AttendanceSignInErrorResponse> => {
-    // Access the query string from the event object
-    const query = event.node.req.url
-      ? new URL(event.node.req.url, `http://${event.node.req.headers.host}`)
-          .searchParams
-      : new URLSearchParams();
-    const fingerprintId: number = Number(query.get("id") || -1);
-    const testing: boolean = Boolean(query.get("testing") === "true");
+	async (
+		event,
+	): Promise<AttendanceSignInResponseModel | AttendanceSignInErrorResponse> => {
+		// Access the query string from the event object
+		const query = event.node.req.url
+			? new URL(event.node.req.url, `http://${event.node.req.headers.host}`)
+					.searchParams
+			: new URLSearchParams();
+		const fingerprintId: number = Number(query.get("id") || -1);
+		const testing: boolean = Boolean(query.get("testing") === "true");
 
-    const attendanceService = new AttendanceService(event);
-    try {
-      // Get the member by fingerprint ID
-      const member = await MembersData.GetMemberByFingerprintId(
-        event,
-        fingerprintId,
-      );
-      if (!member) {
-        log.warn(`No member found with fingerprint ID ${fingerprintId}`);
-        event.node.res.statusCode = 400;
-        return {
-          error: `No member found with fingerprint ID ${fingerprintId}`,
-        };
-      }
+		const attendanceService = new AttendanceService(event);
+		try {
+			// Get the member by fingerprint ID
+			const member = await MembersData.GetMemberByFingerprintId(
+				event,
+				fingerprintId,
+			);
+			if (!member) {
+				log.warn(`No member found with fingerprint ID ${fingerprintId}`);
+				event.node.res.statusCode = 400;
+				return {
+					error: `No member found with fingerprint ID ${fingerprintId}`,
+				};
+			}
 
-      // Do the sign-in
-      const response: AttendanceSignInResponseModel =
-        await attendanceService.signInMember(member, testing);
-      return response;
-    } catch (err) {
-      if (err instanceof AttendanceServiceError) {
-        log.warn(err.message);
-        event.node.res.statusCode = 400;
-        return { error: err.message };
-      }
-      log.error("Unexpected sign-in error", {}, err);
-      event.node.res.statusCode = 500;
-      return { error: "Unexpected error during sign-in" };
-    }
-  },
+			// Do the sign-in
+			const response: AttendanceSignInResponseModel =
+				await attendanceService.signInMember(member, testing);
+			return response;
+		} catch (err) {
+			if (err instanceof AttendanceServiceError) {
+				log.warn(err.message);
+				event.node.res.statusCode = 400;
+				return { error: err.message };
+			}
+			log.error("Unexpected sign-in error", {}, err);
+			event.node.res.statusCode = 500;
+			return { error: "Unexpected error during sign-in" };
+		}
+	},
 );

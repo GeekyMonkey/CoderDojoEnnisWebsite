@@ -11,7 +11,6 @@ Feel free to edit the content and make a pull request. Or even better, convert f
 In the _src_ folder: Setup with
 `pnpm install`
 
-
 ### Running locally
 
 In the _src_ folder: Run with

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { h, resolveComponent, type Component } from "vue";
-	import type { ColumnDef } from '@tanstack/vue-table';
+	import type { ColumnDef } from "@tanstack/vue-table";
 	import type { MemberModel } from "~~/shared/types/models/MemberModel";
 	import { useBeltsStore } from "~/stores/useBeltsStore";
 	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
@@ -30,13 +30,18 @@
 	const { width: windowWidth } = useWindowSize();
 	const { speak } = useSpeechSynth();
 
-	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(() => {
-		return [
-			{ value: "present", label: t("attendance.include.presentMembers") },
-			{ value: "registered", label: t("attendance.include.registeredMembers") },
-			{ value: "all", label: t("attendance.include.allMembers") },
-		];
-	});
+	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(
+		() => {
+			return [
+				{ value: "present", label: t("attendance.include.presentMembers") },
+				{
+					value: "registered",
+					label: t("attendance.include.registeredMembers"),
+				},
+				{ value: "all", label: t("attendance.include.allMembers") },
+			];
+		},
+	);
 
 	const {
 		SessionDates,
@@ -56,9 +61,10 @@
 	const { TeamsById } = useTeamsStore();
 	const { BeltsById } = useBeltsStore();
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
-	const { signInMemberByGuid, signInMemberByNfcTag } = useMemberAttendanceStore();
+	const { signInMemberByGuid, signInMemberByNfcTag } =
+		useMemberAttendanceStore();
 	const log = useLogger("mentor/attendance");
-	
+
 	const initialDate = (route.query.date as string) || "";
 	const initialYear = initialDate.length >= 4 ? initialDate.slice(0, 4) : "";
 	const defaultSort: SingleSortState = { id: "name", desc: false };
@@ -73,9 +79,12 @@
 
 	const selectedSessionYear = ref<string>(initialYear);
 	const selectedSessionDate = ref<string>(initialDate);
-	const includeMode = ref<IncludeMode>((route.query.include as IncludeMode) || "registered");
+	const includeMode = ref<IncludeMode>(
+		(route.query.include as IncludeMode) || "registered",
+	);
 	const searchText = ref<string>((route.query.search as string) || "");
-	const selectedAttendanceQuery = useSessionAttendanceForDate(selectedSessionDate);
+	const selectedAttendanceQuery =
+		useSessionAttendanceForDate(selectedSessionDate);
 
 	const initTab = (route.query.tab as string) || "coders";
 	const selectedTab = ref<string>(
@@ -109,7 +118,7 @@
 		setQuery("search", searchText.value || undefined);
 		setQuery("qr", scannerActive.value ? "1" : undefined);
 		setQuery("nfc", nfcActive.value ? "1" : undefined);
-		
+
 		// Tab: default "coders" is implied by absence
 		setQuery(
 			"tab",
@@ -140,8 +149,7 @@
 			.map((d) => ({
 				value: d,
 				label: d.slice(5), // MM-DD
-			})
-		);
+			}));
 	});
 
 	/**
@@ -185,7 +193,9 @@
 		const map: Record<string, string | null> = {};
 		for (const member of includeFilteredMembers.value) {
 			const teamId = member.teamId || "";
-			map[member.id] = !teamId ? null : TeamsById.value[teamId]?.teamName || null;
+			map[member.id] = !teamId
+				? null
+				: TeamsById.value[teamId]?.teamName || null;
 		}
 		return map;
 	});
@@ -206,7 +216,9 @@
 	/**
 	 * Belt info for member
 	 */
-	const beltInfoForMember = (memberId: string): {
+	const beltInfoForMember = (
+		memberId: string,
+	): {
 		color: string | null;
 		sortOrder: number;
 	} => {
@@ -297,15 +309,15 @@
 			.filter((m) => m.isNinja && !m.isMentor)
 			.map((member) => {
 				const belt = beltInfoForMember(member.id);
-		return {
-			memberId: member.id,
-			name: fullNamesByMemberId.value[member.id],
-			team: teamNamesByMemberId.value[member.id],
-			beltColor: belt.color,
-			beltSortOrder: belt.sortOrder,
-			present: selectedPresentSet.value.has(member.id),
-			member,
-		};
+				return {
+					memberId: member.id,
+					name: fullNamesByMemberId.value[member.id],
+					team: teamNamesByMemberId.value[member.id],
+					beltColor: belt.color,
+					beltSortOrder: belt.sortOrder,
+					present: selectedPresentSet.value.has(member.id),
+					member,
+				};
 			});
 	});
 
@@ -349,12 +361,16 @@
 	/**
 	 * Coders Present Count
 	 */
-	const codersPresentCount = computed<number>(() => codersPresentIds.value.length);
+	const codersPresentCount = computed<number>(
+		() => codersPresentIds.value.length,
+	);
 
 	/**
 	 * Mentors Present Count
 	 */
-	const mentorsPresentCount = computed<number>(() => mentorsPresentIds.value.length);
+	const mentorsPresentCount = computed<number>(
+		() => mentorsPresentIds.value.length,
+	);
 
 	/**
 	 * Tab Items
@@ -368,13 +384,17 @@
 	 * All Present Coders
 	 */
 	const codersPresentAll = computed<MemberModel[]>(() => {
-		return codersAllMembers.value.filter((m) => selectedPresentSet.value.has(m.id));
+		return codersAllMembers.value.filter((m) =>
+			selectedPresentSet.value.has(m.id),
+		);
 	});
 
 	/**
 	 * Should the choose random coder button be shown?
 	 */
-	const canChooseRandomCoder = computed(() => codersPresentAll.value.length > 0);
+	const canChooseRandomCoder = computed(
+		() => codersPresentAll.value.length > 0,
+	);
 
 	/**
 	 * Choose a random coder from those present and navigate to their coder page
@@ -410,7 +430,13 @@
 	/**
 	 * Handle NFC message -> NFC tag sign in
 	 */
-	const handleNfcMessage = async ({ serialNumber, message }: { serialNumber: string; message: NDEFMessage }): Promise<void> => {
+	const handleNfcMessage = async ({
+		serialNumber,
+		message,
+	}: {
+		serialNumber: string;
+		message: NDEFMessage;
+	}): Promise<void> => {
 		log.info("[SignIn][NFC] detected NFC tag", { serialNumber });
 
 		isSubmitting.value = true;
@@ -435,7 +461,10 @@
 	/**
 	 * Set Member Present status for the selected session date
 	 */
-	const setMemberPresent = async (memberId: string, present: boolean): Promise<void> => {
+	const setMemberPresent = async (
+		memberId: string,
+		present: boolean,
+	): Promise<void> => {
 		const sessionDate = selectedSessionDate.value;
 		if (!sessionDate) {
 			return;
@@ -467,11 +496,15 @@
 	 * Convert single-column sort state to table sorting state
 	 */
 	const toTableSorting = (single: SingleSortState): TableSortingState => {
-		const primary = single?.id ? { id: single.id, desc: !!single.desc } : defaultSort;
+		const primary = single?.id
+			? { id: single.id, desc: !!single.desc }
+			: defaultSort;
 		// Spec: only one user-selected sort column.
 		// We still inject a hidden secondary sort by name asc (A-Z) to make ordering within
 		// a primary group deterministic.
-		return primary.id === "name" ? [primary] : [primary, { id: "name", desc: false }];
+		return primary.id === "name"
+			? [primary]
+			: [primary, { id: "name", desc: false }];
 	};
 
 	/**
@@ -493,56 +526,60 @@
 		setSort: (next: SingleSortState) => void,
 	) => {
 		return (
-			label: string,
-			columnId: string,
-			opts?: { canSort?: boolean; showIcons?: boolean },
-		) => (_ctx: unknown) => {
-			const sort = getSort();
-			const isActive = sort.id === columnId;
-			const canSort = opts?.canSort ?? true;
-			const showIcons = opts?.showIcons ?? true;
+				label: string,
+				columnId: string,
+				opts?: { canSort?: boolean; showIcons?: boolean },
+			) =>
+			(_ctx: unknown) => {
+				const sort = getSort();
+				const isActive = sort.id === columnId;
+				const canSort = opts?.canSort ?? true;
+				const showIcons = opts?.showIcons ?? true;
 
-			const inactiveIconClass = "text-muted opacity-60";
-			const activeIconClass = "text-primary";
+				const inactiveIconClass = "text-muted opacity-60";
+				const activeIconClass = "text-primary";
 
-			return h(
-				"button",
-				{
-					type: "button",
-					disabled: !canSort,
-					class:
-						`Header_${columnId} flex items-center gap-2 select-none disabled:cursor-default disabled:opacity-60`,
-					onClick: () => {
-						if (!canSort) {
-							return;
-						}
-						if (isActive) {
-							setSort({ id: columnId, desc: !sort.desc });
-							return;
-						}
-						setSort({ id: columnId, desc: false });
+				return h(
+					"button",
+					{
+						type: "button",
+						disabled: !canSort,
+						class: `Header_${columnId} flex items-center gap-2 select-none disabled:cursor-default disabled:opacity-60`,
+						onClick: () => {
+							if (!canSort) {
+								return;
+							}
+							if (isActive) {
+								setSort({ id: columnId, desc: !sort.desc });
+								return;
+							}
+							setSort({ id: columnId, desc: false });
+						},
 					},
-				},
-				[
-					h("span", { class: `HeaderText text-sm font-semibold text-highlighted` }, label),
-					showIcons
-						? isActive
-							? h(UIcon, {
-									name: sort.desc
-										? "i-lucide-chevron-down"
-										: "i-lucide-chevron-up",
-									class: `size-4 ${activeIconClass}`,
-								})
-							: h("span", { class: "flex flex-col -space-y-1" }, [
-									h(UIcon, {
-										name: "system-uicons-chevron-open",
-										class: `size-3 ${inactiveIconClass}`,
-									}),
-								])
-						: null,
-				],
-			);
-		};
+					[
+						h(
+							"span",
+							{ class: `HeaderText text-sm font-semibold text-highlighted` },
+							label,
+						),
+						showIcons
+							? isActive
+								? h(UIcon, {
+										name: sort.desc
+											? "i-lucide-chevron-down"
+											: "i-lucide-chevron-up",
+										class: `size-4 ${activeIconClass}`,
+									})
+								: h("span", { class: "flex flex-col -space-y-1" }, [
+										h(UIcon, {
+											name: "system-uicons-chevron-open",
+											class: `size-3 ${inactiveIconClass}`,
+										}),
+									])
+							: null,
+					],
+				);
+			};
 	};
 
 	/**
@@ -561,10 +598,14 @@
 				id: "present",
 				key: "present",
 				accessorKey: "present",
-				header: sortableHeader("" /*t("attendance.columns.present")*/, "present", {
-					canSort: includeMode.value !== "present",
-					showIcons: includeMode.value !== "present",
-				}),
+				header: sortableHeader(
+					"" /*t("attendance.columns.present")*/,
+					"present",
+					{
+						canSort: includeMode.value !== "present",
+						showIcons: includeMode.value !== "present",
+					},
+				),
 			},
 			{
 				id: "name",
@@ -604,10 +645,14 @@
 				id: "present",
 				key: "present",
 				accessorKey: "present",
-				header: sortableHeader("" /*t("attendance.columns.present")*/, "present", {
-					canSort: includeMode.value !== "present",
-					showIcons: includeMode.value !== "present",
-				}),
+				header: sortableHeader(
+					"" /*t("attendance.columns.present")*/,
+					"present",
+					{
+						canSort: includeMode.value !== "present",
+						showIcons: includeMode.value !== "present",
+					},
+				),
 			},
 			{
 				id: "name",
@@ -665,11 +710,11 @@
 				await applySignInSuccess(result.data.memberDetails);
 				return;
 			}
-		// 	errorMessage.value = result.error || t("signIn.qrErrorFallback");
+			// 	errorMessage.value = result.error || t("signIn.qrErrorFallback");
 		} catch (err) {
 			const message: string = ErrorToString(err);
 			log.error("[SignIn][QR] POST error", undefined, err);
-		// 	errorMessage.value = message;
+			// 	errorMessage.value = message;
 		} finally {
 			isSubmitting.value = false;
 		}
@@ -692,7 +737,8 @@
 		log.info("QR Signed in", { member });
 
 		// Speak the member's name
-		const memberName = `${member.nameFirst || ""} ${member.nameLast || ""}`.trim();
+		const memberName =
+			`${member.nameFirst || ""} ${member.nameLast || ""}`.trim();
 		if (memberName) {
 			speak(memberName);
 		}
@@ -719,7 +765,6 @@
 			memberRow.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 	};
-
 
 	// --- Watches for state syncing ---
 
@@ -787,7 +832,14 @@
 	 * Sync Out (State -> URL)
 	 */
 	watch(
-		[selectedSessionDate, includeMode, searchText, selectedTab, scannerActive, nfcActive],
+		[
+			selectedSessionDate,
+			includeMode,
+			searchText,
+			selectedTab,
+			scannerActive,
+			nfcActive,
+		],
 		() => {
 			updateUrl();
 		},
@@ -798,7 +850,11 @@
 	 * (probably not necessary but a safety measure)
 	 */
 	watch(
-		[() => CurrentSessionDate.value, () => SessionYears.value, selectedSessionYear],
+		[
+			() => CurrentSessionDate.value,
+			() => SessionYears.value,
+			selectedSessionYear,
+		],
 		([cur, years, yearVal]) => {
 			if (yearVal) {
 				return;
@@ -825,7 +881,10 @@
 				return;
 			}
 			const dateValues = dates.map((d) => d.value);
-			if (selectedSessionDate.value && dateValues.includes(selectedSessionDate.value)) {
+			if (
+				selectedSessionDate.value &&
+				dateValues.includes(selectedSessionDate.value)
+			) {
 				// If the current internal date is valid for the list, keep it.
 				// However, if we are in a "recovery" scenario where year is empty but date is set, ensure year is set.
 				if (selectedSessionDate.value && !selectedSessionYear.value) {
@@ -833,8 +892,9 @@
 				}
 				return;
 			}
-			
-			const target = (cur && dateValues.includes(cur) ? cur : "") || dates[0]?.value || "";
+
+			const target =
+				(cur && dateValues.includes(cur) ? cur : "") || dates[0]?.value || "";
 			selectedSessionDate.value = target;
 
 			if (target && !selectedSessionYear.value) {
@@ -872,7 +932,6 @@
 			<UDashboardToolbar>
 				<div class="AttendanceDashboardToolbar w-full">
 					<div class="AttendanceHeaderInputs items-end gap-x-10 gap-y-2 pb-1">
-
 						<UFormField :label="t('attendance.sessionDate')" size="xs">
 							<div class="flex items-end gap-1">
 								<USelect
@@ -882,7 +941,7 @@
 									label-key="label"
 									size="xs"
 									portal
-									/>
+								/>
 								<USelect
 									v-model="selectedSessionDate"
 									:items="sessionDateOptionsForSelectedYear"
@@ -902,61 +961,63 @@
 								label-key="label"
 								size="xs"
 								portal
-								/>
-							</UFormField>
-							
-							<UFormField :label="t('labels.search')" size="xs">
-								<UInput
-								v-model="searchText"
-								size="xs"
-								placeholder=""
-								/>
-							</UFormField>
-						</div>
+							/>
+						</UFormField>
 
-						<div class="QrScanner" v-if="isCurrentSessionSelected">
-							<QrCodeReader
-								v-if="scannerActive"
-								:active="scannerActive"
-								@decoded="handleGuidDecoded"
-								@error="handleScannerError"
-								@toggle="scannerActive = !scannerActive"
-								>
-							</QrCodeReader>
-							<UButton
-								v-if="!scannerActive"
-								variant="ghost"
-								color="primary"
-								icon="i-lucide-camera"
-								aria-label="Toggle QR scanner"
-								@click="scannerActive = !scannerActive"
-							/>
-							<NfcToggle
-								:on-message="handleNfcMessage"
-								:on-error="handleNfcError"
-							/>
-						</div>
+						<UFormField :label="t('labels.search')" size="xs">
+							<UInput v-model="searchText" size="xs" placeholder="" />
+						</UFormField>
 					</div>
-				</UDashboardToolbar>
-			</template>
-			
-			<!-- Tabs and Tables -->
-			<template #body>
-				<UTabs v-model="selectedTab" :items="tabItems" class="AttendanceTabs">
-				<template #coders>
 
+					<div class="QrScanner" v-if="isCurrentSessionSelected">
+						<QrCodeReader
+							v-if="scannerActive"
+							:active="scannerActive"
+							@decoded="handleGuidDecoded"
+							@error="handleScannerError"
+							@toggle="scannerActive = !scannerActive"
+						>
+						</QrCodeReader>
+						<UButton
+							v-if="!scannerActive"
+							variant="ghost"
+							color="primary"
+							icon="i-lucide-camera"
+							aria-label="Toggle QR scanner"
+							@click="scannerActive = !scannerActive"
+						/>
+						<NfcToggle
+							:on-message="handleNfcMessage"
+							:on-error="handleNfcError"
+						/>
+					</div>
+				</div>
+			</UDashboardToolbar>
+		</template>
+
+		<!-- Tabs and Tables -->
+		<template #body>
+			<UTabs v-model="selectedTab" :items="tabItems" class="AttendanceTabs">
+				<template #coders>
 					<!-- Coders Table -->
 					<UTable v-bind="codersTableProps" class="CodersTable">
 						<template #present-cell="{ row }">
-							<div 
+							<div
 								:id="`MemberRow_${row.original.memberId}`"
-								:data-highlighted="row.original.memberId === highlightedMemberId ? 'true' : 'false'"
+								:data-highlighted="
+									row.original.memberId === highlightedMemberId
+										? 'true'
+										: 'false'
+								"
 							>
 								<UCheckbox
 									class="PresentCheckbox"
 									:model-value="row.original.present"
 									:disabled="!!isSavingByMemberId[row.original.memberId]"
-									@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
+									@update:model-value="
+										(value: boolean) =>
+											setMemberPresent(row.original.memberId, value)
+									"
 								/>
 							</div>
 						</template>
@@ -967,22 +1028,26 @@
 									:member="row.original.member"
 									size="sm"
 								/>
-								<span class="MemberName" @click="MemberClicked(row.original.member)">{{ row.original.name }}</span>
+								<span
+									class="MemberName"
+									@click="MemberClicked(row.original.member)"
+									>{{ row.original.name }}</span
+								>
 							</div>
 						</template>
 						<template #team-cell="{ row }">
 							<div class="TeamCell">
-								<TeamLogo
-									:for="row.original.member"
-									size="sm"
-								/>
+								<TeamLogo :for="row.original.member" size="sm" />
 								<div class="TeamName">
 									{{ row.original.team || "-" }}
 								</div>
 							</div>
 						</template>
 						<template #beltColor-cell="{ row }">
-							<MemberBelt :member="row.original.member" :size="windowWidth >= 768 ? 'md' : 'sm'" />
+							<MemberBelt
+								:member="row.original.member"
+								:size="windowWidth >= 768 ? 'md' : 'sm'"
+							/>
 						</template>
 					</UTable>
 
@@ -1001,15 +1066,22 @@
 				<template #mentors>
 					<UTable v-bind="mentorsTableProps" class="MentorsTable">
 						<template #present-cell="{ row }">
-							<div 
+							<div
 								:id="`MemberRow_${row.original.memberId}`"
-								:data-highlighted="row.original.memberId === highlightedMemberId ? 'true' : 'false'"
+								:data-highlighted="
+									row.original.memberId === highlightedMemberId
+										? 'true'
+										: 'false'
+								"
 							>
 								<UCheckbox
 									class="PresentCheckbox"
 									:model-value="row.original.present"
 									:disabled="!!isSavingByMemberId[row.original.memberId]"
-									@update:model-value="(value: boolean) => setMemberPresent(row.original.memberId, value)"
+									@update:model-value="
+										(value: boolean) =>
+											setMemberPresent(row.original.memberId, value)
+									"
 								/>
 							</div>
 						</template>
@@ -1020,7 +1092,11 @@
 									:member="row.original.member"
 									size="sm"
 								/>
-								<span class="MemberName" @click="MemberClicked(row.original.member)">{{ row.original.name }}</span>
+								<span
+									class="MemberName"
+									@click="MemberClicked(row.original.member)"
+									>{{ row.original.name }}</span
+								>
 							</div>
 						</template>
 					</UTable>
@@ -1053,7 +1129,8 @@
 		max-width: 500px;
 	}
 
-	.CodersTable,.MentorsTable {
+	.CodersTable,
+	.MentorsTable {
 		thead {
 			tr {
 				th:first-child {

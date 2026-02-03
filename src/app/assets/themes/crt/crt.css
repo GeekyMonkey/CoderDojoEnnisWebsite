@@ -151,15 +151,9 @@
 
 		/* CoderDojo Logo Modification to CRT Green shades */
 		img.CoderDojoLogo {
-			filter:
-				saturate(0)
-				brightness(.7)
-				sepia(1)
-				hue-rotate(70deg)
-				saturate(3)
-				brightness(1.2)
-				contrast(2);
-			border-radius : 50%;
+			filter: saturate(0) brightness(0.7) sepia(1) hue-rotate(70deg) saturate(3)
+				brightness(1.2) contrast(2);
+			border-radius: 50%;
 			border: solid 1px white;
 		}
 
@@ -167,7 +161,7 @@
 			[data-slot="link"] {
 				border: solid 1px transparent;
 				transition: all 0.2s ease-in-out;
-				
+
 				&:not(.text-muted) {
 					border: solid 1px var(--ui-border-muted);
 					background-color: oklch(from var(--foreground-color) l c h / 0.05);

@@ -1,5 +1,8 @@
 import { defineEventHandler, readBody } from "#imports";
-import { AttendanceService, AttendanceServiceError } from "~~/server/services/AttendanceService";
+import {
+	AttendanceService,
+	AttendanceServiceError,
+} from "~~/server/services/AttendanceService";
 import { MembersData } from "~~/server/db/MembersData";
 import type { ApiResponse } from "~~/shared/types/ApiResponse";
 import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";

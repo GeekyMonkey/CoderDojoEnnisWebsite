@@ -12,13 +12,15 @@ export function useBadgeCategoriesStore() {
 		},
 	});
 
-	const BadgeCategoriesById = computed<Record<string, BadgeCategoryModel>>(() => {
-		const byId: Record<string, BadgeCategoryModel> = {};
-		badgeCategoriesStore.Items.value?.forEach((badgeCategory) => {
-			byId[badgeCategory.id] = badgeCategory;
-		});
-		return byId;
-	});
+	const BadgeCategoriesById = computed<Record<string, BadgeCategoryModel>>(
+		() => {
+			const byId: Record<string, BadgeCategoryModel> = {};
+			badgeCategoriesStore.Items.value?.forEach((badgeCategory) => {
+				byId[badgeCategory.id] = badgeCategory;
+			});
+			return byId;
+		},
+	);
 
 	return {
 		...badgeCategoriesStore,
