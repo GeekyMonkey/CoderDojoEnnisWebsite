@@ -1,6 +1,6 @@
-import { SessionsData } from "~~/server/db/SessionsData";
-import type { SessionModel } from "~~/shared/types/models/SessionModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { SessionsData } from "#server/db/SessionsData";
+import type { SessionModel } from "#shared/types/models/SessionModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<SessionModel[]>;
 

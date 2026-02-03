@@ -1,12 +1,12 @@
 import { defineEventHandler, readBody } from "#imports";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import { AuthService, AuthServiceError } from "~~/server/services/AuthService";
-import type { MemberModel } from "~~/shared/types/models/MemberModel";
-import { MembersData } from "~~/server/db/MembersData";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import { AuthService, AuthServiceError } from "#server/services/AuthService";
+import type { MemberModel } from "#shared/types/models/MemberModel";
+import { MembersData } from "#server/db/MembersData";
 import {
 	PasswordChangeRequest,
 	passwordChangeRequestSchema,
-} from "~~/shared/validation/AuthSchemas";
+} from "#shared/validation/AuthSchemas";
 
 type ResponseBody = { member: MemberModel | null };
 

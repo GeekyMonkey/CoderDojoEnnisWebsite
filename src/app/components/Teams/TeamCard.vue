@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { useTeamsStore } from "~/stores/useTeamsStore";
-	import type { MemberModel } from "~~/shared/types/models/MemberModel";
-	import type { TeamModel } from "~~/shared/types/models/TeamModel";
+	import type { MemberModel } from "#shared/types/models/MemberModel";
+	import type { TeamModel } from "#shared/types/models/TeamModel";
 
 	const props = defineProps<{
 		for: MemberModel | TeamModel | null;

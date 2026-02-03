@@ -1,4 +1,4 @@
-import { TeamModel } from "~~/shared/types/models/TeamModel";
+import { TeamModel } from "#shared/types/models/TeamModel";
 
 /**
  * SQL Server Team Entity

@@ -3,8 +3,8 @@ import {
 	type MemberParentModel,
 	memberParentFromRecords,
 	memberParentToRecords,
-} from "~~/shared/types/models/MemberParentModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberParentModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

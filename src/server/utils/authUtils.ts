@@ -13,9 +13,9 @@ import type { EventHandlerRequest, H3Event } from "h3";
 import type {
 	MemberModel,
 	MemberSupabaseModel,
-} from "~~/shared/types/models/MemberModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
-import { useLogger } from "~~/shared/utils/Logger";
+} from "#shared/types/models/MemberModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
+import { useLogger } from "#shared/utils/Logger";
 
 const log = useLogger("authUtils");
 

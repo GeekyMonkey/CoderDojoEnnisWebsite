@@ -3,8 +3,8 @@ import {
 	type SessionModel,
 	sessionFromRecords,
 	sessionToRecords,
-} from "~~/shared/types/models/SessionModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/SessionModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

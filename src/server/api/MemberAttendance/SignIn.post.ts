@@ -1,8 +1,8 @@
 import { defineEventHandler, readBody } from "#imports";
-import { AttendanceService } from "~~/server/services/AttendanceService";
-import { AuthService, AuthServiceError } from "~~/server/services/AuthService";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
+import { AttendanceService } from "#server/services/AttendanceService";
+import { AuthService, AuthServiceError } from "#server/services/AuthService";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 
 type RequestBody = { username: string; password: string };
 

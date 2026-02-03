@@ -1,5 +1,5 @@
 import { Themes } from "~~/app/assets/themes/Themes";
-import type { ThemeModel, ThemesConfig } from "~~/shared/types/ThemeModel";
+import type { ThemeModel, ThemesConfig } from "#shared/types/ThemeModel";
 
 // Cache
 let themesConfig: ThemesConfig | null = null;

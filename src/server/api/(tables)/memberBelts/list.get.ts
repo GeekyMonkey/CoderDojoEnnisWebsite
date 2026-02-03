@@ -1,6 +1,6 @@
-import { MemberBeltsData } from "~~/server/db/MemberBeltsData";
-import type { MemberBeltModel } from "~~/shared/types/models/MemberBeltModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { MemberBeltsData } from "#server/db/MemberBeltsData";
+import type { MemberBeltModel } from "#shared/types/models/MemberBeltModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<MemberBeltModel[]>;
 

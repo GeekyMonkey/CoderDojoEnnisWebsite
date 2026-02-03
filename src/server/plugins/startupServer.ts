@@ -1,4 +1,4 @@
-import { useLogger } from "~~/shared/utils/Logger";
+import { useLogger } from "#shared/utils/Logger";
 
 export default defineNitroPlugin((_nitroApp) => {
 	const log = useLogger("startup-server");

@@ -1,6 +1,6 @@
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
-import { MemberAttendanceSessionStatsCollectionSchema } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
+import { MemberAttendanceSessionStatsCollectionSchema } from "#shared/types/models/MemberAttendanceSessionStatsModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<{ dates: string[] }>;
 

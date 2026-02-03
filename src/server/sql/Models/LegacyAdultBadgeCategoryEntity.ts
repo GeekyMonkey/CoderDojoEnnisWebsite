@@ -1,4 +1,4 @@
-import { MemberBadgeCategoryModel } from "~~/shared/types/models/MemberBadgeCategoryModel";
+import { MemberBadgeCategoryModel } from "#shared/types/models/MemberBadgeCategoryModel";
 
 /**
  * SQL Server Adult-BadgeCategory Entity

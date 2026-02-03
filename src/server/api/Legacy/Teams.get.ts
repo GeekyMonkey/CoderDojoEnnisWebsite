@@ -1,7 +1,7 @@
 import { defineEventHandler } from "#imports";
-import { ReadLegacyTeams } from "~~/server/sql/LegacyData";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
-import { useLogger } from "~~/shared/utils/Logger";
+import { ReadLegacyTeams } from "#server/sql/LegacyData";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
+import { useLogger } from "#shared/utils/Logger";
 
 type ResponseBody = {
 	data: any[];

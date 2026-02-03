@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
-import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
-import type { MemberAttendanceSessionDateModel } from "~~/shared/types/models/MemberAttendanceSessionDateModel";
-import type { MemberAttendanceSessionStatsCollection } from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
-import { IsYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
+import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
+import type { MemberAttendanceSessionDateModel } from "#shared/types/models/MemberAttendanceSessionDateModel";
+import type { MemberAttendanceSessionStatsCollection } from "#shared/types/models/MemberAttendanceSessionStatsModel";
+import { IsYYYY_MM_dd } from "#shared/utils/DateHelpers";
 
 // Using shared model: MemberAttendanceSessionStatsCollection
 

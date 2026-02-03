@@ -3,7 +3,7 @@
 	import type { FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
 	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
-	import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
+	import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 	import { useRouteQuery } from "@vueuse/router";
 
 	const { t } = useI18n();

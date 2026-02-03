@@ -128,7 +128,7 @@ export default defineNuxtConfig({
 
 	imports: {
 		dirs: [
-			"~~/shared/utils",
+			"#shared/utils",
 			// "~~/src/app/components",
 			// "~/stores",
 		],

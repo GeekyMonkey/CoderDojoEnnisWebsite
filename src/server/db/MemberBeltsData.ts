@@ -2,17 +2,17 @@ import type { EventHandlerRequest, H3Event } from "h3";
 import {
 	type BeltRecord,
 	beltFromRecord,
-} from "~~/shared/types/models/BeltModel";
+} from "#shared/types/models/BeltModel";
 import type {
 	MemberBeltModel,
 	MemberBeltWithBeltDetailModel,
-} from "~~/shared/types/models/MemberBeltModel";
+} from "#shared/types/models/MemberBeltModel";
 import {
 	memberBeltFromRecord,
 	memberBeltFromRecords,
 	memberBeltToRecords,
-} from "~~/shared/types/models/MemberBeltModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberBeltModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

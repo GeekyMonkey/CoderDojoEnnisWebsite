@@ -2,9 +2,9 @@ import type { EventHandlerRequest, H3Event } from "h3";
 import {
 	type TeamModel,
 	teamFromRecords,
-} from "~~/shared/types/models/TeamModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
-import { useLogger } from "~~/shared/utils/Logger";
+} from "#shared/types/models/TeamModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
+import { useLogger } from "#shared/utils/Logger";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient, GetSupabaseClient } from "./DatabaseClient";
 

@@ -12,7 +12,7 @@ export type BaseModel = {
 /**
  * Create a DB store client with auto-updating data
  */
-import { useLogger } from "~~/shared/utils/Logger";
+import { useLogger } from "#shared/utils/Logger";
 
 export default function baseDbTableStore<T extends BaseModel>({
 	apiPath,

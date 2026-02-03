@@ -1,5 +1,5 @@
-import { TeamsData } from "~~/server/db/TeamsData";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { TeamsData } from "#server/db/TeamsData";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<TeamModel[]>;
 

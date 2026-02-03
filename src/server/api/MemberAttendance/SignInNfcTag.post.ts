@@ -2,11 +2,11 @@ import { defineEventHandler, readBody } from "#imports";
 import {
 	AttendanceService,
 	AttendanceServiceError,
-} from "~~/server/services/AttendanceService";
-import { MembersData } from "~~/server/db/MembersData";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#server/services/AttendanceService";
+import { MembersData } from "#server/db/MembersData";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type RequestBody = { nfcTag: string; testing?: boolean };
 

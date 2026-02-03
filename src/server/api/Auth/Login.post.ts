@@ -1,10 +1,10 @@
 import type { Session } from "@supabase/supabase-js";
 import { defineEventHandler, readBody } from "#imports";
-import { AuthService, AuthServiceError } from "~~/server/services/AuthService";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import type { MemberModel } from "~~/shared/types/models/MemberModel";
-import type { LoginRequest } from "~~/shared/validation/AuthSchemas";
-import { loginRequestSchema } from "~~/shared/validation/AuthSchemas";
+import { AuthService, AuthServiceError } from "#server/services/AuthService";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import type { MemberModel } from "#shared/types/models/MemberModel";
+import type { LoginRequest } from "#shared/validation/AuthSchemas";
+import { loginRequestSchema } from "#shared/validation/AuthSchemas";
 
 type ResponseBody = { member: MemberModel | null; session: Session | null };
 

@@ -1,7 +1,7 @@
-import { type MemberModel } from "~~/shared/types/models/MemberModel";
-import { GeneratePasswordHash } from "~~/server/utils/authUtils";
-import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
-import { Utf8Encode, Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+import { type MemberModel } from "#shared/types/models/MemberModel";
+import { GeneratePasswordHash } from "#server/utils/authUtils";
+import { NumberToDateOrNull } from "#shared/utils/DateHelpers";
+import { Utf8Encode, Utf8EncodeOrNull } from "#shared/utils/StringHelpers";
 
 /**
  * SQL Server Adult Entity

@@ -1,6 +1,6 @@
-import { type MemberBeltModel } from "~~/shared/types/models/MemberBeltModel";
-import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
-import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+import { type MemberBeltModel } from "#shared/types/models/MemberBeltModel";
+import { NumberToDateOrNull } from "#shared/utils/DateHelpers";
+import { Utf8EncodeOrNull } from "#shared/utils/StringHelpers";
 
 /**
  * SQL Server Member-Belt Entity

@@ -1,14 +1,14 @@
 import { defineEventHandler } from "h3";
-import { MembersData } from "~~/server/db/MembersData";
+import { MembersData } from "#server/db/MembersData";
 import {
 	AttendanceService,
 	AttendanceServiceError,
-} from "~~/server/services/AttendanceService";
+} from "#server/services/AttendanceService";
 import type {
 	AttendanceSignInErrorResponse,
 	AttendanceSignInResponseModel,
-} from "~~/shared/types/AttendanceModels";
-import { useLogger } from "~~/shared/utils/Logger";
+} from "#shared/types/AttendanceModels";
+import { useLogger } from "#shared/utils/Logger";
 
 const log = useLogger("api/MemberAttendance/fingerprint");
 

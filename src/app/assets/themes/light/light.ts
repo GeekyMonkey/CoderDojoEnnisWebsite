@@ -1,4 +1,4 @@
-import type { ThemeModel } from "~~/shared/types/ThemeModel";
+import type { ThemeModel } from "#shared/types/ThemeModel";
 
 const theme: ThemeModel = {
 	id: "light",

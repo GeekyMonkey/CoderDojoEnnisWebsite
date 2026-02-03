@@ -4,9 +4,9 @@ import {
 	type MemberAttendanceModelArray,
 	memberAttendanceFromRecords,
 	memberAttendanceToRecords,
-} from "~~/shared/types/models/MemberAttendanceModel";
-import { type DateString, TodayYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberAttendanceModel";
+import { type DateString, TodayYYYY_MM_dd } from "#shared/utils/DateHelpers";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

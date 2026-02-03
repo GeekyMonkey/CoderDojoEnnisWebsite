@@ -1,6 +1,6 @@
-import { type MemberBadgeModel } from "~~/shared/types/models/MemberBadgeModel";
-import { NumberToDateOrNull } from "~~/shared/utils/DateHelpers";
-import { Utf8EncodeOrNull } from "~~/shared/utils/StringHelpers";
+import { type MemberBadgeModel } from "#shared/types/models/MemberBadgeModel";
+import { NumberToDateOrNull } from "#shared/utils/DateHelpers";
+import { Utf8EncodeOrNull } from "#shared/utils/StringHelpers";
 
 /**
  * SQL Server Member-Badge Entity

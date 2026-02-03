@@ -1,9 +1,9 @@
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
+import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
 import {
 	type MemberAttendanceSessionStatsCollection,
 	MemberAttendanceSessionStatsCollectionSchema,
-} from "~~/shared/types/models/MemberAttendanceSessionStatsModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberAttendanceSessionStatsModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<MemberAttendanceSessionStatsCollection>;
 

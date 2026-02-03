@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { h, resolveComponent, type Component } from "vue";
 	import type { ColumnDef } from "@tanstack/vue-table";
-	import type { MemberModel } from "~~/shared/types/models/MemberModel";
+	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import { useBeltsStore } from "~/stores/useBeltsStore";
 	import { useMemberAttendanceStore } from "~/stores/useMemberAttendanceStore";
 	import { useMemberBeltsStore } from "~/stores/useMemberBeltsStore";

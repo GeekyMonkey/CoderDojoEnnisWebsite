@@ -3,8 +3,8 @@ import {
 	type MemberBadgeCategoryModel,
 	memberBadgeCategoryFromRecords,
 	memberBadgeCategoryToRecords,
-} from "~~/shared/types/models/MemberBadgeCategoryModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberBadgeCategoryModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

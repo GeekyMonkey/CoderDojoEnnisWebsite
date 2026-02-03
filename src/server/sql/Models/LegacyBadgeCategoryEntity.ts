@@ -1,4 +1,4 @@
-import { type BadgeCategoryModel } from "~~/shared/types/models/BadgeCategoryModel";
+import { type BadgeCategoryModel } from "#shared/types/models/BadgeCategoryModel";
 
 /**
  * SQL Server Badge Category Entity

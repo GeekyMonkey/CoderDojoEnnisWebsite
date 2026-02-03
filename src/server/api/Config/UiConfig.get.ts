@@ -1,12 +1,12 @@
 import { defineEventHandler, type H3Event } from "h3";
-import { GetBucketBaseUrl } from "~~/server/db/DatabaseClient";
-import { ThemesService } from "~~/server/services/ThemesService";
+import { GetBucketBaseUrl } from "#server/db/DatabaseClient";
+import { ThemesService } from "#server/services/ThemesService";
 import {
 	type ThemesConfig,
 	ThemesConfigDefault,
-} from "~~/shared/types/ThemeModel";
-import type { UiConfigModel } from "~~/shared/types/UiConfigModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/ThemeModel";
+import type { UiConfigModel } from "#shared/types/UiConfigModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 // GET: /Config/UiConfig
 export default defineEventHandler(

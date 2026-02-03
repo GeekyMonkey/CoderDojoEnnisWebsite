@@ -1,5 +1,5 @@
 import type { NavigationMenuItem } from "@nuxt/ui";
-import type { SupabaseUserMetaType } from "~~/shared/types/Supabase";
+import type { SupabaseUserMetaType } from "#shared/types/Supabase";
 
 export type MemberRole = "mentor" | "parent" | "coder";
 

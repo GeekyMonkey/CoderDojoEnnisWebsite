@@ -1,6 +1,6 @@
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import mitt, { type Emitter } from "mitt";
-import { useLogger } from "~~/shared/utils/Logger";
+import { useLogger } from "#shared/utils/Logger";
 import { UseSupabaseClient } from "./UseSupabaseClient";
 
 const log = useLogger("SupabaseRealtime-AllTables");

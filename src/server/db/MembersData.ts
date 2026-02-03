@@ -5,8 +5,8 @@ import {
 	MemberModelArraySchema,
 	memberFromRecords,
 	memberToRecords,
-} from "~~/shared/types/models/MemberModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GeneratePasswordHash } from "../utils/authUtils";
 import { GetSupabaseAdminClient } from "./DatabaseClient";

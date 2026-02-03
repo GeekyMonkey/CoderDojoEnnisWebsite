@@ -1,4 +1,4 @@
-import { type MemberAttendanceModel } from "~~/shared/types/models/MemberAttendanceModel";
+import { type MemberAttendanceModel } from "#shared/types/models/MemberAttendanceModel";
 
 /**
  * SQL Server Member-Attendance Entity

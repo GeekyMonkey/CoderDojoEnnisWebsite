@@ -1,8 +1,8 @@
 import { defineEventHandler, readBody } from "#imports";
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import { DateStringSchema } from "~~/shared/utils/DateHelpers";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import { DateStringSchema } from "#shared/utils/DateHelpers";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import { z } from "zod";
 
 const requestSchema = z.strictObject({

@@ -1,4 +1,4 @@
-import type { SessionModel } from "~~/shared/types/models/SessionModel";
+import type { SessionModel } from "#shared/types/models/SessionModel";
 import baseDbTableStore from "./baseDbTableStore";
 
 /**

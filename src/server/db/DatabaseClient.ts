@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { useLogger } from "~~/shared/utils/Logger";
+import { useLogger } from "#shared/utils/Logger";
 
 const log = useLogger("DatabaseClient");
 

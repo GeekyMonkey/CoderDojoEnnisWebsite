@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/vue-query";
 import {
 	FormatBucketFileName,
 	FormatBucketFileUrl,
-} from "~~/shared/types/Supabase";
+} from "#shared/types/Supabase";
 
 // Theme switching is built on @nuxtjs/color-mode for `light`/`dark`/`system`,
 // with an additional `theme` attribute for opt-in alternate themes (e.g. `crt`).

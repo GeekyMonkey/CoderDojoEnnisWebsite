@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import type { MemberModel } from "~~/shared/types/models/MemberModel";
+	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import { useMemberBeltsStore } from "~/stores/useMemberBeltsStore";
 	import { useBeltsStore } from "~/stores/useBeltsStore";
 

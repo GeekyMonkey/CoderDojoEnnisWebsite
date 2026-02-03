@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
-	import type { SupabaseUserMetaType } from "~~/shared/types/Supabase";
-	import type { MemberSupabaseModel } from "~~/shared/types/models/MemberModel";
+	import type { SupabaseUserMetaType } from "#shared/types/Supabase";
+	import type { MemberSupabaseModel } from "#shared/types/models/MemberModel";
 	import { provideMemberLayoutContext } from "~/composables/useMemberLayoutContext";
 	import {
 		buildNavigationModel,

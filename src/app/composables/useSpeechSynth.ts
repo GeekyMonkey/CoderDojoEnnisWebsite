@@ -1,4 +1,4 @@
-import type { LangCode } from "~~/shared/types/Translation";
+import type { LangCode } from "#shared/types/Translation";
 
 const defaultLang = "en-IE";
 const defaultVoice = "Connor";

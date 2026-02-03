@@ -1,4 +1,4 @@
-import { type BeltModel } from "~~/shared/types/models/BeltModel";
+import { type BeltModel } from "#shared/types/models/BeltModel";
 
 /**
  * SQL Server Belt Entity

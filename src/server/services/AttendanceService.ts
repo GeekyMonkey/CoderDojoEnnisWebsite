@@ -1,12 +1,12 @@
 import type { EventHandlerRequest, H3Event } from "h3";
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
-import { MembersData } from "~~/server/db/MembersData";
-import type { AttendanceSignInResponseModel } from "~~/shared/types/AttendanceModels";
+import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
+import { MembersData } from "#server/db/MembersData";
+import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 import {
 	Member_SetLoginDate,
 	type MemberModel,
-} from "~~/shared/types/models/MemberModel";
-import { TodayYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
+} from "#shared/types/models/MemberModel";
+import { TodayYYYY_MM_dd } from "#shared/utils/DateHelpers";
 import { MemberBadgesData } from "../db/MemberBadgesData";
 import { MemberBeltsData } from "../db/MemberBeltsData";
 

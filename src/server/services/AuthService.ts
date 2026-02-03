@@ -1,17 +1,14 @@
 import type { Session } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { useRuntimeConfig } from "#imports";
-import type { MemberRecord } from "~~/server/db/MembersData";
-import { MembersData } from "~~/server/db/MembersData";
-import {
-	GeneratePasswordHash,
-	LoginToSupabase,
-} from "~~/server/utils/authUtils";
+import type { MemberRecord } from "#server/db/MembersData";
+import { MembersData } from "#server/db/MembersData";
+import { GeneratePasswordHash, LoginToSupabase } from "#server/utils/authUtils";
 import {
 	type MemberModel,
 	type MemberSupabaseModel,
 	memberFromRecord,
-} from "~~/shared/types/models/MemberModel";
+} from "#shared/types/models/MemberModel";
 
 export type AuthServiceErrorCode =
 	| "INVALID_INPUT"

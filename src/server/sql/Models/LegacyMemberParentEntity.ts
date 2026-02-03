@@ -1,4 +1,4 @@
-import { type MemberParentModel } from "~~/shared/types/models/MemberParentModel";
+import { type MemberParentModel } from "#shared/types/models/MemberParentModel";
 
 /**
  * SQL Server Member-Parent Entity

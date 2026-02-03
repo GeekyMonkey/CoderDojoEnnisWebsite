@@ -1,6 +1,6 @@
-import { BadgesData } from "~~/server/db/BadgesData";
-import { BadgeModel } from "~~/shared/types/models/BadgeModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { BadgesData } from "#server/db/BadgesData";
+import { BadgeModel } from "#shared/types/models/BadgeModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<BadgeModel[]>;
 

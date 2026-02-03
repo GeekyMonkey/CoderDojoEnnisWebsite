@@ -1,16 +1,16 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { defineEventHandler } from "#imports";
-import { BadgeCategoriesData } from "~~/server/db/BadgeCategoriesData";
-import { BadgesData } from "~~/server/db/BadgesData";
-import { BeltsData } from "~~/server/db/BeltsData";
+import { BadgeCategoriesData } from "#server/db/BadgeCategoriesData";
+import { BadgesData } from "#server/db/BadgesData";
+import { BeltsData } from "#server/db/BeltsData";
 import {
 	GetBucketBaseUrl,
 	GetBucketFolder,
 	GetSupabaseAdminClient,
-} from "~~/server/db/DatabaseClient";
-import { MembersData } from "~~/server/db/MembersData";
-import { TeamsData } from "~~/server/db/TeamsData";
+} from "#server/db/DatabaseClient";
+import { MembersData } from "#server/db/MembersData";
+import { TeamsData } from "#server/db/TeamsData";
 import {
 	ReadLegacyAdultAttendances,
 	ReadLegacyAdultBadgeCategories,
@@ -24,26 +24,26 @@ import {
 	ReadLegacyMemberParents,
 	ReadLegacyNinjas,
 	ReadLegacyTeams,
-} from "~~/server/sql/LegacyData";
-import { FromLegacyAdultAttendanceEntities } from "~~/server/sql/Models/LegacyAdultAttendanceEntity";
-import { FromLegacyAdultBadgeCategoryEntities } from "~~/server/sql/Models/LegacyAdultBadgeCategoryEntity";
-import { FromLegacyAdultEntities } from "~~/server/sql/Models/LegacyAdultEntity";
-import { FromLegacyBadgeCategoryEntities } from "~~/server/sql/Models/LegacyBadgeCategoryEntity";
-import { FromLegacyBadgeEntities } from "~~/server/sql/Models/LegacyBadgeEntity";
-import { FromLegacyBeltEntities } from "~~/server/sql/Models/LegacyBeltEntity";
-import { FromLegacyMemberAttendanceEntities } from "~~/server/sql/Models/LegacyMemberAttendanceEntity";
-import { FromLegacyMemberBadgeEntities } from "~~/server/sql/Models/LegacyMemberBadgeEntity";
-import { FromLegacyMemberBeltEntities } from "~~/server/sql/Models/LegacyMemberBeltEntity";
-import { FromLegacyMemberEntities } from "~~/server/sql/Models/LegacyMemberEntity";
-import { FromLegacyMemberParentEntities } from "~~/server/sql/Models/LegacyMemberParentEntity";
-import { FromLegacyTeamEntities } from "~~/server/sql/Models/LegacyTeamEntity";
+} from "#server/sql/LegacyData";
+import { FromLegacyAdultAttendanceEntities } from "#server/sql/Models/LegacyAdultAttendanceEntity";
+import { FromLegacyAdultBadgeCategoryEntities } from "#server/sql/Models/LegacyAdultBadgeCategoryEntity";
+import { FromLegacyAdultEntities } from "#server/sql/Models/LegacyAdultEntity";
+import { FromLegacyBadgeCategoryEntities } from "#server/sql/Models/LegacyBadgeCategoryEntity";
+import { FromLegacyBadgeEntities } from "#server/sql/Models/LegacyBadgeEntity";
+import { FromLegacyBeltEntities } from "#server/sql/Models/LegacyBeltEntity";
+import { FromLegacyMemberAttendanceEntities } from "#server/sql/Models/LegacyMemberAttendanceEntity";
+import { FromLegacyMemberBadgeEntities } from "#server/sql/Models/LegacyMemberBadgeEntity";
+import { FromLegacyMemberBeltEntities } from "#server/sql/Models/LegacyMemberBeltEntity";
+import { FromLegacyMemberEntities } from "#server/sql/Models/LegacyMemberEntity";
+import { FromLegacyMemberParentEntities } from "#server/sql/Models/LegacyMemberParentEntity";
+import { FromLegacyTeamEntities } from "#server/sql/Models/LegacyTeamEntity";
 import {
 	type MemberModel,
 	memberFromRecords,
-} from "~~/shared/types/models/MemberModel";
-import { FormatBucketFileName } from "~~/shared/types/Supabase";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
-import { useLogger } from "~~/shared/utils/Logger";
+} from "#shared/types/models/MemberModel";
+import { FormatBucketFileName } from "#shared/types/Supabase";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
+import { useLogger } from "#shared/utils/Logger";
 
 // Global tolerance constants
 const TIME_TOLERANCE_MS = 6 * 60 * 60 * 1000; // 6 hours tolerance for loginDate comparisons

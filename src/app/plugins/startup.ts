@@ -1,5 +1,5 @@
 import { defineNuxtPlugin, useNuxtApp } from "nuxt/app";
-import { useLogger } from "~~/shared/utils/Logger";
+import { useLogger } from "#shared/utils/Logger";
 
 const log = useLogger("startup-plugin");
 

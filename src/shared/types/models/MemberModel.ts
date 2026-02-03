@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Base64Encode } from "~~/shared/utils/StringHelpers";
+import { Base64Encode } from "#shared/utils/StringHelpers";
 import type { Database } from "../../../types/supabase";
 
 export type MemberRecord = Database["coderdojo"]["Tables"]["members"]["Row"];

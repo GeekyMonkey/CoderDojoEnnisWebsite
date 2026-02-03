@@ -1,11 +1,11 @@
 import type { Session } from "@supabase/supabase-js";
 import { defineEventHandler, readBody } from "#imports";
-import { AuthService, AuthServiceError } from "~~/server/services/AuthService";
-import type { ApiResponse } from "~~/shared/types/ApiResponse";
-import type { MemberModel } from "~~/shared/types/models/MemberModel";
-import type { LoginNfcTagRequest } from "~~/shared/validation/AuthSchemas";
-import { loginNfcTagRequestSchema } from "~~/shared/validation/AuthSchemas";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+import { AuthService, AuthServiceError } from "#server/services/AuthService";
+import type { ApiResponse } from "#shared/types/ApiResponse";
+import type { MemberModel } from "#shared/types/models/MemberModel";
+import type { LoginNfcTagRequest } from "#shared/validation/AuthSchemas";
+import { loginNfcTagRequestSchema } from "#shared/validation/AuthSchemas";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = { member: MemberModel | null; session: Session | null };
 

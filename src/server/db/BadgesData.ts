@@ -3,8 +3,8 @@ import {
 	type BadgeModel,
 	badgeFromRecords,
 	badgeToRecords,
-} from "~~/shared/types/models/BadgeModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/BadgeModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

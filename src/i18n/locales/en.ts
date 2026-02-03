@@ -1,4 +1,4 @@
-import type { BroadenLiterals } from "~~/shared/utils/TypeHelpers";
+import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
 
 /**
  * English translations

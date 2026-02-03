@@ -3,8 +3,8 @@ import {
 	type BeltModel,
 	beltFromRecords,
 	beltToRecords,
-} from "~~/shared/types/models/BeltModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/BeltModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

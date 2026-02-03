@@ -1,11 +1,11 @@
 import { defineEventHandler, getQuery } from "h3";
-import { MemberAttendancesData } from "~~/server/db/MemberAttendancesData";
+import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
 import {
 	type MemberAttendanceSessionDateModel,
 	MemberAttendanceSessionDateModelSchema,
-} from "~~/shared/types/models/MemberAttendanceSessionDateModel";
-import { IsYYYY_MM_dd } from "~~/shared/utils/DateHelpers";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberAttendanceSessionDateModel";
+import { IsYYYY_MM_dd } from "#shared/utils/DateHelpers";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<MemberAttendanceSessionDateModel>;
 

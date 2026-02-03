@@ -2,14 +2,14 @@ import type { EventHandlerRequest, H3Event } from "h3";
 import {
 	type BadgeRecord,
 	badgeFromRecord,
-} from "~~/shared/types/models/BadgeModel";
+} from "#shared/types/models/BadgeModel";
 import {
 	type MemberBadgeModel,
 	memberBadgeFromRecord,
 	memberBadgeFromRecords,
 	memberBadgeToRecords,
-} from "~~/shared/types/models/MemberBadgeModel";
-import { ErrorToString } from "~~/shared/utils/ErrorHelpers";
+} from "#shared/types/models/MemberBadgeModel";
+import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
 

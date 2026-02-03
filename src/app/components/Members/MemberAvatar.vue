@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import type { AppConfig } from "@nuxt/schema";
-	import type { MemberModel } from "~~/shared/types/models/MemberModel";
+	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import type { ComponentConfig } from "@nuxt/ui";
 	import theme from "#build/ui/avatar";
 

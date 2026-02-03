@@ -1,5 +1,5 @@
 import { type Session, type User } from "@supabase/supabase-js";
-import type { MemberModel } from "~~/shared/types/models/MemberModel";
+import type { MemberModel } from "#shared/types/models/MemberModel";
 
 interface AuthState {
 	user: Ref<User | null>;
