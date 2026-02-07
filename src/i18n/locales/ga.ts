@@ -23,6 +23,7 @@ export default {
 			presentMembers: "Anseo",
 			registeredMembers: "Cláraithe",
 		},
+		noMembersSignedIn: "Gan aon bhall sínithe isteach",
 		sessionDate: "Dáta Seisiúin",
 	},
 	coders: {

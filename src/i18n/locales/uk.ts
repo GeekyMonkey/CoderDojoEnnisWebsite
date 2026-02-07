@@ -23,6 +23,7 @@ export default {
 			presentMembers: "Присутні",
 			registeredMembers: "Зареєстровані",
 		},
+		noMembersSignedIn: "Жодних членів не виконано вхід",
 		sessionDate: "Дата сесії",
 	},
 	coders: {
