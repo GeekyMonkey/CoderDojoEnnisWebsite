@@ -362,6 +362,8 @@
 				</div>
 			</UPageCard>
 		</div>
+
+		<AttendanceSummary class="AttendanceSummarySection" />
 	</div>
 </template>
 
@@ -475,5 +477,11 @@
 	.NotificationsList ul {
 		margin: 0;
 		padding-left: 1.1rem;
+	}
+
+	.AttendanceSummarySection {
+		width: 100%;
+		margin-top: calc(var(--spacing) * 4);
+		padding: calc(var(--spacing) * 2);
 	}
 </style>

@@ -22,6 +22,7 @@ export default {
 			presentMembers: "Present",
 			registeredMembers: "Registered",
 		},
+		noMembersSignedIn: "No members signed in",
 		sessionDate: "Session Date",
 	},
 	coders: {

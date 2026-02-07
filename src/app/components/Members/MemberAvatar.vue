@@ -46,6 +46,7 @@
 		class="MemberAvatar"
 		:src="src"
 		:alt="alt"
+		:title="alt"
 		:style="{ width: avatarSize, height: avatarSize }"
 		v-bind="$attrs"
 	/>
@@ -55,6 +56,17 @@
 	.MemberAvatar {
 		&:has(span) {
 			outline: dashed 1px var(--ui-border);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		span {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
 		}
 	}
 </style>

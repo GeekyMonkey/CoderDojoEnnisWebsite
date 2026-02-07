@@ -1,18 +1,29 @@
 <script setup lang="ts">
 	import { useTeamsStore } from "~/stores/useTeamsStore";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
+	import mentorIcon from "~/assets/icons/mentor.svg";
+	import unassignedIcon from "~/assets/icons/unassigned.svg";
 
 	const props = defineProps<{
-		for: MemberModel | TeamModel | null;
+		for: MemberModel | TeamModel | "MENTORS" | "UNASSIGNED" | null;
 		size: "sm" | "md" | "lg";
 	}>();
 
 	const { TeamLogoUrl } = useUiConfig();
 	const { TeamsById } = useTeamsStore();
+	const MENTOR_ICON_SRC: string = mentorIcon;
+	const UNASSIGNED_ICON_SRC: string = unassignedIcon;
 
+	// Resolve team logo source (team, mentor, or unassigned).
 	const src = computed<string | null>(() => {
 		let src: string | null = null;
 		if (!!props.for) {
+			if (props.for === "MENTORS") {
+				return MENTOR_ICON_SRC;
+			}
+			if (props.for === "UNASSIGNED") {
+				return UNASSIGNED_ICON_SRC;
+			}
 			let team: TeamModel | null = null;
 
 			// Is this a team or member

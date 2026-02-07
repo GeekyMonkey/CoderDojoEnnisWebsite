@@ -16,7 +16,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"bruno-api-client.bruno"
+				"bruno-api-client.bruno",
+				"Vue.volar"
 			]
 		}
 	}
