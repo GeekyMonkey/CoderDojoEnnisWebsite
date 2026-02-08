@@ -99,16 +99,16 @@
 			header: t("coders.label"),
 		},
 		{
-			id: "team",
-			key: "team",
-			accessorKey: "teamName",
-			header: t("teams.label"),
-		},
-		{
 			id: "beltColor",
 			key: "beltColor",
 			accessorFn: (row: PendingApplicationRow) => row.beltSortOrder,
 			header: t("belts.label"),
+		},
+		{
+			id: "team",
+			key: "team",
+			accessorKey: "teamName",
+			header: t("teams.label"),
 		},
 	]);
 
@@ -165,6 +165,11 @@
 					<span class="CoderName">{{ row.original.memberName }}</span>
 				</div>
 			</template>
+
+			<template #beltColor-cell="{ row }">
+				<BeltColor :belt="row.original.belt || 'noob'" size="lg" />
+			</template>
+
 			<template #team-cell="{ row }">
 				<div class="TeamCell">
 					<TeamLogo
@@ -176,9 +181,7 @@
 					<span class="TeamName">{{ row.original.teamName }}</span>
 				</div>
 			</template>
-			<template #beltColor-cell="{ row }">
-				<BeltColor :belt="row.original.belt || 'noob'" size="lg" />
-			</template>
+
 			<template #expanded="{ row }">
 				<div class="ExpandedPanel">
 					<div class="DetailRow">
@@ -218,6 +221,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: calc(var(--spacing) * 2);
+		max-width: 900px;
 	}
 
 	.Header {
@@ -251,6 +255,12 @@
 
 	.CoderName {
 		font-weight: 600;
+	}
+
+	.TableCell {
+		.BeltColor {
+			margin-right: 2rem;
+		}
 	}
 
 	.TeamCell {
