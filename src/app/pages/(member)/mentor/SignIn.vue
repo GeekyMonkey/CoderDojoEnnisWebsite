@@ -6,6 +6,10 @@
 	import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 	import { useRouteQuery } from "@vueuse/router";
 
+	definePageMeta({
+		layout: "auth-layout", // Hide the side nav for the sign-in page
+	});
+
 	const { t } = useI18n();
 	const log = useLogger("mentor/SignIn");
 	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } =
