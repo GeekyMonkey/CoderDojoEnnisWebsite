@@ -301,6 +301,7 @@ export default defineNuxtConfig({
 	},
 
 	devServer: {
+		host: "127.0.0.1",
 		https: {
 			key: "../certs/localhost.key",
 			cert: "../certs/localhost.cert",

@@ -36,6 +36,11 @@
 		user-select: none;
 	}
 
+	blockquote,
+	q {
+		font-style: italic;
+	}
+
 	.ModalOverlay {
 		background: #00000040;
 		backdrop-filter: blur(2px);
@@ -57,5 +62,16 @@
 			padding-right: 0 !important;
 			width: 40px !important;
 		}
+
+		&:has(.ExpandedPanel) {
+			padding-block: 0 !important;
+		}
+	}
+
+	tr[data-state="selected"] > .TableCell,
+	tr[data-selected="true"] > .TableCell,
+	tr[aria-selected="true"] > .TableCell,
+	tr[data-expanded="true"] > .TableCell {
+		background: var(--ui-bg-elevated) !important;
 	}
 }

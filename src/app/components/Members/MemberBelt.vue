@@ -1,30 +1,20 @@
 <script setup lang="ts">
+	import type { BeltModel } from "#shared/types/models/BeltModel";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
-	import { useMemberBeltsStore } from "~/stores/useMemberBeltsStore";
+	import BeltColor from "~/components/Belts/BeltColor.vue";
 	import { useBeltsStore } from "~/stores/useBeltsStore";
+	import { useMemberBeltsStore } from "~/stores/useMemberBeltsStore";
 
 	const props = defineProps<{
 		member: MemberModel;
 		size?: "sm" | "md" | "lg";
 	}>();
 
-	export type BeltColors =
-		| "white"
-		| "yellow"
-		| "green"
-		| "blue"
-		| "red"
-		| "black"
-		| "noob"
-		| "mentor"
-		| "parent";
-
-	const { t } = useI18n();
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
 	const { BeltsById } = useBeltsStore();
 
 	/**
-	 * Belt Type
+	 * Resolve the belt model for the member.
 	 */
 	const belt = computed<BeltModel | null>(() => {
 		if (!MembersLatestBeltsByMemberId.value || !BeltsById.value) {
@@ -40,104 +30,22 @@
 	});
 
 	/**
-	 * Belt Label
+	 * Resolve the belt display value for the BeltColor component.
 	 */
-	const label = computed(() => {
-		const colorKey = beltColorKey.value;
-		switch (colorKey) {
-			case "mentor":
-				return t("mentors.label");
-			case "parent":
-				return t("parents.label");
-			case "noob":
-				return t("memberBelt.noob");
-			default:
-				return t("memberBelt.label", {
-					Color: t(`memberBelt.color.${colorKey}`, colorKey),
-				});
-		}
-	});
-
-	/**
-	 * Belt Color Key
-	 */
-	const beltColorKey = computed<BeltColors>(() => {
+	const beltDisplayValue = computed<BeltModel | string | null>(() => {
 		if (props.member.isMentor) {
 			return "mentor";
 		}
 		if (props.member.isParent) {
 			return "parent";
 		}
-		if (!belt?.value) {
+		if (!belt.value) {
 			return "noob";
 		}
-
-		const b = belt.value;
-		const c = (b?.color || "").toLowerCase();
-		switch (c) {
-			case "white":
-			case "yellow":
-			case "green":
-			case "blue":
-			case "red":
-			case "black":
-				return c as BeltColors;
-			default:
-				return "noob";
-		}
-	});
-
-	const beltColor = computed<string>(() => {
-		const hexCode = belt.value?.hexCode;
-		if (!hexCode) {
-			return `var(--belt_color-${beltColorKey.value})`;
-		}
-		return hexCode;
+		return belt.value;
 	});
 </script>
 
 <template>
-	<div
-		class="MemberBelt"
-		:class="`Size_${[props.size || 'md']} Color_${beltColorKey}`"
-		:style="{ backgroundColor: beltColor }"
-	>
-		<label>{{ label }}</label>
-	</div>
+	<BeltColor :belt="beltDisplayValue" :size="props.size" />
 </template>
-
-<style lang="scss">
-	.MemberBelt {
-		--belt_color-mentor: purple;
-		--belt_color-noob: var(--ui-bg);
-		border: solid 1px black;
-
-		color: black;
-		font-weight: bold;
-		text-align: center;
-
-		&.Color_blue,
-		.Color_red,
-		.Color_black {
-			color: white;
-		}
-
-		&.Color_mentor {
-			color: white;
-			background: linear-gradient(green, black) !important;
-		}
-
-		&.Color_noob {
-			border: dashed 2px var(--ui-border);
-			color: var(--ui-text);
-		}
-
-		&.Size_sm {
-			height: 32px;
-			width: 10px;
-			label {
-				display: none;
-			}
-		}
-	}
-</style>

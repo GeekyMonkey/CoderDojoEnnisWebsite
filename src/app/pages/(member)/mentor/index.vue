@@ -15,7 +15,7 @@
 		</template>
 		<template #body>
 			<div class="p-4">
-				<TeamsList />
+				<ApplicationsPending />
 			</div>
 		</template>
 	</UDashboardPanel>

@@ -7,11 +7,9 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
 export default {
 	attendance: {
 		columns: {
-			beltColor: "Belt",
 			name: "Name",
 			photo: "Photo",
 			present: "Present",
-			team: "Team",
 		},
 		footer: {
 			chooseRandomCoder: "Choose Random Coder",
@@ -24,6 +22,17 @@ export default {
 		},
 		noMembersSignedIn: "No members signed in",
 		sessionDate: "Session Date",
+	},
+	belts: {
+		description: "Belt Description",
+		label: "Belt",
+		plural: "Belts",
+	},
+	beltApplications: {
+		applicationDate: "Applied",
+		applicationNotes: "Notes from applicant",
+		empty: "There are no pending belt applications.",
+		heading: "Belt Applications",
 	},
 	coders: {
 		label: "Coder",
@@ -93,6 +102,10 @@ export default {
 		sessionCount: "1 session | {count} sessions",
 		signInButton: "Sign In",
 		title: "CoderDojo Ennis Session Sign In",
+	},
+	teams: {
+		label: "Team",
+		plural: "Teams",
 	},
 	theme: {
 		author: "Created by {AuthorName}",

@@ -8,11 +8,9 @@ import { type enMessagesType } from "./en";
 export default {
 	attendance: {
 		columns: {
-			beltColor: "Пояс",
 			name: "Ім'я",
 			photo: "Фото",
 			present: "Присутній",
-			team: "Команда",
 		},
 		footer: {
 			chooseRandomCoder: "Вибрати випадкового кодера",
@@ -25,6 +23,17 @@ export default {
 		},
 		noMembersSignedIn: "Жодних членів не виконано вхід",
 		sessionDate: "Дата сесії",
+	},
+	belts: {
+		description: "Опис пояса",
+		label: "Пояс",
+		plural: "Пояси",
+	},
+	beltApplications: {
+		applicationDate: "Подано",
+		applicationNotes: "Нотатки",
+		empty: "Немає заявок на пояси, що очікують.",
+		heading: "Заявки на пояси",
 	},
 	coders: {
 		label: "Кодер",
@@ -94,6 +103,10 @@ export default {
 		sessionCount: "1 сесія | {count} сесій",
 		signInButton: "Увійти",
 		title: "Реєстрація на сесію CoderDojo Ennis",
+	},
+	teams: {
+		label: "Команда",
+		plural: "Команди",
 	},
 	theme: {
 		author: "Створено {AuthorName}",

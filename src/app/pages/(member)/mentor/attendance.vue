@@ -617,14 +617,14 @@
 				id: "team",
 				key: "team",
 				accessorKey: "team",
-				header: sortableHeader(t("attendance.columns.team"), "team"),
+				header: sortableHeader(t("teams.label"), "team"),
 			},
 			{
 				id: "beltColor",
 				key: "beltColor",
 				// Sort by belt order, not the display label.
 				accessorFn: (row: AttendanceRow) => row.beltSortOrder,
-				header: sortableHeader(t("attendance.columns.beltColor"), "beltColor"),
+				header: sortableHeader(t("belts.label"), "beltColor"),
 			},
 		];
 	});

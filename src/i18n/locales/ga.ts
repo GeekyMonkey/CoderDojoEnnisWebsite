@@ -8,11 +8,9 @@ import { type enMessagesType } from "./en";
 export default {
 	attendance: {
 		columns: {
-			beltColor: "Crios",
 			name: "Ainm",
 			photo: "Grianghraf",
 			present: "Anseo",
-			team: "Foireann",
 		},
 		footer: {
 			chooseRandomCoder: "Roghnaigh códóir go randamach",
@@ -25,6 +23,17 @@ export default {
 		},
 		noMembersSignedIn: "Gan aon bhall sínithe isteach",
 		sessionDate: "Dáta Seisiúin",
+	},
+	belts: {
+		description: "Tuairisc Crios",
+		label: "Crios",
+		plural: "Criosanna",
+	},
+	beltApplications: {
+		applicationDate: "Curtha isteach",
+		applicationNotes: "Nótaí",
+		empty: "Níl aon iarratais chriosanna ar feitheamh.",
+		heading: "Iarratais ar Chriosanna",
 	},
 	coders: {
 		label: "Códóir",
@@ -94,6 +103,10 @@ export default {
 		sessionCount: "1 seisiún | {count} seisiúin",
 		signInButton: "Logáil Isteach",
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",
+	},
+	teams: {
+		label: "Foireann",
+		plural: "Foirne",
 	},
 	theme: {
 		author: "Cruthaitheoir: {AuthorName}",

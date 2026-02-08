@@ -9,11 +9,9 @@ import { type enMessagesType } from "./en";
 export default {
 	attendance: {
 		columns: {
-			beltColor: "Ceinture",
 			name: "Nom",
 			photo: "Photo",
 			present: "Présent",
-			team: "Équipe",
 		},
 		footer: {
 			chooseRandomCoder: "Choisir un codeur au hasard",
@@ -26,6 +24,17 @@ export default {
 		},
 		noMembersSignedIn: "Aucun membre signé",
 		sessionDate: "Date de session",
+	},
+	belts: {
+		description: "Description de la ceinture",
+		label: "Ceinture",
+		plural: "Ceintures",
+	},
+	beltApplications: {
+		applicationDate: "Demandée",
+		applicationNotes: "Notes",
+		empty: "Aucune demande de ceinture en attente.",
+		heading: "Demandes de ceinture",
 	},
 	coders: {
 		label: "Codeur",
@@ -95,6 +104,10 @@ export default {
 		sessionCount: "1 session | {count} sessions",
 		signInButton: "Connexion",
 		title: "Connexion à la session CoderDojo Ennis",
+	},
+	teams: {
+		label: "Équipe",
+		plural: "Équipes",
 	},
 	theme: {
 		author: "Créé par {AuthorName}",
