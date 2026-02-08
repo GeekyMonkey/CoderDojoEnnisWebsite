@@ -5,37 +5,50 @@
 	import { useTeamsStore } from "~/stores/useTeamsStore";
 
 	// Fetch required stores
-	const { CurrentSessionDate, useSessionAttendanceForDate } =
+	const { TodaysDate, useSessionAttendanceForDate } =
 		useMemberAttendanceStore();
 	const { MembersById } = useMembersStore();
 	const { TeamsById } = useTeamsStore();
 
-	// Query attendance for current session date
+	/**
+	 * Query attendance for today's date
+	 */
 	const { data: currentSessionAttendance } =
-		useSessionAttendanceForDate(CurrentSessionDate);
+		useSessionAttendanceForDate(TodaysDate);
 
-	// Get member IDs signed in for today
-	const signedInMemberIds = computed(
+	/**
+	 * Get member IDs signed in for today
+	 */
+	const signedInMemberIds = computed<string[]>(
 		() => currentSessionAttendance.value?.memberIds || [],
 	);
 
-	// Get detailed member objects for signed-in members
-	const signedInMembers = computed(() => {
+	/**
+	 * Get detailed member objects for signed-in members
+	 */
+	const signedInMembers = computed<MemberModel[]>(() => {
 		return signedInMemberIds.value
-			.map((id) => MembersById.value[id])
+			.map((id) => MembersById.value[id] as MemberModel)
 			.filter((m) => m && !m.deleted);
 	});
 
-	// Separate mentors from coders
-	const mentors = computed(() => {
-		return signedInMembers.value.filter((m) => m.isMentor);
+	/**
+	 * Get mentors by filtering signed-in members for those with isMentor flag
+	 */
+	const mentors = computed<MemberModel[]>(() => {
+		return signedInMembers.value.filter((m) => m?.isMentor);
 	});
 
+	/**
+	 * Get coders by filtering out mentors from signed-in members
+	 */
 	const coders = computed(() => {
-		return signedInMembers.value.filter((m) => !m.isMentor);
+		return signedInMembers.value.filter((m) => !m?.isMentor);
 	});
 
-	// Group coders by team
+	/**
+	 * Group coders by team
+	 */
 	const membersByTeam = computed(() => {
 		const groups: Record<string, MemberModel[]> = {};
 		for (const member of coders.value) {
@@ -48,7 +61,9 @@
 		return groups;
 	});
 
-	// Build a list of teams to display (teams with members, with team info included)
+	/**
+	 * Build a list of teams to display (teams with members, with team info included)
+	 */
 	const teamsToDisplay = computed(() => {
 		const result: Array<{
 			teamId: string;
@@ -69,19 +84,22 @@
 			}
 		}
 
-		return result;
+		return result.sort((a, b) => {
+			const aIsUnassigned = a.teamName === "Unassigned";
+			const bIsUnassigned = b.teamName === "Unassigned";
+			if (aIsUnassigned && !bIsUnassigned) {
+				return 1;
+			}
+			if (!aIsUnassigned && bIsUnassigned) {
+				return -1;
+			}
+			return a.teamName.localeCompare(b.teamName);
+		});
 	});
 </script>
 
 <template>
 	<div class="AttendanceSummary">
-		<!-- Mentors card - always visible -->
-		<AttendanceSummaryTeam
-			team-name="Mentors"
-			:team-color="null"
-			:members="mentors"
-		/>
-
 		<!-- Team cards - only visible when team has members present -->
 		<AttendanceSummaryTeam
 			v-for="team in teamsToDisplay"
@@ -90,6 +108,14 @@
 			:team-name="team.teamName"
 			:team-color="team.teamColor"
 			:members="team.members"
+		/>
+
+		<!-- Mentors card - always visible -->
+		<AttendanceSummaryTeam
+			:team-id="null"
+			team-name="Mentors"
+			:team-color="null"
+			:members="mentors"
 		/>
 	</div>
 </template>

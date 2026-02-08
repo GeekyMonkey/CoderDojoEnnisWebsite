@@ -1027,6 +1027,7 @@
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
+									link-to="HERE"
 								/>
 								<span
 									class="MemberName"
@@ -1091,6 +1092,7 @@
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
+									link-to="HERE"
 								/>
 								<span
 									class="MemberName"

@@ -326,6 +326,7 @@
 								<MemberAvatar
 									:member="signInResponse.memberDetails"
 									size="lg"
+									link-to="NEW_TAB"
 								/>
 								<div class="MemberName">
 									{{ signInResponse.memberName }}
@@ -370,19 +371,23 @@
 <style lang="css">
 	.SignInPage {
 		width: 100%;
+
+		.MemberBelt {
+			width: 100%;
+		}
 	}
 
 	.SignInPageGrid {
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-		align-items: stretch;
+		align-items: center;
+		margin-top: 1rem;
 	}
 
 	@media (min-width: 960px) {
 		.SignInPageGrid {
 			flex-direction: row;
-			align-items: flex-start;
 			justify-content: center;
 		}
 	}
@@ -390,6 +395,10 @@
 	.SignInCard {
 		width: 100%;
 		max-width: 500px;
+
+		[data-slot="container"] {
+			padding-top: 0;
+		}
 	}
 
 	.SignInForm {
@@ -449,6 +458,12 @@
 				opacity: 0;
 				scale: 0.5;
 			}
+		}
+	}
+
+	@media (max-width: 959px) {
+		.WelcomeCard {
+			max-width: 500px;
 		}
 	}
 

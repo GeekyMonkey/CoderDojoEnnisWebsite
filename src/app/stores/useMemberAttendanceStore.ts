@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 import type { MemberAttendanceSessionDateModel } from "#shared/types/models/MemberAttendanceSessionDateModel";
 import type { MemberAttendanceSessionStatsCollection } from "#shared/types/models/MemberAttendanceSessionStatsModel";
-import { IsYYYY_MM_dd } from "#shared/utils/DateHelpers";
+import { IsYYYY_MM_dd, TodayYYYY_MM_dd } from "#shared/utils/DateHelpers";
 
 // Using shared model: MemberAttendanceSessionStatsCollection
 
@@ -14,6 +14,7 @@ interface UseMemberAttendanceStoreResult {
 	SessionYears: Ref<string[]>;
 	CurrentSessionMemberIds: Ref<string[]>;
 	CurrentSessionDate: Ref<string>;
+	TodaysDate: Ref<string>;
 	useSessionAttendanceForDate: (
 		sessionDate: MaybeRef<string>,
 	) => ReturnType<typeof useQuery<MemberAttendanceSessionDateModel>>;
@@ -48,7 +49,9 @@ let _store: UseMemberAttendanceStoreResult | null = null;
  * Client-side store for attendance session stats with realtime invalidation on member_attendances changes.
  */
 export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
-	if (_store) return _store;
+	if (_store) {
+		return _store;
+	}
 
 	const queryClient = useQueryClient();
 
@@ -70,10 +73,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 			const response = await $fetch<
 				ApiResponse<MemberAttendanceSessionStatsCollection>
 			>("/api/MemberAttendance/SessionStats", { signal });
-			if (!response.success)
+			if (!response.success) {
 				throw new Error(
 					response.error || "Failed to load member attendance sessions",
 				);
+			}
 			return response.data;
 		},
 		placeholderData: () => ({
@@ -95,10 +99,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 				"/api/MemberAttendance/SessionDates",
 				{ signal },
 			);
-			if (!response.success)
+			if (!response.success) {
 				throw new Error(
 					response.error || "Failed to load member attendance session dates",
 				);
+			}
 			return response.data.dates;
 		},
 		placeholderData: () => [],
@@ -115,6 +120,11 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		}
 		return SessionDates.value[0] || "";
 	});
+
+	/**
+	 * Current local date in YYYY-MM-DD format
+	 */
+	const TodaysDate = computed(() => TodayYYYY_MM_dd());
 
 	/**
 	 * On-demand query: get attendance for a specific session date.
@@ -388,6 +398,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		SessionYears: SessionYears,
 		CurrentSessionMemberIds: CurrentSessionMemberIds,
 		CurrentSessionDate: CurrentSessionDate,
+		TodaysDate: TodaysDate,
 		useSessionAttendanceForDate,
 		isLoading: computed(
 			() => isSessionStatsEnabled.value && isLoadingStats.value,

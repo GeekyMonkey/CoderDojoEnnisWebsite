@@ -18,7 +18,7 @@ export function useMembersStore() {
 	/**
 	 * Map of Members by ID
 	 */
-	const MembersById = computed(() => {
+	const MembersById = computed<Record<string, MemberModel>>(() => {
 		const map: Record<string, MemberModel> = {};
 		if (membersStore.Items) {
 			for (const member of membersStore.Items.value || []) {

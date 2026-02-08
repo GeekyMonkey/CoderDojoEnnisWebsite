@@ -5,13 +5,60 @@
 	import theme from "#build/ui/avatar";
 
 	type Avatar = ComponentConfig<typeof theme, AppConfig, "avatar">;
+	type LinkToOption = "NONE" | "HERE" | "NEW_TAB";
 
 	const props = defineProps<{
 		member: MemberModel;
 		size: "sm" | "md" | "lg";
+		linkTo?: LinkToOption;
 	}>();
 
 	const { MemberPhotoUrl, MemberAvatarUrl } = useUiConfig();
+	const route = useRoute();
+
+	// Determine the member profile link based on current route
+	const memberLink = computed<string | null>(() => {
+		const linkOption = props.linkTo || "NONE";
+		if (linkOption === "NONE") {
+			return null;
+		}
+
+		const currentPath = route.path.toLowerCase();
+		const memberId = props.member.id;
+
+		// Determine role prefix from current route
+		let rolePrefix: string | null = null;
+		if (currentPath.startsWith("/mentor/")) {
+			rolePrefix = "/mentor";
+		} else if (currentPath.startsWith("/coder/")) {
+			rolePrefix = "/coder";
+		} else if (currentPath.startsWith("/parent/")) {
+			rolePrefix = "/parent";
+		}
+
+		// Disable link if route doesn't match known patterns
+		if (!rolePrefix) {
+			return null;
+		}
+
+		// Determine member type
+		let memberType: string;
+		if (props.member.isMentor) {
+			memberType = "mentor";
+		} else if (props.member.isNinja) {
+			memberType = "coder";
+		} else {
+			// Default to parent if neither mentor nor coder
+			memberType = "parent";
+		}
+
+		return `${rolePrefix}/${memberType}/${memberId}`;
+	});
+
+	const linkTarget = computed<string | undefined>(() => {
+		const linkOption = props.linkTo || "NONE";
+		return linkOption === "NEW_TAB" ? "_blank" : undefined;
+	});
 
 	const src = computed(() => {
 		if (props.member.hasPhoto) {
@@ -42,7 +89,23 @@
 </script>
 
 <template>
+	<NuxtLink
+		v-if="memberLink"
+		:to="memberLink"
+		:target="linkTarget"
+		class="MemberAvatarLink"
+	>
+		<UAvatar
+			class="MemberAvatar"
+			:src="src"
+			:alt="alt"
+			:title="alt"
+			:style="{ width: avatarSize, height: avatarSize }"
+			v-bind="$attrs"
+		/>
+	</NuxtLink>
 	<UAvatar
+		v-else
 		class="MemberAvatar"
 		:src="src"
 		:alt="alt"
@@ -53,6 +116,11 @@
 </template>
 
 <style>
+	.MemberAvatarLink {
+		display: inline-block;
+		text-decoration: none;
+	}
+
 	.MemberAvatar {
 		&:has(span) {
 			outline: dashed 1px var(--ui-border);

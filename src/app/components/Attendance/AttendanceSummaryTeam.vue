@@ -38,26 +38,26 @@
 	});
 
 	// Resolve which logo to show for the header
-	const logoFor = computed<TeamModel | "MENTORS" | "UNASSIGNED" | null>(
-		() => {
-			if (team.value) {
-				return team.value;
-			}
-			if (props.teamName === "Mentors") {
-				return "MENTORS";
-			}
-			if (props.teamName === "Unassigned") {
-				return "UNASSIGNED";
-			}
-			return null;
-		},
-	);
+	const logoFor = computed<TeamModel | "MENTORS" | "UNASSIGNED" | null>(() => {
+		if (team.value) {
+			return team.value;
+		}
+		if (props.teamName === "Mentors") {
+			return "MENTORS";
+		}
+		if (props.teamName === "Unassigned") {
+			return "UNASSIGNED";
+		}
+		return null;
+	});
 
 	// Sort members alphabetically by name
 	const sortedMembers = computed(() => {
 		return [...props.members].sort((a, b) => {
-			const nameA = `${a.nameFirst || ""} ${a.nameLast || ""}`.trim() || a.login || "";
-			const nameB = `${b.nameFirst || ""} ${b.nameLast || ""}`.trim() || b.login || "";
+			const nameA =
+				`${a.nameFirst || ""} ${a.nameLast || ""}`.trim() || a.login || "";
+			const nameB =
+				`${b.nameFirst || ""} ${b.nameLast || ""}`.trim() || b.login || "";
 			return nameA.localeCompare(nameB);
 		});
 	});
@@ -65,7 +65,13 @@
 
 <template>
 	<div class="AttendanceSummaryTeam">
-		<div class="TeamHeader" :style="{ backgroundColor: headerBackgroundColor, color: headerTextColor }">
+		<div
+			class="TeamHeader"
+			:style="{
+				backgroundColor: headerBackgroundColor,
+				color: headerTextColor,
+			}"
+		>
 			<TeamLogo v-if="logoFor" :for="logoFor" size="sm" class="TeamLogo" />
 			<h3 class="TeamName">{{ teamName }}</h3>
 		</div>
@@ -79,6 +85,7 @@
 					:key="member.id"
 					:member="member"
 					size="sm"
+					link-to="NEW_TAB"
 					class="MemberAvatarItem"
 				/>
 			</TransitionGroup>
@@ -93,7 +100,7 @@
 		overflow: hidden;
 		background-color: var(--ui-bg-elevated);
 		display: inline-block;
-		min-width: 250px;
+		min-width: min(250px, 25vw);
 	}
 
 	.TeamHeader {
@@ -138,9 +145,11 @@
 	}
 
 	.MembersList {
-		display: flex;
+		display: grid;
 		gap: calc(var(--spacing) * 1);
-		flex-wrap: wrap;
+		grid-template-columns: repeat(10, min-content);
+		grid-auto-flow: row;
+		justify-content: start;
 		width: 100%;
 	}
 
@@ -160,7 +169,7 @@
 			filter: drop-shadow(0 0 0px transparent);
 		}
 		50% {
-			transform: scale(1.2);
+			transform: scale(1.6);
 			filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
 		}
 		70% {

@@ -10,7 +10,7 @@
 	});
 
 	const member = computed(() => {
-		return Members.value.find((m) => m.id === memberId.value) ?? null;
+		return Members.value?.find((m) => m.id === memberId.value) ?? null;
 	});
 
 	const title = computed(() => {
