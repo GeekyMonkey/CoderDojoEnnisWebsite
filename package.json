@@ -17,7 +17,7 @@
 		"supabase:link": "pnpx supabase link --project-ref newsofwpimzmfbqsooka"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.12"
+		"@biomejs/biome": "2.3.14"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

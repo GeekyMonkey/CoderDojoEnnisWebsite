@@ -22,7 +22,7 @@
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.3",
 		"@nuxtjs/supabase": "2.0.3",
-		"@supabase/supabase-js": "2.94.1",
+		"@supabase/supabase-js": "2.95.3",
 		"@tanstack/vue-query": "5.92.9",
 		"@tanstack/vue-table": "8.21.3",
 		"@vueuse/nuxt": "14.2.0",
