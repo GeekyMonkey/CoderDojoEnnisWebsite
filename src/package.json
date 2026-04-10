@@ -60,7 +60,7 @@
 		"supabase": "2.75.6",
 		"ts-node": "10.9.2",
 		"typescript": "5.9.3",
-		"vite": "6.4.1",
+		"vite": "6.4.2",
 		"vitest": "4.0.18",
 		"wrangler": "4.63.0"
 	},
