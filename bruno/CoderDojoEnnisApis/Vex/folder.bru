@@ -1,0 +1,16 @@
+meta {
+  name: Vex
+}
+
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{AccessToken}}
+}
+
+docs {
+  VEX endpoints require a logged-in member's Supabase access token.
+  Copy it from the browser (supabase session in local storage / cookies) into the AccessToken secret.
+}

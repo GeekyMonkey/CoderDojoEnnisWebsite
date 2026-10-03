@@ -1,0 +1,14 @@
+meta {
+  name: Tasks - By Season
+  type: http
+}
+
+get {
+  url: {{Host}}/api/Vex/Tasks?seasonId={{VexSeasonId}}
+  body: none
+  auth: inherit
+}
+
+params:query {
+  seasonId: {{VexSeasonId}}
+}

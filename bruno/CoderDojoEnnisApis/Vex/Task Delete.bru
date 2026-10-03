@@ -1,0 +1,16 @@
+meta {
+  name: Task Delete
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Vex/TaskDelete
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{VexTaskId}}"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Task Save
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Vex/TaskSave
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "sprintId": "{{VexSprintId}}",
+    "title": "Read the Level Up game manual",
+    "notes": null,
+    "linkUrl": null,
+    "status": "todo",
+    "ownerMemberIds": ["{{MemberId}}"]
+  }
+}

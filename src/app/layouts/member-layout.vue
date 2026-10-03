@@ -84,7 +84,14 @@
 	});
 
 	function openProfile() {
-		const base = section.value ? `/${section.value}` : "";
+		// Shared sections (e.g. /vex) have no profile page; use the member's role section
+		const isRoleSection: boolean = roles.value.includes(
+			section.value as MemberRole,
+		);
+		const profileSection: string | null = isRoleSection
+			? section.value
+			: (roles.value[0] ?? null);
+		const base = profileSection ? `/${profileSection}` : "";
 		router.push(`${base}/profile`);
 	}
 

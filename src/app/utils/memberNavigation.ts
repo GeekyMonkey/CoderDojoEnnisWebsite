@@ -78,6 +78,7 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 	const mentorBase = `${basePath}/mentor`;
 	const parentBase = `${basePath}/parent`;
 	const coderBase = `${basePath}/coder`;
+	const vexBase = `${basePath}/vex`;
 	const maintenanceBase = `${mentorBase}/maintenance`;
 	const reportsBase = `${mentorBase}/reports`;
 
@@ -178,6 +179,24 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					to: `${coderBase}/attendance`,
 					icon: "i-lucide-calendar-check",
 					roles: ["coder"],
+				},
+				{
+					label: "VEX",
+					icon: "i-lucide-bot",
+					children: [
+						{
+							label: "VEX Home",
+							to: `${vexBase}`,
+						},
+						{
+							label: "This Week",
+							to: `${vexBase}/this-week`,
+						},
+						{
+							label: "Resources",
+							to: `${vexBase}/resources`,
+						},
+					],
 				},
 			],
 		},

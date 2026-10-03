@@ -1,0 +1,16 @@
+meta {
+  name: Resource Delete
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Vex/ResourceDelete
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{VexResourceId}}"
+  }
+}

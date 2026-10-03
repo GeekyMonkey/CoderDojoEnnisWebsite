@@ -34,7 +34,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	switch (section) {
 		case "mentor":
 		case "coder":
-		case "parent": {
+		case "parent":
+		case "vex": {
 			// Prefer store if ready, fallback to direct check
 			const authenticated = authStore.ready.value
 				? authStore.isAuthenticated.value
