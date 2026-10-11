@@ -47,4 +47,3 @@ export function validateProfilePng(encoded: string): Buffer {
     }
     throw createError({ statusCode: 400, statusMessage: "Invalid PNG image" });
 }
-
