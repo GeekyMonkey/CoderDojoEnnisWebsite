@@ -86,8 +86,8 @@
                     <UButton v-if="canEdit && slot.populated" icon="i-lucide-trash-2" color="error" variant="ghost" :aria-label="`${t('profileImages.delete')} ${t(`profileImages.${slot.key}`)}`" :title="t('profileImages.delete')" :disabled="saving || loading" @click="change({ action: 'delete', slot: slot.key })" />
                 </div>
             </div>
-        </div>
         <div v-if="canEdit" class="SwapAction"><UButton icon="i-lucide-arrow-left-right" :aria-label="t('profileImages.swap')" :title="t('profileImages.swap')" variant="outline" :loading="saving" :disabled="loading || (!member.hasPhoto && !member.hasAvatar)" @click="change({ action: 'swap' })" /></div>
+        </div>
         <UAlert v-if="error" color="error" :title="error" />
         <UModal :open="open" :dismissible="!saving" :title="t('profileImages.edit')" @update:open="(value: boolean): void => { if (!value && !saving) close(); }">
             <template #body>
@@ -103,11 +103,17 @@
 </template>
 
 <style scoped lang="scss">
-    .ProfileImages { display: grid; gap: calc(var(--spacing) * 2); width: min(100%, 26rem); }
+    .ProfileImages { display: grid; gap: calc(var(--spacing) * 2); width: min(100%, 28rem); }
     .ImageFrame.Editable { cursor: pointer; }
     .SlotActions { height: 2.75rem; }
-    .ImageSlots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--spacing) * 4); }
-    .ImageSlot { display: grid; align-content: start; justify-items: center; gap: calc(var(--spacing) * 3); min-width: 0; }
+    .ImageSlots { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: calc(var(--spacing) * 2); align-items: start; }
+    .ImageSlot { display: contents; }
+    .ImageSlot:first-child > * { grid-column: 1; }
+    .ImageSlot:nth-child(2) > * { grid-column: 3; }
+    .ImageSlot h3 { grid-row: 1; text-align: center; }
+    .ImageSlot .ImageFrame { grid-row: 2; }
+    .ImageSlot .SlotActions { grid-row: 3; }
+    .SwapAction { grid-column: 2; grid-row: 2; align-self: center; }
     .CropEditor { display: grid; gap: calc(var(--spacing) * 3); }
     .ImageFrame { width: 100%; padding: 0; aspect-ratio: 1; border: 1px solid var(--ui-border); display: grid; place-items: center; overflow: hidden; }
     .ImageFrame { background-color: var(--ui-bg); background-image: conic-gradient(var(--ui-bg-accented) 25%, transparent 0 50%, var(--ui-bg-accented) 0 75%, transparent 0); background-size: 1rem 1rem; }

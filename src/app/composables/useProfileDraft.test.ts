@@ -12,6 +12,22 @@ const MEMBER: MemberModel = {
 };
 
 describe("reusable profile drafts", (): void => {
+ it("preserves a login draft on remote changes and restores it on cancel", async (): Promise<void> => {
+  const member: Ref<MemberModel> = ref({ ...MEMBER, login: "original" });
+  const scope: EffectScope = effectScope();
+  const draft: ReturnType<typeof useProfileDraft> | undefined = scope.run((): ReturnType<typeof useProfileDraft> => useProfileDraft(member));
+  if (!draft) throw new Error("Missing draft scope");
+  try {
+   draft.fields.login = "local";
+   member.value = { ...member.value, login: "remote" };
+   await nextTick();
+   expect(draft.fields.login).toBe("local");
+   expect(draft.remoteChanged.value).toBe(true);
+   draft.reset(member.value);
+   expect(draft.fields.login).toBe("remote");
+   expect(draft.dirty.value).toBe(false);
+  } finally { scope.stop(); }
+ });
 	it("refreshes clean forms, preserves dirty edits and resets on identity changes", async (): Promise<void> => {
 		const member: Ref<MemberModel> = ref({ ...MEMBER });
 		const scope: EffectScope = effectScope();

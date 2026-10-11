@@ -11,7 +11,7 @@ type ProfileFieldsShape = {
 	email: z.ZodType<string | null>; phone: z.ZodType<string | null>;
 	githubLogin: z.ZodType<string | null>; scratchName: z.ZodType<string | null>; xboxGamertag: z.ZodType<string | null>;
 };
-type SnapshotShape = { [Key in keyof ProfileFieldsShape]: z.ZodNullable<z.ZodString> };
+type SnapshotShape = { [Key in keyof ProfileFieldsShape | "login"]: z.ZodNullable<z.ZodString> };
 
 export const memberProfileFieldsSchema: z.ZodObject<ProfileFieldsShape> = z.strictObject({
 	nameFirst: z.string().trim().min(1).max(80),
@@ -23,9 +23,14 @@ export const memberProfileFieldsSchema: z.ZodObject<ProfileFieldsShape> = z.stri
 	xboxGamertag: optionalText(100),
 });
 export type MemberProfileFields = z.infer<typeof memberProfileFieldsSchema>;
-export const memberProfileUpdateSchema: z.ZodObject<{ fields: typeof memberProfileFieldsSchema; expected: z.ZodObject<SnapshotShape> }> = z.strictObject({
-	fields: memberProfileFieldsSchema,
+export const profileEditableFieldsSchema: z.ZodObject<ProfileFieldsShape & { login: z.ZodString }> = memberProfileFieldsSchema.extend({
+ login: z.string().trim().min(1).max(100).regex(/^[\p{L}\p{N}._-]+$/u, "Use letters, digits, dots, underscores or hyphens"),
+});
+export type ProfileEditableFields = z.infer<typeof profileEditableFieldsSchema>;
+export const memberProfileUpdateSchema: z.ZodObject<{ fields: typeof profileEditableFieldsSchema; expected: z.ZodObject<SnapshotShape> }> = z.strictObject({
+	fields: profileEditableFieldsSchema,
 	expected: z.strictObject({
+        login: z.string().nullable(),
 		nameFirst: z.string().nullable(), nameLast: z.string().nullable(),
 		email: z.string().nullable(), phone: z.string().nullable(),
 		githubLogin: z.string().nullable(), scratchName: z.string().nullable(), xboxGamertag: z.string().nullable(),
@@ -41,7 +46,7 @@ export type ProfilePasswordChange = z.infer<typeof profilePasswordSchema>;
 
 /** Select editable fields without including roles or authentication data. */
 export function memberProfileSnapshot(member: MemberModel): MemberProfileSnapshot {
-	return { nameFirst: member.nameFirst, nameLast: member.nameLast, email: member.email,
+	return { login: member.login, nameFirst: member.nameFirst, nameLast: member.nameLast, email: member.email,
 		phone: member.phone, githubLogin: member.githubLogin, scratchName: member.scratchName, xboxGamertag: member.xboxGamertag };
 }
 

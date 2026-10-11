@@ -1,6 +1,7 @@
 <script setup lang="ts">
+	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { computed, ref, type ComputedRef, type Ref } from "vue";
-	import { memberProfileFieldsSchema, profileModeSchema, type MemberProfileFields, type MemberProfileUpdate, type ProfileMode } from "#shared/types/MemberProfile";
+	import { profileEditableFieldsSchema, profileModeSchema, type MemberProfileFields, type MemberProfileUpdate, type ProfileMode } from "#shared/types/MemberProfile";
 	import type { ProfileImageAction } from "#shared/types/ProfileImages";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import { PROFILE_FIELDS, type ProfileField } from "./profileFields";
@@ -32,12 +33,12 @@
 		error.value = null;
 		notice.value = null;
 		try {
-			const member: MemberModel = await props.save({ fields: memberProfileFieldsSchema.parse(fields), expected: baseline.value });
+			const member: MemberModel = await props.save({ fields: profileEditableFieldsSchema.parse(fields), expected: baseline.value });
 			reset(member);
 			notice.value = t("profile.saved");
 			emit("saved");
-		} catch {
-			error.value = t("profile.saveError");
+		} catch (failure: unknown) {
+			error.value = requestFailureMessage(failure) ?? t("profile.saveError");
 		}
 	}
 
@@ -54,7 +55,7 @@
 	<UPageCard>
 		<ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
-		<p>{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
+		<p v-if="!editing">{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
 		<UAlert v-if="notice" color="success" :title="notice" />
 		<template v-if="!editing">
 			<dl class="ProfileFields">
@@ -65,9 +66,9 @@
 			</dl>
 			<UButton class="ProfileEditAction" v-if="canEdit && save" @click="emit('edit')">{{ t("profile.edit") }}</UButton>
 		</template>
-		<UForm v-else :schema="memberProfileFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
+		<UForm v-else :schema="profileEditableFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
-			<ProfileFieldInputs :fields="fields" :disabled="saving" />
+			<ProfileFieldInputs :includeLogin="true" :fields="fields" :disabled="saving" />
 			<UAlert v-if="error" color="error" :title="error" />
 			<div class="ProfileActions">
 				<UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t("profile.save") }}</UButton>

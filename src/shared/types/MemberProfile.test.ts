@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { profilePasswordFormSchema, profilePasswordSchema, profileQuerySchema, memberProfileUpdateSchema } from "./MemberProfile";
+import { profilePasswordFormSchema, profilePasswordSchema, profileQuerySchema, memberProfileUpdateSchema, memberProfileFieldsSchema } from "./MemberProfile";
 import type { MemberProfileSnapshot, MemberProfileUpdate } from "./MemberProfile";
 
-const EXPECTED: MemberProfileSnapshot = { nameFirst: "Example", nameLast: "Mentor", email: null, phone: null, githubLogin: null, scratchName: null, xboxGamertag: null };
+const EXPECTED: MemberProfileSnapshot = { login: "sample-mentor", nameFirst: "Example", nameLast: "Mentor", email: null, phone: null, githubLogin: null, scratchName: null, xboxGamertag: null };
 
 describe("own mentor profile contract", (): void => {
 	it("normalizes blank optional fields without altering the exact expected snapshot", (): void => {
@@ -10,6 +10,12 @@ describe("own mentor profile contract", (): void => {
 		expect(parsed.fields.phone).toBeNull();
 		expect(parsed.expected.phone).toBe("");
 	});
+ it("validates login without adding it to mentor signup fields", (): void => {
+  for (const login of ["", "bad login", "bad,login", "x".repeat(101)]) expect(memberProfileUpdateSchema.safeParse({ fields: { ...EXPECTED, login }, expected: EXPECTED }).success).toBe(false);
+  expect(memberProfileUpdateSchema.parse({ fields: { ...EXPECTED, login: "  New.Login-1  " }, expected: EXPECTED }).fields.login).toBe("New.Login-1");
+  const { login, ...signup } = EXPECTED;
+  expect(memberProfileFieldsSchema.safeParse(signup).success).toBe(true);
+ });
 	it("rejects identity and privilege injection", (): void => {
 		expect(memberProfileUpdateSchema.safeParse({ fields: { ...EXPECTED, isMentor: true }, expected: EXPECTED }).success).toBe(false);
 		expect(memberProfileUpdateSchema.safeParse({ fields: EXPECTED, expected: EXPECTED, id: "other" }).success).toBe(false);

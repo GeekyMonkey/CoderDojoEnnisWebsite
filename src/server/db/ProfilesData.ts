@@ -1,10 +1,10 @@
 import { createError } from "h3";
 import type { VerifiedMember } from "#server/utils/requestMember";
 import { memberFromRecord, type MemberModel, type MemberRecord } from "#shared/types/models/MemberModel";
-import type { MemberProfileFields, MemberProfileResponse, MemberProfileUpdate } from "#shared/types/MemberProfile";
+import type { ProfileEditableFields, MemberProfileResponse, MemberProfileUpdate } from "#shared/types/MemberProfile";
 
-const PROFILE_COLUMNS: Record<keyof MemberProfileFields, string> = {
-	nameFirst: "name_first", nameLast: "name_last", email: "email", phone: "phone",
+const PROFILE_COLUMNS: Record<keyof ProfileEditableFields, string> = {
+	login: "login", nameFirst: "name_first", nameLast: "name_last", email: "email", phone: "phone",
 	githubLogin: "github_login", scratchName: "scratch_name", xboxGamertag: "xbox_gamertag",
 };
 
@@ -28,15 +28,15 @@ export async function readProfile(actor: VerifiedMember, memberId: string): Prom
 export async function saveProfile(actor: VerifiedMember, memberId: string, update: MemberProfileUpdate): Promise<MemberModel> {
 	requireProfileAccess(actor, memberId);
 	const values: Record<string, string | null> = {};
-	const keys: (keyof MemberProfileFields)[] = Object.keys(PROFILE_COLUMNS) as (keyof MemberProfileFields)[];
+	const keys: (keyof ProfileEditableFields)[] = Object.keys(PROFILE_COLUMNS) as (keyof ProfileEditableFields)[];
 	for (const key of keys) values[PROFILE_COLUMNS[key]] = update.fields[key];
-	let query: ReturnType<ReturnType<ReturnType<typeof actor.client.schema>["from"]>["update"]> = actor.client.schema("coderdojo").from("members").update(values).eq("id", memberId).eq("deleted", false);
-	for (const key of keys) {
-		const value: string | null = update.expected[key];
-		query = value === null ? query.is(PROFILE_COLUMNS[key], null) : query.eq(PROFILE_COLUMNS[key], value);
-	}
-	const { data, error } = await query.select("*").maybeSingle();
-	if (error) throw createError({ statusCode: 503, statusMessage: "Unable to save profile" });
-	if (!data) throw createError({ statusCode: 409, statusMessage: "Profile changed; reload before saving" });
-	return memberFromRecord(data as MemberRecord);
+	const expected: Record<string, string | null> = {};
+ for (const key of keys) expected[PROFILE_COLUMNS[key]] = update.expected[key];
+ const { data, error } = await actor.client.schema("coderdojo").rpc("save_profile", { p_actor: actor.id, p_id: memberId, p_fields: values, p_expected: expected });
+ if (error) {
+  const status: number = error.code === "23505" || error.code === "P0001" ? 409 : error.code === "42501" ? 403 : error.code === "P0002" ? 404 : error.code === "22023" ? 400 : 503;
+  throw createError({ statusCode: status, statusMessage: status === 503 ? "Unable to save profile" : error.message });
+ }
+ if (!data) throw createError({ statusCode: 503, statusMessage: "Unable to save profile" });
+ return memberFromRecord(data as MemberRecord);
 }
