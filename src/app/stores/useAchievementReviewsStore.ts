@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, type QueryFunctionContext } from "@tanstack/vue-query";
 import { computed, onScopeDispose, toValue, type ComputedRef, type MaybeRefOrGetter } from "vue";
-import type { AchievementDecision, AchievementKind, AchievementReview } from "#shared/types/AchievementReview";
+import { AchievementReviewSchema, type AchievementDecision, type AchievementKind, type AchievementReview } from "#shared/types/AchievementReview";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
 
@@ -26,7 +26,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 				headers: await headers(), signal, query: memberId ? { kind, memberId: id.value } : { kind },
 			});
 			if (!response.success) throw new Error(response.error);
-			return response.data;
+			return AchievementReviewSchema.array().parse(response.data);
 		},
 		staleTime: 30_000,
 		retry: false,
@@ -56,7 +56,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 	const realtime: ReturnType<typeof UseSupabaseRealtimeAllTables> = UseSupabaseRealtimeAllTables();
 	/** Refresh this query when its achievement records change elsewhere. */
 	function invalidate(event: { table: string }): void {
-		if (["members", "badges", "belts", "member_badges", "member_belts"].includes(event.table)) {
+		if (["members", "badges", "badge_categories", "belts", "member_badges", "member_belts"].includes(event.table)) {
 			void refresh();
 		}
 	}

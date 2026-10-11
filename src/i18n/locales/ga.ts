@@ -47,6 +47,7 @@ export default {
 		include: {
 			allMembers: "Gach",
 			label: "Cuir san áireamh",
+			otherMembers: "Eile",
 			presentMembers: "Anseo",
 			registeredMembers: "Cláraithe",
 		},

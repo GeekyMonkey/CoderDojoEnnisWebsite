@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { BeltModel } from "./models/BeltModel";
+import { BeltModelSchema, type BeltModel } from "./models/BeltModel";
 
 export const AchievementKindSchema = z.enum(["badge", "belt"]);
 export type AchievementKind = z.infer<typeof AchievementKindSchema>;
@@ -28,6 +28,8 @@ export type AchievementReview = {
 	memberId: string;
 	memberName: string;
 	kind: AchievementKind;
+	categoryId: string | null;
+	categoryName: string | null;
 	label: string;
 	sortOrder: number;
 	belt: BeltModel | null;
@@ -41,3 +43,10 @@ export type AchievementReview = {
 	rejectedNotes: string | null;
 	rejectedByAdultId: string | null;
 };
+
+export const AchievementReviewSchema = z.strictObject({
+ id: z.string().min(1), memberId: z.string().min(1), memberName: z.string(), kind: AchievementKindSchema,
+ categoryId: z.string().nullable(), categoryName: z.string().nullable(), label: z.string(), sortOrder: z.number(), belt: BeltModelSchema.nullable(), description: z.string(),
+ applicationDate: z.number().nullable(), applicationNotes: z.string().nullable(), awarded: z.number().nullable(), awardedNotes: z.string().nullable(), awardedByAdultId: z.string().nullable(),
+ rejectedDate: z.number().nullable(), rejectedNotes: z.string().nullable(), rejectedByAdultId: z.string().nullable(),
+});

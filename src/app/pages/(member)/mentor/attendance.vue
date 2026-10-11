@@ -411,19 +411,10 @@
 		await navigateTo(`/mentor/coder/${chosen.id}`);
 	};
 
-	/**
-	 * Member clicked - navigate to their coder page
-	 */
-	const MemberClicked = async (member: MemberModel) => {
-		if (!member.id) {
-			return;
-		}
-		if (member.isMentor) {
-			await navigateTo(`/mentor/mentor/${member.id}`);
-		} else {
-			await navigateTo(`/mentor/coder/${member.id}`);
-		}
-	};
+	/** Open reusable member details for every role. */
+ const memberClicked = async (member: MemberModel): Promise<void> => {
+  if (member.id) await navigateTo(`/mentor/member/${member.id}`);
+ };
 
 	const isSavingByMemberId = ref<Record<string, true>>({});
 
@@ -922,6 +913,7 @@
 		<template #header>
 			<DashboardHeading :page-title="pageTitle">
 				<template #right>
+					<MemberSignupDialog />
 					<div class="text-xs text-muted leading-tight mt-1 whitespace-nowrap">
 						<div>Coders: {{ codersPresentCount }}</div>
 						<div>Mentors: {{ mentorsPresentCount }}</div>
@@ -1031,7 +1023,7 @@
 								/>
 								<span
 									class="MemberName"
-									@click="MemberClicked(row.original.member)"
+									@click="memberClicked(row.original.member)"
 									>{{ row.original.name }}</span
 								>
 							</div>
@@ -1096,7 +1088,7 @@
 								/>
 								<span
 									class="MemberName"
-									@click="MemberClicked(row.original.member)"
+									@click="memberClicked(row.original.member)"
 									>{{ row.original.name }}</span
 								>
 							</div>

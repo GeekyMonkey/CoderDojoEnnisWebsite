@@ -46,6 +46,7 @@ export default {
 		include: {
 			allMembers: "All",
 			label: "Include",
+			otherMembers: "Other",
 			presentMembers: "Present",
 			registeredMembers: "Registered",
 		},

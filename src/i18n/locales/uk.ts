@@ -47,6 +47,7 @@ export default {
 		include: {
 			allMembers: "Усі",
 			label: "Включити",
+			otherMembers: "Інші",
 			presentMembers: "Присутні",
 			registeredMembers: "Зареєстровані",
 		},

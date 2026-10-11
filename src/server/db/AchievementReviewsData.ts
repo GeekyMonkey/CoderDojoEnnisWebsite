@@ -4,7 +4,7 @@ import { canDecide, decisionFields, type DecisionFields } from "#shared/utils/Ac
 
 import type { SupabaseClientType } from "./DatabaseClient";
 import type { Database } from "../../types/supabase";
-import type { AchievementDecision, AchievementKind, AchievementReview } from "#shared/types/AchievementReview";
+import { AchievementReviewSchema, type AchievementDecision, type AchievementKind, type AchievementReview } from "#shared/types/AchievementReview";
 
 type AchievementRecord = Database["coderdojo"]["Tables"]["member_badges"]["Row"] | Database["coderdojo"]["Tables"]["member_belts"]["Row"];
 
@@ -27,16 +27,17 @@ export async function getAchievementReviews(client: SupabaseClientType, kind: Ac
 	const { data: members, error: memberError } = await client.schema("coderdojo").from("members").select("id, name_first, name_last").in("id", ids).eq("deleted", false);
 	const { data: badges, error: badgeError } = await client.schema("coderdojo").from("badges").select("*");
 	const { data: belts, error: beltError } = await client.schema("coderdojo").from("belts").select("*");
-	if (memberError || badgeError || beltError) throw createError({ statusCode: 503, statusMessage: "Unable to load achievement details" });
+	const { data: categories, error: categoryError } = await client.schema("coderdojo").from("badge_categories").select("id, category_name");
+	if (memberError || badgeError || beltError || categoryError) throw createError({ statusCode: 503, statusMessage: "Unable to load achievement details" });
 	const reviews: AchievementReview[] = [];
 	for (const record of records) {
-		const member: NonNullable<typeof members>[number] | undefined = members?.find((item: NonNullable<typeof members>[number]): boolean => item.id === record.member_id);
-		const badge: NonNullable<typeof badges>[number] | undefined = "badge_id" in record ? badges?.find((item: NonNullable<typeof badges>[number]): boolean => item.id === record.badge_id) : undefined;
-		const belt: NonNullable<typeof belts>[number] | undefined = "belt_id" in record ? belts?.find((item: NonNullable<typeof belts>[number]): boolean => item.id === record.belt_id) : undefined;
+		const member: NonNullable<typeof members>[number] | null = members?.find((item: NonNullable<typeof members>[number]): boolean => item.id === record.member_id) ?? null;
+		const badge: NonNullable<typeof badges>[number] | null = "badge_id" in record ? badges?.find((item: NonNullable<typeof badges>[number]): boolean => item.id === record.badge_id) ?? null : null;
+		const belt: NonNullable<typeof belts>[number] | null = "belt_id" in record ? belts?.find((item: NonNullable<typeof belts>[number]): boolean => item.id === record.belt_id) ?? null : null;
 		if (!member || (!badge && !belt)) continue;
-		reviews.push({ id: record.id, memberId: member.id, memberName: `${member.name_first ?? ""} ${member.name_last ?? ""}`.trim(), kind, belt: belt ? beltFromRecord(belt) : null, sortOrder: belt?.sort_order ?? 0, label: badge?.achievement ?? belt?.color ?? "", description: badge?.description ?? belt?.description ?? "", applicationDate: timestamp(record.application_date), applicationNotes: record.application_notes, awarded: timestamp(record.awarded), awardedNotes: record.awarded_notes, awardedByAdultId: record.awarded_by_adult_id, rejectedDate: timestamp(record.rejected_date), rejectedNotes: record.rejected_notes, rejectedByAdultId: record.rejected_by_adult_id });
+		reviews.push({ id: record.id, memberId: member.id, memberName: `${member.name_first ?? ""} ${member.name_last ?? ""}`.trim(), kind, categoryId: badge?.badge_category_id ?? null, categoryName: categories?.find((category: NonNullable<typeof categories>[number]): boolean => category.id === badge?.badge_category_id)?.category_name ?? null, belt: belt ? beltFromRecord(belt) : null, sortOrder: belt?.sort_order ?? 0, label: badge?.achievement ?? belt?.color ?? "", description: badge?.description ?? belt?.description ?? "", applicationDate: timestamp(record.application_date), applicationNotes: record.application_notes, awarded: timestamp(record.awarded), awardedNotes: record.awarded_notes, awardedByAdultId: record.awarded_by_adult_id, rejectedDate: timestamp(record.rejected_date), rejectedNotes: record.rejected_notes, rejectedByAdultId: record.rejected_by_adult_id });
 	}
-	return reviews;
+	return AchievementReviewSchema.array().parse(reviews);
 }
 
 /** Atomically update a decision only while the database still matches its original state. */

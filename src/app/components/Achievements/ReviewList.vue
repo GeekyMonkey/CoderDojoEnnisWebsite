@@ -6,6 +6,8 @@
 	import { useBeltReviewsStore } from "~/stores/useMemberBeltsStore";
 	import { useMembersStore } from "~/stores/useMembersStore";
 	import { useTeamsStore } from "~/stores/useTeamsStore";
+	import MemberPresenceLegend from "~/components/Members/MemberPresenceLegend.vue";
+	import MemberPresencePhoto from "~/components/Members/MemberPresencePhoto.vue";
 	import BeltColor from "~/components/Belts/BeltColor.vue";
 
 	const props = defineProps<{ kind: AchievementKind; memberId?: string }>();
@@ -24,13 +26,13 @@
 	const successMessage: Ref<string> = ref("");
 	const confirmation: Ref<{ review: AchievementReview; action: Action } | null> = ref(null);
 	const confirmationOpen: Ref<boolean> = ref(false);
-	const rows: ComputedRef<AchievementReview[]> = computed((): AchievementReview[] => [...(data.value ?? [])].sort((a: AchievementReview, b: AchievementReview): number => a.sortOrder - b.sortOrder || a.label.localeCompare(b.label) || a.memberName.localeCompare(b.memberName)));
+	const rows: ComputedRef<AchievementReview[]> = computed((): AchievementReview[] => [...(data.value ?? [])].sort((a: AchievementReview, b: AchievementReview): number => (a.categoryName ?? "").localeCompare(b.categoryName ?? "") || a.sortOrder - b.sortOrder || a.label.localeCompare(b.label) || a.memberName.localeCompare(b.memberName)));
 	const heading: ComputedRef<string> = computed((): string => t(`achievementReviews.${props.memberId ? `${props.kind}History` : `${props.kind}Pending`}`));
 	const columns: ComputedRef<ColumnDef<AchievementReview>[]> = computed((): ColumnDef<AchievementReview>[] => [
 		{ accessorKey: "memberName", header: t("coders.label") },
 		{ accessorKey: "label", header: t(`achievementReviews.${props.kind}`) },
 		{ id: "team", header: t("teams.label") },
-		{ id: "status", header: t("achievementReviews.status") },
+		...(props.kind === "belt" && !props.memberId ? [] : [{ id: "status", header: t("achievementReviews.status") }]),
 	]);
 	const tableMeta: { class: { tr: string } } = { class: { tr: "ReviewRow" } };
 
@@ -86,16 +88,17 @@
 			<UButton @click="reviews.refetch()">{{ t("achievementReviews.retry") }}</UButton>
 		</div>
 		<p v-else-if="!isLoading && !rows.length">{{ t("achievementReviews.empty") }}</p>
-		<UTable v-else v-model:expanded="expanded" :data="rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
+		<MemberPresenceLegend v-if="rows.length" />
+		<UTable v-if="!isError && (isLoading || rows.length)" v-model:expanded="expanded" :data="rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
 			<template #memberName-cell="{ row }">
 				<div class="MemberCell">
-					<MemberAvatar v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" size="sm" />
+					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" size="sm" />
 					<NuxtLink :to="`/mentor/coder/${row.original.memberId}`" @click.stop>{{ row.original.memberName }}</NuxtLink>
 				</div>
 			</template>
 			<template #label-cell="{ row }">
-				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="sm" />
-				<span v-else>{{ row.original.label }}</span>
+				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="md" class="RequestedBelt" />
+				<span v-else>{{ row.original.categoryName ?? t("definitionMaintenance.unavailableCategory") }} — {{ row.original.label }}</span>
 			</template>
 			<template #team-cell="{ row }">
 				<TeamLogo :for="MembersById[row.original.memberId] ?? 'UNASSIGNED'" size="sm" />
@@ -134,11 +137,27 @@
 </template>
 
 <style scoped lang="scss">
-	.ReviewList { display: grid; gap: calc(var(--spacing) * 3); max-width: 1100px; }
+	.ReviewList { display: grid; gap: calc(var(--spacing) * 3); width: 100%; min-width: 0; }
 	h2 { font-size: var(--text-xl); font-weight: 600; }
 	.MemberCell, .ReviewActions { display: flex; align-items: center; gap: calc(var(--spacing) * 3); }
 	.ReviewDetails { display: grid; gap: calc(var(--spacing) * 2); padding: calc(var(--spacing) * 4); background: var(--ui-bg-elevated); }
 	blockquote { white-space: pre-wrap; overflow-wrap: anywhere; }
 	.DecisionNotes { width: 100%; }
 	:deep(.ReviewRow) { cursor: pointer; }
+ .MemberCell { padding: calc(var(--spacing) * 2); }
+ .MemberCell a { white-space: normal; overflow-wrap: anywhere; }
+ .RequestedBelt { display: inline-block; width: 5rem; max-width: 100%; }
+ @media (max-width: 640px) {
+  :deep(thead) { display: none; }
+  :deep(table), :deep(tbody) { display: block; width: 100%; }
+  :deep(.ReviewRow) { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: calc(var(--spacing) * 2); padding: calc(var(--spacing) * 3); border-bottom: 1px solid var(--ui-border); }
+  :deep(.ReviewRow td) { padding: 0; white-space: normal; min-width: 0; }
+  :deep(.ReviewRow td:nth-child(3)), :deep(.ReviewRow td:nth-child(4)) { font-size: var(--text-xs); color: var(--ui-text-muted); }
+  :deep(.ReviewRow td:nth-child(4)) { text-align: right; }
+  .MemberCell { gap: calc(var(--spacing) * 3); }
+  :deep(tbody > tr:has(td[colspan])) { display: block; }
+  :deep(td[colspan]) { display: block; width: 100%; }
+  .ReviewActions { flex-wrap: wrap; }
+ }
+
 </style>

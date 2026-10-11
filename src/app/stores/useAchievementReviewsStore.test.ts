@@ -12,7 +12,7 @@ vi.mock("~/composables/UseSupabaseRealtimeAllTables", (): object => ({
 	UseSupabaseRealtimeAllTables: (): object => ({ events: { on: mocks.on, off: mocks.off } }),
 }));
 
-const REVIEW: AchievementReview = { id: "application", kind: "belt", memberId: "member", memberName: "Example Coder", label: "White", sortOrder: 1, belt: null, description: "", applicationDate: 1, applicationNotes: "Original evidence", awarded: null, awardedByAdultId: null, awardedNotes: null, rejectedDate: null, rejectedByAdultId: null, rejectedNotes: null };
+const REVIEW: AchievementReview = { id: "application", kind: "belt", memberId: "member", memberName: "Example Coder", categoryId: null, categoryName: null, label: "White", sortOrder: 1, belt: null, description: "", applicationDate: 1, applicationNotes: "Original evidence", awarded: null, awardedByAdultId: null, awardedNotes: null, rejectedDate: null, rejectedByAdultId: null, rejectedNotes: null };
 
 describe("achievement store decisions", (): void => {
 	it("invalidates pending, history and latest belt queries after success or conflict and disposes subscriptions", async (): Promise<void> => {
