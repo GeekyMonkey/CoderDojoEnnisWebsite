@@ -1,7 +1,8 @@
 <script setup lang="ts">
 	import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 	import type { SupabaseUserMetaType } from "#shared/types/Supabase";
-	import type { MemberSupabaseModel } from "#shared/types/models/MemberModel";
+	import type { MemberModel, MemberSupabaseModel } from "#shared/types/models/MemberModel";
+	import { useMembersStore } from "~/stores/useMembersStore";
 	import { provideMemberLayoutContext } from "~/composables/useMemberLayoutContext";
 	import {
 		buildNavigationModel,
@@ -15,6 +16,7 @@
 	const route = useRoute();
 	const router = useRouter();
 	const user = useSupabaseUser();
+	const { MembersById } = useMembersStore();
 	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
 	const { locale, setLocale, setLocaleCookie, locales, t, te } = useI18n();
 
@@ -77,8 +79,9 @@
 	const displayName = computed(() => {
 		const meta = (user.value?.user_metadata ??
 			null) as MemberSupabaseModel | null;
-		const first = meta?.nameFirst;
-		const last = meta?.nameLast;
+		const member: MemberModel | null = meta?.memberId ? MembersById.value[meta.memberId] ?? null : null;
+		const first = member?.nameFirst ?? meta?.nameFirst;
+		const last = member?.nameLast ?? meta?.nameLast;
 		const full = [first, last].filter(Boolean).join(" ");
 		return full || user.value?.email || "User";
 	});

@@ -1,0 +1,21 @@
+meta {
+  name: Save User Profile
+  type: http
+}
+patch {
+  url: {{Host}}/api/Profiles/{{MemberId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {
+    "fields": { "nameFirst": "Example", "nameLast": "Mentor", "email": null, "phone": null, "githubLogin": null, "scratchName": null, "xboxGamertag": null },
+    "expected": { "nameFirst": "Example", "nameLast": "Mentor", "email": null, "phone": null, "githubLogin": null, "scratchName": null, "xboxGamertag": null }
+  }
+}
+docs {
+  Populate expected with exact fields from Read Profile before saving. A stale snapshot returns 409.
+}

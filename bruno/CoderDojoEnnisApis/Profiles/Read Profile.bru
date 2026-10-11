@@ -1,0 +1,12 @@
+meta {
+  name: Read My Profile
+  type: http
+}
+get {
+  url: {{Host}}/api/Profile
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
