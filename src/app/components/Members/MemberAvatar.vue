@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { ref, watch, type Ref } from "vue";
 	import type { AppConfig } from "@nuxt/schema";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import type { ComponentConfig } from "@nuxt/ui";
@@ -62,12 +63,17 @@
 		return linkOption === "NEW_TAB" ? "_blank" : undefined;
 	});
 
-	const src = computed(() => {
+	const legacy: Ref<boolean> = ref(false);
+    const { revision, refresh: refreshImages } = useProfileImageRevision((): string => props.member.id);
+    watch((): MemberModel => props.member, (): void => { legacy.value = false; refreshImages(); });
+    const src = computed(() => {
 		if (props.member.hasPhoto) {
-			return MemberPhotoUrl(props.member.id);
+			const url: string = MemberPhotoUrl(props.member.id);
+			return `${legacy.value ? url : url.replace(/\.jpg$/, ".png")}?v=${revision.value}`;
 		}
 		if (props.member.hasAvatar) {
-			return MemberAvatarUrl(props.member.id);
+			const url: string = MemberAvatarUrl(props.member.id);
+			return `${legacy.value ? url : url.replace(/\.jpg$/, ".png")}?v=${revision.value}`;
 		}
 		return "nope";
 	});
@@ -98,7 +104,8 @@
 		class="MemberAvatarLink"
 	>
 		<UAvatar
-			class="MemberAvatar"
+			:class="['MemberAvatar', { SquareAvatar: !member.hasPhoto && member.hasAvatar }]"
+        @error="legacy = true"
 			:src="src"
 			:alt="alt"
 			:title="alt"
@@ -108,7 +115,8 @@
 	</NuxtLink>
 	<UAvatar
 		v-else
-		class="MemberAvatar"
+		:class="['MemberAvatar', { SquareAvatar: !member.hasPhoto && member.hasAvatar }]"
+        @error="legacy = true"
 		:src="src"
 		:alt="alt"
 		:title="alt"
@@ -123,6 +131,7 @@
 		text-decoration: none;
 	}
 
+	.SquareAvatar { border-radius: 0 !important; }
 	.MemberAvatar {
 		&:has(span) {
 			outline: dashed 1px var(--ui-border);

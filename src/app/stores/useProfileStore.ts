@@ -1,3 +1,5 @@
+import { useProfileImageRevision } from "~/composables/useProfileImageRevision";
+import type { ProfileImageAction } from "#shared/types/ProfileImages";
 import { useMutation, useQuery, useQueryClient, type QueryFunctionContext } from "@tanstack/vue-query";
 import { computed, onScopeDispose, toValue, type ComputedRef, type MaybeRefOrGetter, type Ref } from "vue";
 import { MemberModelSchema, type MemberModel } from "#shared/types/models/MemberModel";
@@ -11,6 +13,8 @@ export type ProfileStore = {
 	isPending: Ref<boolean>; isError: Ref<boolean>; isSaving: Ref<boolean>;
 	save: (update: MemberProfileUpdate) => Promise<MemberModel>;
 	reload: () => Promise<void>;
+	isSavingImages: Ref<boolean>;
+	changeImages: (action: ProfileImageAction) => Promise<MemberModel>;
 };
 
 /** Share validated profile queries, mutations and realtime refresh between own and selected profiles. */
@@ -29,8 +33,11 @@ export function useProfileStore(memberId: MaybeRefOrGetter<string> | null): Prof
 		staleTime: 30_000, retry: false,
 	});
 
+	const { refresh: refreshImages } = useProfileImageRevision((): string => query.data.value?.member.id ?? "");
+
 	/** Invalidate own, selected and listing caches consistently for every profile change. */
 	async function reload(): Promise<void> {
+		refreshImages();
 		await Promise.all([
 			queryClient.invalidateQueries({ queryKey: ["profiles"] }),
 			queryClient.invalidateQueries({ queryKey: ["members"] }),
@@ -42,7 +49,11 @@ export function useProfileStore(memberId: MaybeRefOrGetter<string> | null): Prof
 			MemberModelSchema.parse(await $fetch(path.value, { method: "PATCH", headers: await headers(), body: memberProfileUpdateSchema.parse(update) })),
 		onSettled: reload,
 	});
-	const realtime: ReturnType<typeof UseSupabaseRealtimeAllTables> = UseSupabaseRealtimeAllTables();
+	const imageMutation: ReturnType<typeof useMutation<MemberModel, Error, ProfileImageAction>> = useMutation<MemberModel, Error, ProfileImageAction>({
+        mutationFn: async (action: ProfileImageAction): Promise<MemberModel> => MemberModelSchema.parse(await $fetch(`${path.value}/images`, { method: "POST", headers: await headers(), body: action })),
+        onSettled: reload,
+    });
+    const realtime: ReturnType<typeof UseSupabaseRealtimeAllTables> = UseSupabaseRealtimeAllTables();
 
 	/** Refresh active profile views when member rows change in any session. */
 	function invalidate(event: { table: string }): void {
@@ -60,6 +71,6 @@ export function useProfileStore(memberId: MaybeRefOrGetter<string> | null): Prof
 		profile: computed((): MemberModel | null => query.data.value?.member ?? null),
 		permissions: computed((): MemberProfileResponse["permissions"] | null => query.data.value?.permissions ?? null),
 		isPending: query.isPending, isError: query.isError, isSaving: mutation.isPending,
-		save: mutation.mutateAsync, reload,
+		save: mutation.mutateAsync, reload, isSavingImages: imageMutation.isPending, changeImages: imageMutation.mutateAsync,
 	};
 }
