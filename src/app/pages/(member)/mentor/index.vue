@@ -14,11 +14,14 @@
 			<DashboardHeading :page-title="pageTitle" />
 		</template>
 		<template #body>
-			<div class="p-4">
+			<div class="MentorReviews">
 				<ApplicationsPending />
+				<AchievementsReviewList kind="badge" />
 			</div>
 		</template>
 	</UDashboardPanel>
 </template>
 
-<style lang="css" scoped></style>
+<style scoped lang="scss">
+	.MentorReviews { display: grid; gap: calc(var(--spacing) * 8); padding: calc(var(--spacing) * 4); }
+</style>

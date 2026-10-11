@@ -6,6 +6,35 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	achievementReviews: {
+		applied: "Iarrtha",
+		approve: "Ceadaigh",
+		awarded: "Bronnta",
+		badge: "Suaitheantas",
+		badgeHistory: "Stair na suaitheantas",
+		badgePending: "Iarratais ar shuaitheantais",
+		belt: "Crios",
+		beltHistory: "Stair na gcriosanna",
+		beltPending: "Iarratais ar chriosanna",
+		cancel: "Cealaigh",
+		confirm: "Deimhnigh",
+		confirmDescription: "Seiceáil an gradam agus an gníomh sula leanann tú ar aghaidh.",
+		confirmTitle: "Deimhnigh an cinneadh",
+		decided: "Cinneadh",
+		empty: "Níl aon ghradaim le taispeáint.",
+		goal: "Sprioc",
+		loadError: "Níorbh fhéidir na gradaim a luchtú.",
+		mentor: "Meantóir",
+		notes: "Nótaí cinnidh (riachtanach)",
+		pending: "Ar feitheamh",
+		reject: "Diúltaigh",
+		rejected: "Diúltaithe",
+		retry: "Bain triail eile as",
+		saveError: "Níorbh fhéidir sábháil. Seans gur athraigh an t-iarratas nó go bhfuil an seisiún imithe in éag. Athlódáil agus bain triail eile as.",
+		saved: "Sábháladh an cinneadh.",
+		status: "Stádas",
+		undo: "Cuir an cinneadh ar ceal",
+	},
 	attendance: {
 		columns: {
 			name: "Ainm",

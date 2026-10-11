@@ -6,6 +6,35 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	achievementReviews: {
+		applied: "Подано",
+		approve: "Схвалити",
+		awarded: "Нагороджено",
+		badge: "Значок",
+		badgeHistory: "Історія значків",
+		badgePending: "Заявки на значки",
+		belt: "Пояс",
+		beltHistory: "Історія поясів",
+		beltPending: "Заявки на пояси",
+		cancel: "Скасувати",
+		confirm: "Підтвердити",
+		confirmDescription: "Перевірте нагороду та дію, перш ніж продовжити.",
+		confirmTitle: "Підтвердити рішення",
+		decided: "Рішення",
+		empty: "Немає нагород для показу.",
+		goal: "Мета",
+		loadError: "Не вдалося завантажити нагороди.",
+		mentor: "Наставник",
+		notes: "Примітки до рішення (обов’язково)",
+		pending: "Очікує",
+		reject: "Відхилити",
+		rejected: "Відхилено",
+		retry: "Повторити",
+		saveError: "Не вдалося зберегти. Заявка могла змінитися або сеанс завершився. Оновіть сторінку та повторіть.",
+		saved: "Рішення збережено.",
+		status: "Статус",
+		undo: "Скасувати рішення",
+	},
 	attendance: {
 		columns: {
 			name: "Ім'я",

@@ -5,6 +5,35 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	achievementReviews: {
+		applied: "Applied",
+		approve: "Approve",
+		awarded: "Awarded",
+		badge: "Badge",
+		badgeHistory: "Badge history",
+		badgePending: "Badge applications",
+		belt: "Belt",
+		beltHistory: "Belt history",
+		beltPending: "Belt applications",
+		cancel: "Cancel",
+		confirm: "Confirm",
+		confirmDescription: "Check the achievement and action before continuing.",
+		confirmTitle: "Confirm decision",
+		decided: "Decided",
+		empty: "No achievements to show.",
+		goal: "Goal",
+		loadError: "Could not load achievements.",
+		mentor: "Mentor",
+		notes: "Decision notes (required)",
+		pending: "Pending",
+		reject: "Reject",
+		rejected: "Rejected",
+		retry: "Retry",
+		saveError: "Could not save. The application may have changed or your session expired. Refresh and try again.",
+		saved: "Decision saved.",
+		status: "Status",
+		undo: "Undo decision",
+	},
 	attendance: {
 		columns: {
 			name: "Name",

@@ -1,0 +1,25 @@
+meta {
+  name: Belt Reject
+  type: http
+}
+post {
+  url: {{Host}}/api/Achievements/Decision
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+{
+  "kind": "belt",
+  "id": "{{ApplicationId}}",
+  "action": "reject",
+  "notes": "Review notes",
+  "expectedAwarded": null,
+  "expectedRejected": null
+}
+}
+docs {
+  Use a disposable application and authenticated mentor AccessToken. For undo, replace expectedAwarded or expectedRejected with the timestamp in milliseconds from History. Do not run against real member applications during testing.
+}

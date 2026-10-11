@@ -1,0 +1,12 @@
+meta {
+  name: Belt Pending
+  type: http
+}
+get {
+  url: {{Host}}/api/Achievements/Pending?kind=belt
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

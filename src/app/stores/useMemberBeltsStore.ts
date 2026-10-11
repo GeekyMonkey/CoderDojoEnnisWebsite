@@ -9,6 +9,8 @@ import type {
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
 import { useBeltsStore } from "~/stores/useBeltsStore";
 import { useMembersStore } from "~/stores/useMembersStore";
+import { useAchievementReviewsStore } from "./useAchievementReviewsStore";
+import type { MaybeRefOrGetter } from "vue";
 //import baseDbTableStore from "./baseDbTableStore";
 
 export type PendingBeltApplication = {
@@ -18,6 +20,11 @@ export type PendingBeltApplication = {
 	memberName: string;
 	beltSortOrder: number;
 };
+
+/** Provide mentor belt history, pending applications and decision operations. */
+export function useBeltReviewsStore(memberId?: MaybeRefOrGetter<string>): ReturnType<typeof useAchievementReviewsStore> {
+	return useAchievementReviewsStore("belt", memberId);
+}
 
 /**
  * Client-side store for member_belts with realtime invalidation.

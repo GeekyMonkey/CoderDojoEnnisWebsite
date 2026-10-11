@@ -7,6 +7,35 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	achievementReviews: {
+		applied: "Demande",
+		approve: "Approuver",
+		awarded: "Attribué",
+		badge: "Badge",
+		badgeHistory: "Historique des badges",
+		badgePending: "Demandes de badges",
+		belt: "Ceinture",
+		beltHistory: "Historique des ceintures",
+		beltPending: "Demandes de ceintures",
+		cancel: "Annuler",
+		confirm: "Confirmer",
+		confirmDescription: "Vérifiez la récompense et l’action avant de continuer.",
+		confirmTitle: "Confirmer la décision",
+		decided: "Décision",
+		empty: "Aucune récompense à afficher.",
+		goal: "Objectif",
+		loadError: "Impossible de charger les récompenses.",
+		mentor: "Mentor",
+		notes: "Notes de décision (obligatoires)",
+		pending: "En attente",
+		reject: "Refuser",
+		rejected: "Refusé",
+		retry: "Réessayer",
+		saveError: "Échec de l’enregistrement. La demande a peut-être changé ou votre session a expiré. Actualisez et réessayez.",
+		saved: "Décision enregistrée.",
+		status: "Statut",
+		undo: "Annuler la décision",
+	},
 	attendance: {
 		columns: {
 			name: "Nom",

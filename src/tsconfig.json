@@ -2,6 +2,8 @@
 	// https://nuxt.com/docs/guide/concepts/typescript
 	"extends": "./.nuxt/tsconfig.json",
 	"compilerOptions": {
+		"baseUrl": "./.nuxt",
+		"ignoreDeprecations": "6.0",
 		// Base
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -24,6 +26,6 @@
 		"lib": ["es2022", "DOM", "DOM.Iterable"],
 
 		// Cloudflare Workers & Web NFC types
-		"types": ["@cloudflare/workers-types/2023-07-01", "w3c-web-nfc"]
+		"types": ["@cloudflare/workers-types", "w3c-web-nfc"]
 	}
 }

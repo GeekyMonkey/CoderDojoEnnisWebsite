@@ -1,0 +1,12 @@
+meta {
+  name: Badge History
+  type: http
+}
+get {
+  url: {{Host}}/api/Achievements/History?kind=badge&memberId={{MemberId}}
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

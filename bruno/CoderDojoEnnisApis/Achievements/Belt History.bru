@@ -1,0 +1,12 @@
+meta {
+  name: Belt History
+  type: http
+}
+get {
+  url: {{Host}}/api/Achievements/History?kind=belt&memberId={{MemberId}}
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

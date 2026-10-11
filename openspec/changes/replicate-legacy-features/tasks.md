@@ -5,8 +5,8 @@
 3. **Public Features**: Implement upcoming sessions, sign-in functionality.
 4. **Member Profile Management**: Create profile view/edit pages, handle external links (Github, Xbox, Scratch).
 5. **Goals Management**: Implement short-term/long-term goals, badge goal applications.
-6. **Badges System**: Build badge viewing, application, approval/rejection for mentors.
-7. **Belts System**: Implement belt viewing, application, approval/rejection.
+6. **Badges System**: Mentor pending applications, member achievement history, approval/rejection and undo implemented in `add-achievement-approvals`. Coder badge viewing/application remains outstanding; successful write-flow verification needs disposable records.
+7. **Belts System**: Mentor pending applications, member achievement history, approval/rejection and undo implemented in `add-achievement-approvals`. Coder belt viewing/application remains outstanding; successful write-flow verification needs disposable records.
 8. **Attendance Tracking**: Develop personal attendance history view, mentor attendance management.
 9. **Session Management**: Create session listing, joining, mentor session CRUD.
 10. **Team Management**: Build team viewing, CRUD for mentors.

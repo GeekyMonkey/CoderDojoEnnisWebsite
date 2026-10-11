@@ -40,7 +40,8 @@
 					Member not found.
 				</div>
 				<UPageCard v-else>
-					<p class="text-sm opacity-70">Coder details coming soon.</p>
+					<AchievementsReviewList :key="`belts-${memberId}`" kind="belt" :memberId="memberId" />
+					<AchievementsReviewList :key="`badges-${memberId}`" kind="badge" :memberId="memberId" />
 					<div class="mt-2 text-sm">
 						<div><span class="font-semibold">ID:</span> {{ member.id }}</div>
 						<div>

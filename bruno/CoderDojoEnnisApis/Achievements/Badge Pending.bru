@@ -1,0 +1,12 @@
+meta {
+  name: Badge Pending
+  type: http
+}
+get {
+  url: {{Host}}/api/Achievements/Pending?kind=badge
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

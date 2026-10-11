@@ -4,9 +4,11 @@ import { resolve } from "path";
 export default defineConfig({
 	resolve: {
 		alias: {
-			"~": resolve(__dirname, "."),
+			"#server": resolve(__dirname, "server"),
+			"#shared": resolve(__dirname, "shared"),
+			"~": resolve(__dirname, "app"),
 			"~~": resolve(__dirname, "."),
-			"@": resolve(__dirname, "."),
+			"@": resolve(__dirname, "app"),
 		},
 	},
 	test: {
