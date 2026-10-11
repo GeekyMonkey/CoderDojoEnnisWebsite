@@ -1,0 +1,15 @@
+meta {
+  name: List Team
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/teams
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+docs {
+  Requires a current mentor session. Copy current fields into expected before updating or deleting. Stale writes return 409; teams with assigned active members cannot be deleted.
+}

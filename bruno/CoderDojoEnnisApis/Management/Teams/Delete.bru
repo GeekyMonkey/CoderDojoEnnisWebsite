@@ -1,0 +1,28 @@
+meta {
+  name: Delete Team
+  type: http
+}
+delete {
+  url: {{Host}}/api/Management/teams/{{TeamId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+{
+  "expected": {
+    "teamName": "Disposable team",
+    "goal": "Learn together",
+    "notes": null,
+    "hexcode": "#123456"
+  }
+}
+}
+docs {
+  Requires a current mentor session. Copy current fields into expected before updating or deleting. Stale writes return 409; teams with assigned active members cannot be deleted.
+}

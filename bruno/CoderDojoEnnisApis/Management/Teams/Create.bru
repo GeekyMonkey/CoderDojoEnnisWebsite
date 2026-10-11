@@ -1,0 +1,26 @@
+meta {
+  name: Create Team
+  type: http
+}
+post {
+  url: {{Host}}/api/Management/teams
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+{
+  "teamName": "Disposable team",
+  "goal": null,
+  "notes": null,
+  "hexcode": "#123456"
+}
+}
+docs {
+  Requires a current mentor session. Copy current fields into expected before updating or deleting. Stale writes return 409; teams with assigned active members cannot be deleted.
+}

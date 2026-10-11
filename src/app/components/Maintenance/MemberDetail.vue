@@ -12,6 +12,7 @@
 	const valid: ComputedRef<boolean> = computed((): boolean => profileIdentitySchema.safeParse(props.memberId).success);
 	const member: ComputedRef<MemberModel | null> = computed((): MemberModel | null => store.membersById.value[props.memberId] ?? null);
 	const title: ComputedRef<string> = computed((): string => member.value ? `${member.value.nameFirst ?? ""} ${member.value.nameLast ?? ""}`.trim() : t("maintenance.member"));
+	const directory: ComputedRef<{ label: string; to: string }> = computed((): { label: string; to: string } => member.value?.isNinja ? { label: t("nav.Members"), to: "/mentor/members" } : member.value?.isParent ? { label: t("nav.Parents"), to: "/mentor/parents" } : { label: t("nav.Mentors"), to: "/mentor/mentors" });
 	/** Delegate account changes to the maintenance store. */
 	async function saveAccount(body: GuardedUpdate<AccountFields>): Promise<MemberModel> { return store.saveAccount(props.memberId, body); }
 	/** Delegate goal changes to the maintenance store. */
@@ -21,7 +22,7 @@
 </script>
 <template>
 	<UDashboardPanel id="mentor-member-detail">
-		<template #header><DashboardHeading :pageTitle="title" /></template>
+		<template #header><DashboardHeading :pageTitle="title" :breadcrumbLabel="directory.label" :breadcrumbTo="directory.to" /></template>
 		<template #body><div class="MemberDetail">
 			<p v-if="isPending">{{ t('profile.loading') }}</p><UAlert v-else-if="isError" color="error" :title="t('profile.loadError')" /><UAlert v-else-if="!valid || !member" color="error" :title="t('maintenance.notFound')" />
 			<template v-else-if="member && data">
