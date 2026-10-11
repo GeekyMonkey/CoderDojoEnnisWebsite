@@ -1,14 +1,3 @@
-<script setup lang="ts">
-	const { pageTitle } = useMemberLayoutContext();
-</script>
-
 <template>
-	<UDashboardPanel id="mentor-parents">
-		<template #header>
-			<DashboardHeading :page-title="pageTitle" />
-		</template>
-		<template #body>
-			<PlaceholderPage description="Parent management is coming soon." />
-		</template>
-	</UDashboardPanel>
+	<MemberDirectory role="parent" />
 </template>

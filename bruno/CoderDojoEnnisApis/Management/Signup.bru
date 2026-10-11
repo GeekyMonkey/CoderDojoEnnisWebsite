@@ -1,0 +1,41 @@
+meta {
+  name: Signup
+  type: http
+}
+post {
+  url: {{Host}}/api/Management
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {
+    "profile": {
+      "nameFirst": "Example",
+      "nameLast": "Coder",
+      "email": null,
+      "phone": null,
+      "githubLogin": null,
+      "scratchName": null,
+      "xboxGamertag": null
+    },
+    "account": {
+      "birthYear": 2008,
+      "fingerprintId": null,
+      "nfcTag": null,
+      "login": "sample-coder",
+      "teamId": null,
+      "registeredCurrentTerm": true,
+      "isNinja": true,
+      "isParent": false,
+      "isMentor": false,
+      "gardaVetted": false
+    },
+    "password": null
+  }
+}
+docs {
+  Requires a current mentor session. Use exact current section fields as expected before saving; stale snapshots return 409.
+}

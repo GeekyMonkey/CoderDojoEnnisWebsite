@@ -1,0 +1,43 @@
+meta {
+  name: Save Account
+  type: http
+}
+patch {
+  url: {{Host}}/api/Management/{{MemberId}}/account
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {
+    "fields": {
+      "birthYear": 2008,
+      "fingerprintId": null,
+      "nfcTag": null,
+      "login": "sample-coder",
+      "teamId": null,
+      "registeredCurrentTerm": true,
+      "isNinja": true,
+      "isParent": false,
+      "isMentor": false,
+      "gardaVetted": false
+    },
+    "expected": {
+      "birthYear": 2008,
+      "fingerprintId": null,
+      "nfcTag": null,
+      "login": "sample-coder",
+      "teamId": null,
+      "registeredCurrentTerm": true,
+      "isNinja": true,
+      "isParent": false,
+      "isMentor": false,
+      "gardaVetted": false
+    }
+  }
+}
+docs {
+  Requires a current mentor session. Use exact current section fields as expected before saving; stale snapshots return 409.
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Save Goals
+  type: http
+}
+patch {
+  url: {{Host}}/api/Management/{{MemberId}}/goals
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {
+    "fields": {
+      "goalShortTerm": "Learn Python",
+      "goalLongTerm": null
+    },
+    "expected": {
+      "goalShortTerm": null,
+      "goalLongTerm": null
+    }
+  }
+}
+docs {
+  Requires a current mentor session. Use exact current section fields as expected before saving; stale snapshots return 409.
+}

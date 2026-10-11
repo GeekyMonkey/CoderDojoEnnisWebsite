@@ -11,10 +11,10 @@
 ## Mentor priority queue
 Feature 12 reviewed; implement features 1–4 as one batch under the user's authorization, then pause for batch code review. All UI data access must go through TanStack Query stores, with realtime invalidation for other users.
 
-- [ ] 1. Coder management: searchable list, signup, full details/editing, teams, registration, logins and fingerprint ID.
-- [ ] 2. Coder progress: goals editing and individual attendance history (achievement history implemented).
-- [ ] 3. Parent relationships: search, link/unlink children and relationship views.
-- [ ] 4. Mentor/parent management: lists, signup, contact details, roles and mentor skills/categories.
+- [x] 1. Coder management: searchable list, signup, full details/editing, teams, registration, logins and fingerprint ID.
+- [x] 2. Coder progress: goals editing and individual attendance history (achievement history implemented).
+- [x] 3. Parent relationships: search, link/unlink children and relationship views.
+- [x] 4. Mentor/parent management: lists, signup, contact details, roles and mentor skills/categories.
 - [ ] 5. Team management: list/create/edit/delete teams, goals, notes and colours.
 - [ ] 6. Achievement definitions: belt/badge/category CRUD.
 - [ ] 7. Session management: list/create/edit/delete, hosts, topic, URL and mentor-only flag.
@@ -24,6 +24,7 @@ Feature 12 reviewed; implement features 1–4 as one batch under the user's auth
 - [ ] 11. Data maintenance: inactive member/parent cleanup and registration purge.
 - [x] 12. My Profile: role-neutral own-profile store and reusable UI, names/contact details, external handles, guarded save and password change; separate selected-user profile store and realtime refresh.
 - [x] Review feature 12 code before starting feature 1.
+- [x] Review the features 1–4 batch before progressing to feature 5.
 
 ## Other migration stories
 - [ ] Public/upcoming sessions and session joining.

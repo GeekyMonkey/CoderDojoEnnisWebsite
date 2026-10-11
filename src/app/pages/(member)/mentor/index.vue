@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import AchievementsReviewList from "~/components/Achievements/ReviewList.vue";
 	const log = useLogger("MentorPage");
 	const { pageTitle } = useMemberLayoutContext();
 

@@ -1,0 +1,15 @@
+meta {
+  name: Attendance History
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/{{MemberId}}/attendance
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+docs {
+  Requires a current mentor session. Use exact current section fields as expected before saving; stale snapshots return 409.
+}

@@ -2,6 +2,7 @@
 	import { computed, ref, type ComputedRef, type Ref } from "vue";
 	import { memberProfileFieldsSchema, profileModeSchema, type MemberProfileFields, type MemberProfileUpdate, type ProfileMode } from "#shared/types/MemberProfile";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
+	import { PROFILE_FIELDS, type ProfileField } from "./profileFields";
 	import { useProfileDraft } from "~/composables/useProfileDraft";
 
 	const props = withDefaults(defineProps<{
@@ -13,29 +14,14 @@
 	}>(), { mode: "view", canEdit: false, saving: false });
 	const emit = defineEmits<{ edit: []; cancel: []; saved: [] }>();
 
-	type ProfileField = { key: keyof MemberProfileFields; autocomplete: string; type: "text" | "email" | "tel" };
 	type DisplayField = ProfileField & { value: string };
 
-	const FIELDS: ProfileField[] = [
-		{ key: "nameFirst", autocomplete: "given-name", type: "text" },
-		{ key: "nameLast", autocomplete: "family-name", type: "text" },
-		{ key: "email", autocomplete: "email", type: "email" },
-		{ key: "phone", autocomplete: "tel", type: "tel" },
-		{ key: "githubLogin", autocomplete: "off", type: "text" },
-		{ key: "scratchName", autocomplete: "off", type: "text" },
-		{ key: "xboxGamertag", autocomplete: "off", type: "text" },
-	];
 	const { t } = useI18n();
 	const { fields, baseline, dirty, remoteChanged, reset } = useProfileDraft((): MemberModel => props.member);
 	const notice: Ref<string | null> = ref(null);
 	const error: Ref<string | null> = ref(null);
 	const editing: ComputedRef<boolean> = computed((): boolean => profileModeSchema.parse(props.mode) === "edit" && props.canEdit && Boolean(props.save));
-	const displayFields: ComputedRef<DisplayField[]> = computed((): DisplayField[] => FIELDS.map((field: ProfileField): DisplayField => ({ ...field, value: props.member[field.key] ?? "—" })));
-
-	/** Keep input values typed while allowing optional fields to be cleared. */
-	function updateField(key: keyof MemberProfileFields, value: string | number): void {
-		fields[key] = String(value);
-	}
+	const displayFields: ComputedRef<DisplayField[]> = computed((): DisplayField[] => PROFILE_FIELDS.map((field: ProfileField): DisplayField => ({ ...field, value: props.member[field.key] ?? "—" })));
 
 	/** Validate and submit only editable fields through the supplied store action. */
 	async function submit(): Promise<void> {
@@ -73,15 +59,11 @@
 					<dd>{{ field.value }}</dd>
 				</div>
 			</dl>
-			<UButton v-if="canEdit && save" @click="emit('edit')">{{ t("profile.edit") }}</UButton>
+			<UButton class="ProfileEditAction" v-if="canEdit && save" @click="emit('edit')">{{ t("profile.edit") }}</UButton>
 		</template>
 		<UForm v-else :schema="memberProfileFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
-			<div class="ProfileFields">
-				<UFormField v-for="field in FIELDS" :key="field.key" :name="field.key" :label="t(`profile.${field.key}`)">
-					<UInput :modelValue="fields[field.key] ?? ''" :type="field.type" :autocomplete="field.autocomplete" :disabled="saving" class="ProfileInput" @update:modelValue="(value: string | number): void => updateField(field.key, value)" />
-				</UFormField>
-			</div>
+			<ProfileFieldInputs :fields="fields" :disabled="saving" />
 			<UAlert v-if="error" color="error" :title="error" />
 			<div class="ProfileActions">
 				<UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t("profile.save") }}</UButton>
@@ -92,6 +74,7 @@
 </template>
 
 <style scoped lang="scss">
+	.ProfileEditAction { width: fit-content; align-self: flex-start; justify-self: start; }
 	.ProfileForm { display: grid; gap: calc(var(--spacing) * 4); }
 	.ProfileFields { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: calc(var(--spacing) * 4); }
 	.ProfileFields dt { font-weight: 600; }

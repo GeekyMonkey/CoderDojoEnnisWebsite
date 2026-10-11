@@ -2,7 +2,7 @@
 	import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 	import type { SupabaseUserMetaType } from "#shared/types/Supabase";
 	import type { MemberModel, MemberSupabaseModel } from "#shared/types/models/MemberModel";
-	import { useMembersStore } from "~/stores/useMembersStore";
+	import { useMyProfileStore } from "~/stores/useMyProfileStore";
 	import { provideMemberLayoutContext } from "~/composables/useMemberLayoutContext";
 	import {
 		buildNavigationModel,
@@ -11,12 +11,13 @@
 		getRoleFlagsFromUserMeta,
 		toNavigationMenuItems,
 		type MemberRole,
+		type MemberRoleFlags,
 	} from "~/utils/memberNavigation";
 
 	const route = useRoute();
 	const router = useRouter();
 	const user = useSupabaseUser();
-	const { MembersById } = useMembersStore();
+	const { profile: currentMember } = useMyProfileStore();
 	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
 	const { locale, setLocale, setLocaleCookie, locales, t, te } = useI18n();
 
@@ -31,7 +32,7 @@
 	const roles = computed<MemberRole[]>(() => {
 		const meta = (user.value?.user_metadata ??
 			null) as SupabaseUserMetaType | null;
-		const flags = getRoleFlagsFromUserMeta(meta);
+		const flags: MemberRoleFlags = currentMember.value ? { isMentor: currentMember.value.isMentor, isParent: currentMember.value.isParent, isCoder: currentMember.value.isNinja } : getRoleFlagsFromUserMeta(meta);
 		return getMemberRoles(flags);
 	});
 
@@ -79,7 +80,7 @@
 	const displayName = computed(() => {
 		const meta = (user.value?.user_metadata ??
 			null) as MemberSupabaseModel | null;
-		const member: MemberModel | null = meta?.memberId ? MembersById.value[meta.memberId] ?? null : null;
+		const member: MemberModel | null = currentMember.value;
 		const first = member?.nameFirst ?? meta?.nameFirst;
 		const last = member?.nameLast ?? meta?.nameLast;
 		const full = [first, last].filter(Boolean).join(" ");

@@ -41,6 +41,8 @@
 			return null;
 		}
 
+		if (rolePrefix === "/mentor") return `/mentor/member/${memberId}`;
+
 		// Determine member type
 		let memberType: string;
 		if (props.member.isMentor) {
