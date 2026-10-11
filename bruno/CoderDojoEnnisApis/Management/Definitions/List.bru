@@ -1,0 +1,15 @@
+meta {
+  name: List
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/definitions
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+docs {
+  Requires a current mentor session. Use exact current editable fields as expected. Stale writes return 409. Categories referenced by active badges or mentor skills cannot be deleted. Definitions are soft-deleted and achievement history is retained.
+}

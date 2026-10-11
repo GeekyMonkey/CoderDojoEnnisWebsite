@@ -7,7 +7,7 @@
 </script>
 <template>
  <UFormField name="teamName" :label="t('teams.name')" required><UInput v-model="props.fields.teamName" :disabled="disabled" /></UFormField>
- <UFormField name="hexcode" :label="t('teams.colour')"><div class="ColourInput"><UInput :modelValue="props.fields.hexcode ?? ''" @update:modelValue="updateOptional('hexcode', $event)" placeholder="#RRGGBB" :disabled="disabled" /><TeamColour :hexcode="props.fields.hexcode" /></div></UFormField>
+ <UFormField name="hexcode" :label="t('teams.colour')"><div class="ColourInput"><UInput :modelValue="props.fields.hexcode ?? ''" @update:modelValue="updateOptional('hexcode', $event)" placeholder="#RRGGBB" :disabled="disabled" /><ColourSwatch :hexCode="props.fields.hexcode" /></div></UFormField>
  <UFormField name="goal" :label="t('teams.goal')"><UTextarea :modelValue="props.fields.goal ?? ''" @update:modelValue="updateOptional('goal', $event)" :disabled="disabled" /></UFormField>
  <UFormField name="notes" :label="t('teams.notes')"><UTextarea :modelValue="props.fields.notes ?? ''" @update:modelValue="updateOptional('notes', $event)" :disabled="disabled" /></UFormField>
 </template>

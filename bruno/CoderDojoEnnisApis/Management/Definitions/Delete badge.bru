@@ -1,0 +1,29 @@
+meta {
+  name: Delete badge
+  type: http
+}
+delete {
+  url: {{Host}}/api/Management/definitions/badge/{{DefinitionId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+{
+  "expected": {
+    "name": "Disposable badge",
+    "description": null,
+    "hexCode": null,
+    "sortOrder": null,
+    "categoryId": "{{CategoryId}}"
+  }
+}
+}
+docs {
+  Requires a current mentor session. Use exact current editable fields as expected. Stale writes return 409. Categories referenced by active badges or mentor skills cannot be deleted. Definitions are soft-deleted and achievement history is retained.
+}

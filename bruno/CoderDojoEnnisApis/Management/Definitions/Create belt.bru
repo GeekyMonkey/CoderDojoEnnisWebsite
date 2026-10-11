@@ -1,0 +1,27 @@
+meta {
+  name: Create belt
+  type: http
+}
+post {
+  url: {{Host}}/api/Management/definitions/belt
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+headers {
+  Content-Type: application/json
+}
+body:json {
+{
+  "name": "Disposable belt",
+  "description": null,
+  "hexCode": "#123456",
+  "sortOrder": 0,
+  "categoryId": null
+}
+}
+docs {
+  Requires a current mentor session. Use exact current editable fields as expected. Stale writes return 409. Categories referenced by active badges or mentor skills cannot be deleted. Definitions are soft-deleted and achievement history is retained.
+}

@@ -25,8 +25,8 @@ export async function getAchievementReviews(client: SupabaseClientType, kind: Ac
 	if (!records.length) return [];
 	const ids: string[] = [...new Set(records.map((record: AchievementRecord): string => record.member_id ?? ""))];
 	const { data: members, error: memberError } = await client.schema("coderdojo").from("members").select("id, name_first, name_last").in("id", ids).eq("deleted", false);
-	const { data: badges, error: badgeError } = await client.schema("coderdojo").from("badges").select("*").eq("deleted", false);
-	const { data: belts, error: beltError } = await client.schema("coderdojo").from("belts").select("*").eq("deleted", false);
+	const { data: badges, error: badgeError } = await client.schema("coderdojo").from("badges").select("*");
+	const { data: belts, error: beltError } = await client.schema("coderdojo").from("belts").select("*");
 	if (memberError || badgeError || beltError) throw createError({ statusCode: 503, statusMessage: "Unable to load achievement details" });
 	const reviews: AchievementReview[] = [];
 	for (const record of records) {

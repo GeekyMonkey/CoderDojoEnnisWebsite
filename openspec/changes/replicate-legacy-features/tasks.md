@@ -9,14 +9,14 @@
 - [ ] Verify badge/belt decisions end to end using disposable applications.
 
 ## Mentor priority queue
-Feature 12 and features 1–4 reviewed and committed; feature 5 team management reviewed and approved for commit. Feature 6 is next. All UI data access must go through TanStack Query stores, with realtime invalidation for other users.
+Feature 12 and features 1–4 reviewed and committed; feature 5 team management reviewed and approved for commit. Feature 6 achievement definitions implemented in codex/achievement-definitions, pending code review before feature 7. All UI data access must go through TanStack Query stores, with realtime invalidation for other users.
 
 - [x] 1. Coder management: searchable list, signup, full details/editing, teams, registration, logins and fingerprint ID.
 - [x] 2. Coder progress: goals editing and individual attendance history (achievement history implemented).
 - [x] 3. Parent relationships: search, link/unlink children and relationship views.
 - [x] 4. Mentor/parent management: lists, signup, contact details, roles and mentor skills/categories.
 - [x] 5. Team management: list/create/edit/delete teams, goals, notes and colours.
-- [ ] 6. Achievement definitions: belt/badge/category CRUD.
+- [x] 6. Achievement definitions: belt/badge/category CRUD.
 - [ ] 7. Session management: list/create/edit/delete, hosts, topic, URL and mentor-only flag.
 - [ ] 8. Duplicate accounts: merge coders/adults, preserving relationships and history.
 - [ ] 9. Reports: recent belts, belt CSV, parent emails and mentor emails.
@@ -26,6 +26,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] Review feature 12 code before starting feature 1.
 - [x] Review the features 1–4 batch before progressing to feature 5.
 - [x] Review feature 5 team management before progressing to feature 6.
+- [ ] Review feature 6 achievement definitions before progressing to feature 7.
 
 ## Other migration stories
 - [ ] Public/upcoming sessions and session joining.

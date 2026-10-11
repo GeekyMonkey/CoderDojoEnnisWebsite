@@ -6,7 +6,7 @@ import baseDbTableStore from "./baseDbTableStore";
 export function useBadgeCategoriesStore() {
 	const badgeCategoriesStore = baseDbTableStore<BadgeCategoryModel>({
 		apiPath: "badgeCategories",
-		tableName: "badgeCategories",
+		tableName: "badge_categories",
 		getLabel: (badgeCategory: BadgeCategoryModel) => {
 			return badgeCategory.categoryName;
 		},
