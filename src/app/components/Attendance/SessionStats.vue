@@ -5,11 +5,19 @@
 	const {
 		CurrentSessionDate,
 		CurrentSessionMemberIds,
-		SessionCount,
-		AttendanceTotal,
+		SessionStats,
+		refetch,
 		isLoading,
 		isError,
 	} = useMemberAttendanceStore();
+
+	// Read attendance totals from the store statistics.
+	const sessionCount: ComputedRef<number> = computed(
+		() => SessionStats.value?.sessionCount ?? 0,
+	);
+	const attendanceTotal: ComputedRef<number> = computed(
+		() => SessionStats.value?.attendance_total ?? 0,
+	);
 
 	// Computed proxies for template consumption
 	const sessionDate = computed(() => CurrentSessionDate.value || "—");
@@ -32,11 +40,11 @@
 		</div>
 		<div class="row">
 			<strong>Total Sessions:</strong>
-			<span>{{ SessionCount }}</span>
+			<span>{{ sessionCount }}</span>
 		</div>
 		<div class="row">
 			<strong>Total Attendance:</strong>
-			<span>{{ AttendanceTotal }}</span>
+			<span>{{ attendanceTotal }}</span>
 		</div>
 		<div v-if="isLoading" class="status">Loading…</div>
 		<div v-else-if="isError" class="status error">
@@ -47,7 +55,7 @@
 		</ul>
 		<div v-else class="status empty">No members signed in yet.</div>
 		<div class="actions">
-			<UButton size="xs" variant="outline" @click="refetchCurrent">
+			<UButton size="xs" variant="outline" @click="refetch">
 				Refresh
 			</UButton>
 		</div>

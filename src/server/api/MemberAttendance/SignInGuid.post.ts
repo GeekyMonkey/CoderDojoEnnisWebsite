@@ -1,4 +1,4 @@
-import { defineEventHandler, readBody } from "#imports";
+import { defineEventHandler, readBody } from "h3";
 import { AttendanceService } from "#server/services/AttendanceService";
 import { MembersData } from "#server/db/MembersData";
 import type { ApiResponse } from "#shared/types/ApiResponse";

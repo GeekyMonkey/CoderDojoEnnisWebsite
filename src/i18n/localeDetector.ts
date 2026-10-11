@@ -1,5 +1,7 @@
+import type { H3Event } from "h3";
+
 // Detect based on query, cookie, header
-export default defineI18nLocaleDetector((event: Event, config: any) => {
+export default defineI18nLocaleDetector((event: H3Event, config: { defaultLocale: string }): string => {
 	// try to get locale from query
 	const query = tryQueryLocale(event, { lang: "" }); // disable locale default value with `lang` option
 	if (query) {

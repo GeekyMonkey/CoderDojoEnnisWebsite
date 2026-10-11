@@ -1,5 +1,5 @@
 import { MembersData } from "#server/db/MembersData";
-import { MemberModel } from "#shared/types/models/MemberModel";
+import type { MemberModel } from "#shared/types/models/MemberModel";
 import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<MemberModel[]>;

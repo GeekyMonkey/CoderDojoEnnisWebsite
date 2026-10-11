@@ -69,7 +69,7 @@ export const MembersData = {
 				console.error("Error fetching member by ID:", error);
 				return null;
 			}
-			return memberFromRecords([data])[0];
+			return memberFromRecords([data])[0] ?? null;
 		} catch (error) {
 			throw new Error(`Error fetching member by ID: ${ErrorToString(error)}`);
 		}
@@ -98,7 +98,7 @@ export const MembersData = {
 				console.error("Error fetching member by fingerprint ID:", error);
 				return null;
 			}
-			return memberFromRecords([data])[0];
+			return memberFromRecords([data])[0] ?? null;
 		} catch (error) {
 			throw new Error(
 				`Error fetching member by fingerprint ID: ${ErrorToString(error)}`,
@@ -130,7 +130,7 @@ export const MembersData = {
 				console.error("Error fetching member by NFC tag:", error);
 				return null;
 			}
-			return memberFromRecords([data])[0];
+			return memberFromRecords([data])[0] ?? null;
 		} catch (error) {
 			throw new Error(
 				`Error fetching member by NFC tag: ${ErrorToString(error)}`,

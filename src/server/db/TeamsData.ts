@@ -60,7 +60,7 @@ export const TeamsData = {
 		team: TeamModel,
 	): Promise<TeamModel | null> => {
 		const teams = await TeamsData.SaveTeams(event, [team]);
-		return teams.length > 0 ? teams[0] : null;
+		return teams[0] ?? null;
 	},
 
 	/**

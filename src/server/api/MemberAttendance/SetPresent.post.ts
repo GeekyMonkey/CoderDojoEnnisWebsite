@@ -1,4 +1,4 @@
-import { defineEventHandler, readBody } from "#imports";
+import { defineEventHandler, readBody } from "h3";
 import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import { DateStringSchema } from "#shared/utils/DateHelpers";

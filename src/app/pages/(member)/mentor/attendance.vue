@@ -311,8 +311,8 @@
 				const belt = beltInfoForMember(member.id);
 				return {
 					memberId: member.id,
-					name: fullNamesByMemberId.value[member.id],
-					team: teamNamesByMemberId.value[member.id],
+					name: fullNamesByMemberId.value[member.id] ?? "",
+					team: teamNamesByMemberId.value[member.id] ?? null,
 					beltColor: belt.color,
 					beltSortOrder: belt.sortOrder,
 					present: selectedPresentSet.value.has(member.id),
@@ -330,8 +330,8 @@
 			.map((member) => {
 				return {
 					memberId: member.id,
-					name: fullNamesByMemberId.value[member.id],
-					team: teamNamesByMemberId.value[member.id],
+					name: fullNamesByMemberId.value[member.id] ?? "",
+					team: teamNamesByMemberId.value[member.id] ?? null,
 					beltColor: "",
 					beltSortOrder: 0,
 					present: selectedPresentSet.value.has(member.id),
@@ -1015,8 +1015,8 @@
 									:model-value="row.original.present"
 									:disabled="!!isSavingByMemberId[row.original.memberId]"
 									@update:model-value="
-										(value: boolean) =>
-											setMemberPresent(row.original.memberId, value)
+										(value: boolean | 'indeterminate') =>
+											setMemberPresent(row.original.memberId, value === true)
 									"
 								/>
 							</div>
@@ -1080,8 +1080,8 @@
 									:model-value="row.original.present"
 									:disabled="!!isSavingByMemberId[row.original.memberId]"
 									@update:model-value="
-										(value: boolean) =>
-											setMemberPresent(row.original.memberId, value)
+										(value: boolean | 'indeterminate') =>
+											setMemberPresent(row.original.memberId, value === true)
 									"
 								/>
 							</div>

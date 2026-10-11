@@ -1,5 +1,5 @@
 import type { Session } from "@supabase/supabase-js";
-import { defineEventHandler, readBody } from "#imports";
+import { defineEventHandler, readBody } from "h3";
 import { AuthService, AuthServiceError } from "#server/services/AuthService";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import type { MemberModel } from "#shared/types/models/MemberModel";

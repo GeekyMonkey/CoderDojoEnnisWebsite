@@ -366,7 +366,7 @@ export const MemberAttendancesData = {
 				console.error("Error creating member attendance:", error);
 				return null;
 			}
-			return memberAttendanceFromRecords(data as any)[0];
+			return memberAttendanceFromRecords(data as any)[0] ?? null;
 		} catch (error) {
 			console.error(
 				`Error creating member attendance: ${ErrorToString(error)}`,

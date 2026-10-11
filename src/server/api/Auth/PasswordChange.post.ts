@@ -1,10 +1,10 @@
-import { defineEventHandler, readBody } from "#imports";
+import { defineEventHandler, readBody } from "h3";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import { AuthService, AuthServiceError } from "#server/services/AuthService";
 import type { MemberModel } from "#shared/types/models/MemberModel";
 import { MembersData } from "#server/db/MembersData";
 import {
-	PasswordChangeRequest,
+	type PasswordChangeRequest,
 	passwordChangeRequestSchema,
 } from "#shared/validation/AuthSchemas";
 

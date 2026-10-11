@@ -196,7 +196,7 @@
 			return "";
 		}
 		const count: number = signInResponse.value.memberSessionCount;
-		return t("signIn.sessionCount", count, { count });
+		return t("signIn.sessionCount", { count }, count);
 	});
 
 	const handleNfcError: NfcErrorCallback = async (error): Promise<void> => {

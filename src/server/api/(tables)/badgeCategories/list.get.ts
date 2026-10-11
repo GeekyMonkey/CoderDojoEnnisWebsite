@@ -1,5 +1,5 @@
 import { BadgeCategoriesData } from "#server/db/BadgeCategoriesData";
-import { BadgeCategoryModel } from "#shared/types/models/BadgeCategoryModel";
+import type { BadgeCategoryModel } from "#shared/types/models/BadgeCategoryModel";
 import { ErrorToString } from "#shared/utils/ErrorHelpers";
 
 type ResponseBody = ApiResponse<BadgeCategoryModel[]>;

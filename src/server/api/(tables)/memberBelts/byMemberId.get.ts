@@ -1,7 +1,7 @@
 import { MemberBeltsData } from "#server/db/MemberBeltsData";
 import type { MemberBeltWithBeltDetailModel } from "#shared/types/models/MemberBeltModel";
 import { ErrorToString } from "#shared/utils/ErrorHelpers";
-import { ApiResponse } from "#shared/types/ApiResponse";
+import type { ApiResponse } from "#shared/types/ApiResponse";
 
 type ResponseBody = ApiResponse<MemberBeltWithBeltDetailModel[]>;
 
