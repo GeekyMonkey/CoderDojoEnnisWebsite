@@ -160,6 +160,7 @@ export default {
 		registeredOnly: "Registered only",
 		remove: "Remove",
 		resetPassword: "Reset password",
+		roles: "Roles",
 		saveError: "Could not save. Reload and check the values.",
 		search: "Search members",
 		sessionsCount: "{count} sessions attended",

@@ -162,6 +162,7 @@ export default {
 		registeredOnly: "Inscrits seulement",
 		remove: "Supprimer",
 		resetPassword: "Réinitialiser le mot de passe",
+		roles: "Rôles",
 		saveError: "Échec de l’enregistrement. Rechargez et vérifiez les valeurs.",
 		search: "Rechercher des membres",
 		sessionsCount: "{count} séances suivies",

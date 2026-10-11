@@ -12,7 +12,7 @@
 	const editing: Ref<boolean> = ref(false);
 
 	const { fields, baseline, dirty, remoteChanged, reset } = useMemberSectionDraft((): MemberModel => props.member, accountSnapshot);
-	const display: ComputedRef<{ key: string; value: string | boolean }[]> = computed((): { key: string; value: string | boolean }[] => Object.entries(accountSnapshot(props.member)).filter(([key]: [string, unknown]): boolean => (!["birthYear", "teamId", "registeredCurrentTerm"].includes(key) || props.member.isNinja) && (key !== "gardaVetted" || props.member.isMentor)).map(([key, value]: [string, unknown]): { key: string; value: string | boolean } => ({ key: key === "teamId" ? "team" : key, value: key === "teamId" ? props.teams.find((team: TeamModel): boolean => team.id === value)?.teamName ?? t("maintenance.noTeam") : typeof value === "boolean" ? value : String(value ?? "—") })));
+	const display: ComputedRef<{ key: string; value: string | boolean }[]> = computed((): { key: string; value: string | boolean }[] => Object.entries(accountSnapshot(props.member)).filter(([key]: [string, unknown]): boolean => (!["isNinja", "isParent", "isMentor"].includes(key)) && (!["birthYear", "teamId", "registeredCurrentTerm"].includes(key) || props.member.isNinja) && (key !== "gardaVetted" || props.member.isMentor)).map(([key, value]: [string, unknown]): { key: string; value: string | boolean } => ({ key: key === "teamId" ? "team" : key, value: key === "teamId" ? props.teams.find((team: TeamModel): boolean => team.id === value)?.teamName ?? t("maintenance.noTeam") : typeof value === "boolean" ? value : String(value ?? "—") })));
 	/** Discard account edits and return to display mode. */
 	function cancel(): void { reset(); editing.value = false;  }
 	/** Save the validated account snapshot without overwriting remote changes. */
@@ -26,6 +26,7 @@
 	<UPageCard :title="t('maintenance.account')">
 		<template v-if="!editing">
 			<dl class="AccountDisplay"><div v-for="item in display" :key="item.key"><dt>{{ t(`maintenance.${item.key}`) }}</dt><dd><UCheckbox v-if="typeof item.value === 'boolean'" :modelValue="item.value" :aria-label="t(`maintenance.${item.key}`)" disabled /><template v-else>{{ item.value }}</template></dd></div></dl>
+			<MemberRoles :modelValue="member" mode="view" />
 			<UButton class="SectionEdit" @click="editing = true">{{ t('profile.edit') }}</UButton>
 		</template>
 		<UForm v-else :state="fields" :schema="accountFieldsSchema" class="AccountForm" @submit="submit">
