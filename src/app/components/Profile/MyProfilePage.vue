@@ -5,7 +5,7 @@
 
 	const { t } = useI18n();
 	const { pageTitle } = useMemberLayoutContext();
-	const { permissions, profile, isPending, isError, isSaving, isChangingPassword, save, changePassword } = useMyProfileStore();
+	const { permissions, profile, isPending, isError, isSaving, isSavingImages, changeImages, isChangingPassword, save, changePassword } = useMyProfileStore();
 	const mode: Ref<ProfileMode> = ref("view");
 </script>
 
@@ -17,6 +17,7 @@
 				<p v-if="isPending">{{ t("profile.loading") }}</p>
 				<UAlert v-else-if="isError" color="error" :title="t('profile.loadError')" />
 				<template v-else-if="profile">
+					<ProfileImages :member="profile" :canEdit="permissions?.editDetails ?? false" :saving="isSavingImages" :changeImages="changeImages" />
 					<slot name="details" :member="profile" :permissions="permissions">
 					<ProfileDetails :member="profile" :mode="mode" :canEdit="permissions?.editDetails ?? false" :saving="isSaving" :save="save" @edit="mode = 'edit'" @cancel="mode = 'view'" @saved="mode = 'view'" />
 					</slot>

@@ -1,0 +1,23 @@
+meta {
+  name: Profile Image Upload
+  type: http
+}
+post {
+  url: {{Host}}/api/Profile/images
+  body: json
+  auth: none
+}
+headers {
+  Authorization: Bearer {{AccessToken}}
+  Content-Type: application/json
+}
+body:json {
+{
+  "action": "upload",
+  "slot": "photo",
+  "png": "{{processedPngBase64}}"
+}
+}
+docs {
+  Requires a valid session. For upload, processedPngBase64 must contain a square PNG no larger than 800 pixels per axis. Use avatar as slot to edit the avatar.
+}
