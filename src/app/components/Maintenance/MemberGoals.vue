@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { ref, type Ref } from "vue";
 	import { goalFieldsSchema, goalSnapshot, type GoalFields, type GuardedUpdate } from "#shared/types/MemberMaintenance";
@@ -7,17 +8,17 @@
 	const props = defineProps<{ member: MemberModel; saving: boolean; save: (body: GuardedUpdate<GoalFields>) => Promise<MemberModel> }>();
 	const KEYS: (keyof GoalFields)[] = ["goalShortTerm", "goalLongTerm"];
 	const { t } = useI18n();
+	const { publish } = useActionNotifications();
 	const editing: Ref<boolean> = ref(false);
-	const error: Ref<string | null> = ref(null);
+
 	const { fields, baseline, dirty, remoteChanged, reset } = useMemberSectionDraft((): MemberModel => props.member, goalSnapshot);
 	/** Discard unsaved goals and return to display mode. */
-	function cancel(): void { reset(); editing.value = false; error.value = null; }
+	function cancel(): void { reset(); editing.value = false;  }
 	/** Save validated goals through the caller's store action. */
 	async function submit(): Promise<void> {
 		if (props.saving || remoteChanged.value) return;
-		error.value = null;
-		try { await props.save({ fields: goalFieldsSchema.parse(fields), expected: baseline.value }); cancel(); }
-		catch (failure: unknown) { error.value = requestFailureMessage(failure) ?? t("maintenance.saveError"); }
+		try { await props.save({ fields: goalFieldsSchema.parse(fields), expected: baseline.value }); cancel(); publish({ name: "maintenance.membergoals.success", severity: "success", message: t("actionNotifications.saved") }); }
+		catch (failure: unknown) { publish({ name: "maintenance.membergoals.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
 </script>
 <template>
@@ -25,7 +26,7 @@
 		<template v-if="!editing"><dl class="Goals"><div v-for="key in KEYS" :key="key"><dt>{{ t(`maintenance.${key}`) }}</dt><dd>{{ member[key] || '—' }}</dd></div></dl><UButton class="SectionEdit" @click="editing = true">{{ t('profile.edit') }}</UButton></template>
 		<UForm v-else :schema="goalFieldsSchema" :state="fields" class="Goals" @submit="submit">
 			<UFormField v-for="key in KEYS" :key="key" :name="key" :label="t(`maintenance.${key}`)"><UTextarea :modelValue="fields[key] ?? ''" :disabled="saving" class="GoalInput" @update:modelValue="(value: string): void => { fields[key] = value; }" /></UFormField>
-			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" /><UAlert v-if="error" color="error" :title="error" />
+			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<div class="GoalActions"><UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t('profile.save') }}</UButton><UButton variant="outline" :disabled="saving" @click="cancel">{{ t('profile.cancel') }}</UButton></div>
 		</UForm>
 	</UPageCard>

@@ -5,6 +5,11 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	actionNotifications: {
+		created: "Created.",
+		deleted: "Deleted.",
+		saved: "Saved.",
+	},
 	achievementReviews: {
 		applied: "Applied",
 		approve: "Approve",

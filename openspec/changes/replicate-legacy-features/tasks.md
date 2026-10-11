@@ -28,6 +28,9 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] Review feature 5 team management before progressing to feature 6.
 - [x] Review feature 6 achievement definitions before progressing to feature 7.
 
+## Completed-screen discrepancy follow-up
+- [ ] Resolve the 33 documented discrepancies in [discrepancies.md](discrepancies.md), preserving the later batch references and obtaining a review-policy decisions for D24 and D29.
+
 ## Other migration stories
 - [ ] Public/upcoming sessions and session joining.
 - [ ] Coder profile, goals, badge/belt viewing and applications, personal attendance.

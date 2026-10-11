@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { nextTick } from "vue";
 	import type { FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
@@ -11,6 +12,7 @@
 	});
 
 	const { t } = useI18n();
+	const { publish } = useActionNotifications();
 	const log = useLogger("mentor/SignIn");
 	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } =
 		useMemberAttendanceStore();
@@ -201,7 +203,7 @@
 
 	const handleNfcError: NfcErrorCallback = async (error): Promise<void> => {
 		log.error("NFC Error", { error });
-		alert("NFC Error: " + error);
+		publish({ name: "attendance.nfc.error", severity: "error", message: t("signIn.nfcErrorFallback") });
 	};
 
 	const handleNfcMessage: NfcMessageCallback = async ({

@@ -6,6 +6,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Створено.",
+		deleted: "Видалено.",
+		saved: "Збережено.",
+	},
 	achievementReviews: {
 		applied: "Подано",
 		approve: "Схвалити",

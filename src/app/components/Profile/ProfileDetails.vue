@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
-	import { computed, ref, type ComputedRef, type Ref } from "vue";
+	import { useActionNotifications } from "~/composables/useActionNotifications";
+	import { computed, type ComputedRef } from "vue";
 	import { profileEditableFieldsSchema, profileModeSchema, type MemberProfileFields, type MemberProfileUpdate, type ProfileMode } from "#shared/types/MemberProfile";
 	import type { ProfileImageAction } from "#shared/types/ProfileImages";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
@@ -21,32 +22,28 @@
 	type DisplayField = ProfileField & { value: string };
 
 	const { t } = useI18n();
+	const { publish } = useActionNotifications();
 	const { fields, baseline, dirty, remoteChanged, reset } = useProfileDraft((): MemberModel => props.member);
-	const notice: Ref<string | null> = ref(null);
-	const error: Ref<string | null> = ref(null);
+
 	const editing: ComputedRef<boolean> = computed((): boolean => profileModeSchema.parse(props.mode) === "edit" && props.canEdit && Boolean(props.save));
 	const displayFields: ComputedRef<DisplayField[]> = computed((): DisplayField[] => PROFILE_FIELDS.map((field: ProfileField): DisplayField => ({ ...field, value: props.member[field.key] ?? "—" })));
 
 	/** Validate and submit only editable fields through the supplied store action. */
 	async function submit(): Promise<void> {
 		if (!editing.value || !baseline.value || !props.save || props.saving || remoteChanged.value) return;
-		error.value = null;
-		notice.value = null;
 		try {
 			const member: MemberModel = await props.save({ fields: profileEditableFieldsSchema.parse(fields), expected: baseline.value });
 			reset(member);
-			notice.value = t("profile.saved");
+			publish({ name: "profile.profiledetails.success", severity: "success", message: t("profile.saved") });
 			emit("saved");
 		} catch (failure: unknown) {
-			error.value = requestFailureMessage(failure) ?? t("profile.saveError");
+			publish({ name: "profile.profiledetails.error", severity: "error", message: requestFailureMessage(failure) ?? t("profile.saveError") });
 		}
 	}
 
 	/** Discard local edits and return to display mode. */
 	function cancel(): void {
 		reset(props.member);
-		error.value = null;
-		notice.value = null;
 		emit("cancel");
 	}
 </script>
@@ -56,7 +53,6 @@
 		<ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
 		<p v-if="!editing">{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
-		<UAlert v-if="notice" color="success" :title="notice" />
 		<template v-if="!editing">
 			<dl class="ProfileFields">
 				<div v-for="field in displayFields" :key="field.key">
@@ -69,7 +65,6 @@
 		<UForm v-else :schema="profileEditableFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<ProfileFieldInputs :includeLogin="true" :fields="fields" :disabled="saving" />
-			<UAlert v-if="error" color="error" :title="error" />
 			<div class="ProfileActions">
 				<UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t("profile.save") }}</UButton>
 				<UButton variant="outline" :disabled="saving" @click="cancel">{{ t("profile.cancel") }}</UButton>
