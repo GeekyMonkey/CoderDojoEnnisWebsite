@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { h, resolveComponent, type Component } from "vue";
 	import type { ColumnDef } from "@tanstack/vue-table";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
@@ -25,6 +26,7 @@
 
 	const { pageTitle } = useMemberLayoutContext();
 	const { t } = useI18n();
+	const { publish } = useActionNotifications();
 	const route = useRoute();
 	const router = useRouter();
 	const { width: windowWidth } = useWindowSize();
@@ -438,8 +440,10 @@
 				await applySignInSuccess(result.data.memberDetails);
 				return;
 			}
+			publish({ name: "attendance.nfc.error", severity: "error", message: result.error || t("signIn.nfcErrorFallback") });
 		} catch (err) {
 			log.error("[SignIn][NFC] POST error", { error: ErrorToString(err) }, err);
+			publish({ name: "attendance.nfc.error", severity: "error", message: t("signIn.nfcErrorFallback") });
 		} finally {
 			isSubmitting.value = false;
 		}
@@ -477,6 +481,8 @@
 		};
 		try {
 			await setMemberPresentStore(memberId, sessionDate, present);
+		} catch {
+			publish({ name: "attendance.presence.error", severity: "error", message: t("maintenance.saveError") });
 		} finally {
 			const { [memberId]: _ignored, ...rest } = isSavingByMemberId.value;
 			isSavingByMemberId.value = rest;
@@ -701,11 +707,11 @@
 				await applySignInSuccess(result.data.memberDetails);
 				return;
 			}
-			// 	errorMessage.value = result.error || t("signIn.qrErrorFallback");
+			publish({ name: "attendance.qr.error", severity: "error", message: result.error || t("signIn.qrErrorFallback") });
 		} catch (err) {
 			const message: string = ErrorToString(err);
 			log.error("[SignIn][QR] POST error", undefined, err);
-			// 	errorMessage.value = message;
+			publish({ name: "attendance.qr.error", severity: "error", message });
 		} finally {
 			isSubmitting.value = false;
 		}

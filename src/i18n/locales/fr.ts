@@ -7,6 +7,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Créé.",
+		deleted: "Supprimé.",
+		saved: "Enregistré.",
+	},
 	achievementReviews: {
 		applied: "Demande",
 		approve: "Approuver",
@@ -158,6 +163,7 @@ export default {
 		registeredOnly: "Inscrits seulement",
 		remove: "Supprimer",
 		resetPassword: "Réinitialiser le mot de passe",
+		roles: "Rôles",
 		saveError: "Échec de l’enregistrement. Rechargez et vérifiez les valeurs.",
 		search: "Rechercher des membres",
 		sessionsCount: "{count} séances suivies",

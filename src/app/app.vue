@@ -1,4 +1,5 @@
 <script setup lang="ts">
+ import { ACTION_TOASTER } from "~/utils/actionNotificationPolicy";
 	const log = useLogger("App.vue");
 	log.info("App.vue initialized");
 
@@ -19,7 +20,8 @@
 </script>
 
 <template>
-	<UApp>
+	<UApp :toaster="ACTION_TOASTER">
+  <ActionNotificationPresenter />
 		<NuxtLoadingIndicator />
 
 		<NuxtLayout>

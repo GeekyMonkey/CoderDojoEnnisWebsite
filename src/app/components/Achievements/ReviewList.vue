@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import type { ColumnDef, Row } from "@tanstack/vue-table";
 	import type { ComputedRef, Ref } from "vue";
 	import type { AchievementDecision, AchievementKind, AchievementReview } from "#shared/types/AchievementReview";
@@ -13,6 +14,7 @@
 	const props = defineProps<{ kind: AchievementKind; memberId?: string }>();
 	type Action = AchievementDecision["action"];
 	const { t } = useI18n();
+	const { publish } = useActionNotifications();
 	const reviews: ReturnType<typeof useMemberBadgesStore> = props.kind === "badge"
 		? useMemberBadgesStore(props.memberId === undefined ? undefined : (): string => props.memberId ?? "")
 		: useBeltReviewsStore(props.memberId === undefined ? undefined : (): string => props.memberId ?? "");
@@ -22,8 +24,7 @@
 	const expanded: Ref<Record<string, boolean>> = ref({});
 	const notes: Ref<Record<string, string>> = ref({});
 	const busy: Ref<string | null> = ref(null);
-	const errorMessage: Ref<string> = ref("");
-	const successMessage: Ref<string> = ref("");
+
 	const confirmation: Ref<{ review: AchievementReview; action: Action } | null> = ref(null);
 	const confirmationOpen: Ref<boolean> = ref(false);
 	const rows: ComputedRef<AchievementReview[]> = computed((): AchievementReview[] => [...(data.value ?? [])].sort((a: AchievementReview, b: AchievementReview): number => (a.categoryName ?? "").localeCompare(b.categoryName ?? "") || a.sortOrder - b.sortOrder || a.label.localeCompare(b.label) || a.memberName.localeCompare(b.memberName)));
@@ -51,15 +52,13 @@
 	async function submit(review: AchievementReview, action: Action): Promise<void> {
 		if (busy.value) return;
 		busy.value = review.id;
-		errorMessage.value = "";
-		successMessage.value = "";
 		try {
 			await reviews.decide(review, action, notes.value[review.id]?.trim() ?? "");
 			notes.value[review.id] = "";
-			successMessage.value = t("achievementReviews.saved");
+			publish({ name: "achievement.review.success", severity: "success", message: t("achievementReviews.saved") });
 			expanded.value = {};
 		} catch {
-			errorMessage.value = t("achievementReviews.saveError");
+			publish({ name: "achievement.review.error", severity: "error", message: t("achievementReviews.saveError") });
 		} finally { busy.value = null; }
 	}
 
@@ -81,8 +80,7 @@
 <template>
 	<section class="ReviewList">
 		<h2>{{ heading }}</h2>
-		<UAlert v-if="errorMessage" color="error" :title="errorMessage" />
-		<UAlert v-if="successMessage" color="success" :title="successMessage" />
+
 		<div v-if="isError" role="alert">
 			<p>{{ t("achievementReviews.loadError") }}</p>
 			<UButton @click="reviews.refetch()">{{ t("achievementReviews.retry") }}</UButton>

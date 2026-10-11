@@ -6,6 +6,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Створено.",
+		deleted: "Видалено.",
+		saved: "Збережено.",
+	},
 	achievementReviews: {
 		applied: "Подано",
 		approve: "Схвалити",
@@ -157,6 +162,7 @@ export default {
 		registeredOnly: "Лише зареєстровані",
 		remove: "Видалити",
 		resetPassword: "Скинути пароль",
+		roles: "Ролі",
 		saveError: "Не вдалося зберегти. Оновіть та перевірте значення.",
 		search: "Пошук учасників",
 		sessionsCount: "Відвідано занять: {count}",

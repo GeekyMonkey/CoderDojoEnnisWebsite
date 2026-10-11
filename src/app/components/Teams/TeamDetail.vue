@@ -1,4 +1,5 @@
 <script setup lang="ts">
+ import { useActionNotifications } from "~/composables/useActionNotifications";
  import { computed, ref, type Ref, type ComputedRef } from "vue";
  import { teamIdSchema, teamSnapshot, type TeamFields } from "#shared/types/TeamMaintenance";
  import type { TeamModel } from "#shared/types/models/TeamModel";
@@ -8,12 +9,13 @@
  import { requestFailureMessage } from "#shared/utils/RequestFailure";
  const props = defineProps<{ teamId: string }>();
  const { t } = useI18n();
+ const { publish } = useActionNotifications();
  const store: ReturnType<typeof useTeamMaintenanceStore> = useTeamMaintenanceStore();
  const members: ReturnType<typeof useMemberMaintenanceStore> = useMemberMaintenanceStore();
  const { teams, isPending, isError, isSaving } = store;
  const editing: Ref<boolean> = ref(false);
  const deleteSnapshot: Ref<TeamFields | null> = ref(null);
- const error: Ref<string | null> = ref(null);
+
  const valid: ComputedRef<boolean> = computed((): boolean => teamIdSchema.safeParse(props.teamId).success);
  const team: ComputedRef<TeamModel | null> = computed((): TeamModel | null => teams.value.find((item: TeamModel): boolean => item.id === props.teamId) ?? null);
  const assigned: ComputedRef<MemberModel[]> = computed((): MemberModel[] => (members.data.value?.members ?? []).filter((member: MemberModel): boolean => member.teamId === props.teamId));
@@ -22,13 +24,12 @@
  /** Save the selected team's protected snapshot through its store. */
  async function save(fields: TeamFields, expected: TeamFields | null): Promise<TeamModel> { if (!expected) throw new Error(t("teams.notFound")); return store.save(props.teamId, { fields, expected }); }
  /** Capture the exact team being confirmed for deletion. */
- function confirmDelete(): void { if (team.value) { error.value = null; deleteSnapshot.value = teamSnapshot(team.value); } }
+ function confirmDelete(): void { if (team.value) {  deleteSnapshot.value = teamSnapshot(team.value); } }
  /** Soft-delete the confirmed unassigned team, then return to its directory. */
  async function remove(): Promise<void> {
   if (!deleteSnapshot.value || isSaving.value || staleDelete.value) return;
-  error.value = null;
-  try { await store.remove(props.teamId, { expected: deleteSnapshot.value }); await navigateTo("/mentor/maintenance/teams"); }
-  catch (failure: unknown) { error.value = requestFailureMessage(failure) ?? t("teams.saveError"); }
+  try { await store.remove(props.teamId, { expected: deleteSnapshot.value }); publish({ name: "teams.teamdetail.success", severity: "success", message: t("actionNotifications.deleted") }); await navigateTo("/mentor/maintenance/teams"); }
+  catch (failure: unknown) { publish({ name: "teams.teamdetail.error", severity: "error", message: requestFailureMessage(failure) ?? t("teams.saveError") }); }
  }
 </script>
 <template>
@@ -42,7 +43,7 @@
      <template v-else><div class="TeamHeading"><ColourSwatch :hexCode="team.hexcode" /><span>{{ team.teamName }}</span></div><dl class="TeamDisplay"><div v-for="item in details" :key="item.key"><dt>{{ t(`teams.${item.key}`) }}</dt><dd>{{ item.value }}</dd></div></dl><UButton class="TeamEdit" @click="editing = true">{{ t('teams.edit') }}</UButton></template>
     </UPageCard>
     <UPageCard :title="t('nav.Members')"><p v-if="members.isPending.value">{{ t('profile.loading') }}</p><UAlert v-else-if="members.isError.value" color="error" :title="t('profile.loadError')" /><template v-else><ul v-if="assigned.length"><li v-for="member in assigned" :key="member.id"><NuxtLink :to="`/mentor/member/${member.id}`">{{ member.nameFirst }} {{ member.nameLast }}</NuxtLink></li></ul><p v-else>{{ t('teams.noMembers') }}</p></template></UPageCard>
-    <UPageCard v-if="deleteSnapshot" :title="t('teams.deleteConfirm')"><p>{{ t('teams.deleteDescription') }}</p><UAlert v-if="staleDelete" color="warning" :title="t('teams.remoteChanged')" /><UAlert v-if="error" color="error" :title="error" /><div class="TeamActions"><UButton color="error" :loading="isSaving" :disabled="staleDelete || assigned.length > 0 || members.isPending.value || members.isError.value" @click="remove">{{ t('teams.delete') }}</UButton><UButton variant="outline" :disabled="isSaving" @click="deleteSnapshot = null">{{ t('profile.cancel') }}</UButton></div></UPageCard>
+    <UPageCard v-if="deleteSnapshot" :title="t('teams.deleteConfirm')"><p>{{ t('teams.deleteDescription') }}</p><UAlert v-if="staleDelete" color="warning" :title="t('teams.remoteChanged')" /><div class="TeamActions"><UButton color="error" :loading="isSaving" :disabled="staleDelete || assigned.length > 0 || members.isPending.value || members.isError.value" @click="remove">{{ t('teams.delete') }}</UButton><UButton variant="outline" :disabled="isSaving" @click="deleteSnapshot = null">{{ t('profile.cancel') }}</UButton></div></UPageCard>
     <UButton v-else class="TeamEdit" color="error" variant="outline" :disabled="editing || isSaving" @click="confirmDelete">{{ t('teams.delete') }}</UButton>
    </template>
   </div></template>

@@ -5,6 +5,11 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	actionNotifications: {
+		created: "Created.",
+		deleted: "Deleted.",
+		saved: "Saved.",
+	},
 	achievementReviews: {
 		applied: "Applied",
 		approve: "Approve",
@@ -156,6 +161,7 @@ export default {
 		registeredOnly: "Registered only",
 		remove: "Remove",
 		resetPassword: "Reset password",
+		roles: "Roles",
 		saveError: "Could not save. Reload and check the values.",
 		search: "Search members",
 		sessionsCount: "{count} sessions attended",

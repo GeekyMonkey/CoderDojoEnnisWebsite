@@ -6,6 +6,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Cruthaithe.",
+		deleted: "Scriosta.",
+		saved: "Sábháilte.",
+	},
 	achievementReviews: {
 		applied: "Iarrtha",
 		approve: "Ceadaigh",
@@ -157,6 +162,7 @@ export default {
 		registeredOnly: "Cláraithe amháin",
 		remove: "Bain",
 		resetPassword: "Athshocraigh pasfhocal",
+		roles: "Róil",
 		saveError: "Níor sábháladh. Athlódáil agus seiceáil na luachanna.",
 		search: "Cuardaigh baill",
 		sessionsCount: "{count} seisiún freastailte",

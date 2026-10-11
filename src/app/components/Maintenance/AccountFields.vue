@@ -5,7 +5,7 @@
 	const props = withDefaults(defineProps<{ fields: AccountFields; teams: TeamModel[]; disabled?: boolean; pathPrefix?: string }>(), { disabled: false, pathPrefix: "" });
 	type AccountInput = { key: "birthYear" | "fingerprintId" | "login" | "nfcTag"; type: "number" | "text" };
 	const INPUTS: AccountInput[] = [{ key: "login", type: "text" }, { key: "fingerprintId", type: "number" }, { key: "nfcTag", type: "text" }, { key: "birthYear", type: "number" }];
-	const CHECKS: ("isNinja" | "isParent" | "isMentor" | "registeredCurrentTerm" | "gardaVetted")[] = ["isNinja", "isParent", "isMentor", "registeredCurrentTerm", "gardaVetted"];
+	const CHECKS: ("registeredCurrentTerm" | "gardaVetted")[] = ["registeredCurrentTerm", "gardaVetted"];
 	const { t } = useI18n();
 	const teamItems: ComputedRef<{ label: string; value: string }[]> = computed((): { label: string; value: string }[] => [{ label: t("maintenance.noTeam"), value: "NONE" }, ...props.teams.map((team: TeamModel): { label: string; value: string } => ({ label: team.teamName, value: team.id }))]);
 	const visibleInputs: ComputedRef<AccountInput[]> = computed((): AccountInput[] => INPUTS.filter((field: AccountInput): boolean => field.key !== "birthYear" || props.fields.isNinja));
@@ -24,6 +24,7 @@
 		<UFormField v-if="fields.isNinja" :name="`${pathPrefix}teamId`" :label="t('maintenance.team')">
 			<USelect :modelValue="fields.teamId ?? 'NONE'" :items="teamItems" :disabled="disabled" class="AccountInput" @update:modelValue="(value: string): void => { fields.teamId = value === 'NONE' ? null : value; }" />
 		</UFormField>
+		<MemberRoles :modelValue="fields" mode="edit" :disabled="disabled" :pathPrefix="pathPrefix" @update:modelValue="(value: Pick<AccountFields, 'isNinja' | 'isParent' | 'isMentor'>): void => { Object.assign(fields, value); }" />
 		<UFormField v-for="key in visibleChecks" :key="key" :name="`${pathPrefix}${key}`"><UCheckbox v-model="fields[key]" :disabled="disabled" :label="t(`maintenance.${key}`)" /></UFormField>
 	</div>
 </template>

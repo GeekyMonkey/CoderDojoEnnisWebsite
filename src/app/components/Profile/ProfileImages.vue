@@ -1,10 +1,12 @@
 <script setup lang="ts">
+	import { useActionNotifications } from "~/composables/useActionNotifications";
     import { computed, onBeforeUnmount, ref, watch, type ComputedRef, type Ref } from "vue";
     import { MAX_SOURCE_BYTES, type ProfileImageAction, type ProfileImageSlot } from "#shared/types/ProfileImages";
     import type { MemberModel } from "#shared/types/models/MemberModel";
     const props = defineProps<{ member: MemberModel; canEdit: boolean; saving: boolean; changeImages: (action: ProfileImageAction) => Promise<MemberModel> }>();
     type Slot = { key: ProfileImageSlot; populated: boolean };
     const { t } = useI18n();
+	const { publish } = useActionNotifications();
     const cropper: Ref<{ getPng: () => string } | null> = ref(null);
     const selected: Ref<ProfileImageSlot | null> = ref(null);
     const image: Ref<HTMLImageElement | null> = ref(null);
@@ -56,9 +58,10 @@
         error.value = null;
         try {
             await props.changeImages(action);
+            publish({ name: "profile.images.success", severity: "success", message: t("profileImages.saved") });
             refreshImages();
             close();
-        } catch { error.value = t("profileImages.saveError"); }
+        } catch { publish({ name: "profile.images.error", severity: "error", message: t("profileImages.saveError") }); }
     }
 
     /** Encode the processed square as PNG so padding remains transparent. */
