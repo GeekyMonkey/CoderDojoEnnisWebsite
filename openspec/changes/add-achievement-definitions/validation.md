@@ -1,10 +1,10 @@
 # Validation
 
 ## Worktree
-- Branch: codex/achievement-definitions, based on develop commit a6f39c8.
+- Branch: codex/achievement-definitions, integrated with develop commit 50a6b6d before committing.
 - Workspace: /home/russp/.codex/worktrees/achievement-definitions/CoderDojoEnnisWebsite.
 - Local dev server: http://localhost:3002. Main checkout changes were left untouched.
-- This batch remains uncommitted for user review before feature 7.
+- This batch was reviewed and committed as 3648997, then merged and pushed to develop. Feature 7 has not started.
 
 ## Checks
 - Production build passed; local startup and all three directories/detail routes verified in the integrated browser.

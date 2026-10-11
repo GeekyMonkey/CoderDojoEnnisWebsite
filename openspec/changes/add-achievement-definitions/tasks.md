@@ -7,4 +7,4 @@
 - [x] Build, type checks and startup.
 - [x] Disposable-data API and browser checks, including concurrent writes and realtime drafts.
 - [x] Update master checklist and provide full diff.
-- [ ] User review before feature 7.
+- [x] User review before feature 7.

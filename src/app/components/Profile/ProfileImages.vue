@@ -9,7 +9,6 @@
     const selected: Ref<ProfileImageSlot | null> = ref(null);
     const image: Ref<HTMLImageElement | null> = ref(null);
     const error: Ref<string | null> = ref(null);
-    const notice: Ref<string | null> = ref(null);
     const { revision, refresh: refreshImages } = useProfileImageRevision((): string => props.member.id);
     const loading: Ref<boolean> = ref(false);
     let sourceUrl: string | null = null;
@@ -32,9 +31,8 @@
         const input: HTMLInputElement = event.target as HTMLInputElement;
         const file: File | undefined = input.files?.[0];
         input.value = "";
-        if (!file || props.saving || !props.canEdit) return;
+        if (!file || props.saving || loading.value || !props.canEdit) return;
         error.value = null;
-        notice.value = null;
         if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > MAX_SOURCE_BYTES) { error.value = t("profileImages.invalidFile"); return; }
         close();
         const sequence: number = ++loadSequence;
@@ -54,12 +52,11 @@
 
     /** Persist an image action through the supplied profile store. */
     async function change(action: ProfileImageAction): Promise<void> {
-        if (props.saving || !props.canEdit) return;
-        error.value = null; notice.value = null;
+        if (props.saving || loading.value || !props.canEdit) return;
+        error.value = null;
         try {
             await props.changeImages(action);
             refreshImages();
-            notice.value = t("profileImages.saved");
             close();
         } catch { error.value = t("profileImages.saveError"); }
     }
@@ -71,29 +68,27 @@
     }
     watch((): MemberModel => props.member, (): void => { refreshImages(); });
     watch((): string => props.member.id, close);
+    watch((): boolean => props.canEdit, (canEdit: boolean): void => { if (!canEdit) { close(); error.value = null; } });
     onBeforeUnmount(close);
 </script>
 
 <template>
-    <UPageCard :title="t('profileImages.title')">
+    <section class="ProfileImages" :aria-label="t('profileImages.title')">
         <div class="ImageSlots">
             <div v-for="slot in slots" :key="slot.key" class="ImageSlot">
                 <h3>{{ t(`profileImages.${slot.key}`) }}</h3>
-                <div :class="['ImageFrame', { Photo: slot.key === 'photo' }]">
+                <component :is="canEdit ? 'button' : 'div'" :type="canEdit ? 'button' : undefined" :class="['ImageFrame', { Photo: slot.key === 'photo', Editable: canEdit }]" :disabled="canEdit ? saving || loading : undefined" :aria-label="canEdit ? `${t('profileImages.upload')} ${t(`profileImages.${slot.key}`)}` : t(`profileImages.${slot.key}`)" @click="canEdit && ($refs[slot.key + 'Input'] as HTMLInputElement[])?.[0]?.click()">
                     <ProfileImage v-if="slot.populated" :memberId="member.id" :slot="slot.key" :revision="revision" />
-                    <span v-else>{{ t('profileImages.empty') }}</span>
+                    <UIcon v-else :name="canEdit ? 'i-lucide-image-plus' : 'i-lucide-image'" class="EmptyImageIcon" />
+                </component>
+                <input v-if="canEdit" :ref="slot.key + 'Input'" class="ImageFileInput" type="file" accept="image/jpeg,image/png,image/webp" tabindex="-1" :disabled="saving || loading" :aria-label="`${t('profileImages.upload')} ${t(`profileImages.${slot.key}`)}`" @change="choose($event, slot.key)" />
+                <div v-if="canEdit" class="SlotActions">
+                    <UButton v-if="canEdit && slot.populated" icon="i-lucide-trash-2" color="error" variant="ghost" :aria-label="`${t('profileImages.delete')} ${t(`profileImages.${slot.key}`)}`" :title="t('profileImages.delete')" :disabled="saving || loading" @click="change({ action: 'delete', slot: slot.key })" />
                 </div>
-                <template v-if="canEdit">
-                    <label class="UploadLabel">{{ t('profileImages.upload') }}
-                        <input type="file" accept="image/jpeg,image/png,image/webp" :disabled="saving || loading" :aria-label="`${t('profileImages.upload')} ${t(`profileImages.${slot.key}`)}`" @change="choose($event, slot.key)" />
-                    </label>
-                    <UButton v-if="slot.populated" color="error" variant="outline" :disabled="saving || loading" @click="change({ action: 'delete', slot: slot.key })">{{ t('profileImages.delete') }}</UButton>
-                </template>
             </div>
         </div>
-        <UButton v-if="canEdit" variant="outline" :loading="saving" :disabled="loading || (!member.hasPhoto && !member.hasAvatar)" @click="change({ action: 'swap' })">{{ t('profileImages.swap') }}</UButton>
+        <div v-if="canEdit" class="SwapAction"><UButton icon="i-lucide-arrow-left-right" :aria-label="t('profileImages.swap')" :title="t('profileImages.swap')" variant="outline" :loading="saving" :disabled="loading || (!member.hasPhoto && !member.hasAvatar)" @click="change({ action: 'swap' })" /></div>
         <UAlert v-if="error" color="error" :title="error" />
-        <UAlert v-if="notice" color="success" :title="notice" />
         <UModal :open="open" :dismissible="!saving" :title="t('profileImages.edit')" @update:open="(value: boolean): void => { if (!value && !saving) close(); }">
             <template #body>
                 <div class="CropEditor">
@@ -104,16 +99,23 @@
                 </div>
             </template>
         </UModal>
-    </UPageCard>
+    </section>
 </template>
 
 <style scoped lang="scss">
+    .ProfileImages { display: grid; gap: calc(var(--spacing) * 2); width: min(100%, 26rem); }
+    .ImageFrame.Editable { cursor: pointer; }
+    .SlotActions { height: 2.75rem; }
     .ImageSlots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--spacing) * 4); }
-    .ImageSlot, .CropEditor { display: grid; gap: calc(var(--spacing) * 3); }
-    .ImageFrame { width: min(100%, 12rem); aspect-ratio: 1; border: 1px solid var(--ui-border); display: grid; place-items: center; overflow: hidden; }
+    .ImageSlot { display: grid; align-content: start; justify-items: center; gap: calc(var(--spacing) * 3); min-width: 0; }
+    .CropEditor { display: grid; gap: calc(var(--spacing) * 3); }
+    .ImageFrame { width: 100%; padding: 0; aspect-ratio: 1; border: 1px solid var(--ui-border); display: grid; place-items: center; overflow: hidden; }
     .ImageFrame { background-color: var(--ui-bg); background-image: conic-gradient(var(--ui-bg-accented) 25%, transparent 0 50%, var(--ui-bg-accented) 0 75%, transparent 0); background-size: 1rem 1rem; }
     .Photo { border-radius: 50%; overflow: hidden; }
-    .UploadLabel { display: grid; gap: var(--spacing); }
-    input { max-width: 100%; }
+    .ImageFileInput { display: none; }
+    .ImageFrame:focus-visible { outline: 2px solid var(--ui-primary); outline-offset: 4px; }
+    .ImageFrame:disabled { cursor: default; }
+    .EmptyImageIcon { width: 2rem; height: 2rem; color: var(--ui-text-muted); }
+    .SlotActions, .SwapAction { display: flex; justify-content: center; align-items: center; }
     .ImageActions { display: flex; gap: calc(var(--spacing) * 3); }
 </style>

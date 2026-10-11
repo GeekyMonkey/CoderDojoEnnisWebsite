@@ -17,9 +17,8 @@
 				<p v-if="isPending">{{ t("profile.loading") }}</p>
 				<UAlert v-else-if="isError" color="error" :title="t('profile.loadError')" />
 				<template v-else-if="profile">
-					<ProfileImages :member="profile" :canEdit="permissions?.editDetails ?? false" :saving="isSavingImages" :changeImages="changeImages" />
 					<slot name="details" :member="profile" :permissions="permissions">
-					<ProfileDetails :member="profile" :mode="mode" :canEdit="permissions?.editDetails ?? false" :saving="isSaving" :save="save" @edit="mode = 'edit'" @cancel="mode = 'view'" @saved="mode = 'view'" />
+					<ProfileDetails :member="profile" :mode="mode" :canEdit="permissions?.editDetails ?? false" :saving="isSaving || isSavingImages" :save="save" :savingImages="isSavingImages" :changeImages="changeImages" @edit="mode = 'edit'" @cancel="mode = 'view'" @saved="mode = 'view'" />
 					</slot>
 					<ProfilePasswordForm v-if="mode === 'edit' && permissions?.changePassword" :changePassword="changePassword" :saving="isChangingPassword" />
 					<slot name="roleDetails" :member="profile" :permissions="permissions" />

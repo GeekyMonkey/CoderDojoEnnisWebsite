@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { computed, ref, type ComputedRef, type Ref } from "vue";
 	import { memberProfileFieldsSchema, profileModeSchema, type MemberProfileFields, type MemberProfileUpdate, type ProfileMode } from "#shared/types/MemberProfile";
+	import type { ProfileImageAction } from "#shared/types/ProfileImages";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import { PROFILE_FIELDS, type ProfileField } from "./profileFields";
 	import { useProfileDraft } from "~/composables/useProfileDraft";
@@ -10,6 +11,8 @@
 		mode?: ProfileMode;
 		canEdit?: boolean;
 		saving?: boolean;
+		savingImages?: boolean;
+		changeImages?: (action: ProfileImageAction) => Promise<MemberModel>;
 		save?: (update: MemberProfileUpdate) => Promise<MemberModel>;
 	}>(), { mode: "view", canEdit: false, saving: false });
 	const emit = defineEmits<{ edit: []; cancel: []; saved: [] }>();
@@ -48,8 +51,9 @@
 </script>
 
 <template>
-	<UPageCard :title="t('profile.details')">
-		<MemberAvatar :member="member" size="lg" linkTo="NONE" />
+	<UPageCard>
+		<ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
+		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
 		<p>{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
 		<UAlert v-if="notice" color="success" :title="notice" />
 		<template v-if="!editing">
