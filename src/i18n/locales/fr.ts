@@ -7,6 +7,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Créé.",
+		deleted: "Supprimé.",
+		saved: "Enregistré.",
+	},
 	achievementReviews: {
 		applied: "Demande",
 		approve: "Approuver",

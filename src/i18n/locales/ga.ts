@@ -6,6 +6,11 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	actionNotifications: {
+		created: "Cruthaithe.",
+		deleted: "Scriosta.",
+		saved: "Sábháilte.",
+	},
 	achievementReviews: {
 		applied: "Iarrtha",
 		approve: "Ceadaigh",

@@ -1,15 +1,17 @@
 <script setup lang="ts">
+ import { useActionNotifications } from "~/composables/useActionNotifications";
  import { computed, ref, type ComputedRef, type Ref } from "vue";
  import { definitionIdSchema, definitionSnapshot, DEFINITION_PATHS, type Definition, type DefinitionFields, type DefinitionKind } from "#shared/types/DefinitionMaintenance";
  import { useDefinitionMaintenanceStore } from "~/stores/useDefinitionMaintenanceStore";
  import { requestFailureMessage } from "#shared/utils/RequestFailure";
  const props = defineProps<{ kind: DefinitionKind; definitionId: string }>();
  const { t } = useI18n();
+ const { publish } = useActionNotifications();
  const store: ReturnType<typeof useDefinitionMaintenanceStore> = useDefinitionMaintenanceStore();
  const { byId,categories,definitions,isPending,isError,isSaving } = store;
  const editing: Ref<boolean> = ref(false);
  const deleteSnapshot: Ref<DefinitionFields | null> = ref(null);
- const error: Ref<string | null> = ref(null);
+
  const definition: ComputedRef<Definition | null> = computed((): Definition | null => { const value: Definition | null = byId.value[props.definitionId] ?? null; return value?.kind === props.kind ? value : null; });
  const valid: ComputedRef<boolean> = computed((): boolean => definitionIdSchema.safeParse(props.definitionId).success);
  const directoryTitle: ComputedRef<string> = computed((): string => t(`nav.${props.kind === "belt" ? "Belts" : props.kind === "badge" ? "Badges" : "Badge Categories"}`));
@@ -20,12 +22,12 @@
  /** Save the selected definition through its store with an exact baseline. */
  async function save(fields: DefinitionFields,expected: DefinitionFields | null): Promise<Definition> { if(!expected) throw new Error(t("definitionMaintenance.notFound")); return store.save(props.kind,props.definitionId,{fields,expected}); }
  /** Capture the exact definition being confirmed for deletion. */
- function confirmDelete(): void { if(definition.value) { error.value = null; deleteSnapshot.value = definitionSnapshot(definition.value); } }
+ function confirmDelete(): void { if(definition.value) {  deleteSnapshot.value = definitionSnapshot(definition.value); } }
  /** Soft-delete a confirmed definition while preserving achievement records. */
  async function remove(): Promise<void> {
-  if(!deleteSnapshot.value || isSaving.value || staleDelete.value) return; error.value = null;
-  try { await store.remove(props.kind,props.definitionId,{expected:deleteSnapshot.value}); await navigateTo(directoryPath.value); }
-  catch(failure: unknown) { error.value = requestFailureMessage(failure) ?? t("definitionMaintenance.saveError"); }
+  if(!deleteSnapshot.value || isSaving.value || staleDelete.value) return;
+  try { await store.remove(props.kind,props.definitionId,{expected:deleteSnapshot.value}); publish({ name: "definitions.definitiondetail.success", severity: "success", message: t("actionNotifications.deleted") }); await navigateTo(directoryPath.value); }
+  catch(failure: unknown) { publish({ name: "definitions.definitiondetail.error", severity: "error", message: requestFailureMessage(failure) ?? t("definitionMaintenance.saveError") }); }
  }
 </script>
 <template>
@@ -51,7 +53,7 @@
     <UPageCard v-if="deleteSnapshot" :title="t('definitionMaintenance.deleteConfirm')">
      <p>{{ t(kind === 'category' ? 'definitionMaintenance.categoryDeleteDescription' : 'definitionMaintenance.deleteDescription') }}</p>
      <p v-if="kind !== 'category'">{{ t('definitionMaintenance.awardedCount') }}: {{ definition.awardedCount }}</p>
-     <UAlert v-if="staleDelete" color="warning" :title="t('definitionMaintenance.remoteChanged')" /><UAlert v-if="error" color="error" :title="error" />
+     <UAlert v-if="staleDelete" color="warning" :title="t('definitionMaintenance.remoteChanged')" />
      <div class="DefinitionActions"><UButton color="error" :loading="isSaving" :disabled="staleDelete || (kind === 'category' && relatedBadges.length > 0)" @click="remove">{{ t('definitionMaintenance.delete') }}</UButton><UButton variant="outline" :disabled="isSaving" @click="deleteSnapshot = null">{{ t('profile.cancel') }}</UButton></div>
     </UPageCard>
     <UButton v-else class="DefinitionEdit" color="error" variant="outline" :disabled="editing || isSaving" @click="confirmDelete">{{ t('definitionMaintenance.delete') }}</UButton>
