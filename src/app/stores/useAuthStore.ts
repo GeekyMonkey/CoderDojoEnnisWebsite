@@ -1,7 +1,9 @@
+import { memberIdentitySchema, type MemberIdentity } from "#shared/types/MemberIdentity";
 import { type Session, type User } from "@supabase/supabase-js";
 import type { MemberModel } from "#shared/types/models/MemberModel";
 
 interface AuthState {
+ getIdentity: () => Promise<MemberIdentity>;
 	user: Ref<User | null>;
 	initializing: Ref<boolean>;
 	ready: Ref<boolean>;
@@ -22,10 +24,13 @@ interface AuthState {
 	) => Promise<ApiResponse<{ session: Session; member: MemberModel }>>;
 }
 
-let _store: AuthState | null = null;
+const authStores: WeakMap<object, AuthState> = new WeakMap<object, AuthState>();
 
 export function useAuthStore(): AuthState {
-	if (_store) return _store;
+ const app: ReturnType<typeof useNuxtApp> = useNuxtApp();
+ const existing: AuthState | undefined = authStores.get(app);
+ if (existing) return existing;
+ const identityClient: ReturnType<typeof useSupabaseClient> = useSupabaseClient();
 
 	const user = ref<User | null>(null);
 	const initializing = ref(true);
@@ -98,7 +103,16 @@ export function useAuthStore(): AuthState {
 		return result;
 	}
 
-	_store = {
+ /** Load the current protected binding rather than editable auth metadata. */
+ async function getIdentity(): Promise<MemberIdentity> {
+  const { data, error } = await identityClient.auth.getSession();
+  if (error || !data.session) throw Object.assign(new Error("Authentication required"), { statusCode: 401 });
+  return memberIdentitySchema.parse(await $fetch("/api/Auth/Identity", { headers: { Authorization: `Bearer ${data.session.access_token}` } }));
+ }
+
+
+	const store: AuthState = {
+  getIdentity,
 		user,
 		initializing,
 		ready,
@@ -113,5 +127,6 @@ export function useAuthStore(): AuthState {
 		login,
 		loginWithNfc,
 	};
-	return _store;
+ authStores.set(app, store);
+	return store;
 }

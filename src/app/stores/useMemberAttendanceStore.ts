@@ -1,3 +1,4 @@
+import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 import type { MemberAttendanceSessionDateModel } from "#shared/types/models/MemberAttendanceSessionDateModel";
@@ -54,6 +55,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	}
 
 	const queryClient = useQueryClient();
+ const headers: ReturnType<typeof useProfileAuthorization> = useProfileAuthorization();
 
 	const isSessionStatsEnabled = ref(false);
 
@@ -72,7 +74,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		queryFn: async ({ signal }) => {
 			const response = await $fetch<
 				ApiResponse<MemberAttendanceSessionStatsCollection>
-			>("/api/MemberAttendance/SessionStats", { signal });
+			>("/api/MemberAttendance/SessionStats", { signal, headers: await headers() });
 			if (!response.success) {
 				throw new Error(
 					response.error || "Failed to load member attendance sessions",
@@ -97,7 +99,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		queryFn: async ({ signal }) => {
 			const response = await $fetch<ApiResponse<{ dates: string[] }>>(
 				"/api/MemberAttendance/SessionDates",
-				{ signal },
+				{ signal, headers: await headers() },
 			);
 			if (!response.success) {
 				throw new Error(
@@ -144,6 +146,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 					ApiResponse<MemberAttendanceSessionDateModel>
 				>("/api/MemberAttendance/SessionDate", {
 					signal,
+     headers: await headers(),
 					query: { sessionDate: date },
 				});
 				if (!response.success) {
@@ -162,38 +165,15 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	const { data: currentSessionData } =
 		useSessionAttendanceForDate(CurrentSessionDate);
 
-	// Realtime invalidation: minimal logging + background refresh (avoid removeQueries to prevent UI flicker)
-	UseSupabaseRealtimeTable<MemberAttendanceModel>({
-		table: "member_attendances",
-		onInsert: (evt) => {
-			console.log(`[MemberAttendanceStore][realtime] INSERT -> invalidate`, {
-				evt,
-			});
-			// Invalidate relevant queries
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionStats"],
-			});
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDate", evt.newData.date],
-				exact: false,
-			});
-		},
-		onUpdate: (evt) => {
-			// Nothing to do
-		},
-		onDelete: (evt) => {
-			console.log(`[MemberAttendanceStore][realtime] DELETE -> invalidate`, {
-				evt,
-			});
-			// Invalidate relevant queries
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionStats"],
-			});
-			queryClient.invalidateQueries({
-				queryKey: ["memberAttendanceSessionDate", evt.oldData.date],
-			});
-		},
-	});
+ // Invalidate all attendance-date queries without sending presence rows or IDs.
+ UseSupabaseRealtimeTable({
+  table: "member_attendances",
+  onInvalidate: (): void => {
+   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
+   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionDate"] });
+   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionDates"] });
+  },
+ });
 
 	/**
 	 * Computed session years from complete sessions list

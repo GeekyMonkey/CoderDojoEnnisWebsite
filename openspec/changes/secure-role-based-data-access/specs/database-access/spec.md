@@ -36,7 +36,7 @@ Active parents and coders SHALL be able to edit their own login, first name, las
 - **AND** injecting is_mentor or another target identity SHALL fail without partial changes
 
 ### Requirement: Linked child and own coder operations
-The system SHALL allow active parents to read authorized linked-child histories and edit linked-child birth year, login, handles, password and images through their existing narrow operations. Coders SHALL manage only their own goals and eligible applications. Nonmentors SHALL NOT assign relationships, roles, award decisions or manual attendance.
+The system SHALL allow active parents to read authorized linked-child histories and edit linked-child birth year, login, handles, password and images through their existing narrow operations. Coders SHALL manage only their own goals and eligible applications. Nonmentors SHALL NOT assign relationships, roles or award decisions. F03 kiosk API compatibility SHALL remain an accepted exception; direct attendance DML SHALL stay denied.
 
 #### Scenario: Parent link removed
 - **WHEN** a parent requests a child operation after the link is removed
@@ -59,7 +59,7 @@ Anonymous database access SHALL be limited to explicitly approved active definit
 - **AND** the private row SHALL remain denied
 
 ### Requirement: Guarded mutation and execution
-All anon/authenticated direct table mutations SHALL be denied, including mentor direct mutations. Supported edits SHALL run through guarded service-only operations with server-derived actors and transaction-time role/link/target checks. Public/global statistics execution and arbitrary attendance endpoints SHALL be removed or secured.
+All anon/authenticated direct table mutations SHALL be denied, including mentor direct mutations. Supported edits SHALL run through guarded service-only operations with server-derived actors and transaction-time role/link/target checks. Public/global statistics execution SHALL be removed or secured. Existing F03 attendance/kiosk APIs SHALL remain unchanged for third-party hardware compatibility; their unverified actor/identifier authority is an explicitly accepted known vulnerability.
 
 #### Scenario: Direct REST privilege escalation
 - **WHEN** any browser role attempts a direct table update or service-only RPC call
@@ -67,7 +67,7 @@ All anon/authenticated direct table mutations SHALL be denied, including mentor 
 - **AND** valid authorized application edits SHALL still work through their guarded API
 
 ### Requirement: Pod and attendance scope
-Nonmentors SHALL read and join only active unexpired non-mentor-only pods as themselves. Current attendance/date/history reads SHALL be limited to own or linked-child scope or an explicitly approved aggregate. Device credentials SHALL authorize only their bounded current-session attendance action for an active target.
+Nonmentors SHALL read and join only active unexpired non-mentor-only pods as themselves. Current attendance/date/history reads SHALL be limited to own or linked-child scope or an explicitly approved aggregate. Existing F03 hardware kiosk APIs SHALL retain their current contracts and authorization behavior under the accepted known-vulnerability exception; this change SHALL NOT require new device credentials or target restrictions for those APIs.
 
 #### Scenario: Pod expires before joining
 - **WHEN** an eligible pod expires between display and join

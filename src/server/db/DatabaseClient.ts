@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { EventHandlerRequest, H3Event } from "h3";
+import { createError, getHeader, type EventHandlerRequest, type H3Event } from "h3";
 import { useLogger } from "#shared/utils/Logger";
 
 const log = useLogger("DatabaseClient");
@@ -154,6 +154,16 @@ export async function GetSupabaseAdminClient(
 	event: H3Event<EventHandlerRequest>,
 ): Promise<SupabaseClient | null> {
 	return GetSupabaseClient(event, "admin");
+}
+
+/** Create a request-scoped read client that carries the user's token and obeys RLS. */
+export function GetSupabaseRequestClient(event: H3Event): SupabaseClient {
+ const authorization: string | undefined = getHeader(event, "authorization");
+ if (!authorization?.startsWith("Bearer ")) throw createError({ statusCode: 401, statusMessage: "Authentication required" });
+ return createClient(supabaseUrl as string, supabaseAnonKey as string, {
+  global: { headers: { Authorization: authorization } },
+  auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+ });
 }
 
 /**

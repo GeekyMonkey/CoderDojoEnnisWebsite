@@ -3,6 +3,7 @@ import {
 	type AuthError,
 	createClient,
 	type Session,
+ type SupabaseClient,
 	type User,
 	type WeakPassword,
 } from "@supabase/supabase-js";
@@ -143,7 +144,7 @@ export async function LoginToSupabase(
 				password: supabasePass,
 			});
 
-			logs.push(`Sign in response: ${JSON.stringify(signInResponse)}`);
+			logs.push(`Sign in completed: ${Boolean(signInResponse.data.session)}`);
 			authTokenResponse = signInResponse.data;
 			error = signInResponse.error;
 			if (error) {
@@ -198,11 +199,15 @@ export async function LoginToSupabase(
 			user = authTokenResponse.user;
 			session = authTokenResponse.session;
 		}
-		log.info("User authenticated:", { user, session });
+		logs.push(`Session available: ${Boolean(session)}`);
 
 		// Update the user metadata if it changed, or if it's a new user
-		if (user) {
-			UpdateSupabaseUserMetadata(member, user);
+		if (user && session) {
+   // Signing in sets a user token on that client; identity provisioning needs a fresh service client.
+   const identityAdmin: SupabaseClient = await CreateSupabaseAdminClient();
+   const { error: bindingError } = await identityAdmin.schema("coderdojo").rpc("ensure_member_auth_binding", { p_auth_user: user.id, p_member: member.memberId });
+   if (bindingError) throw new Error("Unable to provision member identity");
+			await UpdateSupabaseUserMetadata(member, user);
 		}
 
 		return authTokenResponse;
