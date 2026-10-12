@@ -2,6 +2,8 @@ import { createError, getHeader, type H3Event } from "h3";
 import { GetSupabaseAdminClient, GetSupabaseRequestClient, type SupabaseClientType } from "#server/db/DatabaseClient";
 import { memberFromRecord, type MemberModel, type MemberRecord } from "#shared/types/models/MemberModel";
 
+import { requireActivePortalSession } from "./portalSession";
+
 export type VerifiedMember = { id: string; client: SupabaseClientType; member: MemberModel; readClient: SupabaseClientType };
 
 /** Verify session identity and an active member record without trusting editable metadata. */
@@ -13,6 +15,7 @@ export async function requireRequestMember(event: H3Event): Promise<VerifiedMemb
 	const { data, error } = await client.auth.getUser(authorization.slice(7));
 	if (error && (!error.status || error.status >= 500)) throw createError({ statusCode: 503, statusMessage: "Unable to verify session" });
 	if (error || !data.user) throw createError({ statusCode: 401, statusMessage: "Invalid session" });
+	await requireActivePortalSession(client, authorization.slice(7));
 	const { data: id, error: bindingError } = await client.schema("coderdojo").rpc("resolve_member_identity", { p_auth_user: data.user.id });
  if (bindingError) throw createError({ statusCode: 503, statusMessage: "Unable to verify member identity" });
 	if (!id) throw createError({ statusCode: 403, statusMessage: "Member access required" });

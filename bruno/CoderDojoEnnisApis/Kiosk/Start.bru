@@ -1,0 +1,19 @@
+meta {
+  name: Kiosk Start
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Kiosk/Start
+  body: none
+  auth: none
+}
+
+headers {
+  Origin: {{Host}}
+  Authorization: Bearer {{MentorAccessToken}}
+}
+
+docs {
+  Start requires a fresh mentor token and revokes that session. Retain cookies for Status/SignIn/End. Missing, expired and altered cookies must fail; cookie alone must not authorize management. SignIn supports password, guid (memberGuid) and nfc (nfcTag). Use a test member for attendance writes.
+}

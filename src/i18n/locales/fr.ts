@@ -366,6 +366,8 @@ export default {
 		since: "Attribué depuis",
 	},
 	signIn: {
+		endKiosk: "Quitter le mode de présence",
+		kioskStartError: "Impossible de démarrer le kiosque. Reconnectez-vous.",
 		qrPlaceholder: "Activez la caméra pour scanner un code QR.",
 		signInButton: "Connexion",
 		title: "Connexion à la session CoderDojo Ennis",

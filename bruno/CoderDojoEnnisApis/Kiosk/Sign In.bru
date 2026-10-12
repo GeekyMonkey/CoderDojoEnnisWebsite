@@ -1,0 +1,22 @@
+meta {
+  name: Kiosk Sign In
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Kiosk/SignIn
+  body: json
+  auth: none
+}
+
+headers {
+  Origin: {{Host}}
+}
+
+body:json {
+  {"kind":"password","username":"{{Username}}","password":"{{Password}}"}
+}
+
+docs {
+  Start requires a fresh mentor token and revokes that session. Retain cookies for Status/SignIn/End. Missing, expired and altered cookies must fail; cookie alone must not authorize management. SignIn supports password, guid (memberGuid) and nfc (nfcTag). Use a test member for attendance writes.
+}

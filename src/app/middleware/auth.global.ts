@@ -35,10 +35,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		case "mentor":
 		case "coder":
 		case "parent": {
-			// Prefer store if ready, fallback to direct check
-			const authenticated = authStore.ready.value
-				? authStore.isAuthenticated.value
-				: await isAuthenticated();
+			// Recheck persisted credentials rather than trusting history-restored auth refs.
+			const authenticated: boolean = await isAuthenticated();
 			redirectToLogin = !authenticated;
 			break;
 		}
@@ -50,10 +48,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 });
 
 async function isAuthenticated(): Promise<boolean> {
-	const user = useSupabaseUser();
-	if (user.value?.aud === "authenticated") {
-		return true;
-	}
 
 	// Attempt to restore session (race condition on first load)
 	try {

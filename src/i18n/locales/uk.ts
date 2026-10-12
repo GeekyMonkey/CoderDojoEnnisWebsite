@@ -365,6 +365,8 @@ export default {
 		since: "Нагороджено з",
 	},
 	signIn: {
+		endKiosk: "Завершити режим реєстрації",
+		kioskStartError: "Не вдалося запустити кіоск. Увійдіть знову.",
 		qrPlaceholder: "Увімкніть камеру, щоб сканувати QR-код.",
 		signInButton: "Увійти",
 		title: "Реєстрація на сесію CoderDojo Ennis",

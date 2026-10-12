@@ -364,6 +364,8 @@ export default {
 		since: "Awarded since",
 	},
 	signIn: {
+		endKiosk: "End sign-in mode",
+		kioskStartError: "Unable to start kiosk. Please sign in again.",
 		qrPlaceholder: "Enable the camera to scan a QR code.",
 		signInButton: "Sign In",
 		title: "CoderDojo Ennis Session Sign In",

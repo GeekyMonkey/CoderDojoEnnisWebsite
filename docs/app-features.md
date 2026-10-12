@@ -14,7 +14,7 @@ This document describes the expected product behavior and current implementation
 | Coder / Ninja | Own account, goals, achievements, attendance, passport and eligible session joining; safe public profiles for current teammates. |
 | Parent | Own profile and session attendance; only active linked children and safe teammate profiles within those children's teams; permitted child account/password/image changes, read-only goals and achievement decisions. |
 | Mentor | Attendance administration, directories/signup, account roles and relationships, skills/goals, award review, definitions, teams, pods, reports, printing, merge and controlled maintenance. |
-| Shared kiosk / scanner | A bounded sign-in authority that cannot recover mentor management privileges; supported credential/QR/NFC/fingerprint inputs and a scoped live attendance board. F03 hardware kiosk APIs are preserved as an accepted known vulnerability; shared browser kiosk lifecycle remains incomplete (F12/F13). |
+| Shared kiosk / scanner | A bounded sign-in authority that cannot recover mentor management privileges; supported credential/QR/NFC/fingerprint inputs and a scoped live attendance board. F03 hardware kiosk APIs are preserved as an accepted known vulnerability; F12 implements mentor logout and a bounded kiosk cookie; hosted acceptance is pending and the scoped live board remains F13. |
 
 Accounts can hold multiple roles. Identity and privileges must be checked against the current database account on the server; menu visibility and editable auth metadata are presentation hints. Archived accounts must not gain access or sign in. A parent link must be checked for every child request. Mentors must not approve/reject their own child's award applications; any mentor may undo decisions under the implemented policy, with current role and stale-state checks.
 
@@ -105,7 +105,7 @@ Expected credential, compact UUID QR, NFC and fingerprint sign-in records one at
 
 The kiosk must show a live team-grouped attendance board with mentor group, names/photos/colours and counts, including changes from other devices. Welcome includes previous login, team or unassigned guidance and recent award/rejection detail with category, notes, mentor and reapplication guidance; suppress badge rejection after reapplication. Use previous-login calendar-day boundaries, and today's boundary for first login.
 
-F03 is accepted unchanged for the third-party hardware kiosk, with the known authorization vulnerability documented. F05 atomic sign-in is implemented and database-verified. Remaining gaps: F12–F15. Fingerprint testing currently suppresses attendance creation but still rotates login dates and simulates a count increment; this is not a fully read-only dry run. Define its supported contract before cutover.
+F03 is accepted unchanged for the third-party hardware kiosk, with the known authorization vulnerability documented. F05 atomic sign-in is implemented and database-verified. F12 mentor logout and bounded kiosk cookie are implemented; hosted acceptance remains pending. Remaining functional gaps: F13–F15. Fingerprint testing currently suppresses attendance creation but still rotates login dates and simulates a count increment; this is not a fully read-only dry run. Define its supported contract before cutover.
 
 ## Data, consistency and user feedback
 
@@ -129,3 +129,5 @@ F04 legacy member/belt directories and attendance read routes are mentor-only in
 Attendance sign-in commits daily attendance and login-date rotation atomically, preserves concurrent account edits and returns the current committed member/count. Repeat scans retain one daily attendance row. Fingerprint testing preserves its existing simulated count and persisted login-date rotation; it is not a read-only dry run.
 
 F06 portal history is restored: successful password/NFC portal logins rotate current/previous login dates after session creation without creating attendance. Completion rechecks the active bound account and credential, preserves unrelated fields and returns the current member. Failed credentials/session/history writes do not return successful login. Database migration/rollback checks are complete; hosted portal acceptance remains unconfirmed.
+
+F12 shared sign-in now uses /mentor/SignIn only to start the bounded kiosk session and sign the mentor out, then replaces navigation with /kiosk/sign-in. The kiosk-only cookie expires at Dublin midnight or after 12 hours, whichever is sooner; it cannot authorize management. Returning to management requires fresh authentication. Password/QR/NFC attendance and scoped photo/belt/team welcome data remain available; the live board is separately tracked as F13. The hardware API contracts and beta member-subdomain redirect remain unchanged.
