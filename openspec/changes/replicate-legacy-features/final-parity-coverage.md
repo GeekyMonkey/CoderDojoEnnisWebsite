@@ -14,7 +14,7 @@ A mapped counterpart means source exists for the feature, not that every behavio
 
 | Legacy workflow | Current counterpart / fields and actions accounted for | Status and side effects |
 | --- | --- | --- |
-| Home login/logout | Auth login/NFC, logout, role landing and session recovery; username/password, errors | F06–F08: history rotation, compound names and credential length; Q02/Q06: return URL/cookie/hash compatibility |
+| Home login/logout | Auth login/NFC, logout, role landing and session recovery; username/password, errors | F06/F07 implemented: history rotation and compound names; F08 password minimum accepted, username length open; Q02/Q06: return URL/cookie/hash compatibility |
 | SignIn / SignInQR / fingerprint | Mentor SignIn, QR reader, NFC toggle, attendance API/service; member identity/name/count, photo/avatar, belt/team, speech/notifications | F03/F05/F12–F15; identifier contracts, actual attendance/date/login mutations, archived lookup, failure responses, role-safe kiosk and live board remain qualified |
 | Mentor attendance/random | Selected date, team and mentor groups, search/sort/presence controls, total/member counts, registration/belt/photo; random present coder, QR/NFC, signup and selected-date context | Present; writes remain F03/F05, full reads F04/F21, dates F22; realtime store refresh replaces SignalR |
 | Mentor directory/signup/detail | Members/parents/mentors; profile and account sections, roles, birth year, registration, team, fingerprint/NFC, vetting, password confirmation, attendance-on-create | Present; separate sections replace one big save form; narrow guarded RPCs prevent stale saves and privilege escalation |

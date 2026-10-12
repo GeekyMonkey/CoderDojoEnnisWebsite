@@ -155,27 +155,29 @@ export class AuthService {
 		username: string,
 		logs: string[],
 	): Promise<MemberRecord[]> {
-		const usernameLower = username.toLowerCase();
-		const parts = usernameLower.split(/\s+/).filter(Boolean);
-		const first = parts[0] || "";
-		const last = parts.length > 1 ? parts[parts.length - 1] : "";
-
+		const usernameLower: string = username.trim().toLowerCase();
+		const parts: string[] = usernameLower.split(/\s+/).filter(Boolean);
 		const candidates: MemberRecord[] = [];
-
 		const byLoginEmail: MemberRecord[] =
 			await MembersData.GetMembersByLoginUsername(this.event, usernameLower);
-		candidates.push(...byLoginEmail);
-		if (byLoginEmail) {
-			candidates.push(...(byLoginEmail as MemberRecord[]));
-		}
-
-		if (candidates.length === 0 && first && last) {
-			const byName: MemberRecord[] =
+		// Prefer explicit login/email matches, then stable IDs within each group.
+		candidates.push(...byLoginEmail.sort(
+			(a: MemberRecord, b: MemberRecord): number => a.id.localeCompare(b.id),
+		));
+		const byName: MemberRecord[] = [];
+		for (let split: number = 1; split < parts.length; split++) {
+			const first: string = parts.slice(0, split).join(" ");
+			const last: string = parts.slice(split).join(" ");
+			const matches: MemberRecord[] =
 				await MembersData.GetMembersByLoginFirstLast(this.event, first, last);
-			if (byName) {
-				candidates.push(...(byName as MemberRecord[]));
-			}
+			// Require the complete name even if a database pattern matches more rows.
+			byName.push(...matches.filter((member: MemberRecord): boolean =>
+				`${member.name_first} ${member.name_last}`.trim().toLowerCase() === parts.join(" "),
+			));
 		}
+		candidates.push(...byName.sort(
+			(a: MemberRecord, b: MemberRecord): number => a.id.localeCompare(b.id),
+		));
 
 		if (candidates.length === 0) {
 			logs.push("No member candidate");

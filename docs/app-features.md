@@ -37,8 +37,8 @@ Public GitHub disclosure is deliberately narrower than the internal member model
 
 ## Authentication and profile
 
-- Login accepts a supported login/name, and email where supported, plus password; NFC login is a separate supported flow. Full stored names, including compound names, and imported credential lengths need compatibility fixes (F07/F08).
-- Successful portal login establishes a Supabase session, chooses an eligible role destination and rotates previous/current login timestamps. Portal login does not itself mark attendance. Timestamp rotation is currently missing (F06).
+- Login accepts a supported login/name, and email where supported, plus password; NFC login is a separate supported flow. Full stored names, including compound given names and surnames, are supported even when another account has a matching login/email (F07). Passwords retain the accepted minimum of four characters; the separate username-length compatibility question remains open (F08).
+- Successful portal login establishes a Supabase session, chooses an eligible role destination and rotates previous/current login timestamps. Portal login does not itself mark attendance. Timestamp rotation is restored (F06); hosted acceptance remains unconfirmed.
 - Logout clears the session. Expired/revoked sessions return to login with recovery feedback; hard reload restores a valid session. Legacy cross-domain cookies and return URLs require a documented cutover decision (Q02).
 - Shared profile fields are login, first name, last name, email, phone, GitHub login, Scratch name and Xbox gamertag, subject to role permissions. External links appear only when handles exist. Role/account privileges are edited only through mentor maintenance.
 - Password change requires the current password for one's own profile; mentor reset and linked-child parent reset have separate authorized flows with password/confirmation and validation. Credentials never appear in profile responses.
@@ -51,7 +51,7 @@ Profile/account flows are present. Import credential handling and private databa
 
 | Feature | Expected fields/actions and effects | Coverage |
 | --- | --- | --- |
-| Home | Welcome/name, team or unassigned guidance, previous login, session count, current belt, short/long goals, activity links and team roster; recent awards/rejections with notes and mentor names since previous-login day | Present; depends on F06 login-history fix. |
+| Home | Welcome/name, team or unassigned guidance, previous login, session count, current belt, short/long goals, activity links and team roster; recent awards/rejections with notes and mentor names since previous-login day | Present; F06 login history restored, hosted acceptance pending. |
 | Profile and teammates | Own permitted profile/handles/images; team name/colour/image/goal/roster; peer public details and earned awards without private contacts/evidence | Present with server team checks. |
 | Goals | Edit short-term and long-term text; add/remove dated badge goals, view progress/current and next belt | Present; goal changes are guarded against stale state. |
 | Badges | Earned, pending, rejected and available badges; category/name/description, goal status, application and decision dates/notes/mentor; application evidence at least five trimmed characters; retry after rejection | Present; no duplicate pending application, preserve existing goal metadata and recorded deleted-definition history. |

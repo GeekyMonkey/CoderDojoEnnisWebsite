@@ -184,13 +184,14 @@ export const MembersData = {
 		const candidates: MemberRecord[] = [];
 
 		try {
-			const { data: byLoginEmail } = await supabase
+			const { data: byLoginEmail, error } = await supabase
 				.schema("coderdojo")
 				.from("members")
 				.select("*")
-				.ilike("name_first", first)
-				.ilike("name_last", last)
+				.ilike("name_first", first.replace(/[\\%_]/g, "\\$&"))
+				.ilike("name_last", last.replace(/[\\%_]/g, "\\$&"))
 				.eq("deleted", false);
+			if (error) throw error;
 			if (byLoginEmail) {
 				candidates.push(...(byLoginEmail as MemberRecord[]));
 			}
