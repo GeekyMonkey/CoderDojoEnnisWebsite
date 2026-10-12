@@ -1,0 +1,12 @@
+meta {
+  name: Current Bound Identity
+  type: http
+}
+get {
+  url: {{Host}}/api/Auth/Identity
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
