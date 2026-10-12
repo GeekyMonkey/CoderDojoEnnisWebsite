@@ -12,10 +12,11 @@ vi.mock("~/composables/UseSupabaseRealtimeAllTables", (): object => ({
 	UseSupabaseRealtimeAllTables: (): object => ({ events: { on: mocks.on, off: mocks.off } }),
 }));
 
-const REVIEW: AchievementReview = { id: "application", kind: "belt", memberId: "member", memberName: "Example Coder", categoryId: null, categoryName: null, label: "White", sortOrder: 1, belt: null, description: "", applicationDate: 1, applicationNotes: "Original evidence", awarded: null, awardedByAdultId: null, awardedNotes: null, rejectedDate: null, rejectedByAdultId: null, rejectedNotes: null };
+const REVIEW: AchievementReview = { id: "00000000-0000-4000-8000-000000000002", definitionId: "00000000-0000-4000-8000-000000000001", definitionDeleted: false, goalDate: null, kind: "belt", memberId: "member", memberName: "Example Coder", categoryId: null, categoryName: null, label: "White", sortOrder: 1, belt: null, description: "", applicationDate: 1, applicationNotes: "Original evidence", awarded: null, awardedByAdultId: null, awardedNotes: null, rejectedDate: null, rejectedByAdultId: null, rejectedNotes: null };
 
 describe("achievement store decisions", (): void => {
 	it("invalidates pending, history and latest belt queries after success or conflict and disposes subscriptions", async (): Promise<void> => {
+		vi.stubGlobal("useSupabaseUser", (): object => ref({ email: "test@example.invalid" }));
 		vi.stubGlobal("useSupabaseClient", (): object => ({ auth: { getSession: mocks.session } }));
 		vi.stubGlobal("$fetch", mocks.fetch);
 		mocks.session.mockResolvedValue({ data: { session: { access_token: "test-token" } }, error: null });

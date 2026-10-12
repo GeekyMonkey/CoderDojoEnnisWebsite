@@ -11,10 +11,12 @@
 	import MemberCurrentBelt from "~/components/Members/MemberCurrentBelt.vue";
 	import MemberPresenceLegend from "~/components/Members/MemberPresenceLegend.vue";
 	import MemberPresencePhoto from "~/components/Members/MemberPresencePhoto.vue";
+	import ApplicationFeedback from "./ApplicationFeedback.vue";
 	import BeltColor from "~/components/Belts/BeltColor.vue";
 
 	const props = defineProps<{ kind: AchievementKind; memberId?: string }>();
 	type Action = AchievementDecision["action"];
+	type ReviewGroup = { key: string; rows: AchievementReview[] };
 	const { t } = useI18n();
 	const { presentById } = useMemberPresenceStore();
 	const { publish } = useActionNotifications();
@@ -31,11 +33,34 @@
 	const confirmation: Ref<{ review: AchievementReview; action: Action } | null> = ref(null);
 	const confirmationOpen: Ref<boolean> = ref(false);
 	const rows: ComputedRef<AchievementReview[]> = computed((): AchievementReview[] => [...(data.value ?? [])].sort((a: AchievementReview, b: AchievementReview): number => (a.categoryName ?? "").localeCompare(b.categoryName ?? "") || a.sortOrder - b.sortOrder || a.label.localeCompare(b.label) || a.memberName.localeCompare(b.memberName)));
+	const goalIds: ComputedRef<Set<string>> = computed((): Set<string> => {
+		const earned: Set<string> = new Set(rows.value.filter((review: AchievementReview): boolean => review.awarded !== null).map((review: AchievementReview): string => review.definitionId));
+		return new Set(rows.value.filter((review: AchievementReview): boolean => review.goalDate !== null && !earned.has(review.definitionId)).map((review: AchievementReview): string => review.definitionId));
+	});
+	const groups: ComputedRef<ReviewGroup[]> = computed((): ReviewGroup[] => {
+		if (!props.memberId) return [{ key: "pending", rows: rows.value }];
+		const pending: AchievementReview[] = rows.value.filter((review: AchievementReview): boolean => review.applicationDate !== null && review.awarded === null && review.rejectedDate === null);
+		const awarded: AchievementReview[] = rows.value.filter((review: AchievementReview): boolean => review.awarded !== null);
+		const unavailable: Set<string> = new Set([...pending, ...awarded].map((review: AchievementReview): string => review.definitionId));
+		const available: Map<string, AchievementReview> = new Map();
+		for (const review of rows.value) {
+			if (unavailable.has(review.definitionId) || review.definitionDeleted) continue;
+			const previous: AchievementReview | null = available.get(review.definitionId) ?? null;
+			if (!previous || (review.rejectedDate ?? 0) > (previous.rejectedDate ?? 0)) available.set(review.definitionId, review);
+		}
+		const archived: AchievementReview[] = rows.value.filter((review: AchievementReview): boolean => review.definitionDeleted && review.awarded === null && !pending.includes(review));
+		return [{ key: "pending", rows: pending }, { key: "awarded", rows: awarded }, { key: "available", rows: [...available.values()] }, ...(archived.length ? [{ key: "archived", rows: archived }] : [])];
+	});
+	const rejectionsByRow: ComputedRef<Record<string, AchievementReview[]>> = computed((): Record<string, AchievementReview[]> => {
+		const result: Record<string, AchievementReview[]> = {};
+		for (const review of rows.value) result[review.id] = rows.value.filter((rejection: AchievementReview): boolean => rejection.definitionId === review.definitionId && rejection.rejectedDate !== null && rejection.id !== review.id);
+		return result;
+	});
 	const heading: ComputedRef<string> = computed((): string => t(`achievementReviews.${props.memberId ? `${props.kind}History` : `${props.kind}Pending`}`));
 	const columns: ComputedRef<ColumnDef<AchievementReview>[]> = computed((): ColumnDef<AchievementReview>[] => [
-		{ accessorKey: "memberName", header: t("coders.label") },
+		...(props.memberId ? [] : [{ accessorKey: "memberName", header: t("coders.label") }]),
 		{ accessorKey: "label", header: t(`achievementReviews.${props.kind}`) },
-		{ id: "team", header: t("teams.label") },
+		...(props.memberId ? [] : [{ id: "team", header: t("teams.label") }]),
 		...(props.kind === "belt" && !props.memberId ? [] : [{ id: "status", header: t("achievementReviews.status") }]),
 	]);
 	const tableMeta: { class: { tr: string } } = { class: { tr: "ReviewRow" } };
@@ -89,8 +114,11 @@
 			<UButton @click="reviews.refetch()">{{ t("achievementReviews.retry") }}</UButton>
 		</div>
 		<p v-else-if="!isLoading && !rows.length">{{ t("achievementReviews.empty") }}</p>
-		<MemberPresenceLegend v-if="rows.length" />
-		<UTable v-if="!isError && (isLoading || rows.length)" v-model:expanded="expanded" :data="rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
+		<MemberPresenceLegend v-if="!memberId && rows.length" />
+		<section v-for="group in groups" :key="group.key" class="HistorySection">
+		<h3 v-if="memberId">{{ t(`achievementReviews.${group.key}`) }} ({{ group.rows.length }})</h3>
+		<p v-if="memberId && !isLoading && !group.rows.length">{{ t("achievementReviews.empty") }}</p>
+		<UTable v-if="!isError && (isLoading || group.rows.length)" v-model:expanded="expanded" :data="group.rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
 			<template #memberName-cell="{ row }">
 				<div class="MemberCell">
 					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" :present="presentById === null ? null : presentById[row.original.memberId] === true" size="sm" />
@@ -100,18 +128,18 @@
 			</template>
 			<template #label-cell="{ row }">
 				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="md" class="RequestedBelt" />
-				<span v-else>{{ row.original.categoryName ?? t("definitionMaintenance.unavailableCategory") }} — {{ row.original.label }}</span>
+				<span v-else>{{ row.original.categoryName ?? t("definitionMaintenance.unavailableCategory") }} — {{ row.original.label }}</span><span v-if="goalIds.has(row.original.definitionId)" class="GoalMarker">★ {{ t("achievementReviews.goal") }}</span>
 			</template>
 			<template #team-cell="{ row }">
 				<TeamLogo :for="MembersById[row.original.memberId] ?? 'UNASSIGNED'" size="sm" />
 				{{ TeamsById[MembersById[row.original.memberId]?.teamId ?? ""]?.teamName ?? "—" }}
 			</template>
 			<template #status-cell="{ row }">
-				{{ t(`achievementReviews.${row.original.awarded ? 'awarded' : row.original.rejectedDate ? 'rejected' : row.original.applicationDate ? 'pending' : 'goal'}`) }}
+				{{ t(`achievementReviews.${row.original.awarded ? 'awarded' : row.original.rejectedDate ? 'rejected' : row.original.applicationDate ? 'pending' : goalIds.has(row.original.definitionId) ? 'goal' : 'available'}`) }}
 			</template>
 			<template #expanded="{ row }">
 				<div class="ReviewDetails">
-					<p>{{ row.original.description }}</p><p v-if="row.original.canReview === false && !row.original.awarded && !row.original.rejectedDate" role="status">{{ t('achievementReviews.ownChild') }}</p>
+					<p class="Description">{{ row.original.description }}</p><div v-for="rejection in rejectionsByRow[row.original.id] ?? []" :key="rejection.id"><ApplicationFeedback :review="rejection" /><UButton v-if="rejection.applicationDate" color="neutral" :disabled="Boolean(busy)" @click="requestConfirmation(rejection, 'undo')">{{ t("achievementReviews.undo") }}</UButton></div><p v-if="row.original.canReview === false && !row.original.awarded && !row.original.rejectedDate && row.original.applicationDate" role="status">{{ t('achievementReviews.ownChild') }}</p>
 					<p>{{ t("achievementReviews.applied") }}: {{ displayDate(row.original.applicationDate) }}</p>
 					<blockquote>{{ row.original.applicationNotes || "—" }}</blockquote>
 					<template v-if="row.original.awarded || row.original.rejectedDate">
@@ -131,6 +159,7 @@
 				</div>
 			</template>
 		</UTable>
+		</section>
 		<UModal v-model:open="confirmationOpen" :title="t('achievementReviews.confirmTitle')" :description="t('achievementReviews.confirmDescription')">
 			<template #body><p>{{ confirmation?.review.memberName }} — {{ confirmation?.review.label }}</p><p>{{ t(`achievementReviews.${confirmation?.action === 'undo' ? 'undo' : 'reject'}`) }}</p><blockquote>{{ confirmation ? notes[confirmation.review.id] : "" }}</blockquote></template>
 			<template #footer><UButton color="neutral" @click="confirmationOpen = false">{{ t("achievementReviews.cancel") }}</UButton><UButton color="error" @click="confirmDecision">{{ t("achievementReviews.confirm") }}</UButton></template>
@@ -140,6 +169,10 @@
 
 <style scoped lang="scss">
 	.ReviewList { display: grid; gap: calc(var(--spacing) * 3); width: 100%; min-width: 0; }
+	.HistorySection { display: grid; gap: calc(var(--spacing) * 3); min-width: 0; }
+	h3 { font-weight: 600; }
+	.GoalMarker { display: block; color: var(--ui-warning); }
+	.Description { white-space: pre-wrap; overflow-wrap: anywhere; }
 	h2 { font-size: var(--text-xl); font-weight: 600; }
 	.MemberCell, .ReviewActions { display: flex; align-items: center; gap: calc(var(--spacing) * 3); }
 	.ReviewDetails { display: grid; gap: calc(var(--spacing) * 2); padding: calc(var(--spacing) * 4); background: var(--ui-bg-elevated); }

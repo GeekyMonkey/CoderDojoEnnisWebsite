@@ -21,8 +21,8 @@ export async function getAchievementReviews(client: SupabaseClientType, kind: Ac
 	const { data, error } = await query.order("application_date", { ascending: false });
 	if (error) throw createError({ statusCode: 503, statusMessage: "Unable to load achievements" });
 	const records: AchievementRecord[] = (data ?? []) as AchievementRecord[];
-	if (!records.length) return [];
-	const ids: string[] = [...new Set(records.map((record: AchievementRecord): string => record.member_id ?? ""))];
+	if (!records.length && !memberId) return [];
+	const ids: string[] = memberId ? [memberId] : [...new Set(records.map((record: AchievementRecord): string => record.member_id ?? ""))];
 	const { data: members, error: memberError } = await client.schema("coderdojo").from("members").select("id, name_first, name_last").in("id", ids).eq("deleted", false);
 	const { data: badges, error: badgeError } = await client.schema("coderdojo").from("badges").select("*");
 	const { data: belts, error: beltError } = await client.schema("coderdojo").from("belts").select("*");
@@ -30,6 +30,7 @@ export async function getAchievementReviews(client: SupabaseClientType, kind: Ac
 	if (memberError || badgeError || beltError || categoryError) throw createError({ statusCode: 503, statusMessage: "Unable to load achievement details" });
 	const { data: links, error: linkError } = mentorId ? await client.schema("coderdojo").from("member_parents").select("member_id").eq("parent_id", mentorId) : { data: [], error: null };
 	if (linkError) throw createError({ statusCode: 503, statusMessage: "Unable to load review permissions" });
+	if (memberId && !members?.length) throw createError({ statusCode: 404, statusMessage: "Member unavailable" });
 	const children: Set<string> = new Set((links ?? []).map((link: { member_id: string }): string => link.member_id));
 	const reviews: AchievementReview[] = [];
 	for (const record of records) {
@@ -37,7 +38,18 @@ export async function getAchievementReviews(client: SupabaseClientType, kind: Ac
 		const badge: NonNullable<typeof badges>[number] | null = "badge_id" in record ? badges?.find((item: NonNullable<typeof badges>[number]): boolean => item.id === record.badge_id) ?? null : null;
 		const belt: NonNullable<typeof belts>[number] | null = "belt_id" in record ? belts?.find((item: NonNullable<typeof belts>[number]): boolean => item.id === record.belt_id) ?? null : null;
 		if (!member || (!badge && !belt)) continue;
-		reviews.push({ id: record.id, memberId: member.id, canReview: !children.has(member.id), memberName: `${member.name_first ?? ""} ${member.name_last ?? ""}`.trim(), kind, categoryId: badge?.badge_category_id ?? null, categoryName: categories?.find((category: NonNullable<typeof categories>[number]): boolean => category.id === badge?.badge_category_id)?.category_name ?? null, belt: belt ? beltFromRecord(belt) : null, sortOrder: belt?.sort_order ?? 0, label: badge?.achievement ?? belt?.color ?? "", description: badge?.description ?? belt?.description ?? "", applicationDate: timestamp(record.application_date), applicationNotes: record.application_notes, awarded: timestamp(record.awarded), awardedNotes: record.awarded_notes, awardedByAdultId: record.awarded_by_adult_id, rejectedDate: timestamp(record.rejected_date), rejectedNotes: record.rejected_notes, rejectedByAdultId: record.rejected_by_adult_id });
+		reviews.push({ id: record.id, definitionId: badge?.id ?? belt!.id, definitionDeleted: badge?.deleted ?? belt!.deleted, goalDate: "goal_date" in record ? timestamp(record.goal_date) : null, memberId: member.id, canReview: !children.has(member.id), memberName: `${member.name_first ?? ""} ${member.name_last ?? ""}`.trim(), kind, categoryId: badge?.badge_category_id ?? null, categoryName: categories?.find((category: NonNullable<typeof categories>[number]): boolean => category.id === badge?.badge_category_id)?.category_name ?? null, belt: belt ? beltFromRecord(belt) : null, sortOrder: belt?.sort_order ?? 0, label: badge?.achievement ?? belt?.color ?? "", description: badge?.description ?? belt?.description ?? "", applicationDate: timestamp(record.application_date), applicationNotes: record.application_notes, awarded: timestamp(record.awarded), awardedNotes: record.awarded_notes, awardedByAdultId: record.awarded_by_adult_id, rejectedDate: timestamp(record.rejected_date), rejectedNotes: record.rejected_notes, rejectedByAdultId: record.rejected_by_adult_id });
+	}
+	// Include active definitions without records; preserve recorded deleted definitions above.
+	if (memberId && members?.length) {
+		const member: NonNullable<typeof members>[number] = members[0]!;
+		const definitions: (NonNullable<typeof badges>[number] | NonNullable<typeof belts>[number])[] = kind === "badge" ? badges ?? [] : belts ?? [];
+		for (const definition of definitions) {
+			if (definition.deleted || reviews.some((review: AchievementReview): boolean => review.definitionId === definition.id)) continue;
+			const badge: NonNullable<typeof badges>[number] | null = "achievement" in definition ? definition : null;
+			const belt: NonNullable<typeof belts>[number] | null = "color" in definition ? definition : null;
+			reviews.push({ id: `available:${definition.id}`, definitionId: definition.id, definitionDeleted: false, goalDate: null, memberId, memberName: `${member.name_first ?? ""} ${member.name_last ?? ""}`.trim(), canReview: !children.has(memberId), kind, categoryId: badge?.badge_category_id ?? null, categoryName: categories?.find((category: NonNullable<typeof categories>[number]): boolean => category.id === badge?.badge_category_id)?.category_name ?? null, belt: belt ? beltFromRecord(belt) : null, sortOrder: belt?.sort_order ?? 0, label: badge?.achievement ?? belt?.color ?? "", description: badge?.description ?? belt?.description ?? "", applicationDate: null, applicationNotes: null, awarded: null, awardedNotes: null, awardedByAdultId: null, rejectedDate: null, rejectedNotes: null, rejectedByAdultId: null });
+		}
 	}
 	return AchievementReviewSchema.array().parse(reviews);
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import MemberProgress from "~/components/Achievements/MemberProgress.vue";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { ref, type Ref } from "vue";
@@ -29,6 +30,7 @@
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<div class="GoalActions"><UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t('profile.save') }}</UButton><UButton variant="outline" :disabled="saving" @click="cancel">{{ t('profile.cancel') }}</UButton></div>
 		</UForm>
+		<MemberProgress :memberId="member.id" />
 	</UPageCard>
 </template>
 <style scoped lang="scss">

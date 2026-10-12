@@ -41,7 +41,7 @@ Legacy sources remain reference-only. The 25 existing type diagnostics in legacy
 
 ## Legacy screen discrepancies
 
-This is the authoritative planning checklist. The screen audit is reference evidence only. D02, D03, D05 and D06 are implemented, verified and approved; D01 is won’t do; D04 is restored with the belt-application exception; D09–D15 and D25–D27 are reviewed, committed and pushed; D20–D24, D26 and D29 are reviewed, implemented and verified for publication; remaining items stay queued. Printing D20–D22 belongs to feature 10 and account merge D23 belongs to feature 8, rather than separate implementation batches.
+This is the authoritative planning checklist. The screen audit is reference evidence only. D02, D03, D05 and D06 are implemented, verified and approved; D01 is won’t do; D04 is restored with the belt-application exception; D09–D15 and D25–D27 are reviewed, committed and pushed; D20–D24, D26 and D29 are reviewed, implemented and verified for publication; D16–D19 are reviewed, implemented and verified for publication; remaining items stay queued. Printing D20–D22 belongs to feature 10 and account merge D23 belongs to feature 8, rather than separate implementation batches.
 
 - [x] **D01 · P2 · Login — Won’t do:** Remember Me will not be restored; retain current Supabase session behavior. User decision: 2026-10-11.
 - [x] **D02 · P2 · Mentor home/reviews:** Display applicant presence and current-term registration. Legacy `Views/Mentor/Index.cshtml` marks both on pending rows; the round member photo uses a green presence outline, orange registered outline or red otherwise. Acceptance: both indicators track current attendance/member changes without refresh.
@@ -58,10 +58,10 @@ This is the authoritative planning checklist. The screen audit is reference evid
 - [x] **D13 · P3 · Profile images:** Shared keyboard picker and drag/drop validation, generic cropper, and preparing/saving progress retain store-owned updates.
 - [x] **D14 · P2 · Relationship search:** Result count and incremental loading make every eligible match reachable.
 - [x] **D15 · P3 · Relationship lists:** Linked people and search matches use stable first-name/last-name ordering, including realtime updates.
-- [ ] **D16 · P1 · Coder goals:** Display the next unearned belt with description, rejection feedback and pending application details. Legacy `Views/Mentor/MemberGoals.cshtml` computes `NextBelt`; new `MemberGoals` shows only editable short/long goals. Acceptance: derived progress updates after decisions and definition changes.
-- [ ] **D17 · P1 · Coder goals:** Display selected badge goals, category/name/description and pending application state. Legacy `MemberGoals.cshtml` uses `GoalDate`; new goal component does not. Acceptance: distinguish badge goals from applications and awards without moving personal goal selection into mentor-only actions.
-- [ ] **D18 · P1 · Member belt/badge history:** Show available/unearned definitions even when no member achievement record exists. Legacy `MemberBelts.cshtml` / `MemberBadges.cshtml` iterate the definition catalogue; new `AchievementReviewsData.getAchievementReviews` starts from member award/application rows. Acceptance: complete catalogue, descriptions and rejected/pending/earned status are available, retaining labels for deleted historical definitions.
-- [ ] **D19 · P2 · Member history:** Restore separate earned/pending/available sections and badge-goal markers. Legacy history explicitly groups these and shows goal stars; current table combines records and its contract omits `goalDate`. Acceptance: readable grouping and actual goal state; an undated record must not automatically be assumed to be a selected goal.
+- [x] **D16 · P1 · Coder goals:** Shared store-backed progress displays the next active unearned belt, description, previous rejection feedback/mentor and pending application evidence; decisions and definition changes refresh progress without reload.
+- [x] **D17 · P1 · Coder goals:** Selected unearned badge goals show category/name/description and pending applications using the actual goal date; mentor progress remains display-only for personal badge selection.
+- [x] **D18 · P1 · Member belt/badge history:** Zod-validated history includes the complete active definition catalogue even without member records, preserving recorded deleted definitions and descriptions without inserting synthetic database rows.
+- [x] **D19 · P2 · Member history:** Separate pending, awarded and available sections, with archived historical definitions, category sorting and actual badge goal markers. Earlier rejection feedback and undo remain accessible; undated records are not treated as selected goals.
 - [x] **D20 · P2 · Coder directory/details:** Registered coder batch and individual ID actions use the shared sheet, including unassigned coders and scanner-compatible QR codes.
 - [x] **D21 · P2 · Mentor directory/adult details:** Mentor batch and individual adult ID actions use the shared cards with role and skill labels.
 - [x] **D22 · P2 · Coder details:** Belt certificate displays the latest earned belt, name and award month, with a responsive preview and A4 landscape print layout; no award disables printing.
@@ -95,3 +95,10 @@ This is the authoritative planning checklist. The screen audit is reference evid
 
 - Review refinement: round photo status outlines (present green, registered orange, other red), separate reusable photo/avatar components with optional borderColor, photo cover mode, readable mobile sizing and stacked review rows.
 - Pending belt applications omit the redundant status column; history retains it.
+
+## D16–D19 verification (2026-10-12)
+
+- History APIs include all 6 active belts and 86 active badges for a disposable member without records; pending queues remain application-only. Malformed requests return 400 and unauthenticated requests are rejected.
+- Desktop and 390px mobile checks show next-belt requirements, badge goal category/description and pending evidence, grouped history and existing deleted-definition feedback. No horizontal page overflow on mobile.
+- Two open views updated without reload when a belt was awarded and when a badge goal was cleared/restored; next belt, selected goals and pending goal markers changed together.
+- Production build/start and strict change validation passed; typecheck retains only the existing 25 legacy errors. No legacy code or database schema changed. Disposable verification data cleaned up.

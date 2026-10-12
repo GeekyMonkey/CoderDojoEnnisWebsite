@@ -10,3 +10,14 @@ get {
 auth:bearer {
   token: {{AccessToken}}
 }
+
+tests {
+  test("History includes validated catalogue identity and actual goal state", function () {
+    expect(res.status).to.equal(200);
+    for (const row of res.body.data) {
+      expect(row.definitionId).to.be.a("string");
+      expect(row.definitionDeleted).to.be.a("boolean");
+      expect(row.goalDate === null || typeof row.goalDate === "number").to.equal(true);
+    }
+  });
+}

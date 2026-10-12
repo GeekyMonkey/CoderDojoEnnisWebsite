@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, type QueryFunctionContext } from "@tanstack/vue-query";
 import { computed, onScopeDispose, toValue, type ComputedRef, type MaybeRefOrGetter } from "vue";
-import { AchievementReviewSchema, type AchievementDecision, type AchievementKind, type AchievementReview } from "#shared/types/AchievementReview";
+import { AchievementDecisionSchema, AchievementReviewSchema, type AchievementDecision, type AchievementKind, type AchievementReview } from "#shared/types/AchievementReview";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
 
@@ -45,7 +45,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 
 	/** Submit a decision and refresh even after a conflict to recover stale UI state. */
 	async function decide(review: AchievementReview, action: AchievementDecision["action"], notes: string): Promise<void> {
-		const body: AchievementDecision = { kind, id: review.id, action, notes, expectedAwarded: review.awarded, expectedRejected: review.rejectedDate };
+		const body: AchievementDecision = AchievementDecisionSchema.parse({ kind, id: review.id, action, notes, expectedAwarded: review.awarded, expectedRejected: review.rejectedDate });
 		try {
 			const response: ApiResponse<null> = await $fetch("/api/Achievements/Decision", { method: "POST", headers: await headers(), body });
 			if (!response.success) throw new Error(response.error);
