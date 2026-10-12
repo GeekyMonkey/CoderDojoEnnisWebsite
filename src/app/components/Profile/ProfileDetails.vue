@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import MemberCurrentBelt from "~/components/Members/MemberCurrentBelt.vue";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { computed, type ComputedRef } from "vue";
@@ -50,11 +51,11 @@
 
 <template>
 	<UPageCard>
-		<ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
+		<MemberCurrentBelt :member="member" /><ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
 		<p v-if="!editing">{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
 		<template v-if="!editing">
-			<dl class="ProfileFields">
+			<ProfileExternalLinks :member="member" /><dl class="ProfileFields">
 				<div v-for="field in displayFields" :key="field.key">
 					<dt>{{ t(`profile.${field.key}`) }}</dt>
 					<dd>{{ field.value }}</dd>

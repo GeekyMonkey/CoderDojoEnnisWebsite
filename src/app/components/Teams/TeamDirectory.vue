@@ -19,7 +19,7 @@
    <div class="TeamToolbar"><UInput v-model="search" :placeholder="t('teams.search')" :aria-label="t('teams.search')" maxlength="200" /><UButton @click="creating = true">{{ t('teams.create') }}</UButton></div>
    <UPageCard v-if="creating" :title="t('teams.create')"><TeamForm :team="null" :saving="isSaving" :save="store.create" @saved="created" @cancel="creating = false" /></UPageCard>
    <p v-if="isPending">{{ t('profile.loading') }}</p><UAlert v-else-if="isError" color="error" :title="t('teams.loadError')" />
-   <ul v-else class="TeamList"><li v-for="team in visible" :key="team.id"><NuxtLink :to="`/mentor/maintenance/team/${team.id}`"><ColourSwatch :hexCode="team.hexcode" /><span>{{ team.teamName }}</span></NuxtLink></li></ul>
+   <ul v-else class="TeamList"><li v-for="team in visible" :key="team.id"><NuxtLink :to="`/mentor/maintenance/team/${team.id}`"><TeamLogo :for="team" size="md" /><ColourSwatch :hexCode="team.hexcode" /><span>{{ team.teamName }}</span></NuxtLink></li></ul>
    <p v-if="!isPending && !isError && !visible.length">{{ t('teams.empty') }}</p>
   </div></template>
  </UDashboardPanel>

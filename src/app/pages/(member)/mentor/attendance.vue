@@ -919,7 +919,7 @@
 		<template #header>
 			<DashboardHeading :page-title="pageTitle">
 				<template #right>
-					<MemberSignupDialog />
+					<MemberSignupDialog :sessionDate="selectedSessionDate || null" />
 					<div class="text-xs text-muted leading-tight mt-1 whitespace-nowrap">
 						<div>Coders: {{ codersPresentCount }}</div>
 						<div>Mentors: {{ mentorsPresentCount }}</div>

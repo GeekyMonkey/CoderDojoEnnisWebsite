@@ -11,5 +11,5 @@ export default defineEventHandler(async (event: H3Event): Promise<MemberModel> =
  const body: NewMember = await maintenanceBody(event, newMemberSchema);
  const hash: string | null = body.password === null ? null : await GeneratePasswordHash(body.password, useRuntimeConfig(event).private.auth.pass_salt);
  if (body.password !== null && !hash) throw createError({ statusCode: 503, statusMessage: "Unable to set password" });
- return maintainMemberDetails(actor, "create", crypto.randomUUID(), { ...storageFields(body.profile), ...storageFields(body.account), password_hash: hash });
+ return maintainMemberDetails(actor, "create", crypto.randomUUID(), { ...storageFields(body.profile), ...storageFields(body.account), password_hash: hash, attendance_date: body.attendanceDate });
 });

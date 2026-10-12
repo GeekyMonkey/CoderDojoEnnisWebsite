@@ -1,0 +1,19 @@
+meta {
+ name: Team image
+ type: http
+}
+post {
+ url: {{Host}}/api/Management/teams/{{TeamId}}/image
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+ { "action": "upload", "expectedRevision": null, "png": "{{ImagePngBase64}}" }
+}
+docs {
+ Mentor-only. Use the current team's imageRevision as expectedRevision; stale images return 409.
+ Supply a cropped PNG up to 800 pixels and 3MB. To remove use action delete and omit png.
+}

@@ -1,22 +1,26 @@
 <script setup lang="ts">
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
-	import { reactive } from "vue";
+	import { computed, reactive, type ComputedRef } from "vue";
 	import { newMemberFormSchema, newMemberSchema, newAccount, type NewMember, type NewMemberForm, type MemberRole } from "#shared/types/MemberMaintenance";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
+	import { TodayYYYY_MM_dd, DateStringSchema } from "#shared/utils/DateHelpers";
 	import type { TeamModel } from "#shared/types/models/TeamModel";
-	const props = defineProps<{ role: MemberRole; teams: TeamModel[]; saving: boolean; create: (body: NewMember) => Promise<MemberModel> }>();
+	const props = defineProps<{ role: MemberRole; sessionDate?: string | null; teams: TeamModel[]; saving: boolean; create: (body: NewMember) => Promise<MemberModel> }>();
+	const today: string = TodayYYYY_MM_dd();
 	const emit = defineEmits<{ created: [member: MemberModel]; cancel: [] }>();
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
-	const fields: NewMemberForm = reactive({ profile: { nameFirst: "", nameLast: "", email: null, phone: null, githubLogin: null, scratchName: null, xboxGamertag: null }, account: newAccount(props.role), password: "", confirmation: "" });
+	const fields: NewMemberForm = reactive({ profile: { nameFirst: "", nameLast: "", email: null, phone: null, githubLogin: null, scratchName: null, xboxGamertag: null }, account: newAccount(props.role), password: "", confirmation: "", attended: props.role === "coder" });
+	const attendanceDate: ComputedRef<string> = computed((): string => props.sessionDate ?? today);
+	const attendanceLabel: ComputedRef<string> = computed((): string => attendanceDate.value === today ? t("maintenance.attendedToday") : t("maintenance.attendedSession", { date: attendanceDate.value }));
 
 	/** Validate signup and clear entered credentials after creating the member. */
 	async function submit(): Promise<void> {
 		if (props.saving) return;
 		try {
 			const parsed: NewMemberForm = newMemberFormSchema.parse(fields);
-			const member: MemberModel = await props.create(newMemberSchema.parse({ profile: parsed.profile, account: parsed.account, password: parsed.password || null }));
+			const member: MemberModel = await props.create(newMemberSchema.parse({ profile: parsed.profile, account: parsed.account, password: parsed.password || null, attendanceDate: parsed.attended ? DateStringSchema.parse(attendanceDate.value) : null }));
 			fields.password = ""; fields.confirmation = ""; emit("created", member); publish({ name: "maintenance.membersignup.success", severity: "success", message: t("actionNotifications.created") });
 		} catch (failure: unknown) { publish({ name: "maintenance.membersignup.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
@@ -26,6 +30,7 @@
 		<UForm :schema="newMemberFormSchema" :state="fields" class="SignupForm" @submit="submit">
 			<ProfileFieldInputs :fields="fields.profile" pathPrefix="profile." :disabled="saving" />
 			<AccountFields :fields="fields.account" :teams="teams" pathPrefix="account." :disabled="saving" />
+			<UFormField name="attended"><UCheckbox v-model="fields.attended" :disabled="saving" :label="attendanceLabel" /></UFormField>
 			<p>{{ t('maintenance.passwordOptional') }}</p>
 			<UFormField name="password" :label="t('profile.newPassword')"><UInput v-model="fields.password" type="password" autocomplete="new-password" :disabled="saving" /></UFormField>
 			<UFormField name="confirmation" :label="t('profile.confirmPassword')"><UInput v-model="fields.confirmation" type="password" autocomplete="new-password" :disabled="saving" /></UFormField>

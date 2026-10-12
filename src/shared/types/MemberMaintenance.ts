@@ -1,23 +1,24 @@
 import { z } from "zod";
+import { DateStringSchema } from "../utils/DateHelpers";
 import { memberProfileFieldsSchema, type MemberProfileFields } from "./MemberProfile";
 import { MemberModelSchema, type MemberModel } from "./models/MemberModel";
 import { MemberParentModelSchema } from "./models/MemberParentModel";
 import { MemberBadgeCategoryModelSchema } from "./models/MemberBadgeCategoryModel";
 import { MemberAttendanceModelSchema } from "./models/MemberAttendanceModel";
-import { TeamModelSchema } from "./models/TeamModel";
+import { TeamModelSchema, type TeamModel } from "./models/TeamModel";
 import { BadgeCategoryModelSchema } from "./models/BadgeCategoryModel";
 
 export type MemberRole = "coder" | "parent" | "mentor";
 export type AccountFields = Pick<MemberModel, "birthYear" | "fingerprintId" | "nfcTag" | "login" | "teamId" | "registeredCurrentTerm" | "isNinja" | "isParent" | "isMentor" | "gardaVetted">;
 export type GoalFields = Pick<MemberModel, "goalShortTerm" | "goalLongTerm">;
 export type GuardedUpdate<T> = { fields: T; expected: T };
-export type NewMember = { profile: MemberProfileFields; account: AccountFields; password: string | null };
+export type NewMember = { profile: MemberProfileFields; account: AccountFields; password: string | null; attendanceDate: string | null };
 export type RelationshipInput = { memberId: string; parentId: string };
 export type SkillInput = { memberId: string; badgeCategoryId: string };
 export type PasswordReset = { newPassword: string; confirmation: string };
 export type MaintenanceData = {
 	members: MemberModel[];
-	teams: z.infer<typeof TeamModelSchema>[];
+	teams: TeamModel[];
 	categories: z.infer<typeof BadgeCategoryModelSchema>[];
 	relationships: z.infer<typeof MemberParentModelSchema>[];
 	skills: z.infer<typeof MemberBadgeCategoryModelSchema>[];
@@ -43,7 +44,7 @@ export const accountSnapshotSchema: z.ZodType<AccountFields> = z.strictObject({
 export const accountUpdateSchema: z.ZodType<GuardedUpdate<AccountFields>> = z.strictObject({ fields: accountFieldsSchema, expected: accountSnapshotSchema });
 export const goalFieldsSchema: z.ZodType<GoalFields> = z.strictObject({ goalShortTerm: nullableText(4000), goalLongTerm: nullableText(4000) });
 export const goalUpdateSchema: z.ZodType<GuardedUpdate<GoalFields>> = z.strictObject({ fields: goalFieldsSchema, expected: z.strictObject({ goalShortTerm: z.string().nullable(), goalLongTerm: z.string().nullable() }) });
-export const newMemberSchema: z.ZodType<NewMember> = z.strictObject({ profile: memberProfileFieldsSchema, account: accountFieldsSchema, password: z.string().trim().min(4).max(120).nullable() });
+export const newMemberSchema: z.ZodType<NewMember> = z.strictObject({ profile: memberProfileFieldsSchema, account: accountFieldsSchema, password: z.string().trim().min(4).max(120).nullable(), attendanceDate: DateStringSchema.nullable().default(null) });
 export const relationshipInputSchema: z.ZodType<RelationshipInput> = z.strictObject({ memberId: z.uuid(), parentId: z.uuid() }).refine((value: RelationshipInput): boolean => value.memberId !== value.parentId);
 export const skillInputSchema: z.ZodType<SkillInput> = z.strictObject({ memberId: z.uuid(), badgeCategoryId: z.uuid() });
 export const passwordResetSchema: z.ZodType<PasswordReset> = z.strictObject({ newPassword: z.string().trim().min(4).max(120), confirmation: z.string().trim().min(4).max(120) }).refine((value: PasswordReset): boolean => value.newPassword === value.confirmation, { path: ["confirmation"], message: "Passwords do not match" });
@@ -66,9 +67,9 @@ export function newAccount(role: MemberRole): AccountFields {
 	return { birthYear: null, fingerprintId: null, nfcTag: null, login: null, teamId: null, registeredCurrentTerm: role === "coder", isNinja: role === "coder", isParent: role === "parent", isMentor: role === "mentor", gardaVetted: false };
 }
 
-export type NewMemberForm = { profile: MemberProfileFields; account: AccountFields; password: string; confirmation: string };
+export type NewMemberForm = { profile: MemberProfileFields; account: AccountFields; password: string; confirmation: string; attended: boolean };
 export const newMemberFormSchema: z.ZodType<NewMemberForm> = z.strictObject({
- profile: memberProfileFieldsSchema, account: accountFieldsSchema, password: z.string().trim().max(120), confirmation: z.string().trim().max(120),
+ attended: z.boolean(), profile: memberProfileFieldsSchema, account: accountFieldsSchema, password: z.string().trim().max(120), confirmation: z.string().trim().max(120),
 }).refine((value: NewMemberForm): boolean => value.password === "" || value.password.length >= 4, { path: ["password"], message: "Use at least four characters" })
  .refine((value: NewMemberForm): boolean => value.password === value.confirmation, { path: ["confirmation"], message: "Passwords do not match" });
 export const memberSearchSchema: z.ZodString = z.string().trim().max(200);

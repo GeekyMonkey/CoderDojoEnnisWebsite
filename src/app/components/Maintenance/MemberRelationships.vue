@@ -1,7 +1,8 @@
 <script setup lang="ts">
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
-	import { computed, ref, type ComputedRef, type Ref } from "vue";
+	import { compareMemberNames } from "#shared/utils/MemberNames";
+	import { computed, ref, watch, type ComputedRef, type Ref } from "vue";
 	import { memberSearchSchema, relationshipInputSchema, type RelationshipInput } from "#shared/types/MemberMaintenance";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import type { MemberParentModel } from "#shared/types/models/MemberParentModel";
@@ -12,18 +13,20 @@
 	const editing: Ref<boolean> = ref(false);
 	const search: Ref<string> = ref("");
 	const removing: Ref<string | null> = ref(null);
+	const limit: Ref<number> = ref(20);
 
 	const linked: ComputedRef<RelationshipRow[]> = computed((): RelationshipRow[] => props.relationships.flatMap((relation: MemberParentModel): RelationshipRow[] => {
 		if ((props.side === "parents" ? relation.memberId : relation.parentId) !== props.member.id) return [];
 		const target: MemberModel | null = props.members.find((member: MemberModel): boolean => member.id === (props.side === "parents" ? relation.parentId : relation.memberId)) ?? null;
 		return target ? [{ member: target, input: { memberId: relation.memberId, parentId: relation.parentId } }] : [];
-	}));
-	const candidates: ComputedRef<MemberModel[]> = computed((): MemberModel[] => {
+	}).sort((a: RelationshipRow, b: RelationshipRow): number => compareMemberNames(a.member, b.member)));
+	const matches: ComputedRef<MemberModel[]> = computed((): MemberModel[] => {
 		const parsed: ReturnType<typeof memberSearchSchema.safeParse> = memberSearchSchema.safeParse(search.value);
 		if (!parsed.success || !parsed.data) return [];
 		const term: string = parsed.data.toLocaleLowerCase();
-		return props.members.filter((member: MemberModel): boolean => member.id !== props.member.id && (props.side === "parents" ? member.isParent : member.isNinja) && !linked.value.some((row: RelationshipRow): boolean => row.member.id === member.id) && `${member.nameFirst ?? ""} ${member.nameLast ?? ""} ${member.login ?? ""}`.toLocaleLowerCase().includes(term)).slice(0, 20);
+		return props.members.filter((member: MemberModel): boolean => member.id !== props.member.id && (props.side === "parents" ? member.isParent : member.isNinja) && !linked.value.some((row: RelationshipRow): boolean => row.member.id === member.id) && `${member.nameFirst ?? ""} ${member.nameLast ?? ""} ${member.login ?? ""}`.toLocaleLowerCase().includes(term)).sort(compareMemberNames);
 	});
+	const candidates: ComputedRef<MemberModel[]> = computed((): MemberModel[] => matches.value.slice(0, limit.value));
 	/** Link or unlink only a validated parent-coder pair through store callbacks. */
 	async function change(input: RelationshipInput, remove: boolean): Promise<void> {
 		if (props.saving) return;
@@ -32,6 +35,7 @@
 	}
 	/** Build a pair from either profile's relationship view. */
 	function pair(target: MemberModel): RelationshipInput { return props.side === "parents" ? { memberId: props.member.id, parentId: target.id } : { memberId: target.id, parentId: props.member.id }; }
+	watch([search, (): string => props.member.id, (): string => props.side], (): void => { limit.value = 20; });
 </script>
 <template>
 	<UPageCard :title="t(`maintenance.${side}`)">
@@ -41,7 +45,7 @@
 			<template v-if="editing"><UButton v-if="removing !== row.member.id" variant="outline" color="error" :disabled="saving" @click="removing = row.member.id">{{ t('maintenance.unlink') }}</UButton><template v-else><span>{{ t('maintenance.confirmUnlink') }}</span><UButton color="error" :loading="saving" @click="change(row.input, true)">{{ t('maintenance.unlink') }}</UButton><UButton variant="ghost" @click="removing = null">{{ t('profile.cancel') }}</UButton></template></template>
 		</li></ul>
 		<UButton class="SectionEdit" variant="outline" :disabled="saving" @click="editing = !editing; search = ''; removing = null">{{ t(editing ? 'maintenance.done' : 'maintenance.editRelationships') }}</UButton>
-		<template v-if="editing"><UInput v-model="search" :maxlength="200" :aria-label="t('maintenance.search')" :placeholder="t('maintenance.search')" /><ul class="Relationships"><li v-for="candidate in candidates" :key="candidate.id"><span>{{ candidate.nameFirst }} {{ candidate.nameLast }}</span><UButton :loading="saving" @click="change(pair(candidate), false)">{{ t('maintenance.link') }}</UButton></li></ul></template>
+		<template v-if="editing"><UInput v-model="search" :maxlength="200" :aria-label="t('maintenance.search')" :placeholder="t('maintenance.search')" /><p v-if="search">{{ t('maintenance.membersCount', { count: matches.length }) }}</p><ul class="Relationships"><li v-for="candidate in candidates" :key="candidate.id"><span>{{ candidate.nameFirst }} {{ candidate.nameLast }}</span><UButton :loading="saving" @click="change(pair(candidate), false)">{{ t('maintenance.link') }}</UButton></li></ul><UButton v-if="candidates.length < matches.length" variant="outline" @click="limit += 20">{{ t('maintenance.showMore') }}</UButton></template>
 
 	</UPageCard>
 </template>

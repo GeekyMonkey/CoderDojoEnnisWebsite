@@ -7,6 +7,7 @@
 
 	const props = defineProps<{
 		member: MemberModel;
+		earnedOnly?: boolean;
 		size?: "sm" | "md" | "lg";
 	}>();
 
@@ -33,10 +34,10 @@
 	 * Resolve the belt display value for the BeltColor component.
 	 */
 	const beltDisplayValue = computed<BeltModel | string | null>(() => {
-		if (props.member.isMentor) {
+		if (!props.earnedOnly && props.member.isMentor) {
 			return "mentor";
 		}
-		if (props.member.isParent) {
+		if (!props.earnedOnly && props.member.isParent) {
 			return "parent";
 		}
 		if (!belt.value) {

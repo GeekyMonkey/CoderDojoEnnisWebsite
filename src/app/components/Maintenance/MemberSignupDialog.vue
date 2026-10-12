@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { ref, type Ref } from "vue";
 	import { useMemberMaintenanceStore, type MemberMaintenanceStore } from "~/stores/useMemberMaintenanceStore";
+	const props = defineProps<{ sessionDate?: string | null }>();
 	const { t } = useI18n();
 	const store: MemberMaintenanceStore = useMemberMaintenanceStore();
 	const open: Ref<boolean> = ref(false);
@@ -15,7 +16,7 @@
 	 <template #body>
 	  <UAlert v-if="store.isError.value" color="error" :title="t('profile.loadError')" />
 	  <p v-else-if="store.isPending.value">{{ t('profile.loading') }}</p>
-	  <MemberSignup v-else-if="store.data.value" role="coder" :teams="store.data.value.teams" :saving="store.isSaving.value" :create="store.create" @created="created" @cancel="setOpen(false)" />
+	  <MemberSignup v-else-if="store.data.value" role="coder" :sessionDate="props.sessionDate" :teams="store.data.value.teams" :saving="store.isSaving.value" :create="store.create" @created="created" @cancel="setOpen(false)" />
 	 </template>
 	</UModal>
 </template>

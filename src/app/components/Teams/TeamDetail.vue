@@ -1,4 +1,6 @@
 <script setup lang="ts">
+ import EntityImageEditor from "~/components/Images/EntityImageEditor.vue";
+ import type { EntityImageAction } from "#shared/types/ImageUpload";
  import { useActionNotifications } from "~/composables/useActionNotifications";
  import { computed, ref, type Ref, type ComputedRef } from "vue";
  import { teamIdSchema, teamSnapshot, type TeamFields } from "#shared/types/TeamMaintenance";
@@ -21,6 +23,8 @@
  const assigned: ComputedRef<MemberModel[]> = computed((): MemberModel[] => (members.data.value?.members ?? []).filter((member: MemberModel): boolean => member.teamId === props.teamId));
  const staleDelete: ComputedRef<boolean> = computed((): boolean => !!team.value && JSON.stringify(deleteSnapshot.value) !== JSON.stringify(teamSnapshot(team.value)));
  const details: ComputedRef<{ key: string; value: string }[]> = computed((): { key: string; value: string }[] => ["goal", "notes", "hexcode"].map((key: string): { key: string; value: string } => ({ key: key === "hexcode" ? "colour" : key, value: String(team.value?.[key as "goal" | "notes" | "hexcode"] ?? "—") })));
+ /** Forward entity image processing through the team store with revision protection. */
+ async function changeImage(action: EntityImageAction): Promise<TeamModel> { return store.changeImage(props.teamId, action); }
  /** Save the selected team's protected snapshot through its store. */
  async function save(fields: TeamFields, expected: TeamFields | null): Promise<TeamModel> { if (!expected) throw new Error(t("teams.notFound")); return store.save(props.teamId, { fields, expected }); }
  /** Capture the exact team being confirmed for deletion. */
@@ -38,10 +42,11 @@
   <template #body><div class="TeamDetail">
    <p v-if="isPending">{{ t('profile.loading') }}</p><UAlert v-else-if="isError" color="error" :title="t('teams.loadError')" /><UAlert v-else-if="!valid || !team" color="error" :title="t('teams.notFound')" />
    <template v-else>
-    <UPageCard :title="t('profile.details')">
+    <UPageCard :title="t('profile.details')"><EntityImageEditor v-if="editing" :identity="team.id" :revision="team.imageRevision ?? null" :populated="team.hasImage ?? true" :saving="isSaving" :change="changeImage"><TeamLogo :for="team" size="fill" /></EntityImageEditor><TeamLogo v-else :for="team" size="lg" />
      <TeamForm v-if="editing" :key="teamId" :team="team" :saving="isSaving" :save="save" @saved="editing = false" @cancel="editing = false" />
      <template v-else><div class="TeamHeading"><ColourSwatch :hexCode="team.hexcode" /><span>{{ team.teamName }}</span></div><dl class="TeamDisplay"><div v-for="item in details" :key="item.key"><dt>{{ t(`teams.${item.key}`) }}</dt><dd>{{ item.value }}</dd></div></dl><UButton class="TeamEdit" @click="editing = true">{{ t('teams.edit') }}</UButton></template>
     </UPageCard>
+    <div class="TeamActions"><UButton :to="`/mentor/maintenance/team-print/${team.id}?kind=ids`" target="_blank" variant="outline" icon="i-lucide-printer">{{ t('teams.printIds') }}</UButton><UButton :to="`/mentor/maintenance/team-print/${team.id}?kind=card`" target="_blank" variant="outline" icon="i-lucide-printer">{{ t('teams.printTeamCard') }}</UButton></div>
     <UPageCard :title="t('nav.Members')"><p v-if="members.isPending.value">{{ t('profile.loading') }}</p><UAlert v-else-if="members.isError.value" color="error" :title="t('profile.loadError')" /><template v-else><ul v-if="assigned.length"><li v-for="member in assigned" :key="member.id"><NuxtLink :to="`/mentor/member/${member.id}`">{{ member.nameFirst }} {{ member.nameLast }}</NuxtLink></li></ul><p v-else>{{ t('teams.noMembers') }}</p></template></UPageCard>
     <UPageCard v-if="deleteSnapshot" :title="t('teams.deleteConfirm')"><p>{{ t('teams.deleteDescription') }}</p><UAlert v-if="staleDelete" color="warning" :title="t('teams.remoteChanged')" /><div class="TeamActions"><UButton color="error" :loading="isSaving" :disabled="staleDelete || assigned.length > 0 || members.isPending.value || members.isError.value" @click="remove">{{ t('teams.delete') }}</UButton><UButton variant="outline" :disabled="isSaving" @click="deleteSnapshot = null">{{ t('profile.cancel') }}</UButton></div></UPageCard>
     <UButton v-else class="TeamEdit" color="error" variant="outline" :disabled="editing || isSaving" @click="confirmDelete">{{ t('teams.delete') }}</UButton>

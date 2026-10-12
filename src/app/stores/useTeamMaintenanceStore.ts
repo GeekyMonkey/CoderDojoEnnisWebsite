@@ -1,11 +1,12 @@
+import { entityImageActionSchema, type EntityImageAction } from "#shared/types/ImageUpload";
 import { useMutation, useQuery, useQueryClient, type QueryFunctionContext } from "@tanstack/vue-query";
 import { computed, onScopeDispose, type ComputedRef, type Ref } from "vue";
 import { teamFieldsSchema, teamUpdateSchema, teamDeleteSchema, teamIdSchema, teamListSchema, type TeamFields, type TeamUpdate, type TeamDelete } from "#shared/types/TeamMaintenance";
 import { TeamModelSchema, type TeamModel } from "#shared/types/models/TeamModel";
 import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
-type TeamWrite = { path: string; method: "POST" | "PATCH" | "DELETE"; body: TeamFields | TeamUpdate | TeamDelete };
-type TeamMaintenanceStore = { teams: ComputedRef<TeamModel[]>; isPending: Ref<boolean>; isError: Ref<boolean>; isSaving: Ref<boolean>; create: (fields: TeamFields) => Promise<TeamModel>; save: (id: string, body: TeamUpdate) => Promise<TeamModel>; remove: (id: string, body: TeamDelete) => Promise<TeamModel> };
+type TeamWrite = { path: string; method: "POST" | "PATCH" | "DELETE"; body: TeamFields | TeamUpdate | TeamDelete | EntityImageAction };
+type TeamMaintenanceStore = { teams: ComputedRef<TeamModel[]>; isPending: Ref<boolean>; isError: Ref<boolean>; isSaving: Ref<boolean>; changeImage: (id: string, body: EntityImageAction) => Promise<TeamModel>; create: (fields: TeamFields) => Promise<TeamModel>; save: (id: string, body: TeamUpdate) => Promise<TeamModel>; remove: (id: string, body: TeamDelete) => Promise<TeamModel> };
 /** Own team requests, shared query caching and remote refresh for all dependent views. */
 export function useTeamMaintenanceStore(): TeamMaintenanceStore {
  const user: ReturnType<typeof useSupabaseUser> = useSupabaseUser();
@@ -27,11 +28,13 @@ export function useTeamMaintenanceStore(): TeamMaintenanceStore {
  async function save(id: string, body: TeamUpdate): Promise<TeamModel> { return mutation.mutateAsync({ path: `/${teamIdSchema.parse(id)}`, method: "PATCH", body: teamUpdateSchema.parse(body) }); }
  /** Soft-delete the confirmed team with snapshot protection. */
  async function remove(id: string, body: TeamDelete): Promise<TeamModel> { return mutation.mutateAsync({ path: `/${teamIdSchema.parse(id)}`, method: "DELETE", body: teamDeleteSchema.parse(body) }); }
+ /** Save a validated team image through the same shared mutation and realtime caches. */
+ async function changeImage(id: string, body: EntityImageAction): Promise<TeamModel> { return mutation.mutateAsync({ path: `/${teamIdSchema.parse(id)}/image`, method: "POST", body: entityImageActionSchema.parse(body) }); }
  const teams: ComputedRef<TeamModel[]> = computed((): TeamModel[] => query.data.value ?? []);
  const realtime: ReturnType<typeof UseSupabaseRealtimeAllTables> = UseSupabaseRealtimeAllTables();
  /** Refresh caches after any team event from another session. */
  function invalidate(event: { table: string }): void { if (event.table === "teams") void reload(); }
  realtime.events.on("INSERT", invalidate); realtime.events.on("UPDATE", invalidate); realtime.events.on("DELETE", invalidate);
  onScopeDispose((): void => { realtime.events.off("INSERT", invalidate); realtime.events.off("UPDATE", invalidate); realtime.events.off("DELETE", invalidate); });
- return { teams, isPending: query.isPending, isError: query.isError, isSaving: mutation.isPending, create, save, remove };
+ return { teams, isPending: query.isPending, isError: query.isError, isSaving: mutation.isPending, changeImage, create, save, remove };
 }

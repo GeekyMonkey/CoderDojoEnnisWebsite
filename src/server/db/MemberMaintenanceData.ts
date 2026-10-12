@@ -29,7 +29,9 @@ export function storageFields(fields: object): Record<string, unknown> {
 
 /** Execute a mentor-only atomic maintenance operation with useful conflict responses. */
 export async function maintainMember(actor: VerifiedMember, action: MaintenanceAction, id: string, fields: Record<string, unknown>, expected: Record<string, unknown> = {}): Promise<unknown> {
-	const { data, error } = await actor.client.schema("coderdojo").rpc("maintain_member", { p_actor: actor.id, p_action: action, p_id: id, p_fields: fields, p_expected: expected });
+	const { data, error } = action === "create"
+		? await actor.client.schema("coderdojo").rpc("signup_member", { p_actor: actor.id, p_id: id, p_fields: fields, p_attendance_date: fields.attendance_date ?? null })
+		: await actor.client.schema("coderdojo").rpc("maintain_member", { p_actor: actor.id, p_action: action, p_id: id, p_fields: fields, p_expected: expected });
 	if (error) {
 		const status: number = error.code === "42501" ? 403 : error.code === "P0002" ? 404 : ["23505", "40001", "P0001"].includes(error.code) ? 409 : error.code === "22023" ? 400 : 503;
 		throw createError({ statusCode: status, statusMessage: status === 503 ? "Unable to save member" : error.message });

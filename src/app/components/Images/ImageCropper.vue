@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref, watch, onBeforeUnmount, type Ref } from "vue";
-    import { imageGeometry, clampImageTransform, zoomImageTransform, type ProfileImageSlot, type ImageGeometry, type ImageTransform, type ImagePoint } from "#shared/types/ProfileImages";
-    const props = defineProps<{ image: HTMLImageElement; slot: ProfileImageSlot; disabled: boolean }>();
+    import { imageGeometry, clampImageTransform, zoomImageTransform, type ImageGeometry, type ImageTransform, type ImagePoint } from "#shared/types/ProfileImages";
+    const props = defineProps<{ image: HTMLImageElement; round: boolean; disabled: boolean }>();
     type Metrics = { center: ImagePoint; distance: number; count: number };
     type Gesture = Metrics & { initial: ImageTransform };
     const { t } = useI18n();
@@ -46,7 +46,7 @@
     /** Apply pan and zoom limits without enforcing a separate fit mode. */
     function updateTransform(value: ImageTransform): void {
         if (props.disabled) return;
-        transform.value = clampImageTransform(props.image.naturalWidth, props.image.naturalHeight, value, props.slot === "photo");
+        transform.value = clampImageTransform(props.image.naturalWidth, props.image.naturalHeight, value, props.round);
     }
 
     /** Capture primary mouse or touch pointers for direct image manipulation. */
@@ -114,7 +114,7 @@
     /** Draw exactly the framing that will be saved, including transparent uncovered areas. */
     function draw(): void {
         if (!canvas.value) return;
-        const geometry: ImageGeometry = imageGeometry(props.image.naturalWidth, props.image.naturalHeight, transform.value, props.slot === "photo");
+        const geometry: ImageGeometry = imageGeometry(props.image.naturalWidth, props.image.naturalHeight, transform.value, props.round);
         canvas.value.width = geometry.outputSize; canvas.value.height = geometry.outputSize;
         const context: CanvasRenderingContext2D | null = canvas.value.getContext("2d");
         if (!context) return;
@@ -132,14 +132,14 @@
     watch(canvas, draw);
     watch(transform, draw, { flush: "post" });
     watch((): HTMLImageElement => props.image, (): void => { resetView(); draw(); });
-    watch((): ProfileImageSlot => props.slot, (): void => { resetView(); draw(); });
+    watch((): boolean => props.round, (): void => { resetView(); draw(); });
     watch((): boolean => props.disabled, (disabled: boolean): void => { if (disabled) resetGestures(); });
     onBeforeUnmount(resetGestures);
 </script>
 
 <template>
     <div class="ImageCropper">
-        <div :class="['CropPreview', { Photo: slot === 'photo', Dragging: dragging }]" tabindex="0" role="group" :aria-label="t('profileImages.preview')" :aria-describedby="instructionsId" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerEnd" @pointercancel="pointerEnd" @lostpointercapture="pointerEnd" @wheel.prevent="wheel" @keydown="keyDown">
+        <div :class="['CropPreview', { Photo: round, Dragging: dragging }]" tabindex="0" role="group" :aria-label="t('profileImages.preview')" :aria-describedby="instructionsId" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerEnd" @pointercancel="pointerEnd" @lostpointercapture="pointerEnd" @wheel.prevent="wheel" @keydown="keyDown">
             <canvas ref="canvas" :aria-label="t('profileImages.preview')" />
         </div>
         <p :id="instructionsId">{{ t('profileImages.gestures') }}</p>

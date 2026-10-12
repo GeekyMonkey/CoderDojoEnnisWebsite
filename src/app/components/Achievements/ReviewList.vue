@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useMemberPresenceStore } from "~/stores/useMemberPresenceStore";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import type { ColumnDef, Row } from "@tanstack/vue-table";
 	import type { ComputedRef, Ref } from "vue";
@@ -7,6 +8,7 @@
 	import { useBeltReviewsStore } from "~/stores/useMemberBeltsStore";
 	import { useMembersStore } from "~/stores/useMembersStore";
 	import { useTeamsStore } from "~/stores/useTeamsStore";
+	import MemberCurrentBelt from "~/components/Members/MemberCurrentBelt.vue";
 	import MemberPresenceLegend from "~/components/Members/MemberPresenceLegend.vue";
 	import MemberPresencePhoto from "~/components/Members/MemberPresencePhoto.vue";
 	import BeltColor from "~/components/Belts/BeltColor.vue";
@@ -14,6 +16,7 @@
 	const props = defineProps<{ kind: AchievementKind; memberId?: string }>();
 	type Action = AchievementDecision["action"];
 	const { t } = useI18n();
+	const { presentById } = useMemberPresenceStore();
 	const { publish } = useActionNotifications();
 	const reviews: ReturnType<typeof useMemberBadgesStore> = props.kind === "badge"
 		? useMemberBadgesStore(props.memberId === undefined ? undefined : (): string => props.memberId ?? "")
@@ -90,9 +93,10 @@
 		<UTable v-if="!isError && (isLoading || rows.length)" v-model:expanded="expanded" :data="rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
 			<template #memberName-cell="{ row }">
 				<div class="MemberCell">
-					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" size="sm" />
+					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" :present="presentById === null ? null : presentById[row.original.memberId] === true" size="sm" />
 					<NuxtLink :to="`/mentor/coder/${row.original.memberId}`" @click.stop>{{ row.original.memberName }}</NuxtLink>
 				</div>
+				<MemberCurrentBelt v-if="(kind !== 'belt' || memberId) && MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" />
 			</template>
 			<template #label-cell="{ row }">
 				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="md" class="RequestedBelt" />

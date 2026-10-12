@@ -35,7 +35,7 @@ export function useMemberMaintenanceStore(): MemberMaintenanceStore {
 
 	/** Refresh all derived directories, profiles and progress after successful or conflicting writes. */
 	async function reload(): Promise<void> {
-		await Promise.all(["memberMaintenance", "profiles", "members", "memberAttendanceHistory"].map((key: string): Promise<void> => queryClient.invalidateQueries({ queryKey: [key] })));
+		await Promise.all(["memberMaintenance", "profiles", "members", "memberAttendanceHistory", "memberAttendanceSessionStats", "memberAttendanceSessionDates", "memberAttendanceSessionDate"].map((key: string): Promise<void> => queryClient.invalidateQueries({ queryKey: [key] })));
 	}
 	const mutation: ReturnType<typeof useMutation<MemberModel | null, Error, MaintenanceWrite>> = useMutation<MemberModel | null, Error, MaintenanceWrite>({
 		mutationFn: async (write: MaintenanceWrite): Promise<MemberModel | null> => {

@@ -15,5 +15,5 @@
 
 <style scoped lang="scss">
     .ProfileImage { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; }
-    .Photo { border-radius: 50%; }
+    .Photo { border-radius: 50%; object-fit: cover; }
 </style>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	import { useMemberPresenceStore } from "~/stores/useMemberPresenceStore";
+	import MemberCurrentBelt from "~/components/Members/MemberCurrentBelt.vue";
 	import { computed, reactive, ref, type ComputedRef, type Ref } from "vue";
 	import { directoryFilterSchema, type MemberRole } from "#shared/types/MemberMaintenance";
 	import type { TeamModel } from "#shared/types/models/TeamModel";
@@ -6,6 +8,7 @@
 	import { useMemberMaintenanceStore } from "~/stores/useMemberMaintenanceStore";
 	const props = defineProps<{ role: MemberRole }>();
 	const { t } = useI18n();
+	const { presentById } = useMemberPresenceStore();
 	const { pageTitle } = useMemberLayoutContext();
 	const store: ReturnType<typeof useMemberMaintenanceStore> = useMemberMaintenanceStore();
 	const { data, isPending, isError, isSaving } = store;
@@ -33,10 +36,10 @@
 				<MemberSignup v-if="signup" :role="role" :teams="data.teams" :saving="isSaving" :create="store.create" @created="created" @cancel="signup = false" />
 				<template v-else>
 					<div class="DirectoryControls"><UInput v-model="filters.search" :maxlength="200" :aria-label="t('maintenance.search')" :placeholder="t('maintenance.search')" /><UCheckbox v-if="role === 'coder'" v-model="filters.registeredOnly" :label="t('maintenance.registeredOnly')" /><UButton @click="signup = true">{{ t('maintenance.signup') }}</UButton></div>
-					<p>{{ t('maintenance.membersCount', { count: filtered.length }) }}</p><p v-if="!filtered.length">{{ t('maintenance.noMembers') }}</p>
+					<MemberPresenceLegend v-if="role === 'coder'" /><p>{{ t('maintenance.membersCount', { count: filtered.length }) }}</p><p v-if="!filtered.length">{{ t('maintenance.noMembers') }}</p>
 					<ul class="DirectoryMembers"><li v-for="member in visible" :key="member.id">
-						<NuxtLink class="DirectoryMember" :to="`/mentor/member/${member.id}`"><MemberAvatar :member="member" size="sm" linkTo="NONE" /><span>{{ member.nameFirst }} {{ member.nameLast }}<small>{{ member.login || '—' }} · {{ teamNames[member.teamId ?? ''] ?? t('maintenance.noTeam') }}</small></span></NuxtLink>
-						<span v-if="role !== 'coder'">{{ member.email || member.phone || '—' }}</span><UBadge v-if="member.registeredCurrentTerm" variant="soft">{{ t('maintenance.registeredCurrentTerm') }}</UBadge>
+						<NuxtLink class="DirectoryMember" :to="`/mentor/member/${member.id}`"><MemberPresencePhoto v-if="role === 'coder'" :member="member" :present="presentById === null ? null : presentById[member.id] === true" size="sm" /><MemberAvatar v-else :member="member" size="sm" linkTo="NONE" /><span>{{ member.nameFirst }} {{ member.nameLast }}<small>{{ member.login || '—' }} · {{ teamNames[member.teamId ?? ''] ?? t('maintenance.noTeam') }}</small></span></NuxtLink>
+						<MemberCurrentBelt :member="member" /><TeamLogo v-if="member.teamId" :for="member" size="sm" /><span v-if="role !== 'coder'">{{ member.email || member.phone || '—' }}</span><UBadge v-if="member.registeredCurrentTerm" variant="soft">{{ t('maintenance.registeredCurrentTerm') }}</UBadge>
 					</li></ul><UButton v-if="visible.length < filtered.length" variant="outline" @click="limit += 50">{{ t('maintenance.showMore') }}</UButton>
 				</template>
 			</template>

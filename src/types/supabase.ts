@@ -450,6 +450,8 @@ export type Database = {
 			teams: {
 				Row: {
 					deleted: boolean;
+					has_image: boolean;
+					image_revision: string | null;
 					goal: string | null;
 					hexcode: string | null;
 					id: string;
@@ -458,6 +460,8 @@ export type Database = {
 				};
 				Insert: {
 					deleted?: boolean;
+					has_image?: boolean;
+					image_revision?: string | null;
 					goal?: string | null;
 					hexcode?: string | null;
 					id?: string;
@@ -466,6 +470,8 @@ export type Database = {
 				};
 				Update: {
 					deleted?: boolean;
+					has_image?: boolean;
+					image_revision?: string | null;
 					goal?: string | null;
 					hexcode?: string | null;
 					id?: string;
