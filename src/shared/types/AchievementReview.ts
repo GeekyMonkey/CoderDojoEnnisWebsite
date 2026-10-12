@@ -43,6 +43,8 @@ export type AchievementReview = {
 	awarded: number | null;
 	awardedNotes: string | null;
 	awardedByAdultId: string | null;
+ awardedByName?:string|null;
+ rejectedByName?:string|null;
 	rejectedDate: number | null;
 	rejectedNotes: string | null;
 	rejectedByAdultId: string | null;
@@ -52,5 +54,6 @@ export const AchievementReviewSchema = z.strictObject({
  id: z.string().min(1), definitionId: z.uuid(), definitionDeleted: z.boolean(), goalDate: z.number().nullable(), memberId: z.string().min(1), memberName: z.string(), canReview: z.boolean().default(true), kind: AchievementKindSchema,
  categoryId: z.string().nullable(), categoryName: z.string().nullable(), label: z.string(), sortOrder: z.number(), belt: BeltModelSchema.nullable(), description: z.string(),
  applicationDate: z.number().nullable(), applicationNotes: z.string().nullable(), awarded: z.number().nullable(), awardedNotes: z.string().nullable(), awardedByAdultId: z.string().nullable(),
+ awardedByName:z.string().nullable().default(null),rejectedByName:z.string().nullable().default(null),
  rejectedDate: z.number().nullable(), rejectedNotes: z.string().nullable(), rejectedByAdultId: z.string().nullable(),
 });

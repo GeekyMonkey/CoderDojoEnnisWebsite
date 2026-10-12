@@ -1,0 +1,18 @@
+meta {
+  name: Save Goals
+  type: http
+}
+patch {
+  url: {{Host}}/api/Coder/goals
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {"fields":{"goalShortTerm":null,"goalLongTerm":null},"expected":{"goalShortTerm":null,"goalLongTerm":null}}
+}
+docs {
+  Own coder only. Goal writes reject stale baselines. Applications require 5-4000 trimmed characters, active definitions, and the next unearned belt. Concurrent duplicate submissions return the same application ID. Existing badge goals are upgraded rather than duplicated.
+}

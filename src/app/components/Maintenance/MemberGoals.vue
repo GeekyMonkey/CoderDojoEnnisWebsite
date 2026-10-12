@@ -6,7 +6,7 @@
 	import { goalFieldsSchema, goalSnapshot, type GoalFields, type GuardedUpdate } from "#shared/types/MemberMaintenance";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import { useMemberSectionDraft } from "~/composables/useMemberSectionDraft";
-	const props = defineProps<{ member: MemberModel; saving: boolean; save: (body: GuardedUpdate<GoalFields>) => Promise<MemberModel> }>();
+	const props = withDefaults(defineProps<{ member: MemberModel; saving: boolean; showProgress?:boolean; save: (body: GuardedUpdate<GoalFields>) => Promise<unknown> }>(),{showProgress:true});
 	const KEYS: (keyof GoalFields)[] = ["goalShortTerm", "goalLongTerm"];
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
@@ -30,7 +30,7 @@
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<div class="GoalActions"><UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t('profile.save') }}</UButton><UButton variant="outline" :disabled="saving" @click="cancel">{{ t('profile.cancel') }}</UButton></div>
 		</UForm>
-		<MemberProgress :memberId="member.id" />
+		<MemberProgress v-if="showProgress" :memberId="member.id" />
 	</UPageCard>
 </template>
 <style scoped lang="scss">

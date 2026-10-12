@@ -1,0 +1,18 @@
+meta {
+  name: Choose Badge Goal
+  type: http
+}
+post {
+  url: {{Host}}/api/Coder/badge-goal
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {"definitionId":"{{BadgeId}}","selected":true,"expectedGoalDate":null}
+}
+docs {
+  Own coder only. Goal writes reject stale baselines. Applications require 5-4000 trimmed characters, active definitions, and the next unearned belt. Concurrent duplicate submissions return the same application ID. Existing badge goals are upgraded rather than duplicated.
+}

@@ -89,6 +89,14 @@ export default {
 		heading: "Belt Applications",
 	},
 	coder: {
+		applicationSaved: "Application submitted.",
+		apply: "Apply",
+		askMentor: "Talk to a mentor about your application.",
+		chooseBadges: "Choose badge goals",
+		chooseGoal: "Choose goal",
+		evidence: "Tell us why you deserve this (at least 5 characters)",
+		reapply: "You can apply again after addressing the feedback.",
+		removeGoal: "Remove goal",
 		unassigned: "Contact a mentor to be assigned to a team.",
 	},
 	coders: {

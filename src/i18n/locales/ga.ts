@@ -90,6 +90,14 @@ export default {
 		heading: "Iarratais ar Chriosanna",
 	},
 	coder: {
+		applicationSaved: "Iarratas curtha isteach.",
+		apply: "Déan iarratas",
+		askMentor: "Labhair le meantóir faoi d’iarratas.",
+		chooseBadges: "Roghnaigh spriocanna suaitheantais",
+		chooseGoal: "Roghnaigh sprioc",
+		evidence: "Inis cén fáth a bhfuil sé tuillte agat (5 charachtar ar a laghad)",
+		reapply: "Is féidir iarratas eile a dhéanamh tar éis an aiseolais.",
+		removeGoal: "Bain sprioc",
 		unassigned: "Déan teagmháil le meantóir chun dul isteach i bhfoireann.",
 	},
 	coders: {

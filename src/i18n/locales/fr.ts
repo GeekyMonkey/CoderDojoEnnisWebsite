@@ -91,6 +91,14 @@ export default {
 		heading: "Demandes de ceinture",
 	},
 	coder: {
+		applicationSaved: "Demande envoyée.",
+		apply: "Postuler",
+		askMentor: "Parlez de votre demande à un mentor.",
+		chooseBadges: "Choisir des objectifs de badges",
+		chooseGoal: "Choisir cet objectif",
+		evidence: "Expliquez pourquoi vous le méritez (5 caractères minimum)",
+		reapply: "Vous pouvez postuler à nouveau après avoir suivi les conseils.",
+		removeGoal: "Retirer cet objectif",
 		unassigned: "Contactez un mentor pour rejoindre une équipe.",
 	},
 	coders: {

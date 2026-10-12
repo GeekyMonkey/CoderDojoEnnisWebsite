@@ -491,6 +491,10 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
+            coder_action: {
+                Args: {p_actor:string;p_action:string;p_kind?:string|null;p_definition?:string|null;p_fields?:Json;p_expected?:Json};
+                Returns: Json;
+            };
 			get_attendance_dates: {
 				Args: never;
 				Returns: {

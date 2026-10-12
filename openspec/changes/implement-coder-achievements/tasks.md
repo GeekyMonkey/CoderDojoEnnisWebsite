@@ -1,0 +1,6 @@
+- [x] Review legacy MemberController goals/applications and complete Goals/Badges/BadgesAvailable/Belts views.
+- [x] Add strict contracts, store-owned actions, reusable forms/cards and own-member APIs with Bruno requests.
+- [x] Apply atomic coder_action migration with service-only access and empty search_path.
+- [x] Verify stale goals, goal upgrade, duplicates, earned/progression restrictions, rejection/reapplication and role checks.
+- [x] Verify browser, realtime, production build and unchanged legacy type diagnostics.
+- [x] Publish C03-C06 and update master checklist.
