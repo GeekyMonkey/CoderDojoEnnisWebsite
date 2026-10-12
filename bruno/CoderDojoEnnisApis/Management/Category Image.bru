@@ -1,0 +1,18 @@
+meta {
+  name: Category image
+  type: http
+}
+post {
+  url: {{Host}}/api/Management/definitions/category/{{BadgeCategoryId}}/image
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {"action":"delete","expectedRevision":null}
+}
+docs {
+  Mentor only. Upload uses action upload and a png field containing processed square PNG base64, at most 800 pixels. Use the latest imageRevision as expectedRevision; stale revisions return 409. Deletion returns a category definition with hasImage false and a new revision.
+}

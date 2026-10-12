@@ -107,6 +107,7 @@ export default {
 		details: "Définition",
 		edit: "Modifier la définition",
 		empty: "Aucune définition trouvée.",
+		image: "Image",
 		loadError: "Impossible de charger les définitions.",
 		name: "Nom",
 		noBadges: "Aucun badge actif dans cette catégorie.",

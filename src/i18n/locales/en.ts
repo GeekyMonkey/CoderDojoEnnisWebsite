@@ -105,6 +105,7 @@ export default {
 		details: "Definition",
 		edit: "Edit definition",
 		empty: "No definitions found.",
+		image: "Image",
 		loadError: "Could not load definitions.",
 		name: "Name",
 		noBadges: "No active badges in this category.",

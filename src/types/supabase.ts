@@ -19,18 +19,24 @@ export type Database = {
 					category_description: string | null;
 					category_name: string | null;
 					deleted: boolean;
+					has_image: boolean;
+					image_revision: string | null;
 					id: string;
 				};
 				Insert: {
 					category_description?: string | null;
 					category_name?: string | null;
 					deleted?: boolean;
+					has_image?: boolean;
+					image_revision?: string | null;
 					id?: string;
 				};
 				Update: {
 					category_description?: string | null;
 					category_name?: string | null;
 					deleted?: boolean;
+					has_image?: boolean;
+					image_revision?: string | null;
 					id?: string;
 				};
 				Relationships: [];

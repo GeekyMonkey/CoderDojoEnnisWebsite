@@ -5,7 +5,7 @@ export const definitionIdSchema = z.uuid();
 export const definitionSearchSchema = z.string().trim().max(200);
 export const definitionSnapshotSchema = z.strictObject({ name: z.string(), description: z.string().nullable(), hexCode: z.string().nullable(), sortOrder: z.number().nullable(), categoryId: z.string().nullable() });
 export type DefinitionFields = z.infer<typeof definitionSnapshotSchema>;
-export const definitionSchema = definitionSnapshotSchema.extend({ id: definitionIdSchema, kind: definitionKindSchema, deleted: z.boolean(), awardedCount: z.number().int().nonnegative().default(0) });
+export const definitionSchema = definitionSnapshotSchema.extend({ id: definitionIdSchema, kind: definitionKindSchema, deleted: z.boolean(), hasImage: z.boolean().default(false), imageRevision: z.uuid().nullable().default(null), awardedCount: z.number().int().nonnegative().default(0) });
 export type Definition = z.infer<typeof definitionSchema>;
 export const definitionListSchema = z.array(definitionSchema);
 /** Normalize optional input text while preserving unavailable values as null. */
@@ -28,5 +28,5 @@ export type DefinitionDelete = z.infer<typeof definitionDeleteSchema>;
 /** Extract editable fields for optimistic snapshot checks. */
 export function definitionSnapshot(value: Definition): DefinitionFields { return { name: value.name, description: value.description, hexCode: value.hexCode, sortOrder: value.sortOrder, categoryId: value.categoryId }; }
 /** Start a kind-specific creation form. */
-export function newDefinition(kind: DefinitionKind): Definition { return { id: "new", kind, deleted: false, awardedCount: 0, name: "", description: null, hexCode: null, sortOrder: kind === "belt" ? 0 : null, categoryId: null }; }
+export function newDefinition(kind: DefinitionKind): Definition { return { id: "new", kind, deleted: false, hasImage: false, imageRevision: null, awardedCount: 0, name: "", description: null, hexCode: null, sortOrder: kind === "belt" ? 0 : null, categoryId: null }; }
 export const DEFINITION_PATHS: Record<DefinitionKind, string> = { belt: "belts", badge: "badges", category: "badge-categories" };

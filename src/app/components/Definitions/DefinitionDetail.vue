@@ -1,4 +1,6 @@
 <script setup lang="ts">
+ import CategoryImageEditor from "~/components/Categories/CategoryImageEditor.vue";
+ import type { EntityImageAction } from "#shared/types/ImageUpload";
  import { useActionNotifications } from "~/composables/useActionNotifications";
  import { computed, ref, type ComputedRef, type Ref } from "vue";
  import { definitionIdSchema, definitionSnapshot, DEFINITION_PATHS, type Definition, type DefinitionFields, type DefinitionKind } from "#shared/types/DefinitionMaintenance";
@@ -19,6 +21,8 @@
  const staleDelete: ComputedRef<boolean> = computed((): boolean => !!definition.value && JSON.stringify(deleteSnapshot.value) !== JSON.stringify(definitionSnapshot(definition.value)));
  const category: ComputedRef<Definition | null> = computed((): Definition | null => byId.value[definition.value?.categoryId ?? ""] ?? null);
  const relatedBadges: ComputedRef<Definition[]> = computed((): Definition[] => definitions.value.filter((value: Definition): boolean => value.kind === "badge" && value.categoryId === props.definitionId));
+ /** Publish category image changes through the shared definition store. */
+ async function changeImage(action: EntityImageAction): Promise<Definition> { return store.changeImage(props.definitionId, action); }
  /** Save the selected definition through its store with an exact baseline. */
  async function save(fields: DefinitionFields,expected: DefinitionFields | null): Promise<Definition> { if(!expected) throw new Error(t("definitionMaintenance.notFound")); return store.save(props.kind,props.definitionId,{fields,expected}); }
  /** Capture the exact definition being confirmed for deletion. */
@@ -49,6 +53,7 @@
       <UButton class="DefinitionEdit" @click="editing = true">{{ t('definitionMaintenance.edit') }}</UButton>
      </template>
     </UPageCard>
+    <UPageCard v-if="kind === 'category'" :title="t('definitionMaintenance.image')"><CategoryImageEditor :key="definition.id" :category="definition" :saving="isSaving" :change="changeImage" /></UPageCard>
     <UPageCard v-if="kind === 'category'" :title="t('nav.Badges')"><ul v-if="relatedBadges.length"><li v-for="badge in relatedBadges" :key="badge.id"><NuxtLink :to="`/mentor/maintenance/badges/${badge.id}`">{{ badge.name }}</NuxtLink></li></ul><p v-else>{{ t('definitionMaintenance.noBadges') }}</p></UPageCard>
     <UPageCard v-if="deleteSnapshot" :title="t('definitionMaintenance.deleteConfirm')">
      <p>{{ t(kind === 'category' ? 'definitionMaintenance.categoryDeleteDescription' : 'definitionMaintenance.deleteDescription') }}</p>

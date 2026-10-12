@@ -106,6 +106,7 @@ export default {
 		details: "Sainmhíniú",
 		edit: "Cuir sainmhíniú in eagar",
 		empty: "Níor aimsíodh sainmhínithe.",
+		image: "Íomhá",
 		loadError: "Níorbh fhéidir sainmhínithe a lódáil.",
 		name: "Ainm",
 		noBadges: "Níl suaitheantais ghníomhacha sa chatagóir seo.",

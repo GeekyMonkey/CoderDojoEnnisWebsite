@@ -1,4 +1,5 @@
 <script setup lang="ts">
+ import CategoryImage from "~/components/Categories/CategoryImage.vue";
  import { computed, ref, type ComputedRef, type Ref } from "vue";
  import { definitionSearchSchema, DEFINITION_PATHS, type Definition, type DefinitionFields, type DefinitionKind } from "#shared/types/DefinitionMaintenance";
  import { useDefinitionMaintenanceStore } from "~/stores/useDefinitionMaintenanceStore";
@@ -29,7 +30,7 @@
    <div class="DefinitionToolbar"><UInput v-model="search" :placeholder="t('definitionMaintenance.search')" :aria-label="t('definitionMaintenance.search')" maxlength="200" /><UButton @click="creating = true">{{ t('definitionMaintenance.create') }}</UButton></div>
    <UPageCard v-if="creating" :title="t('definitionMaintenance.create')"><DefinitionForm :kind="kind" :definition="null" :categories="categories" :saving="isSaving" :save="create" @saved="created" @cancel="creating = false" /></UPageCard>
    <p v-if="isPending">{{ t('profile.loading') }}</p><UAlert v-else-if="isError" color="error" :title="t('definitionMaintenance.loadError')" />
-   <ul v-else class="DefinitionList"><li v-for="value in visible" :key="value.id"><NuxtLink :to="`/mentor/maintenance/${DEFINITION_PATHS[kind]}/${value.id}`"><ColourSwatch v-if="kind === 'belt'" :hexCode="value.hexCode" /><span>{{ value.name || '—' }}<small v-if="kind === 'badge'">{{ categoryLabels[value.id] }}</small></span></NuxtLink></li></ul>
+   <ul v-else class="DefinitionList"><li v-for="value in visible" :key="value.id"><NuxtLink :to="`/mentor/maintenance/${DEFINITION_PATHS[kind]}/${value.id}`"><CategoryImage v-if="kind === 'category'" :id="value.id" :name="value.name" :populated="value.hasImage" :revision="value.imageRevision" size="sm" /><ColourSwatch v-if="kind === 'belt'" :hexCode="value.hexCode" /><span>{{ value.name || '—' }}<small v-if="kind === 'badge'">{{ categoryLabels[value.id] }}</small></span></NuxtLink></li></ul>
    <p v-if="!isPending && !isError && !visible.length">{{ t('definitionMaintenance.empty') }}</p>
   </div></template>
  </UDashboardPanel>
