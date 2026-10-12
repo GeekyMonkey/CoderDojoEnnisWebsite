@@ -1,0 +1,12 @@
+meta {
+  name: Reports - mentors
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/reports?kind=mentors
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

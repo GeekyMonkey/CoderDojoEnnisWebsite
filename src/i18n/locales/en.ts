@@ -327,6 +327,18 @@ export default {
 		zoomIn: "Zoom in",
 		zoomOut: "Zoom out",
 	},
+	reports: {
+		count: "{count} results",
+		download: "Download CSV",
+		empty: "No matching results.",
+		error: "Unable to load report.",
+		exportHint: "The CSV includes all report results, regardless of the search.",
+		invalidDate: "Choose a valid date.",
+		loading: "Loading report…",
+		retry: "Retry",
+		search: "Search",
+		since: "Awarded since",
+	},
 	signIn: {
 		qrPlaceholder: "Enable the camera to scan a QR code.",
 		signInButton: "Sign In",

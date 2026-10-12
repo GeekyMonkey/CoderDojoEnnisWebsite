@@ -1,0 +1,12 @@
+meta {
+  name: Reports - belts
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/reports?kind=belts&since=2024-10-12
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

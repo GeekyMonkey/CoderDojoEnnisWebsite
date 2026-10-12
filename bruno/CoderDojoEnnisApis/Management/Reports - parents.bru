@@ -1,0 +1,12 @@
+meta {
+  name: Reports - parents
+  type: http
+}
+get {
+  url: {{Host}}/api/Management/reports?kind=parents
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}

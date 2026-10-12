@@ -19,7 +19,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] 6. Achievement definitions: belt/badge/category CRUD.
 - [x] 7. Session management: list/create/edit/delete, hosts, topic, URL and mentor-only flag.
 - [x] 8. Duplicate accounts: merge coders/adults, preserving relationships and history.
-- [ ] 9. Reports: recent belts, belt CSV, parent emails and mentor emails.
+- [x] 9. Reports: recent belts, belt CSV, parent emails and mentor emails. Shared searchable report UI, two-year default/date filter, authenticated store-owned CSV exports and realtime refresh. Single queries suit the small tables; build, type and focused checks pass. Browser visual review remains pending because local server startup is blocked in this session.
 - [x] 10. Printing: coder/mentor passports, batch passports, certificates and team cards.
 - [ ] 11. Data maintenance: inactive member/parent cleanup and registration purge.
 - [x] 12. My Profile: role-neutral own-profile store and reusable UI, names/contact details, external handles, guarded save and password change; separate selected-user profile store and realtime refresh.

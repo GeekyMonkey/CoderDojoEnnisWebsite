@@ -328,6 +328,18 @@ export default {
 		zoomIn: "Súmáil isteach",
 		zoomOut: "Súmáil amach",
 	},
+	reports: {
+		count: "{count} toradh",
+		download: "Íoslódáil CSV",
+		empty: "Níl aon torthaí ann.",
+		error: "Ní féidir an tuairisc a lódáil.",
+		exportHint: "Tá gach toradh sa CSV, beag beann ar an gcuardach.",
+		invalidDate: "Roghnaigh dáta bailí.",
+		loading: "Tuairisc á lódáil…",
+		retry: "Bain triail eile as",
+		search: "Cuardaigh",
+		since: "Bronnta ó",
+	},
 	signIn: {
 		qrPlaceholder: "Cumasaigh an ceamara chun cód QR a scanadh.",
 		signInButton: "Logáil Isteach",

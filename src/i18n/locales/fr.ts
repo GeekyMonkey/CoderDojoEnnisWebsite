@@ -329,6 +329,18 @@ export default {
 		zoomIn: "Zoom avant",
 		zoomOut: "Zoom arrière",
 	},
+	reports: {
+		count: "{count} résultats",
+		download: "Télécharger le CSV",
+		empty: "Aucun résultat.",
+		error: "Impossible de charger le rapport.",
+		exportHint: "Le CSV inclut tous les résultats du rapport, indépendamment de la recherche.",
+		invalidDate: "Choisissez une date valide.",
+		loading: "Chargement du rapport…",
+		retry: "Réessayer",
+		search: "Rechercher",
+		since: "Attribué depuis",
+	},
 	signIn: {
 		qrPlaceholder: "Activez la caméra pour scanner un code QR.",
 		signInButton: "Connexion",

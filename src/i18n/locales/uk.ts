@@ -328,6 +328,18 @@ export default {
 		zoomIn: "Збільшити",
 		zoomOut: "Зменшити",
 	},
+	reports: {
+		count: "Результатів: {count}",
+		download: "Завантажити CSV",
+		empty: "Немає результатів.",
+		error: "Не вдалося завантажити звіт.",
+		exportHint: "CSV містить усі результати звіту незалежно від пошуку.",
+		invalidDate: "Виберіть правильну дату.",
+		loading: "Завантаження звіту…",
+		retry: "Повторити",
+		search: "Пошук",
+		since: "Нагороджено з",
+	},
 	signIn: {
 		qrPlaceholder: "Увімкніть камеру, щоб сканувати QR-код.",
 		signInButton: "Увійти",

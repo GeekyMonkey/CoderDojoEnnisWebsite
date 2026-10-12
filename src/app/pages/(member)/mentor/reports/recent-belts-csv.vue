@@ -1,14 +1,4 @@
 <script setup lang="ts">
-	const { pageTitle } = useMemberLayoutContext();
+import MentorReport from "~/components/Reports/MentorReport.vue";
 </script>
-
-<template>
-	<UDashboardPanel id="mentor-report-recent-belts-csv">
-		<template #header>
-			<DashboardHeading :page-title="pageTitle" />
-		</template>
-		<template #body>
-			<PlaceholderPage description="Reporting features are coming soon." />
-		</template>
-	</UDashboardPanel>
-</template>
+<template><MentorReport kind="belts" /></template>
