@@ -9,13 +9,20 @@ const EVENT: H3Event = {} as H3Event;
 
 beforeEach((): void => { vi.resetAllMocks(); mocks.mentor.mockResolvedValue({id:"verified"}); });
 describe("legacy private read boundary", (): void => {
- it.each(["/api/members/list", "/api/memberBelts/list", "/api/memberBelts/byMemberId", "/api/memberBelts/latest", "/api/memberBelts/pending", "/api/teams/list", "/api/MemberAttendance/SessionDate", "/api/MemberAttendance/SessionDates", "/api/MemberAttendance/SessionStats"])("requires current mentor authority for %s", async (path: string): Promise<void> => {
+ it.each(["/api/members/list", "/api/memberBelts/list", "/api/memberBelts/byMemberId", "/api/memberBelts/latest", "/api/memberBelts/pending", "/api/teams/list", "/api/MemberAttendance/SessionDate", "/api/MemberAttendance/SessionDates", "/api/MemberAttendance/SessionStats", "/api/MemberAttendance/SessionCurrent", "/api/MemberAttendance/SessionDateRange", "/api/memberattendance/sessioncurrent/", "/api/MemberAttendance/%53essionDateRange", "/api/MEMBERS/list/"])("requires current mentor authority for %s", async (path: string): Promise<void> => {
   mocks.url.mockReturnValue(new URL(`https://example.test${path}`));
   mocks.mentor.mockRejectedValue({statusCode:403});
   await expect(middleware(EVENT)).rejects.toMatchObject({statusCode:403});
  });
- it.each(["/api/Legacy/CopyData", "/api/Legacy/Teams", "/api/Profile", "/api/Parent/children", "/api/Auth/Login", "/api/MemberAttendance/SignInNfcTag"])("preserves separately guarded/deferred flow %s", async (path: string): Promise<void> => {
+ it.each(["/api/Legacy/CopyData", "/api/Legacy/Teams", "/api/Profile", "/api/Parent/children", "/api/Auth/Login", "/api/MemberAttendance/SignInNfcTag", "/api/MemberAttendance/SignInGuid", "/api/MemberAttendance/SignIn", "/api/MemberAttendance/SetPresent", "/api/MemberAttendance/fingerprint"])("preserves separately guarded/deferred flow %s", async (path: string): Promise<void> => {
   mocks.url.mockReturnValue(new URL(`https://example.test${path}`));
   await middleware(EVENT); expect(mocks.mentor).not.toHaveBeenCalled();
  });
+});
+
+// Successful verification must allow every protected route through to its handler.
+it("allows a verified current mentor", async (): Promise<void> => {
+ mocks.url.mockReturnValue(new URL("https://example.test/api/MemberAttendance/SessionCurrent"));
+ await expect(middleware(EVENT)).resolves.toBeUndefined();
+ expect(mocks.mentor).toHaveBeenCalledWith(EVENT);
 });

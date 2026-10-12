@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import MemberCurrentBelt from "~/components/Members/MemberCurrentBelt.vue";
+	import ProfileCurrentBelt from "./ProfileCurrentBelt.vue";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { computed, type ComputedRef } from "vue";
@@ -51,7 +51,7 @@
 
 <template>
 	<UPageCard>
-		<MemberCurrentBelt :member="member" /><ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
+		<ProfileCurrentBelt v-if="member.isNinja" :memberId="member.id" /><ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
 		<p v-if="!editing">{{ t("profile.login") }}: {{ member.login ?? '—' }}</p>
 		<template v-if="!editing">
