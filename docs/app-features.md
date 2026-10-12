@@ -27,10 +27,10 @@ All images are public to download, including member photos/avatars and team/cate
 | Feature | Expected fields/actions | Current status |
 | --- | --- | --- |
 | Public information | Home/about, joining, when/where, topics, news, contact/privacy, sponsor/media/tutorial content and links | Present as `/home.html` and static fragments; external content/destination freshness needs Q05/V04. Root redirects to the static page. |
-| Member/volunteer GitHub directory | Separate `Members` and `Mentors` lists containing first name, last name and GitHub login; active accounts only, nonempty handles, stable name ordering and GitHub page/avatar links | Gap F09: proxy rejects the object contract used by the public page and relies on legacy hosting. |
+| Member/volunteer GitHub directory | Separate `Members` and `Mentors` lists containing first name, last name and GitHub login; active accounts only, nonempty handles, stable name ordering and GitHub page/avatar links | F09 implemented: current Supabase data supplies the existing public contract; no legacy API call. Hosted acceptance pending. |
 | Chatbot definition exports | Badge compact ID/achievement/description/category; belt compact ID/name/hex/order/description, stable category/order sorting | Gap F10; compatibility or retirement decision required. |
 | NFC utilities | Supported ReadNFC/WriteNFC downloads, installation/use instructions and an entry point | Gap F11; legacy downloads absent. |
-| Legacy URLs/devices/external services | Supported bookmarks/print links/scanner payloads/session links and known WebHub/chat consumers | Decision Q02; enumerate consumers and implement compatibility or communicate retirement. |
+| Legacy URLs/devices/external services | Supported bookmarks/print links/scanner payloads/session links and known WebHub/chat consumers | Q02: retain the member-subdomain legacy redirect through beta, remove it at production cutover before teardown; enumerate other consumers and implement compatibility or communicate retirement. |
 | Public sessions | Explicitly approved publishable topic/date/host fields, listing/calendar, without mentor-only/private join authority | Decision Q05; authenticated session pages exist, public projection does not. |
 
 Public GitHub disclosure is deliberately narrower than the internal member model. It must not become a general member-directory API.
