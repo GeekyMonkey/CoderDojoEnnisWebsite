@@ -1,0 +1,22 @@
+<script setup lang="ts">
+ import { useCoderSessionsStore } from "~/stores/useCoderSessionsStore";
+ import SessionCard from "~/components/Sessions/SessionCard.vue";
+ import ScheduleCalendar from "~/components/Sessions/ScheduleCalendar.vue";
+ const { t } = useI18n();
+ const { pageTitle } = useMemberLayoutContext();
+ const store: ReturnType<typeof useCoderSessionsStore> = useCoderSessionsStore();
+</script>
+<template>
+ <UDashboardPanel id="coder-sessions">
+  <template #header><DashboardHeading :pageTitle="pageTitle" /></template>
+  <template #body><div class="CoderSessions">
+   <p v-if="store.isPending.value">{{ t('profile.loading') }}</p>
+   <UAlert v-else-if="store.isError.value" color="error" :title="t('sessions.loadError')" />
+   <ScheduleCalendar v-else-if="!store.data.value?.length" />
+   <SessionCard v-for="session in store.data.value ?? []" v-else :key="session.id" :session="session" :joining="store.isJoining.value" :join="store.join" />
+  </div></template>
+ </UDashboardPanel>
+</template>
+<style scoped lang="scss">
+ .CoderSessions { display: grid; gap: calc(var(--spacing) * 6); padding: calc(var(--spacing) * 4); max-width: 60rem; min-width: 0; }
+</style>

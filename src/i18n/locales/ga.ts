@@ -317,7 +317,17 @@ export default {
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",
 	},
 	sessions: {
+		calendar: "Féilire an dojo",
+		empty: "Níl aon seisiúin sceidealaithe. Féach ar an bhféilire.",
+		ends: "Críochnaíonn {date}",
+		fallback: "Oscail an seisiún mura raibh fuinneog nua le feiceáil",
+		hosts: "Óstaigh",
+		join: "Glac páirt",
+		joinError: "Ní féidir páirt a ghlacadh sa seisiún.",
+		joined: "Taifeadadh do láithreacht.",
 		label: "Seisiúin",
+		loadError: "Ní féidir seisiúin a luchtú.",
+		noUrl: "Níl nasc ar fáil. Iarr ar mheantóir.",
 	},
 	teams: {
 		colour: "Dath",

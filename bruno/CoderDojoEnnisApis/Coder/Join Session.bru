@@ -1,0 +1,18 @@
+meta {
+ name: Join Session
+ type: http
+}
+
+post {
+ url: {{Host}}/api/Coder/sessions/join
+ body: json
+ auth: bearer
+}
+
+auth:bearer {
+ token: {{AccessToken}}
+}
+
+body:json {
+ {"sessionId": "{{SessionId}}"}
+}

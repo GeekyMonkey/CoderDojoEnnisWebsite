@@ -432,6 +432,42 @@ export type Database = {
 					},
 				];
 			};
+			session_pods: {
+				Row: {
+					ends_at: string | null;
+					url: string | null;
+					host_id: string | null;
+					host2_id: string | null;
+					id: string;
+					mentors_only: boolean;
+					session_date: string;
+					topic: string | null;
+				};
+				Insert: {
+					ends_at?: string | null;
+					url?: string | null;
+					host_id?: string | null;
+					host2_id?: string | null;
+					id?: string;
+					mentors_only?: boolean;
+					session_date: string;
+					topic?: string | null;
+				};
+				Update: {
+					ends_at?: string | null;
+					url?: string | null;
+					host_id?: string | null;
+					host2_id?: string | null;
+					id?: string;
+					mentors_only?: boolean;
+					session_date?: string;
+					topic?: string | null;
+				};
+				Relationships: [
+ { foreignKeyName: "session_pods_host_id_fkey"; columns: ["host_id"]; isOneToOne: false; referencedRelation: "members"; referencedColumns: ["id"]; },
+ { foreignKeyName: "session_pods_host2_id_fkey"; columns: ["host2_id"]; isOneToOne: false; referencedRelation: "members"; referencedColumns: ["id"]; },
+ ];
+			};
 			sessions: {
 				Row: {
 					id: string;
@@ -491,6 +527,7 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
+			join_coder_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };
             coder_action: {
                 Args: {p_actor:string;p_action:string;p_kind?:string|null;p_definition?:string|null;p_fields?:Json;p_expected?:Json};
                 Returns: Json;

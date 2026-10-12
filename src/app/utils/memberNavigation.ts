@@ -179,6 +179,7 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					icon: "i-lucide-calendar-check",
 					roles: ["coder"],
 				},
+                { label: "Sessions", to: `${coderBase}/sessions`, icon: "i-lucide-calendar", roles: ["coder"] },
 			],
 		},
 		{

@@ -318,7 +318,17 @@ export default {
 		title: "Connexion à la session CoderDojo Ennis",
 	},
 	sessions: {
+		calendar: "Calendrier du dojo",
+		empty: "Aucune séance prévue. Consultez le calendrier.",
+		ends: "Fin : {date}",
+		fallback: "Ouvrir la séance si la fenêtre ne s’est pas ouverte",
+		hosts: "Animateurs",
+		join: "Rejoindre",
+		joinError: "Impossible de rejoindre cette séance.",
+		joined: "Votre présence est enregistrée.",
 		label: "Séances",
+		loadError: "Impossible de charger les séances.",
+		noUrl: "Aucun lien disponible. Demandez à un mentor.",
 	},
 	teams: {
 		colour: "Couleur",

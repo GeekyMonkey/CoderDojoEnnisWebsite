@@ -1,0 +1,5 @@
+- [x] Review legacy sessions view, controller and attendance join handler.
+- [x] Add safe contracts, own APIs/store and service-only atomic joining migration.
+- [x] Build reusable session, host and calendar components with realtime/expiry behavior.
+- [x] Verify authorization, expiry, URL safety, concurrent attendance, browser and production build.
+- [x] Publish C08 and complete coder checklist.

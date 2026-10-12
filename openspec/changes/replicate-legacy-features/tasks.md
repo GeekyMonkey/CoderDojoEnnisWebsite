@@ -29,8 +29,8 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] Review feature 6 achievement definitions before progressing to feature 7.
 
 ## Other migration stories
-- [ ] Public/upcoming sessions and session joining.
-- [ ] Coder use cases (legacy baseline reviewed before each feature):
+- [ ] Public/upcoming sessions and session joining (coder C08 complete; public/parent surfaces remain).
+- [x] Coder use cases (legacy baseline reviewed before each feature):
   - [x] C01 Personal attendance: total unique attended sessions and dates newest first; own-member authorization, shared history component/store and realtime refresh. Legacy `MemberController.Attendance` and `Views/Member/Attendance.cshtml`.
   - [x] C02 Complete coder profile: retain shared My Profile; add birth year, team goal, team roster, profile links and own passport. Legacy `MemberController.Profile/ProfileSave`, `Views/Member/Profile.cshtml` and `TeamMember.cshtml`.
   - [x] C03 Goals: edit short/long term goals, next belt progress, badge goal selection and pending application evidence. Legacy `MemberController.Goals/MemberGoalChange/ProfileSave` and `Views/Member/Goals.cshtml`.
@@ -38,7 +38,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
   - [x] C05 Available badges and applications: category grouping, selected goals, pending evidence, rejection feedback and reapplication; prevent duplicate pending applications and upgrade an existing goal. Legacy `MemberController.BadgesAvailable/BadgeApplication` and `Views/Member/BadgesAvailable.cshtml`.
   - [x] C06 Belts and applications: earned/unearned belts ordered by progression, award evidence, next-belt-only applications, pending/rejection feedback and duplicate prevention. Legacy `MemberController.Belts/BeltApplication` and `Views/Member/Belts.cshtml`.
   - [x] C07 Coder home: personal welcome, current team/progress and contextual achievement messages. Legacy `MemberController.Index`, `Views/Member/Index.cshtml` and `Member.GetLoginMessage`.
-  - [ ] C08 Sessions: upcoming non-mentor sessions and joining. Legacy `MemberController.Sessions`, `Views/Member/Sessions.cshtml` and the session join handler.
+  - [x] C08 Sessions: upcoming non-mentor sessions and joining. Legacy `MemberController.Sessions`, `Views/Member/Sessions.cshtml` and the session join handler.
   - [x] C09 Team member display: reusable read-only profile with team, public handles and earned achievements, restricted to the authorized roster. Legacy `MemberController.TeamMember` and `Views/Member/TeamMember.cshtml`.
 
 Coder features are the current priority. Remaining D discrepancies are deferred by user instruction; they do not gate coder feature work. Each queued feature requires a focused reread of its complete legacy view/controller/model behavior before implementation; references above establish the review entrypoints.

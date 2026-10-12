@@ -316,7 +316,17 @@ export default {
 		title: "CoderDojo Ennis Session Sign In",
 	},
 	sessions: {
+		calendar: "Dojo calendar",
+		empty: "No pods are currently scheduled. Check the calendar for upcoming times.",
+		ends: "Ends {date}",
+		fallback: "Open session if the new window did not appear",
+		hosts: "Hosts",
+		join: "Join",
+		joinError: "Unable to join this session.",
+		joined: "Joined; your attendance is recorded.",
 		label: "Sessions",
+		loadError: "Could not load sessions.",
+		noUrl: "No joining link is available. Ask a mentor.",
 	},
 	teams: {
 		colour: "Colour",

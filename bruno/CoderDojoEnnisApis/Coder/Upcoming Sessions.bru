@@ -1,0 +1,14 @@
+meta {
+ name: Upcoming Sessions
+ type: http
+}
+
+get {
+ url: {{Host}}/api/Coder/sessions
+ body: none
+ auth: bearer
+}
+
+auth:bearer {
+ token: {{AccessToken}}
+}
