@@ -47,7 +47,7 @@ F21 is closed by accepted configuration mitigation; F02 is deferred until produc
 
 ## Decisions required before declaring parity
 
-These six differences remain open decisions. Safer role checks and guarded APIs are expected; legacy vulnerabilities are not features to restore.
+Q01–Q05 remain open decisions. Q06 is accepted as an intentional improvement. Safer role checks and guarded APIs are expected; legacy vulnerabilities are not features to restore.
 
 | ID | Priority | Difference / evidence | Decision needed |
 | --- | --- | --- | --- |
@@ -56,7 +56,11 @@ These six differences remain open decisions. Safer role checks and guarded APIs 
 | Q03 | P2 | Legacy Sessions stores CreatedDate as a full timestamp. Current pods have a date only and refresh that date on update, while preserving EndDate as ends_at. Current CopyData rebuilds attendance-date `sessions` from attendance, not legacy session pods; no legacy Sessions reader/import is present. | Decide whether to migrate historical/current pod IDs, creation instants, hosts and URLs; add a reproducible mapping or document deliberate nonmigration. `sessions` and `session_pods` serve different purposes. |
 | Q04 | P3 | Legacy Dojos has Id/DojoName but no active UI/controller usage found; there is no new table. Combined adult directory is replaced by separate parents/mentors, automatic mobile-view switching by responsive layouts, hard-delete merges by audited soft archival, and generic image upload by entity-specific photo/avatar/PNG flows. | Record these as explicit retirements/design differences; preserve data externally if Dojos has consumers absent from source. Do not recreate obsolete browser switching or unsafe upload endpoints. |
 | Q05 | P2 | Public/session expectations in the master OpenSpec include a public list/calendar. Current session pages are authenticated coder/parent/mentor pages. Static public information remains at `/home.html`; external WebHub/chat content and public-site links need a cutover decision. | Define the public session projection and publishable fields, or narrow the earlier requirement. Audit external destinations and public content against current operating information. |
-| Q06 | P2 | New forms restrict lengths, hex colours, URLs, names, categories, host eligibility and privilege edits more strongly than legacy. Password hashing changes from legacy MD5 behavior to salted SHA-256 with lowercasing/trim. Duplicate credentials/fingerprint IDs can survive historical imports although new writes reject conflicts. | Approve compatibility rules and a migration strategy for historical invalid/duplicate values and credentials. New validation must not silently erase preserved historical fields. Do not reinstate legacy weak hashing. |
+| Q06 | P2 · Accepted | New forms restrict lengths, hex colours, URLs, names, categories, host eligibility and privilege edits more strongly than legacy. Password hashing changes from legacy MD5 behavior to salted SHA-256 with lowercasing/trim. Duplicate credentials/fingerprint IDs can survive historical imports although new writes reject conflicts. | Accepted by the user on 12 October 2026 as intentional improvements. Retain the stricter validation, privilege/host checks, current hashing/normalization and conflict rejection on new writes while preserving historical values. No legacy behavior restoration is required. Historical migration verification V02 and the separate F20 import password-reset finding remain open. |
+
+## Q06 acceptance — 12 October 2026
+
+The user accepted the Q06 differences as intentional improvements. Q06 is closed as a parity decision; retain the current behavior. This acceptance does not close F20 or certify historical data migration under V02.
 
 ## Verification still required
 
@@ -93,6 +97,6 @@ No query pagination or aggregation code changed. This raises the truncation thre
 1. F01, F03–F05, F12 and F20: close access/data-integrity exposure. F02 stays unchanged until production cutover, when legacy routes are removed and the old database decommissioned.
 2. F06–F10 and F13–F15: restore login, public directory/integration and kiosk behavior.
 3. F16–F19, F22–F23: archived history, defaults, import quality and date handling. F21 is closed by accepted configuration mitigation.
-4. Resolve Q01–Q06 and complete V01–V04 before calling app-wide parity complete.
+4. Resolve Q01–Q05 and complete V01–V04 before calling app-wide parity complete.
 
 The original audit changed documentation only and did not implement fixes or mutate production data. The subsequent F21 closure records the user-applied one-million-row configuration and accepted mitigation; it does not certify pagination fixes or close any other finding.

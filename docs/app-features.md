@@ -45,7 +45,7 @@ Public GitHub disclosure is deliberately narrower than the internal member model
 - Photo and Avatar are separate slots with upload, independent delete and swap. Photo crop is circular, avatar crop square; output is square PNG up to 800×800. Contain mode preserves transparent padding. Legacy JPEG fallback remains supported. Upload/progress/errors and image refresh belong to the shared store/component flow.
 - Save/Cancel, loading/empty/error states and stale-draft protection apply to editable sections. Remote changes must not overwrite an unsaved draft; conflicting saves request a reload.
 
-Profile/account flows are present. Import credential handling and private database exposure remain F01/F20/Q06; storage reconciliation remains V03.
+Profile/account flows are present. Import credential handling and private database exposure remain F01/F20; Q06 validation and credential-policy differences are accepted intentional improvements; storage reconciliation remains V03.
 
 ## Coder portal
 
@@ -79,7 +79,7 @@ These flows are present. Every linked-child operation must recheck the relations
 | Home/review queues | Pending belt and badge applications, applicant names/photos, categories/definitions/evidence and navigation to review | Present; F21 closed by accepted one-million-row configuration. |
 | Attendance | Selected session/year/date, coder/mentor tabs, team/name/registration/belt/photo/count/presence; search/sort/filter, totals, manual present/absent, QR/NFC, signup in selected date, random present coder | Present; authorization/atomic persistence F03/F05 and manual welcome F23 remain. |
 | Directories and signup | Coder, parent and mentor lists; search, reusable presence/photo/team/belt; create profile/account/password, initial role, optional attendance; child/parent follow-up navigation | Present; selected-date signup preserved. |
-| Account maintenance | First/last names, login, email/phone/handles, birth year, fingerprint/NFC, coder/parent/mentor roles, registration, team, mentor vetting, password reset | Present; privileges are current-server-checked and snapshot-guarded. Login/scanner conflicts are serialized; historical duplicates Q06. |
+| Account maintenance | First/last names, login, email/phone/handles, birth year, fingerprint/NFC, coder/parent/mentor roles, registration, team, mentor vetting, password reset | Present; privileges are current-server-checked and snapshot-guarded. Login/scanner conflicts are serialized; historical duplicates retained under accepted Q06 compatibility. |
 | Relationships and skills | Search/select eligible parent/child; link/unlink from both views, confirmation; mentor category skills add/remove | Present, narrow actions with current eligibility checks. |
 | Goals | View/edit short/long goals and progress, history of selected badge goals | Present. |
 | Achievement review | Application evidence, approve/reject with notes, dates/reviewer identity, undo; reject linked-own-child decision actions; permit any-current-mentor undo with stale-state protection | Present; history and recorded deleted definitions preserved. |
@@ -120,6 +120,6 @@ Current gaps: F03/F05/F12–F15. Fingerprint testing currently suppresses attend
 
 ## Differences requiring explicit decisions
 
-Raw scaffold CRUD, hard deletes, arbitrary award corrections, legacy routes/cross-domain cookies/external consumers, full pod creation timestamps, the unused Dojos table, public sessions and stricter historical validation are Q01–Q06. Responsive layouts, entity-specific safe image editing, role-safe peer/print access and guarded mutation flows are the new design direction; obsolete or unsafe endpoints are not app requirements merely because legacy code contained them.
+Raw scaffold CRUD, hard deletes, arbitrary award corrections, legacy routes/cross-domain cookies/external consumers, full pod creation timestamps, the unused Dojos table, public sessions and stricter historical validation are tracked by Q01–Q06; Q06 stricter validation, current hashing/normalization and new-write conflict checks are accepted intentional improvements, while Q01–Q05 remain open decisions. Responsive layouts, entity-specific safe image editing, role-safe peer/print access and guarded mutation flows are the new design direction; obsolete or unsafe endpoints are not app requirements merely because legacy code contained them.
 
 No feature or discrepancy is closed by writing this document. App-wide completion requires the [open findings and decisions](../openspec/changes/replicate-legacy-features/final-parity-discrepancies.md) plus legacy/new runtime, migration, storage/realtime and external-consumer verification V01–V04.

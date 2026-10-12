@@ -28,7 +28,7 @@ A mapped counterpart means source exists for the feature, not that every behavio
 | Data cleanup and term reset | Separate mentor preview/confirm/apply pages, candidate counts and result feedback | Present; legacy inactivity/never-attended cleanup and orphan-parent rules mapped to combined roles; protect mentors/remaining relationships; registration reset includes archived coders; stale preview and atomic server action |
 | Coder home/profile/team | Welcome/name/team/unassigned/previous login/session count/current belt; recent awards/rejections; profile/handles/login, short/long goals, team goal/roster/public peer profile; separate photo/avatar | Present, portal history side effect F06; authorized peer projection; F14 concerns kiosk not this home |
 | Coder achievements/goals | Badge category/description/state, goal toggle, dated applications/evidence and decisions, available badges, current/next belt and reapplication | Present; active definitions for new applications, preserve history for deleted definitions; structured feedback avoids raw HTML |
-| Parent own account/children | Own contact/profile/password; linked active child names/photo/belt/count, account birth year/login/handles/password, separate images, child goals/history/attendance/parents/team/passport | Present; link authorization server-side, view-only child decisions/goals, Q06 historical constraints. Old documentation saying parent cannot edit login is inaccurate |
+| Parent own account/children | Own contact/profile/password; linked active child names/photo/belt/count, account birth year/login/handles/password, separate images, child goals/history/attendance/parents/team/passport | Present; link authorization server-side, view-only child decisions/goals, accepted Q06 historical constraints. Old documentation saying parent cannot edit login is inaccurate |
 | Passport / certificate / team-card printing | Own coder card, linked-child card, mentor selected/batch cards, registered coders, team cards and belt certificates; names/login/team/QR/category badge counts/mentor skills/belt/date | Present; compact UUID QR payload, authenticated access, ready/print states; Q02 old URLs; V01 print layout and physical scanner validation |
 | Public content / GitHub / chatbot / tools | Static public homepage/info/contact/join/privacy/topics/news/tutorials; current GitHub proxy; no chatbot-compatible exports/tools downloads | F09–F11; Q02/Q05 external routes and public session expectation |
 | Raw MVC/API CRUD | Normal member/team/definition/link/attendance/review tasks have role-specific replacements | Q01 retirement/correction decision; unsafe raw credential editing and arbitrary hard deletes are not automatic requirements |
@@ -54,7 +54,7 @@ The mapping accounts for storage, identity and effects, including fields never s
 | Adults.Email | members.email | Profile/account field; F07/F08 credentials and F19 import Unicode. |
 | Adults.Phone | members.phone | Stored field; see workflow above. |
 | Adults.Login | members.login | Profile/account field; F07/F08 credentials and F19 import Unicode. |
-| Adults.PasswordHash | members.password_hash | Private credential; omitted from public models and legacy converter. F01/F20/Q06 migration/access policy. |
+| Adults.PasswordHash | members.password_hash | Private credential; omitted from public models and legacy converter. F01/F20 migration/access policy; Q06 hashing/validation differences accepted. |
 | Adults.GithubLogin | members.github_login | Stored field; see workflow above. |
 | Adults.XboxGamertag | members.xbox_gamertag | Stored field; see workflow above. |
 | Adults.Deleted | members.deleted | Soft archive/history visibility; F16/F17 and role-specific eligibility. |
@@ -62,7 +62,7 @@ The mapping accounts for storage, identity and effects, including fields never s
 | Adults.GardaVetted | members.garda_vetted | Stored field; see workflow above. |
 | Adults.LoginDate | members.login_date | Welcome/decision boundaries; F06 portal rotation and F22 UTC convention. |
 | Adults.LoginDatePrevious | members.login_date_previous | Welcome/decision boundaries; F06 portal rotation and F22 UTC convention. |
-| Adults.FingerprintId | members.fingerprint_id | Mentor account/scanner identity; F03 active check, Q06 duplicates, V04 device contracts. |
+| Adults.FingerprintId | members.fingerprint_id | Mentor account/scanner identity; F03 active check, accepted Q06 duplicate handling, V04 device contracts. |
 | BadgeCategories.Id | badge_categories.id | UUID preserved for identity/links/compact QR; V02 collision/reconciliation check. |
 | BadgeCategories.CategoryName | badge_categories.category_name | Stored field; see workflow above. |
 | BadgeCategories.CategoryDescription | badge_categories.category_description | Stored field; see workflow above. |
@@ -116,13 +116,13 @@ The mapping accounts for storage, identity and effects, including fields never s
 | Members.ScratchName | members.scratch_name | Stored field; see workflow above. |
 | Members.XboxGamertag | members.xbox_gamertag | Stored field; see workflow above. |
 | Members.Login | members.login | Profile/account field; F07/F08 credentials and F19 import Unicode. |
-| Members.PasswordHash | members.password_hash | Private credential; omitted from public models and legacy converter. F01/F20/Q06 migration/access policy. |
+| Members.PasswordHash | members.password_hash | Private credential; omitted from public models and legacy converter. F01/F20 migration/access policy; Q06 hashing/validation differences accepted. |
 | Members.GithubLogin | members.github_login | Stored field; see workflow above. |
 | Members.Deleted | members.deleted | Soft archive/history visibility; F16/F17 and role-specific eligibility. |
 | Members.LoginDate | members.login_date | Welcome/decision boundaries; F06 portal rotation and F22 UTC convention. |
 | Members.LoginDatePrevious | members.login_date_previous | Welcome/decision boundaries; F06 portal rotation and F22 UTC convention. |
 | Members.TeamId | members.team_id | Stored field; see workflow above. |
-| Members.FingerprintId | members.fingerprint_id | Mentor account/scanner identity; F03 active check, Q06 duplicates, V04 device contracts. |
+| Members.FingerprintId | members.fingerprint_id | Mentor account/scanner identity; F03 active check, accepted Q06 duplicate handling, V04 device contracts. |
 | Members.RegisteredCurrentTerm | members.registered_current_term | Stored field; see workflow above. |
 | Members.GoalShortTerm | members.goal_short_term | Stored field; see workflow above. |
 | Members.GoalLongTerm | members.goal_long_term | Stored field; see workflow above. |
@@ -403,7 +403,7 @@ Every route file is listed; the guard column records direct helper references an
 | --- | --- |
 | IUser.SetLoginDate, member/adult GetLoginMessage | Login history F06; CoderWelcome/coderRecentDecisions preserve coder home structure; AttendanceService needs F14/F15. |
 | Member.MemberName / Adult.FullName / current belt / badge category aggregation | Shared member presentation; newest awarded belt; category badge counts and mentor skill names on cards. Category count order changed to alphabetical for current print cards; approve during V01 if count-descending order is important. |
-| CoderDojoData.GeneratePasswordHash | New hash/session helpers; migration F20 and credential-policy Q06. |
+| CoderDojoData.GeneratePasswordHash | New hash/session helpers; migration F20 and accepted credential-policy Q06. |
 | CoderDojoData.GetSessionDates, MemberAttendanceSet, AdultAttendanceSet | Shared attendance dates/stats helpers and unique member/date writes; manual write authority F03, atomic success F05, day convention F22. |
 | BaseEntity.ImageUrl | Separate storage-aware image components and legacy fallback; image processing/server guards; V03 object migration and policy. |
 | BaseController current actor, trim, redirects, MergeValues | Verified request actor/role helpers, typed normalization, safe client route changes and explicit merge RPC field policy. Blank-value/credential/image preservation differs intentionally; Q02/Q06. |
