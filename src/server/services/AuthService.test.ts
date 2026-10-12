@@ -4,10 +4,10 @@ import type { H3Event } from "h3";
 import { memberFromRecord, type MemberRecord } from "#shared/types/models/MemberModel";
 import { AuthService } from "./AuthService";
 
-const mocks = vi.hoisted(() => ({ client: vi.fn(), rpc: vi.fn(), hash: vi.fn(), login: vi.fn(), candidates: vi.fn(), nfc: vi.fn() }));
+const mocks = vi.hoisted(() => ({ client: vi.fn(), rpc: vi.fn(), hash: vi.fn(), login: vi.fn(), candidates: vi.fn(), names: vi.fn(), nfc: vi.fn() }));
 vi.mock("#imports", (): object => ({ useRuntimeConfig: (): object => ({ private: { auth: { pass_salt: "test" } } }) }));
 vi.mock("#server/db/DatabaseClient", (): object => ({ GetSupabaseAdminClient: mocks.client }));
-vi.mock("#server/db/MembersData", (): object => ({ MembersData: { GetMembersByLoginUsername: mocks.candidates, GetMemberByNfcTag: mocks.nfc } }));
+vi.mock("#server/db/MembersData", (): object => ({ MembersData: { GetMembersByLoginUsername: mocks.candidates, GetMembersByLoginFirstLast: mocks.names, GetMemberByNfcTag: mocks.nfc } }));
 vi.mock("#server/utils/authUtils", (): object => ({ GeneratePasswordHash: mocks.hash, LoginToSupabase: mocks.login }));
 const RECORD: MemberRecord = { id: "00000000-0000-4000-8000-000000000001", name_first: "Original", name_last: "Coder", birth_year: null, deleted: false, email: null, fingerprint_id: null, nfc_tag: "device", garda_vetted: false, github_login: null, goal_long_term: null, goal_short_term: null, has_avatar: false, has_photo: false, is_mentor: false, is_ninja: true, is_parent: false, login: "coder", login_date: null, login_date_previous: null, phone: null, registered_current_term: false, scratch_name: null, team_id: null, xbox_gamertag: null, password_hash: "valid-hash" };
 const SESSION: Session = { access_token: "test-token", refresh_token: "test-refresh", expires_in: 3600, token_type: "bearer", user: { id: "00000000-0000-4000-8000-000000000101", app_metadata: {}, user_metadata: {}, aud: "authenticated", created_at: "2026-10-12T00:00:00Z" } };
@@ -20,6 +20,7 @@ beforeEach((): void => {
  mocks.hash.mockResolvedValue("valid-hash");
  mocks.login.mockResolvedValue({ session: SESSION });
  mocks.candidates.mockResolvedValue([RECORD]);
+ mocks.names.mockResolvedValue([]);
  mocks.nfc.mockResolvedValue(memberFromRecord(RECORD));
 });
 describe("portal login history", (): void => {
@@ -64,5 +65,39 @@ describe("portal login history", (): void => {
  it("does not return success for malformed committed data", async (): Promise<void> => {
   mocks.rpc.mockResolvedValue({ data: { id: RECORD.id }, error: null });
   await expect(new AuthService(EVENT).loginWithNfcTag("device")).rejects.toMatchObject({ code: "LOGIN_HISTORY_ERROR" });
+ });
+});
+
+// Verify complete stored names and deterministic credential selection.
+describe("full-name credentials", (): void => {
+ it.each([["Mary Jane", "de Silva"], ["Mary", "Jane de Silva"], ["Mary-Jane", "O’Neill"]])("matches complete %s %s", async (first: string, last: string): Promise<void> => {
+  mocks.candidates.mockResolvedValue([]);
+  mocks.names.mockImplementation(async (_event: H3Event, given: string, surname: string): Promise<MemberRecord[]> => given === first.toLowerCase() && surname === last.toLowerCase() ? [{ ...RECORD, name_first: first, name_last: last }] : []);
+  const result: Awaited<ReturnType<AuthService["validateCredentials"]>> = await new AuthService(EVENT).validateCredentials(` ${first} ${last} `, "password");
+  expect(result.member.nameFirst).toBe(first); expect(result.member.nameLast).toBe(last);
+ });
+ it("checks names even when another account's login matches", async (): Promise<void> => {
+  mocks.candidates.mockResolvedValue([{ ...RECORD, password_hash: "other-hash" }]);
+  mocks.names.mockResolvedValue([{ ...RECORD, id: "00000000-0000-4000-8000-000000000002", name_first: "Mary Jane", name_last: "Smith" }]);
+  const result: Awaited<ReturnType<AuthService["validateCredentials"]>> = await new AuthService(EVENT).validateCredentials("Mary Jane Smith", "password");
+  expect(result.member.id).toBe("00000000-0000-4000-8000-000000000002");
+ });
+ it("prefers explicit login/email and uses stable IDs for duplicate names", async (): Promise<void> => {
+  const second: MemberRecord = { ...RECORD, id: "00000000-0000-4000-8000-000000000002" };
+  mocks.names.mockResolvedValue([second, RECORD]);
+  expect((await new AuthService(EVENT).validateCredentials("Original Coder", "password")).member.id).toBe(RECORD.id);
+  mocks.candidates.mockResolvedValue([]);
+  expect((await new AuthService(EVENT).validateCredentials("Original Coder", "password")).member.id).toBe(RECORD.id);
+  mocks.candidates.mockResolvedValue([second]);
+  expect((await new AuthService(EVENT).validateCredentials("Original Coder", "password")).member.id).toBe(second.id);
+ });
+ it("does not accept a partial name or wildcard-expanded result", async (): Promise<void> => {
+  mocks.candidates.mockResolvedValue([]); mocks.names.mockResolvedValue([RECORD]);
+  await expect(new AuthService(EVENT).validateCredentials("Original %", "password")).rejects.toMatchObject({ code: "NO_MATCHING_MEMBER" });
+ });
+ it("still rejects a wrong password for a complete name", async (): Promise<void> => {
+  mocks.candidates.mockResolvedValue([]); mocks.names.mockResolvedValue([RECORD]); mocks.hash.mockResolvedValue("wrong");
+  await expect(new AuthService(EVENT).validateCredentials("Original Coder", "wrong")).rejects.toMatchObject({ code: "INVALID_CREDENTIALS" });
+  expect(mocks.login).not.toHaveBeenCalled(); expect(mocks.rpc).not.toHaveBeenCalled();
  });
 });
