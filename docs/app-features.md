@@ -77,7 +77,7 @@ These flows are present. Every linked-child operation must recheck the relations
 | Feature | Expected fields/actions | Coverage |
 | --- | --- | --- |
 | Home/review queues | Pending belt and badge applications, applicant names/photos, categories/definitions/evidence and navigation to review | Present; F21 closed by accepted one-million-row configuration. |
-| Attendance | Selected session/year/date, coder/mentor tabs, team/name/registration/belt/photo/count/presence; search/sort/filter, totals, manual present/absent, QR/NFC, signup in selected date, random present coder | Present; F03 API authorization is accepted unchanged for the third-party hardware kiosk; atomic persistence F05 and manual welcome F23 remain. |
+| Attendance | Selected session/year/date, coder/mentor tabs, team/name/registration/belt/photo/count/presence; search/sort/filter, totals, manual present/absent, QR/NFC, signup in selected date, random present coder | Present; F03 API authorization is accepted unchanged for the third-party hardware kiosk; F05 atomic sign-in persistence is implemented and database-verified; manual welcome F23 remains. |
 | Directories and signup | Coder, parent and mentor lists; search, reusable presence/photo/team/belt; create profile/account/password, initial role, optional attendance; child/parent follow-up navigation | Present; selected-date signup preserved. |
 | Account maintenance | First/last names, login, email/phone/handles, birth year, fingerprint/NFC, coder/parent/mentor roles, registration, team, mentor vetting, password reset | Present; privileges are current-server-checked and snapshot-guarded. Login/scanner conflicts are serialized; historical duplicates retained under accepted Q06 compatibility. |
 | Relationships and skills | Search/select eligible parent/child; link/unlink from both views, confirmation; mentor category skills add/remove | Present, narrow actions with current eligibility checks. |
@@ -105,7 +105,7 @@ Expected credential, compact UUID QR, NFC and fingerprint sign-in records one at
 
 The kiosk must show a live team-grouped attendance board with mentor group, names/photos/colours and counts, including changes from other devices. Welcome includes previous login, team or unassigned guidance and recent award/rejection detail with category, notes, mentor and reapplication guidance; suppress badge rejection after reapplication. Use previous-login calendar-day boundaries, and today's boundary for first login.
 
-F03 is accepted unchanged for the third-party hardware kiosk, with the known authorization vulnerability documented. Remaining gaps: F05/F12–F15. Fingerprint testing currently suppresses attendance creation but still rotates login dates and simulates a count increment; this is not a fully read-only dry run. Define its supported contract before cutover.
+F03 is accepted unchanged for the third-party hardware kiosk, with the known authorization vulnerability documented. F05 atomic sign-in is implemented and database-verified. Remaining gaps: F12–F15. Fingerprint testing currently suppresses attendance creation but still rotates login dates and simulates a count increment; this is not a fully read-only dry run. Define its supported contract before cutover.
 
 ## Data, consistency and user feedback
 
@@ -125,3 +125,5 @@ Raw scaffold CRUD, hard deletes, arbitrary award corrections, legacy routes/cros
 No feature or discrepancy is closed by writing this document. App-wide completion requires the [open findings and decisions](../openspec/changes/replicate-legacy-features/final-parity-discrepancies.md) plus legacy/new runtime, migration, storage/realtime and external-consumer verification V01–V04.
 
 F04 legacy member/belt directories and attendance read routes are mentor-only in develop after PR #57. Own-profile belt display uses the scoped coder achievement API (or guarded mentor history for mentor viewers); linked-child/peer screens retain their scoped APIs. F03 hardware kiosk APIs are unchanged. Hosted deployment/acceptance remains pending.
+
+Attendance sign-in commits daily attendance and login-date rotation atomically, preserves concurrent account edits and returns the current committed member/count. Repeat scans retain one daily attendance row. Fingerprint testing preserves its existing simulated count and persisted login-date rotation; it is not a read-only dry run.

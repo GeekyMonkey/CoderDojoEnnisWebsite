@@ -1,14 +1,26 @@
 import type { EventHandlerRequest, H3Event } from "h3";
-import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
-import { MembersData } from "#server/db/MembersData";
+import { GetSupabaseAdminClient, type SupabaseClientType } from "#server/db/DatabaseClient";
+import { z } from "zod";
 import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 import {
-	Member_SetLoginDate,
+	memberFromRecord,
+ type MemberRecord,
 	type MemberModel,
 } from "#shared/types/models/MemberModel";
 import { TodayYYYY_MM_dd, TimestampToDateString } from "#shared/utils/DateHelpers";
 import { MemberBadgesData } from "../db/MemberBadgesData";
 import { MemberBeltsData } from "../db/MemberBeltsData";
+
+type AttendanceCommit = { member: MemberModel; sessionCount: number };
+
+// Validate the service-only commit response and discard all credential hash fields.
+const attendanceCommitSchema: z.ZodType<AttendanceCommit> = z.object({
+ member: z.object({ id: z.string() }).passthrough().transform((record: Record<string, unknown> & { id: string }, context: z.RefinementCtx): MemberModel | typeof z.NEVER => {
+  try { return memberFromRecord(record as MemberRecord); }
+  catch { context.addIssue({ code: "custom", message: "Invalid committed member" }); return z.NEVER; }
+ }),
+ sessionCount: z.number().int().min(1),
+});
 
 export class AttendanceServiceError extends Error {
 	constructor(
@@ -39,30 +51,18 @@ export class AttendanceService {
 		}
 
 		const todayString: string = TodayYYYY_MM_dd();
-		if (!testing) {
-			await MemberAttendancesData.CreateMemberAttendance(
-				this.event,
-				member.id,
-				todayString,
-			);
-			logs.push(`Attendance record created for ${todayString}`);
-		} else {
-			logs.push(
-				`[Testing mode] Attendance record not created for ${todayString}`,
-			);
-		}
-
-		let sessionCount: number =
-			await MemberAttendancesData.GetMemberAttendancesCountForMember(
-				this.event,
-				member.id,
-			);
-		if (testing) {
-			sessionCount = sessionCount + 1;
-		}
-
-		Member_SetLoginDate(member as MemberModel);
-		await MembersData.SaveMember(this.event, member);
+  const client: SupabaseClientType | null = await GetSupabaseAdminClient(this.event);
+  if (!client) throw new AttendanceServiceError("Unable to record sign-in", "SIGN_IN_FAILED");
+  const { data, error } = await client.schema("coderdojo").rpc("sign_in_attendance", {
+   p_member: member.id, p_date: todayString, p_testing: testing,
+  });
+  if (error) throw new AttendanceServiceError("Unable to record sign-in", "SIGN_IN_FAILED");
+  const result: ReturnType<typeof attendanceCommitSchema.safeParse> = attendanceCommitSchema.safeParse(data);
+  if (!result.success || result.data.member.id !== member.id) throw new AttendanceServiceError("Unable to confirm sign-in", "SIGN_IN_FAILED");
+  // Use the committed current account, never the stale lookup snapshot or its fields.
+  member = result.data.member;
+  const sessionCount: number = result.data.sessionCount;
+  logs.push(testing ? `[Testing mode] Attendance record not created for ${todayString}` : `Attendance recorded for ${todayString}`);
 
 		const {
 			message,
