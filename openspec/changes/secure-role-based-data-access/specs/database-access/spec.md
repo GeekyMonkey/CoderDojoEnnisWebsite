@@ -106,3 +106,19 @@ Attendance sign-in SHALL commit daily attendance and login-date rotation in one 
 #### Scenario: Fingerprint testing mode
 - **WHEN** testing mode is requested
 - **THEN** attendance SHALL remain unpersisted while login dates rotate and the displayed count is simulated under the existing contract
+
+### Requirement: Successful portal login history
+Successful password and NFC portal logins SHALL rotate login_date_previous/login_date through a service-only operation after session creation, without creating attendance or overwriting unrelated account fields. The transaction SHALL recheck the active bound account and the verified credential. Failed credential/session/persistence steps SHALL NOT return login success. Attendance credential validation alone SHALL NOT rotate portal history.
+
+#### Scenario: First and repeated portal logins
+- **WHEN** an active account completes its first or a repeated password/NFC login
+- **THEN** previous login SHALL be the stored old login date (null on first login) and current login SHALL be the committed UTC time
+- **AND** welcome decisions SHALL continue to use the previous-login boundary
+
+#### Scenario: Login cannot complete
+- **WHEN** credentials or session creation fail, the account is archived or credentials change before completion, or history persistence fails
+- **THEN** login SHALL report failure without rotating dates for that failed operation
+
+#### Scenario: Attendance password validation
+- **WHEN** the kiosk validates credentials before attendance sign-in
+- **THEN** validation alone SHALL NOT rotate history; the existing attendance operation SHALL own its date effects

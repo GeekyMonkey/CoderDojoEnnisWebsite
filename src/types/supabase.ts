@@ -531,6 +531,7 @@ export type Database = {
 		};
 		Functions: {
    ensure_member_auth_binding: { Args: { p_auth_user: string; p_member: string }; Returns: undefined };
+   record_portal_login: { Args: { p_member: string; p_auth_user: string; p_kind: string; p_credential: string }; Returns: Json };
    sign_in_attendance: { Args: { p_member: string; p_date: string; p_testing?: boolean }; Returns: Json };
       resolve_member_identity: { Args: { p_auth_user: string }; Returns: string | null };
 			maintain_data: { Args: { p_actor: string; p_action: string; p_apply?: boolean; p_expected?: string | null }; Returns: Json };
