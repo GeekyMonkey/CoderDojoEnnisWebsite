@@ -1,0 +1,6 @@
+- [x] Review complete legacy mentor Sessions/Session/controller and join behavior.
+- [x] Implement strict contracts, guarded service-only lifecycle RPCs and own member joining.
+- [x] Compose reusable host/field/form/detail components with store-owned requests and realtime.
+- [x] Verify stale writes, roles, hosts, deletion, private visibility, draft reconciliation, build and unchanged legacy diagnostics.
+- [ ] Complete integrated-browser visual review (navigation commands currently time out; not claimed as verified).
+- [x] Prepare mentor feature 7 for publication and review parent stories in the master checklist.

@@ -9,7 +9,7 @@
 - [x] Verify badge/belt decisions end to end using disposable applications, including own-child restrictions, independent mentor decisions and stale conflicts.
 
 ## Mentor priority queue
-Feature 12 and features 1–4 reviewed and committed; feature 5 team management reviewed and approved for commit. Feature 6 achievement definitions reviewed, committed and merged into develop. Feature 7 has not started. All UI data access must go through TanStack Query stores, with realtime invalidation for other users.
+Feature 12 and features 1–4 reviewed and committed; feature 5 team management reviewed and approved for commit. Feature 6 achievement definitions reviewed, committed and merged into develop. Feature 7 session management is implemented; production build and guarded API checks pass. Browser visual review remains pending because integrated-browser navigation timed out. All UI data access must go through TanStack Query stores, with realtime invalidation for other users.
 
 - [x] 1. Coder management: searchable list, signup, full details/editing, teams, registration, logins and fingerprint ID.
 - [x] 2. Coder progress: goals editing and individual attendance history (achievement history implemented).
@@ -17,7 +17,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] 4. Mentor/parent management: lists, signup, contact details, roles and mentor skills/categories.
 - [x] 5. Team management: list/create/edit/delete teams, goals, notes and colours.
 - [x] 6. Achievement definitions: belt/badge/category CRUD.
-- [ ] 7. Session management: list/create/edit/delete, hosts, topic, URL and mentor-only flag.
+- [x] 7. Session management: list/create/edit/delete, hosts, topic, URL and mentor-only flag.
 - [x] 8. Duplicate accounts: merge coders/adults, preserving relationships and history.
 - [ ] 9. Reports: recent belts, belt CSV, parent emails and mentor emails.
 - [x] 10. Printing: coder/mentor passports, batch passports, certificates and team cards.
@@ -41,8 +41,23 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
   - [x] C08 Sessions: upcoming non-mentor sessions and joining. Legacy `MemberController.Sessions`, `Views/Member/Sessions.cshtml` and the session join handler.
   - [x] C09 Team member display: reusable read-only profile with team, public handles and earned achievements, restricted to the authorized roster. Legacy `MemberController.TeamMember` and `Views/Member/TeamMember.cshtml`.
 
-Coder features are the current priority. Remaining D discrepancies are deferred by user instruction; they do not gate coder feature work. Each queued feature requires a focused reread of its complete legacy view/controller/model behavior before implementation; references above establish the review entrypoints.
-- [ ] Parent dashboard, account editing and child management.
+Coder C01–C09 are implemented. Parent use cases are the next priority. Remaining D discrepancies are deferred by user instruction; they do not gate parent feature work. Each queued feature requires a focused reread of its complete legacy view/controller/model behavior before implementation; references above establish the review entrypoints.
+- [ ] Parent use cases (complete legacy controller and views reviewed; implementation queue):
+  - [ ] P01 Parent home: replace placeholder with navigation to own account, linked children and public sessions. Legacy `ParentController.Index` and `Views/Parent/Index.cshtml`; news/status updates were a future placeholder, not an implemented legacy feed.
+  - [x] P02 My Account foundation: role-neutral My Profile already supplies own names, email, phone, images and password change. Legacy `MyAccount/MyAccountSave` and `MyAccount.cshtml`. Parent-only account acceptance check remains part of batch verification.
+  - [ ] P03 My Kids: active linked children, first/last-name ordering, real child routes and empty-state advice to ask a mentor to link accounts. Replace hardcoded Child 1/Child 2 navigation. Legacy `MyKids` and `MyKids.cshtml`.
+  - [ ] P04 Child summary and passport: photo/avatar, birth year, attendance total, external profile links, current earned belt and individual ID/passport action. Legacy `MyKid/MyKid.cshtml` and `Member/Member.cshtml`.
+  - [ ] P05 Child account editing: birth year, login, GitHub/Scratch/Xbox handles and password reset, with separate reusable forms. Names, roles, registration and team are not editable by parents. Legacy `MemberSave` and `Member.cshtml`.
+  - [ ] P06 Child images: reuse separate photo/avatar editor with relationship-scoped upload, swap and deletion. Legacy `MyKid.cshtml` and shared `_ImageEditable`.
+  - [ ] P07 Child goals: display short/long-term goals, next belt requirements and pending/rejection evidence, selected badge goals and pending applications. Parents cannot edit goals or apply here. Legacy `MemberGoals` and `MemberGoals.cshtml`.
+  - [ ] P08 Child belts: ordered earned/available belts, requirements, applications, award and rejection feedback with mentor names/dates. Display only. Legacy `MemberBelts` and `MemberBelts.cshtml`.
+  - [ ] P09 Child badges: category grouping, pending/earned/available sections, selected goal markers, historical definitions, application/award/rejection evidence. Display only. Legacy `MemberBadges` and `MemberBadges.cshtml`.
+  - [ ] P10 Child attendance: total and newest-first dates using shared history presentation; relationship-scoped query/store. Legacy `MemberAttendance` and `MemberAttendance.cshtml`.
+  - [ ] P11 Linked parent contacts: read-only names, email and phone of parents linked to the selected child; no linking/unlinking controls. Legacy `MemberParents` and `MemberParents.cshtml`.
+  - [ ] P12 Child team and peer profiles: team name/logo/goal/roster, unassigned guidance, read-only peer birth year/handles/earned awards. Restrict peers to teams of linked children and return public DTOs. Legacy `Member.cshtml`, `TeamMember` and `TeamMember.cshtml`.
+  - [ ] P13 Parent sessions: public upcoming pods, host photos/names, safe joining/fallback link, own parent attendance and empty-state calendar, using shared session components. Legacy `Sessions` and `Sessions.cshtml`.
+
+Parent implementation order: P01/P03/P04/P07–P12 read surfaces, then P05/P06 guarded child edits, then P13 joining. Reuse shared profile, achievement presentation, attendance, image and session components; expose parent APIs only through validated TanStack Query stores with realtime invalidation. Every child read/write must verify current parent role, active member and active relationship server-side; removing a link must revoke subsequent access. Preserve login uniqueness, stale-write and privilege-field safeguards when extending profile mutations. Parent-only accounts must not use mentor Management endpoints. The legacy arbitrary-ID own-account save and unrestricted peer lookup are not authorization baselines.
 - [ ] Image upload/editing and remaining integrations (chatbot, etc.).
 - [ ] Remaining tools/public pages.
 - [ ] User-run test/format checks and feature-parity verification.

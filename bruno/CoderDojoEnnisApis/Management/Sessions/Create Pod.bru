@@ -1,0 +1,22 @@
+meta {
+ name: Create Pod
+ type: http
+}
+
+post {
+ url: {{Host}}/api/Management/session-pods
+ body: json
+ auth: bearer
+}
+
+auth:bearer {
+ token: {{AccessToken}}
+}
+
+body:json {
+ {"topic": "Coding pod", "url": "https://example.com/", "hostId": "{{MentorId}}", "host2Id": null, "mentorsOnly": false}
+}
+
+docs {
+ Active mentor only. Save/delete require the exact fields snapshot returned by Pod Management. Saves renew for 150 minutes; removal preserves attendance and archives the pod.
+}

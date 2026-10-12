@@ -434,6 +434,7 @@ export type Database = {
 			};
 			session_pods: {
 				Row: {
+ deleted: boolean;
 					ends_at: string | null;
 					url: string | null;
 					host_id: string | null;
@@ -444,6 +445,7 @@ export type Database = {
 					topic: string | null;
 				};
 				Insert: {
+ deleted?: boolean;
 					ends_at?: string | null;
 					url?: string | null;
 					host_id?: string | null;
@@ -454,6 +456,7 @@ export type Database = {
 					topic?: string | null;
 				};
 				Update: {
+ deleted?: boolean;
 					ends_at?: string | null;
 					url?: string | null;
 					host_id?: string | null;
@@ -527,6 +530,9 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
+ can_read_mentor_pods: { Args: Record<string, never>; Returns: boolean };
+ maintain_session_pod: { Args: { p_actor: string; p_action: string; p_id?: string; p_fields?: Json; p_expected?: Json }; Returns: Json };
+ join_member_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };
 			join_coder_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };
             coder_action: {
                 Args: {p_actor:string;p_action:string;p_kind?:string|null;p_definition?:string|null;p_fields?:Json;p_expected?:Json};

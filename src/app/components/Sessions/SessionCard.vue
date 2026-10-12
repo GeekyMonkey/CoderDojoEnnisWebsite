@@ -35,6 +35,7 @@
   <p v-if="session.url === null">{{ t('sessions.noUrl') }}</p>
   <p v-else class="SessionUrl">{{ session.url }}</p>
   <a v-if="joinedUrl" :href="joinedUrl" target="_blank" rel="noopener noreferrer" class="FallbackLink">{{ t('sessions.fallback') }}</a>
+  <slot />
  </UPageCard>
 </template>
 <style scoped lang="scss">

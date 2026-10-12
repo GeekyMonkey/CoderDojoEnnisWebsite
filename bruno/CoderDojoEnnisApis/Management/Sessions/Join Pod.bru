@@ -1,0 +1,22 @@
+meta {
+ name: Join Pod
+ type: http
+}
+
+post {
+ url: {{Host}}/api/Management/session-pods/join
+ body: json
+ auth: bearer
+}
+
+auth:bearer {
+ token: {{AccessToken}}
+}
+
+body:json {
+ {"sessionId": "{{SessionId}}"}
+}
+
+docs {
+ Active mentor only. Save/delete require the exact fields snapshot returned by Pod Management. Saves renew for 150 minutes; removal preserves attendance and archives the pod.
+}

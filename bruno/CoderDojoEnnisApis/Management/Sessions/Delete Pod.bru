@@ -1,0 +1,22 @@
+meta {
+ name: Delete Pod
+ type: http
+}
+
+delete {
+ url: {{Host}}/api/Management/session-pods/{{SessionId}}
+ body: json
+ auth: bearer
+}
+
+auth:bearer {
+ token: {{AccessToken}}
+}
+
+body:json {
+ {"expected": {{SessionSnapshot}}}
+}
+
+docs {
+ Active mentor only. Save/delete require the exact fields snapshot returned by Pod Management. Saves renew for 150 minutes; removal preserves attendance and archives the pod.
+}
