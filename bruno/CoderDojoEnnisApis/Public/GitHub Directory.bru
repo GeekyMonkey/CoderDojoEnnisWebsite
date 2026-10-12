@@ -1,0 +1,29 @@
+meta {
+  name: GitHub Directory
+  type: http
+}
+
+get {
+  url: {{Host}}/api/githubaccounts
+  body: none
+  auth: none
+}
+
+tests {
+  test("Public directory preserves the static page contract", function () {
+    expect(res.getStatus()).to.equal(200);
+    const directory = res.getBody();
+    expect(directory).to.have.all.keys("Members", "Mentors");
+    [directory.Members, directory.Mentors].forEach(function (entries) {
+      expect(entries).to.be.an("array");
+      entries.forEach(function (entry) {
+        expect(entry).to.have.all.keys("FirstName", "LastName", "GithubLogin");
+        expect(entry.GithubLogin.trim()).not.to.equal("");
+      });
+    });
+  });
+}
+
+docs {
+  Anonymous public projection of active coders and mentors with GitHub handles. Names and GitHub handles only; no legacy API dependency. The member subdomain redirect is intentionally retained until beta cutover.
+}
