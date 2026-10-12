@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
 	header: vi.fn(),
 	getUser: vi.fn(),
 	maybeSingle: vi.fn(),
- rpc: vi.fn(),
+ rpc: vi.fn(), active: vi.fn(),
 }));
 vi.mock("h3", async (importOriginal): Promise<unknown> => ({ ...await importOriginal<object>(), getHeader: mocks.header }));
 vi.mock("#shared/types/models/MemberModel", (): object => ({
@@ -19,6 +19,8 @@ vi.mock("#server/db/DatabaseClient", (): object => ({
 		schema: (): object => ({ rpc: mocks.rpc, from: (): object => ({ select: (): object => ({ eq: (): object => ({ maybeSingle: mocks.maybeSingle }) }) }) }),
 	}),
 }));
+
+vi.mock("./portalSession", (): object => ({ requireActivePortalSession: mocks.active }));
 
 const EVENT: H3Event = {} as H3Event;
 const ID: string = "21630ded-fbf5-4ddc-9305-0db90c311ea8";
@@ -40,6 +42,14 @@ describe("request member authorization", (): void => {
  });
 
 	beforeEach((): void => { vi.resetAllMocks(); mocks.rpc.mockResolvedValue({ data: ID, error: null }); });
+ it("denies a revoked portal session before binding or member lookup", async (): Promise<void> => {
+  mocks.header.mockReturnValue("Bearer valid");
+  mocks.getUser.mockResolvedValue({ data: { user: { id: "auth-user" } }, error: null });
+  mocks.active.mockRejectedValue({ statusCode: 401 });
+  await expect(requireRequestMember(EVENT)).rejects.toMatchObject({ statusCode: 401 });
+  expect(mocks.rpc).not.toHaveBeenCalled(); expect(mocks.maybeSingle).not.toHaveBeenCalled();
+ });
+
 	it("rejects absent bearer authentication before querying the database", async (): Promise<void> => {
 		mocks.header.mockReturnValue(undefined);
 		await expect(requireRequestMember(EVENT)).rejects.toMatchObject({ statusCode: 401 });

@@ -365,6 +365,8 @@ export default {
 		since: "Bronnta ó",
 	},
 	signIn: {
+		endKiosk: "Cuir deireadh le síniú isteach",
+		kioskStartError: "Ní féidir an both a thosú. Logáil isteach arís.",
 		qrPlaceholder: "Cumasaigh an ceamara chun cód QR a scanadh.",
 		signInButton: "Logáil Isteach",
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",

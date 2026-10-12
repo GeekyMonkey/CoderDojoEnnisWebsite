@@ -15,7 +15,7 @@ A mapped counterpart means source exists for the feature, not that every behavio
 | Legacy workflow | Current counterpart / fields and actions accounted for | Status and side effects |
 | --- | --- | --- |
 | Home login/logout | Auth login/NFC, logout, role landing and session recovery; username/password, errors | F06/F07 implemented: history rotation and compound names; F08 password minimum accepted, username length open; Q02/Q06: return URL/cookie/hash compatibility |
-| SignIn / SignInQR / fingerprint | Mentor SignIn, QR reader, NFC toggle, attendance API/service; member identity/name/count, photo/avatar, belt/team, speech/notifications | F03/F05/F12–F15; identifier contracts, actual attendance/date/login mutations, archived lookup, failure responses, role-safe kiosk and live board remain qualified |
+| SignIn / SignInQR / fingerprint | Mentor SignIn, QR reader, NFC toggle, attendance API/service; member identity/name/count, photo/avatar, belt/team, speech/notifications | F03/F05; F12 implemented (bounded cookie/logout, hosted acceptance pending); F13–F15; identifier contracts, actual attendance/date/login mutations, archived lookup, failure responses, role-safe kiosk and live board remain qualified |
 | Mentor attendance/random | Selected date, team and mentor groups, search/sort/presence controls, total/member counts, registration/belt/photo; random present coder, QR/NFC, signup and selected-date context | Present; writes remain F03/F05, full reads F04/F21, dates F22; realtime store refresh replaces SignalR |
 | Mentor directory/signup/detail | Members/parents/mentors; profile and account sections, roles, birth year, registration, team, fingerprint/NFC, vetting, password confirmation, attendance-on-create | Present; separate sections replace one big save form; narrow guarded RPCs prevent stale saves and privilege escalation |
 | Parent-child linking and mentor skills | Search/select, create/remove relationship from either direction, skill category add/remove | Present; requires current mentor and eligible active records; relation races guarded |
@@ -237,8 +237,8 @@ Model fields include hidden IDs, computed properties and navigation collections.
 | Home/Login.cshtml | Password, Username | Login | /login; F06–F08/Q02. |
 | Home/Passport.cshtml | Awarded | — | Printing/MemberIdCard/PrintIdSheet; authorized scope, Q02. |
 | Home/PassportMentor.cshtml | BadgeCategory | — | Printing/MemberIdCard/PrintIdSheet with skills; Q02. |
-| Home/SignIn.cshtml | Adult, Deleted, HexCode, Id, ImageUrl, Member, Password, TeamName, Username | SignIn | /mentor/SignIn; F12–F15. |
-| Home/SignInQR.cshtml | Adult, Deleted, HexCode, Id, ImageUrl, Member, Password, TeamName, Username | SignIn | QR mode in /mentor/SignIn; F12–F15. |
+| Home/SignIn.cshtml | Adult, Deleted, HexCode, Id, ImageUrl, Member, Password, TeamName, Username | SignIn | /mentor/SignIn logout entry -> /kiosk/sign-in; F12 implemented, F13–F15 pending. |
+| Home/SignInQR.cshtml | Adult, Deleted, HexCode, Id, ImageUrl, Member, Password, TeamName, Username | SignIn | QR mode in /mentor/SignIn logout entry -> /kiosk/sign-in; F12 implemented, F13–F15 pending. |
 | Home/TeamCard.cshtml | FirstName, HexCode, ImageUrl, LastName, Members, TeamName | /content/Paper.css | Printing/TeamCard; Q02. |
 | Home/Tools.cshtml | — | /Content/tools/ReadNFC.zip, /Content/tools/WriteNFC.zip | Missing tools/downloads F11. |
 | Member/Attendance.cshtml | Date, FirstName, MemberAttendances | — | Coder pages/Profile/Coder/Achievements/MemberSessions/TeamRoster; workflow mappings above. F06/Q02. |
