@@ -416,3 +416,7 @@ Every route file is listed; the guard column records direct helper references an
 ## Live metadata verification
 
 The checked-in snapshot contains all columns/types/defaults/nullability, constraints, indexes, policies, triggers, publication columns and all function definitions/EXECUTE grants. It contains no member rows or credentials. RLS and grant findings are metadata-verified on 12 October 2026; external REST exposure and deployed application behavior remain V03/V04. New controlled mutation functions are restricted correctly; older direct table grants and APIs are separate unresolved paths.
+
+## F03 compatibility decision — 12 October 2026
+
+F03 is an explicitly accepted known vulnerability (12 October 2026): preserve the existing MemberAttendance/SetPresent, SignInGuid, SignInNfcTag and fingerprint API contracts and authorization behavior for the third-party hardware kiosk. Do not add authentication, device credentials or target restrictions as F03 remediation. Identifier-driven service-role requests can change attendance without a verified actor; fingerprint lookup also lacks an active-account filter. The user accepts this exposure and requests no remediation. This exception does not waive F01 database RLS or close F04/F05/F12 and other independent findings. References to F03 above identify this retained exposure, not outstanding remediation work.

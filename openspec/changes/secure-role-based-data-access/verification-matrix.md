@@ -12,7 +12,7 @@ For **each** of the 12 tables in the policy matrix, exercise direct REST SELECT 
 | --- | --- | --- |
 | members | M account/role/archive/reset/merge administration; P/C1 eight own fields; P linked-child fields | C1/P inject role/vetting/team/scanner/deleted/hash/id; alter actor/target binding; P edits C2 |
 | member_parents | M add/remove eligible links; P authorized child/co-parent projection | P/C1 self-assign link; P enumerates unrelated parent contacts |
-| member_attendances | M manual presence/date/report; P own/C1 read; C1 authorized join | Nonmentor manual/backdated/remove presence; join as another member; unauthenticated SetPresent |
+| member_attendances | M manual presence/date/report; P own/C1 read; C1 authorized join | Direct browser DML denied; join as another member denied; existing F03 SetPresent/API behavior retained as accepted vulnerability |
 | member_badge_categories | M skill maintenance; authorized own/host skill presentation | Nonmentor skill mutation or global skill/member directory |
 | member_badges | M review/undo; C1 own goal/apply/reapply; P child history; peer earned only | C1 approve/date/reviewer injection; P child apply; peer pending/evidence; M own-child approve/reject |
 | member_belts | M review/undo; C1 eligible own next-belt apply; P child history | Skip prerequisites; nonmentor award/decision edit; unrelated evidence; own-child review |
@@ -36,7 +36,7 @@ For **each** of the 12 tables in the policy matrix, exercise direct REST SELECT 
 | Projections | Snapshot exact allowed keys for self/child/peer/co-parent/host/GitHub; added DB column cannot enter output; no hashes/device secrets/logged rows |
 | RPC grants | anon/authenticated cannot execute any service-only core; scoped stats cannot return global private data; forged actor parameter denied even via guarded service path |
 | Legacy routes | Before production, F02 remains unchanged by user decision. At production cutover, CopyData/legacy read routes unavailable and old-database dependencies removed; final reconciliation/recovery backup recorded before decommissioning. Old generic member/belt/attendance lists and include_deleted cannot bypass role checks; aliases covered |
-| Device attendance | Valid scoped credential marks only active authorized target for current session/date; bad/archived credential, arbitrary target/backdate and repeated abuse denied |
+| Device attendance | Verify existing third-party hardware kiosk contracts remain compatible; document accepted unauthenticated identifier/target exposure under F03; no hardening acceptance gate |
 | Transactions | Signup, join attendance, review/undo, relation, merge, reset/cleanup effects atomic; rollback has no successful-change invalidation |
 | Pod times | Europe/Dublin midnight and daylight-saving cases match API/SQL; ends_at/null fallback boundaries and join-time recheck work |
 | Grants/views | All 12 RLS flags true; no broad DML/SELECT/PUBLIC EXECUTE/default grants; invoker views cannot bypass; private helpers inaccessible as public RPCs |

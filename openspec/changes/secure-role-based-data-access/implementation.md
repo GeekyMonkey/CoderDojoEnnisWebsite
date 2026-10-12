@@ -12,13 +12,13 @@ Branch: `codex/f01-role-based-rls`, isolated managed worktree. The preceding aud
 - App-local subscription/auth state, 60-second channel renewal, committed-change/reconnect refetch, strict payload validation, denial/logout/role-change cache clearing. Mounted query observers are notified that data is gone before cache removal. Single-table attendance and generic table stores refetch instead of depending on row payloads/IDs.
 - Scoped restrictive storage policies deny client listing/writes in the coderdojo bucket, preserving public image bytes/URLs and unrelated bucket permissions. Current validated image mutation APIs remain the supported path.
 - Service-only exposed operation/stat RPCs; fixed empty search paths on existing attendance stat functions. Private policy helpers and the two service-only identity functions use finite fixed-schema SECURITY DEFINER bodies owned by the migration owner (`postgres`). This follows the existing Supabase helper ownership pattern: managed service_role cannot SELECT auth.users. No broad auth.users read grant was added. A separate BYPASSRLS owner role was not introduced.
-- Legacy service-backed member/belt/team and global attendance read routes require a current mentor; stores send bearer headers. This closes related generic read bypasses but does not claim the entire F03/F04 scanner/API review is complete. New `/api/Auth/Identity` has a Bruno request.
+- Legacy service-backed member/belt/team and global attendance read routes require a current mentor; stores send bearer headers. This closes related generic read bypasses but preserves the accepted F03 hardware kiosk API exception; F04 remains separate. New `/api/Auth/Identity` has a Bruno request.
 
 ## Explicitly unchanged/deferred
 
 F02 CopyData and Legacy/Teams code and the old database remain unchanged until production cutover. A later destructive full import deletes binding rows with deleted members; users must complete the existing custom login again to provision the new binding. The import was not invoked or tested against live data. F19/F20 remain open.
 
-The scanner/kiosk authority and manual attendance mutation findings F03/F12, global attendance transaction issue F05, public GitHub/export gaps and final production retirement remain separate work. RLS cannot restrict those service-role paths by itself. F21 stays closed under the user's accepted one-million-row configuration.
+F03 scanner/manual attendance APIs remain unchanged as a known vulnerability accepted for the third-party hardware kiosk. The browser kiosk lifecycle finding F12, global attendance transaction issue F05, public GitHub/export gaps and final production retirement remain separate work. RLS cannot restrict those service-role paths by itself. F21 stays closed under the user's accepted one-million-row configuration.
 
 ## Verification and deployment boundary
 

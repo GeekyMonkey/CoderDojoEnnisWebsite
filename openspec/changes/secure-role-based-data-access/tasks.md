@@ -6,8 +6,8 @@
 
 ## 2. Close service-role bypasses
 - [ ] 2.1 Record F02 as deferred: leave the current legacy import and old database unchanged until production cutover.
-- [ ] 2.2 Guard old private list/history/include_deleted/manual attendance endpoints and all aliases.
-- [ ] 2.3 Implement bounded active-target device/kiosk attendance authorization; preserve valid login/device contracts without arbitrary member/backdate rights.
+- [ ] 2.2 Guard old private list/history/include_deleted endpoints and aliases outside the accepted F03 kiosk/attendance exception.
+- [x] 2.3 Record F03 as accepted known vulnerability / do not change: retain third-party hardware kiosk APIs and existing authorization behavior. No F03 hardening is planned.
 - [ ] 2.4 Recheck actor/role/link/target in transactional mutations; preserve existing profile locks, stale checks and operation side effects.
 
 ## 3. Identity, readers and database policies
