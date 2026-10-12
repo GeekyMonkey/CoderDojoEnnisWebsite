@@ -1,0 +1,7 @@
+- [x] Review full legacy Parent controller and all parent views; record P01–P13 in master checklist.
+- [x] Implement relationship-scoped parent read contracts, APIs and query stores.
+- [x] Compose home, child directory, summary, progress, contacts, attendance, team and passport screens.
+- [x] Implement guarded child account/password/image updates with reusable focused forms.
+- [x] Reuse public session listing and own-parent joining.
+- [x] Verify role/link revocation, privacy, stale edits, duplicate logins, image mutations, password login and concurrent joining.
+- [x] Verify production build/start, type diagnostics, mobile/browser screens and publish develop.

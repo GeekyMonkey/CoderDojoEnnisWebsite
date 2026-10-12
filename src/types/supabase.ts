@@ -530,6 +530,7 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
+ maintain_parent_child: { Args: { p_actor:string; p_id:string; p_action:string; p_fields:Json; p_expected?:Json }; Returns:Json };
  can_read_mentor_pods: { Args: Record<string, never>; Returns: boolean };
  maintain_session_pod: { Args: { p_actor: string; p_action: string; p_id?: string; p_fields?: Json; p_expected?: Json }; Returns: Json };
  join_member_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };

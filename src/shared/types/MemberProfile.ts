@@ -69,3 +69,7 @@ export const memberProfileResponseSchema: z.ZodObject<{
 	permissions: z.strictObject({ editDetails: z.boolean(), changePassword: z.boolean() }),
 });
 export type MemberProfileResponse = z.infer<typeof memberProfileResponseSchema>;
+
+export const selectedPasswordResetSchema:z.ZodObject<{newPassword:z.ZodString}> = z.strictObject({ newPassword:z.string().trim().min(4).max(120) });
+export type SelectedPasswordReset = z.infer<typeof selectedPasswordResetSchema>;
+export const selectedPasswordResetFormSchema:z.ZodObject<{newPassword:z.ZodString;confirmation:z.ZodString}> = selectedPasswordResetSchema.extend({ confirmation:z.string().trim().min(4).max(120) }).refine((value:{newPassword:string;confirmation:string}):boolean=>value.newPassword===value.confirmation,{path:["confirmation"],message:"Passwords do not match"});

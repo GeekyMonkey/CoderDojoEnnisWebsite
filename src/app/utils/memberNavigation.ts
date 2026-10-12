@@ -94,19 +94,9 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					label: "My Kids",
 					icon: "i-lucide-users-round",
 					roles: ["parent"],
-					children: [
-						{
-							label: "Child 1",
-							to: `${parentBase}/kids/child-1`,
-							roles: ["parent"],
-						},
-						{
-							label: "Child 2",
-							to: `${parentBase}/kids/child-2`,
-							roles: ["parent"],
-						},
-					],
+					to: `${parentBase}/kids`,
 				},
+                { label: "Sessions", to: `${parentBase}/sessions`, icon: "i-lucide-calendar", roles: ["parent"] },
 				{
 					label: "Mentor Home",
 					to: `${mentorBase}`,

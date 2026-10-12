@@ -1,0 +1,24 @@
+meta {
+  name: Join Session
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Parent/sessions/join
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{ParentAccessToken}}
+}
+
+body:json {
+{
+  "sessionId": "{{SessionId}}"
+}
+}
+
+docs {
+  Use a parent-only access token. MemberId must be an active linked coder; unrelated children and removed links must be denied.
+}

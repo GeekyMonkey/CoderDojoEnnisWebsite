@@ -1,0 +1,25 @@
+meta {
+  name: Child Images
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Parent/children/{{MemberId}}/images
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{ParentAccessToken}}
+}
+
+body:json {
+{
+  "action": "delete",
+  "slot": "avatar"
+}
+}
+
+docs {
+  Use a parent-only access token. MemberId must be an active linked coder; unrelated children and removed links must be denied.
+}

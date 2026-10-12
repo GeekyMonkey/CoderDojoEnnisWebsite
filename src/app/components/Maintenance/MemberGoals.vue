@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import GoalFieldsDisplay from "~/components/Profile/GoalFieldsDisplay.vue";
 	import MemberProgress from "~/components/Achievements/MemberProgress.vue";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
@@ -24,7 +25,7 @@
 </script>
 <template>
 	<UPageCard :title="t('maintenance.goals')">
-		<template v-if="!editing"><dl class="Goals"><div v-for="key in KEYS" :key="key"><dt>{{ t(`maintenance.${key}`) }}</dt><dd>{{ member[key] || '—' }}</dd></div></dl><UButton class="SectionEdit" @click="editing = true">{{ t('profile.edit') }}</UButton></template>
+		<template v-if="!editing"><GoalFieldsDisplay :member="member" /><UButton class="SectionEdit" @click="editing = true">{{ t('profile.edit') }}</UButton></template>
 		<UForm v-else :schema="goalFieldsSchema" :state="fields" class="Goals" @submit="submit">
 			<UFormField v-for="key in KEYS" :key="key" :name="key" :label="t(`maintenance.${key}`)"><UTextarea :modelValue="fields[key] ?? ''" :disabled="saving" class="GoalInput" @update:modelValue="(value: string): void => { fields[key] = value; }" /></UFormField>
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />

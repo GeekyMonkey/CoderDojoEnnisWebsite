@@ -7,7 +7,7 @@ import {
 	type WeakPassword,
 } from "@supabase/supabase-js";
 import CryptoJS from "crypto-js";
-import hasher from "crypto-js/sha256";
+import hasher from "crypto-js/sha256.js";
 // import { GetSupabaseAdminClient } from "../db/DatabaseClient"; // Using local admin client to avoid divergence
 import type { EventHandlerRequest, H3Event } from "h3";
 import type {

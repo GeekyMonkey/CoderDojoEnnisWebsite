@@ -1,0 +1,31 @@
+meta {
+  name: Save Child
+  type: http
+}
+
+patch {
+  url: {{Host}}/api/Parent/children/{{MemberId}}
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{ParentAccessToken}}
+}
+
+body:json {
+{
+  "fields": {
+    "birthYear": 2015,
+    "login": "{{ChildLogin}}",
+    "githubLogin": null,
+    "scratchName": null,
+    "xboxGamertag": null
+  },
+  "expected": {{ChildSnapshot}}
+}
+}
+
+docs {
+  Use a parent-only access token. MemberId must be an active linked coder; unrelated children and removed links must be denied.
+}

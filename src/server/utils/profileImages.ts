@@ -2,6 +2,8 @@ import { Buffer } from "node:buffer";
 import { validateProfilePng } from "./profilePng";
 import { createError, getQuery, getRouterParam, readBody, type H3Event } from "h3";
 import { requireRequestMember, type VerifiedMember } from "#server/utils/requestMember";
+import { requireRequestParent, requireLinkedChild } from "./parentRequest";
+import { mutateChild } from "#server/db/ParentChildMaintenanceData";
 import { readProfile } from "#server/db/ProfilesData";
 import { profileIdentitySchema, profileQuerySchema } from "#shared/types/MemberProfile";
 import { profileImageActionSchema, type ProfileImageSlot, type ProfileImageAction } from "#shared/types/ProfileImages";
@@ -29,8 +31,8 @@ async function snapshot(actor: VerifiedMember, memberId: string, slots: ProfileI
 }
 
 /** Handle authorized image changes, preserving previous files if persistence fails. */
-export async function changeProfileImages(event: H3Event, own: boolean): Promise<MemberModel> {
-    const actor: VerifiedMember = await requireRequestMember(event);
+export async function changeProfileImages(event: H3Event, own: boolean, parent: boolean = false): Promise<MemberModel> {
+    const actor: VerifiedMember = parent ? await requireRequestParent(event) : await requireRequestMember(event);
     const identity: ReturnType<typeof profileIdentitySchema.safeParse> = profileIdentitySchema.safeParse(own ? actor.id : getRouterParam(event, "memberId"));
     if (!identity.success) throw createError({ statusCode: 400, statusMessage: "Invalid profile identity" });
     const id: string = identity.data;
@@ -38,7 +40,7 @@ export async function changeProfileImages(event: H3Event, own: boolean): Promise
     const parsed: ReturnType<typeof profileImageActionSchema.safeParse> = profileImageActionSchema.safeParse(await readBody<unknown>(event));
     if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid image action" });
     const action: ProfileImageAction = parsed.data;
-    const { member } = await readProfile(actor, id);
+    const member: MemberModel = parent ? await requireLinkedChild(actor, id) : (await readProfile(actor, id)).member;
     const png: Buffer | null = action.action === "upload" ? validateProfilePng(action.png) : null;
     const slots: ProfileImageSlot[] = action.action === "swap" ? SLOTS : [action.slot];
     const before: StoredImage[] = await snapshot(actor, id, slots);
@@ -58,14 +60,16 @@ export async function changeProfileImages(event: H3Event, own: boolean): Promise
             if (error) throw error;
             values[slot === "photo" ? "has_photo" : "has_avatar"] = populated;
         }
+        if (parent) return await mutateChild(actor, id, "images", values, { has_photo: member.hasPhoto, has_avatar: member.hasAvatar });
         const { data, error } = await actor.client.schema("coderdojo").from("members").update(values).eq("id", id).eq("deleted", false).eq("has_photo", member.hasPhoto).eq("has_avatar", member.hasAvatar).select("*").maybeSingle();
         if (error || !data) throw new Error("Unable to save image flags");
         return memberFromRecord(data as MemberRecord);
-    } catch {
+    } catch (failure: unknown) {
         const restored: PromiseSettledResult<void>[] = await Promise.allSettled(before.map(async (image: StoredImage): Promise<void> => {
             const result: { error: unknown } = image.blob ? await bucket.upload(image.path, image.blob, { upsert: true, contentType: image.blob.type, cacheControl: "0" }) : await bucket.remove([image.path]);
             if (result.error) throw result.error;
         }));
+        if (!restored.some((result: PromiseSettledResult<void>): boolean => result.status === "rejected") && failure instanceof Error && "statusCode" in failure) throw failure;
         throw createError({ statusCode: 503, statusMessage: restored.some((result: PromiseSettledResult<void>): boolean => result.status === "rejected") ? "Image save and recovery failed; reload profile" : "Unable to save images; please retry" });
     }
 }

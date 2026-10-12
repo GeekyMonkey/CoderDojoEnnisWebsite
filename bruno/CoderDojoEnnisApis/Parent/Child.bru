@@ -1,0 +1,18 @@
+meta {
+  name: Child
+  type: http
+}
+
+get {
+  url: {{Host}}/api/Parent/children/{{MemberId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{ParentAccessToken}}
+}
+
+docs {
+  Use a parent-only access token. MemberId must be an active linked coder; unrelated children and removed links must be denied.
+}

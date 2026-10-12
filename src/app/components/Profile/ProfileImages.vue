@@ -6,8 +6,8 @@
     import ImageTransferProgress from "~/components/Images/ImageTransferProgress.vue";
     import { useImageSource } from "~/composables/useImageSource";
     import { type ProfileImageAction, type ProfileImageSlot } from "#shared/types/ProfileImages";
-    import type { MemberModel } from "#shared/types/models/MemberModel";
-    const props = defineProps<{ member: MemberModel; canEdit: boolean; saving: boolean; changeImages: (action: ProfileImageAction) => Promise<MemberModel> }>();
+    import type { MemberImageSubject } from "#shared/types/MemberPresentation";
+    const props = defineProps<{ member: MemberImageSubject; canEdit: boolean; saving: boolean; changeImages: (action: ProfileImageAction) => Promise<unknown> }>();
     type Slot = { key: ProfileImageSlot; populated: boolean };
     const { t } = useI18n();
 	const { publish } = useActionNotifications();
@@ -49,7 +49,7 @@
         if (!cropper.value || !selected.value) return;
         await change({ action: "upload", slot: selected.value, png: cropper.value.getPng() });
     }
-    watch((): MemberModel => props.member, (): void => { refreshImages(); });
+    watch((): MemberImageSubject => props.member, (): void => { refreshImages(); });
     watch((): string => props.member.id, close);
     watch((): boolean => props.canEdit, (canEdit: boolean): void => { if (!canEdit) { close(); error.value = null; } });
     onBeforeUnmount(close);

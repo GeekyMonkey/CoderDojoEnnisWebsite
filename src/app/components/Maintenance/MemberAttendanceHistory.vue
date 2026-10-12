@@ -2,9 +2,9 @@
 	import { computed, type ComputedRef } from "vue";
 	import type { MemberAttendanceModel } from "#shared/types/models/MemberAttendanceModel";
 	import { useMemberAttendanceHistoryStore } from "~/stores/useMemberAttendanceHistoryStore";
-	const props = defineProps<{ memberId: string | null }>();
+	const props = defineProps<{ memberId: string | null; parent?: boolean }>();
 	const { t, locale } = useI18n();
-	const { data, isPending, isError } = useMemberAttendanceHistoryStore((): string | null => props.memberId);
+	const { data, isPending, isError } = useMemberAttendanceHistoryStore((): string | null => props.memberId, props.parent ?? false);
 	const dates: ComputedRef<string[]> = computed((): string[] => [...new Set((data.value ?? []).map((attendance: MemberAttendanceModel): string => attendance.date))].sort((a: string, b: string): number => b.localeCompare(a)));
  const labels: ComputedRef<Record<string, string>> = computed((): Record<string, string> => {
   const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(locale.value, { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
