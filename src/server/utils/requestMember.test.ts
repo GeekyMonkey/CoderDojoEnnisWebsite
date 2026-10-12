@@ -30,8 +30,14 @@ describe("request member authorization", (): void => {
 	});
 	it("rejects expired or revoked tokens", async (): Promise<void> => {
 		mocks.header.mockReturnValue("Bearer expired");
-		mocks.getUser.mockResolvedValue({ data: { user: null }, error: new Error("expired") });
+		mocks.getUser.mockResolvedValue({ data: { user: null }, error: { status: 403, code: "session_not_found" } });
 		await expect(requireRequestMember(EVENT)).rejects.toMatchObject({ statusCode: 401 });
+	});
+	it("does not report an auth service outage as an expired session", async (): Promise<void> => {
+		mocks.header.mockReturnValue("Bearer valid");
+		mocks.getUser.mockResolvedValue({ data: { user: null }, error: { status: 503 } });
+		await expect(requireRequestMember(EVENT)).rejects.toMatchObject({ statusCode: 503 });
+		expect(mocks.maybeSingle).not.toHaveBeenCalled();
 	});
 	it.each([{ is_mentor: true, deleted: true }])("rejects deleted database records", async (member: { is_mentor: boolean; deleted: boolean }): Promise<void> => {
 		mocks.header.mockReturnValue("Bearer valid");

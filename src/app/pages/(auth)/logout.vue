@@ -3,7 +3,7 @@
 
 	const { supabaseClient } = UseSupabaseClient();
 
-	supabaseClient.auth.signOut({});
+	await supabaseClient.auth.signOut({ scope: "local" });
 
 	router.replace("/login");
 </script>

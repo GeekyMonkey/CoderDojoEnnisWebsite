@@ -12,6 +12,7 @@ export async function requireRequestMember(event: H3Event): Promise<VerifiedMemb
 	const client: SupabaseClientType | null = await GetSupabaseAdminClient(event);
 	if (!client) throw createError({ statusCode: 503, statusMessage: "Database unavailable" });
 	const { data, error } = await client.auth.getUser(authorization.slice(7));
+	if (error && (!error.status || error.status >= 500)) throw createError({ statusCode: 503, statusMessage: "Unable to verify session" });
 	if (error || !data.user) throw createError({ statusCode: 401, statusMessage: "Invalid session" });
 	const id: string | null = authenticatedMemberId(data.user);
 	if (!id) throw createError({ statusCode: 403, statusMessage: "Member access required" });

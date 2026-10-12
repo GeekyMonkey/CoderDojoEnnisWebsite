@@ -150,6 +150,7 @@ export default {
 	login: {
 		loginButton: "Login",
 		password: "Password",
+		sessionExpired: "Your session has expired. Please sign in again.",
 		title: "CoderDojo Ennis Member Login",
 		username: "Username",
 	},

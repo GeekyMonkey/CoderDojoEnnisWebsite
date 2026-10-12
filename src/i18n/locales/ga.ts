@@ -151,6 +151,7 @@ export default {
 	login: {
 		loginButton: "Logáil Isteach",
 		password: "Pasfhocal",
+		sessionExpired: "Tá do sheisiún imithe in éag. Logáil isteach arís.",
 		title: "Logáil Isteach Comhaltaí CoderDojo Ennis",
 		username: "Ainm Úsáideora",
 	},

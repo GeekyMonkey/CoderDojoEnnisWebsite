@@ -152,6 +152,7 @@ export default {
 	login: {
 		loginButton: "Connexion",
 		password: "Mot de passe",
+		sessionExpired: "Votre session a expiré. Veuillez vous reconnecter.",
 		title: "Connexion membre CoderDojo Ennis",
 		username: "Nom d'utilisateur",
 	},

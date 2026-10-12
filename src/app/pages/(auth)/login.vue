@@ -15,6 +15,7 @@
 	};
 
 	const router = useRouter();
+	const route: ReturnType<typeof useRoute> = useRoute();
 	const { t } = useI18n();
 	const log = useLogger("auth/login");
 	const { supabaseClient } = UseSupabaseClient();
@@ -170,6 +171,7 @@
 			</template>
 
 			<template #validation>
+				<UAlert v-if="route.query.reason === 'session-expired' && !errorMessage" color="warning" icon="i-lucide-info" :title="t('login.sessionExpired')" />
 				<UAlert
 					v-if="errorMessage"
 					color="error"

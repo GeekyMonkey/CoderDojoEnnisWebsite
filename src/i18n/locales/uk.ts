@@ -151,6 +151,7 @@ export default {
 	login: {
 		loginButton: "Увійти",
 		password: "Пароль",
+		sessionExpired: "Ваш сеанс завершився. Увійдіть знову.",
 		title: "Вхід для учасників CoderDojo Ennis",
 		username: "Ім'я користувача",
 	},
