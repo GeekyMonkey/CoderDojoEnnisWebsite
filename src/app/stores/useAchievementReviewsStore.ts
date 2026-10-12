@@ -5,12 +5,12 @@ import type { ApiResponse } from "#shared/types/ApiResponse";
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
 
 /** Own authenticated achievement queries, decisions and realtime invalidation. */
-export function useAchievementReviewsStore(kind: AchievementKind, memberId?: MaybeRefOrGetter<string>) {
+export function useAchievementReviewsStore(kind: AchievementKind, memberId?: MaybeRefOrGetter<string>, own: boolean = false) {
 	const user: ReturnType<typeof useSupabaseUser> = useSupabaseUser();
 	const client: ReturnType<typeof useSupabaseClient> = useSupabaseClient();
 	const queryClient: ReturnType<typeof useQueryClient> = useQueryClient();
 	const id: ComputedRef<string> = computed((): string => memberId ? toValue(memberId) : "");
-	const key: ComputedRef<readonly unknown[]> = computed((): readonly unknown[] => ["achievementReviews", user.value?.email ?? "", kind, memberId ? "history" : "pending", id.value]);
+	const key: ComputedRef<readonly unknown[]> = computed((): readonly unknown[] => ["achievementReviews", user.value?.email ?? "", kind, own ? "own" : memberId ? "history" : "pending", id.value]);
 
 	/** Attach the current session without exposing tokens in query keys or logs. */
 	async function headers(): Promise<{ Authorization: string }> {
@@ -21,10 +21,10 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 
 	const query: ReturnType<typeof useQuery<AchievementReview[]>> = useQuery<AchievementReview[]>({
 		queryKey: key,
-		enabled: computed((): boolean => Boolean(user.value) && (!memberId || Boolean(id.value))),
+		enabled: computed((): boolean => Boolean(user.value) && (own || !memberId || Boolean(id.value))),
 		queryFn: async ({ signal }: QueryFunctionContext): Promise<AchievementReview[]> => {
-			const response: ApiResponse<AchievementReview[]> = await $fetch(memberId ? "/api/Achievements/History" : "/api/Achievements/Pending", {
-				headers: await headers(), signal, query: memberId ? { kind, memberId: id.value } : { kind },
+			const response: ApiResponse<AchievementReview[]> = await $fetch(own ? `/api/Coder/achievements/${kind}` : memberId ? "/api/Achievements/History" : "/api/Achievements/Pending", {
+				headers: await headers(), signal, query: own ? {} : memberId ? { kind, memberId: id.value } : { kind },
 			});
 			if (!response.success) throw new Error(response.error);
 			return AchievementReviewSchema.array().parse(response.data);
@@ -45,6 +45,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 
 	/** Submit a decision and refresh even after a conflict to recover stale UI state. */
 	async function decide(review: AchievementReview, action: AchievementDecision["action"], notes: string): Promise<void> {
+		if (own) throw new Error("Mentor access required");
 		const body: AchievementDecision = AchievementDecisionSchema.parse({ kind, id: review.id, action, notes, expectedAwarded: review.awarded, expectedRejected: review.rejectedDate });
 		try {
 			const response: ApiResponse<null> = await $fetch("/api/Achievements/Decision", { method: "POST", headers: await headers(), body });

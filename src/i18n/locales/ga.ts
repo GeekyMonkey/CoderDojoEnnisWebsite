@@ -89,6 +89,9 @@ export default {
 		empty: "Níl aon iarratais chriosanna ar feitheamh.",
 		heading: "Iarratais ar Chriosanna",
 	},
+	coder: {
+		unassigned: "Déan teagmháil le meantóir chun dul isteach i bhfoireann.",
+	},
 	coders: {
 		label: "Códóir",
 		plural: "Códóirí",

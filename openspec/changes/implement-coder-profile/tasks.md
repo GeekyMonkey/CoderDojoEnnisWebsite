@@ -1,0 +1,5 @@
+- [x] Review legacy MemberController.Profile/ProfileSave/TeamMember and complete Profile/TeamMember views.
+- [x] Implement own context and same-team public profile APIs with Zod and Bruno requests.
+- [x] Reuse profile, image, roster and passport components with store-owned realtime.
+- [x] Verify authorization, public field restrictions, own history, passport readiness, UI and production build.
+- [x] Publish C02/C09 to develop and update master checklist.

@@ -7,12 +7,12 @@
  import type { TeamModel } from "#shared/types/models/TeamModel";
  import type { AchievementReview } from "#shared/types/AchievementReview";
  import { useAchievementReviewsStore } from "~/stores/useAchievementReviewsStore";
- const props = defineProps<{ member: MemberModel; team: TeamModel | null; skillNames: string[] }>();
+ const props = defineProps<{ member: MemberModel; team: TeamModel | null; skillNames: string[]; own?: boolean }>();
  const emit = defineEmits<{ ready: [id: string, ready: boolean] }>();
  type BadgeCount = { name: string; count: number };
  const { t } = useI18n();
- const badges: ReturnType<typeof useAchievementReviewsStore> = useAchievementReviewsStore("badge", (): string => props.member.id);
- const belts: ReturnType<typeof useAchievementReviewsStore> = useAchievementReviewsStore("belt", (): string => props.member.id);
+ const badges: ReturnType<typeof useAchievementReviewsStore> = useAchievementReviewsStore("badge", (): string => props.member.id, props.own ?? false);
+ const belts: ReturnType<typeof useAchievementReviewsStore> = useAchievementReviewsStore("belt", (): string => props.member.id, props.own ?? false);
  const currentBelt: ComputedRef<AchievementReview | null> = computed((): AchievementReview | null => [...(belts.data.value ?? [])].filter((value: AchievementReview): boolean => value.awarded !== null).sort((a: AchievementReview, b: AchievementReview): number => (b.awarded ?? 0) - (a.awarded ?? 0) || a.id.localeCompare(b.id))[0] ?? null);
  const qr: Ref<string | null> = ref(null);
  const failed: Ref<boolean> = ref(false);

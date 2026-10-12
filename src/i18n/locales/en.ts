@@ -88,6 +88,9 @@ export default {
 		empty: "There are no pending belt applications.",
 		heading: "Belt Applications",
 	},
+	coder: {
+		unassigned: "Contact a mentor to be assigned to a team.",
+	},
 	coders: {
 		label: "Coder",
 		plural: "Coders",

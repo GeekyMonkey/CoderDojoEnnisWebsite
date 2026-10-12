@@ -90,6 +90,9 @@ export default {
 		empty: "Aucune demande de ceinture en attente.",
 		heading: "Demandes de ceinture",
 	},
+	coder: {
+		unassigned: "Contactez un mentor pour rejoindre une équipe.",
+	},
 	coders: {
 		label: "Codeur",
 		plural: "Codeurs",

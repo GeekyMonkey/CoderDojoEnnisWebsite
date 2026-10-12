@@ -1,0 +1,15 @@
+meta {
+  name: Teammate
+  type: http
+}
+get {
+  url: {{Host}}/api/Coder/team-members/{{MemberId}}
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+docs {
+  Requires a current active coder. Own routes derive identity from the session. Teammate profiles require active same-team membership and return only public fields and awards. Unexpected query parameters are rejected.
+}

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 	import { ref, watch, type Ref } from "vue";
-		import type { MemberModel } from "#shared/types/models/MemberModel";
+		import type { MemberImageSubject } from "#shared/types/MemberPresentation";
 		
 	type LinkToOption = "NONE" | "HERE" | "NEW_TAB";
 
 	const props = defineProps<{
-		member: MemberModel;
+		member: MemberImageSubject;
 		kind: "photo" | "avatar";
 		borderColor?: string | null;
 		size: "sm" | "md" | "lg";
@@ -63,7 +63,7 @@
 
 	const legacy: Ref<boolean> = ref(false);
 	const { revision, refresh: refreshImages } = useProfileImageRevision((): string => props.member.id);
-	watch((): MemberModel => props.member, (): void => { legacy.value = false; refreshImages(); });
+	watch((): MemberImageSubject => props.member, (): void => { legacy.value = false; refreshImages(); });
 	/** Resolve only the requested image, with a legacy JPEG fallback. */
 	const src = computed<string | null>(() => {
 		const available: boolean = props.kind === "photo" ? props.member.hasPhoto : props.member.hasAvatar;
