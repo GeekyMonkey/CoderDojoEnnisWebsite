@@ -5,6 +5,17 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
  * Used as the base for other locales
  */
 export default {
+	accountMerge: {
+		choose: "Choose duplicate account",
+		confirm: "Merge these accounts",
+		description: "The current account is kept. Its name, login, password and images stay unchanged. History, relationships and skills are combined; the duplicate is archived.",
+		duplicate: "Duplicate account",
+		error: "Unable to merge. Refresh and review both accounts again.",
+		keep: "Keep account",
+		saved: "Accounts merged",
+		title: "Merge account",
+		value: "Value to keep",
+	},
 	actionNotifications: {
 		created: "Created.",
 		deleted: "Deleted.",
@@ -31,6 +42,7 @@ export default {
 		loadError: "Could not load achievements.",
 		mentor: "Mentor",
 		notes: "Decision notes (required)",
+		ownChild: "Another mentor must review your child’s application.",
 		pending: "Pending",
 		reject: "Reject",
 		rejected: "Rejected",
@@ -208,6 +220,15 @@ export default {
 		label: "Parent",
 		plural: "Parents",
 	},
+	printing: {
+		awardedTo: "Awarded to",
+		beltAward: "{belt} Belt",
+		certificate: "Belt certificate",
+		id: "Print ID",
+		mentorIds: "Print mentor IDs",
+		noBelt: "No earned belt to print.",
+		registeredIds: "Print registered coder IDs",
+	},
 	profile: {
 		cancel: "Cancel",
 		changePassword: "Change password",
@@ -299,7 +320,16 @@ export default {
 	userMenu: {
 		language: "Language",
 		logOut: "Log out",
-		profile: "Profile",
+		printing: {
+		awardedTo: "Awarded to",
+		beltAward: "{belt} Belt",
+		certificate: "Belt certificate",
+		id: "Print ID",
+		mentorIds: "Print mentor IDs",
+		noBelt: "No earned belt to print.",
+		registeredIds: "Print registered coder IDs",
+	},
+	profile: "Profile",
 		theme: "Theme",
 	},
 	validation: {

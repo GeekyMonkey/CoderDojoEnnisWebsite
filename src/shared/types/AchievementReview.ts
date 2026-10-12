@@ -27,6 +27,7 @@ export type AchievementReview = {
 	id: string;
 	memberId: string;
 	memberName: string;
+	canReview?: boolean;
 	kind: AchievementKind;
 	categoryId: string | null;
 	categoryName: string | null;
@@ -45,7 +46,7 @@ export type AchievementReview = {
 };
 
 export const AchievementReviewSchema = z.strictObject({
- id: z.string().min(1), memberId: z.string().min(1), memberName: z.string(), kind: AchievementKindSchema,
+ id: z.string().min(1), memberId: z.string().min(1), memberName: z.string(), canReview: z.boolean().default(true), kind: AchievementKindSchema,
  categoryId: z.string().nullable(), categoryName: z.string().nullable(), label: z.string(), sortOrder: z.number(), belt: BeltModelSchema.nullable(), description: z.string(),
  applicationDate: z.number().nullable(), applicationNotes: z.string().nullable(), awarded: z.number().nullable(), awardedNotes: z.string().nullable(), awardedByAdultId: z.string().nullable(),
  rejectedDate: z.number().nullable(), rejectedNotes: z.string().nullable(), rejectedByAdultId: z.string().nullable(),

@@ -1,0 +1,15 @@
+meta {
+  name: Merge duplicate member
+  type: http
+}
+post {
+  url: {{Host}}/api/Management/{{MemberId}}/merge
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+body:json {
+  {"duplicateId":"{{duplicateId}}","expectedKeep":{{expectedKeep}},"expectedDuplicate":{{expectedDuplicate}},"choices":{"birthYear":"keep","email":"keep","phone":"keep","githubLogin":"keep","scratchName":"keep","xboxGamertag":"keep","teamId":"keep","goalShortTerm":"keep","goalLongTerm":"keep"}}
+}

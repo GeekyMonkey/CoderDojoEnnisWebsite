@@ -6,10 +6,11 @@ import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeA
 
 /** Own authenticated achievement queries, decisions and realtime invalidation. */
 export function useAchievementReviewsStore(kind: AchievementKind, memberId?: MaybeRefOrGetter<string>) {
+	const user: ReturnType<typeof useSupabaseUser> = useSupabaseUser();
 	const client: ReturnType<typeof useSupabaseClient> = useSupabaseClient();
 	const queryClient: ReturnType<typeof useQueryClient> = useQueryClient();
 	const id: ComputedRef<string> = computed((): string => memberId ? toValue(memberId) : "");
-	const key: ComputedRef<readonly unknown[]> = computed((): readonly unknown[] => ["achievementReviews", kind, memberId ? "history" : "pending", id.value]);
+	const key: ComputedRef<readonly unknown[]> = computed((): readonly unknown[] => ["achievementReviews", user.value?.email ?? "", kind, memberId ? "history" : "pending", id.value]);
 
 	/** Attach the current session without exposing tokens in query keys or logs. */
 	async function headers(): Promise<{ Authorization: string }> {
@@ -20,7 +21,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 
 	const query: ReturnType<typeof useQuery<AchievementReview[]>> = useQuery<AchievementReview[]>({
 		queryKey: key,
-		enabled: computed((): boolean => !memberId || Boolean(id.value)),
+		enabled: computed((): boolean => Boolean(user.value) && (!memberId || Boolean(id.value))),
 		queryFn: async ({ signal }: QueryFunctionContext): Promise<AchievementReview[]> => {
 			const response: ApiResponse<AchievementReview[]> = await $fetch(memberId ? "/api/Achievements/History" : "/api/Achievements/Pending", {
 				headers: await headers(), signal, query: memberId ? { kind, memberId: id.value } : { kind },
@@ -56,7 +57,7 @@ export function useAchievementReviewsStore(kind: AchievementKind, memberId?: May
 	const realtime: ReturnType<typeof UseSupabaseRealtimeAllTables> = UseSupabaseRealtimeAllTables();
 	/** Refresh this query when its achievement records change elsewhere. */
 	function invalidate(event: { table: string }): void {
-		if (["members", "badges", "badge_categories", "belts", "member_badges", "member_belts"].includes(event.table)) {
+		if (["members", "member_parents", "badges", "badge_categories", "belts", "member_badges", "member_belts"].includes(event.table)) {
 			void refresh();
 		}
 	}

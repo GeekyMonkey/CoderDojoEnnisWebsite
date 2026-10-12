@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient, type QueryFunctionContext } from
 import { computed, onScopeDispose, type ComputedRef, type Ref } from "vue";
 import { maintenanceDataSchema, newMemberSchema, accountUpdateSchema, goalUpdateSchema, relationshipInputSchema, skillInputSchema, passwordResetSchema,
 	type MaintenanceData, type NewMember, type AccountFields, type GoalFields, type GuardedUpdate, type RelationshipInput, type SkillInput, type PasswordReset } from "#shared/types/MemberMaintenance";
+import { MemberMergeSchema, type MemberMerge } from "#shared/types/MemberMerge";
 import { profileIdentitySchema } from "#shared/types/MemberProfile";
 import { MemberModelSchema, type MemberModel } from "#shared/types/models/MemberModel";
 import { UseSupabaseRealtimeAllTables } from "~/composables/UseSupabaseRealtimeAllTables";
@@ -10,6 +11,7 @@ import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 export type MemberMaintenanceStore = {
 	data: Ref<MaintenanceData | undefined>; isPending: Ref<boolean>; isError: Ref<boolean>; isSaving: Ref<boolean>;
 	membersById: ComputedRef<Record<string, MemberModel>>;
+	merge: (id: string, body: MemberMerge) => Promise<MemberModel>;
 	create: (body: NewMember) => Promise<MemberModel>;
 	saveAccount: (id: string, body: GuardedUpdate<AccountFields>) => Promise<MemberModel>;
 	saveGoals: (id: string, body: GuardedUpdate<GoalFields>) => Promise<MemberModel>;
@@ -35,7 +37,7 @@ export function useMemberMaintenanceStore(): MemberMaintenanceStore {
 
 	/** Refresh all derived directories, profiles and progress after successful or conflicting writes. */
 	async function reload(): Promise<void> {
-		await Promise.all(["memberMaintenance", "profiles", "members", "memberAttendanceHistory", "memberAttendanceSessionStats", "memberAttendanceSessionDates", "memberAttendanceSessionDate"].map((key: string): Promise<void> => queryClient.invalidateQueries({ queryKey: [key] })));
+		await Promise.all(["memberMaintenance", "profiles", "members", "memberAttendanceHistory", "memberAttendanceSessionStats", "memberAttendanceSessionDates", "memberAttendanceSessionDate", "achievementReviews", "memberBeltsLatest", "memberBeltsPending", "memberBeltsByMemberId"].map((key: string): Promise<void> => queryClient.invalidateQueries({ queryKey: [key] })));
 	}
 	const mutation: ReturnType<typeof useMutation<MemberModel | null, Error, MaintenanceWrite>> = useMutation<MemberModel | null, Error, MaintenanceWrite>({
 		mutationFn: async (write: MaintenanceWrite): Promise<MemberModel | null> => {
@@ -50,6 +52,8 @@ export function useMemberMaintenanceStore(): MemberMaintenanceStore {
 	}
 	/** Register a new member with role-specific defaults. */
 	async function create(body: NewMember): Promise<MemberModel> { return MemberModelSchema.parse(await write("", "POST", newMemberSchema.parse(body), true)); }
+	/** Merge previewed accounts and invalidate every transferred history. */
+	async function merge(id: string, body: MemberMerge): Promise<MemberModel> { return MemberModelSchema.parse(await write(`/${profileIdentitySchema.parse(id)}/merge`, "POST", MemberMergeSchema.parse(body), true)); }
 	/** Save the selected member's account section. */
 	async function saveAccount(id: string, body: GuardedUpdate<AccountFields>): Promise<MemberModel> { return MemberModelSchema.parse(await write(`/${profileIdentitySchema.parse(id)}/account`, "PATCH", accountUpdateSchema.parse(body), true)); }
 	/** Save the selected coder's goals. */
@@ -72,5 +76,5 @@ export function useMemberMaintenanceStore(): MemberMaintenanceStore {
 	}
 	realtime.events.on("INSERT", invalidate); realtime.events.on("UPDATE", invalidate); realtime.events.on("DELETE", invalidate);
 	onScopeDispose((): void => { realtime.events.off("INSERT", invalidate); realtime.events.off("UPDATE", invalidate); realtime.events.off("DELETE", invalidate); });
-	return { data: query.data, isPending: query.isPending, isError: query.isError, isSaving: mutation.isPending, membersById, create, saveAccount, saveGoals, resetPassword, link, unlink, addSkill, removeSkill, reload };
+	return { data: query.data, isPending: query.isPending, isError: query.isError, isSaving: mutation.isPending, membersById, create, merge, saveAccount, saveGoals, resetPassword, link, unlink, addSkill, removeSkill, reload };
 }

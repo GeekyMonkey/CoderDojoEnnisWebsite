@@ -26,7 +26,7 @@
 		<template #body><div class="MemberDetail">
 			<p v-if="isPending">{{ t('profile.loading') }}</p><UAlert v-else-if="isError" color="error" :title="t('profile.loadError')" /><UAlert v-else-if="!valid || !member" color="error" :title="t('maintenance.notFound')" />
 			<template v-else-if="member && data">
-				<UserProfile :key="memberId" :memberId="memberId" />
+				<div class="MemberActions"><UButton :to="`/mentor/maintenance/print?kind=member&memberId=${memberId}`" target="_blank" variant="outline">{{ t('printing.id') }}</UButton><UButton v-if="member.isNinja" :to="`/mentor/maintenance/print?kind=certificate&memberId=${memberId}`" target="_blank" variant="outline">{{ t('printing.certificate') }}</UButton><UButton :to="`/mentor/maintenance/merge/${memberId}`" variant="outline">{{ t('accountMerge.title') }}</UButton></div><UserProfile :key="memberId" :memberId="memberId" />
 				<MemberAccount :key="`account-${memberId}`" :member="member" :teams="data.teams" :saving="isSaving" :save="saveAccount" />
 				<PasswordResetForm :key="`password-${memberId}`" :saving="isSaving" :resetPassword="resetPassword" />
 				<template v-if="member.isNinja"><MemberGoals :key="`goals-${memberId}`" :member="member" :saving="isSaving" :save="saveGoals" /><MemberRelationships :key="`parents-${memberId}`" :member="member" :members="data.members" :relationships="data.relationships" side="parents" :saving="isSaving" :link="store.link" :unlink="store.unlink" /><MemberAttendanceHistory :key="`attendance-${memberId}`" :memberId="memberId" /><UPageCard><AchievementsReviewList :key="`belts-${memberId}`" kind="belt" :memberId="memberId" /><AchievementsReviewList :key="`badges-${memberId}`" kind="badge" :memberId="memberId" /></UPageCard></template>
@@ -37,5 +37,6 @@
 	</UDashboardPanel>
 </template>
 <style scoped lang="scss">
+	.MemberActions { display: flex; flex-wrap: wrap; gap: calc(var(--spacing) * 3); }
 	.MemberDetail { display: grid; gap: calc(var(--spacing) * 6); padding: calc(var(--spacing) * 4); max-width: 70rem; }
 </style>

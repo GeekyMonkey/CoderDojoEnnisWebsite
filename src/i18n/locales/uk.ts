@@ -6,6 +6,17 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	accountMerge: {
+		choose: "Виберіть дублікат облікового запису",
+		confirm: "Об’єднати облікові записи",
+		description: "Поточний запис зберігає ім’я, логін, пароль та зображення. Історія, зв’язки й навички об’єднуються, дублікат архівується.",
+		duplicate: "Дублікат",
+		error: "Не вдалося об’єднати. Оновіть і перевірте записи.",
+		keep: "Збережений запис",
+		saved: "Записи об’єднано",
+		title: "Об’єднати записи",
+		value: "Значення для збереження",
+	},
 	actionNotifications: {
 		created: "Створено.",
 		deleted: "Видалено.",
@@ -32,6 +43,7 @@ export default {
 		loadError: "Не вдалося завантажити нагороди.",
 		mentor: "Наставник",
 		notes: "Примітки до рішення (обов’язково)",
+		ownChild: "Заявку вашої дитини має розглянути інший наставник.",
 		pending: "Очікує",
 		reject: "Відхилити",
 		rejected: "Відхилено",
@@ -209,6 +221,15 @@ export default {
 		label: "Батьки",
 		plural: "Батьки",
 	},
+	printing: {
+		awardedTo: "Нагороджено",
+		beltAward: "Пояс {belt}",
+		certificate: "Сертифікат пояса",
+		id: "Друкувати картку",
+		mentorIds: "Друкувати картки наставників",
+		noBelt: "Немає отриманого пояса для друку.",
+		registeredIds: "Друкувати картки зареєстрованих учасників",
+	},
 	profile: {
 		cancel: "Скасувати",
 		changePassword: "Змінити пароль",
@@ -300,7 +321,16 @@ export default {
 	userMenu: {
 		language: "Мова",
 		logOut: "Вийти",
-		profile: "Профіль",
+		printing: {
+		awardedTo: "Нагороджено",
+		beltAward: "Пояс {belt}",
+		certificate: "Сертифікат пояса",
+		id: "Друкувати картку",
+		mentorIds: "Друкувати картки наставників",
+		noBelt: "Немає отриманого пояса для друку.",
+		registeredIds: "Друкувати картки зареєстрованих учасників",
+	},
+	profile: "Профіль",
 		theme: "Тема",
 	},
 	validation: {

@@ -6,6 +6,17 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	accountMerge: {
+		choose: "Roghnaigh cuntas dúblach",
+		confirm: "Cumaisc na cuntais",
+		description: "Coinnítear an cuntas reatha, a ainm, logáil isteach, pasfhocal agus íomhánna. Cuirtear stair, caidrimh agus scileanna le chéile agus cartlannaítear an dúblach.",
+		duplicate: "Cuntas dúblach",
+		error: "Níorbh fhéidir cumasc. Athnuaigh agus seiceáil na cuntais.",
+		keep: "Cuntas le coinneáil",
+		saved: "Cuntais cumaiscthe",
+		title: "Cumaisc cuntas",
+		value: "Luach le coinneáil",
+	},
 	actionNotifications: {
 		created: "Cruthaithe.",
 		deleted: "Scriosta.",
@@ -32,6 +43,7 @@ export default {
 		loadError: "Níorbh fhéidir na gradaim a luchtú.",
 		mentor: "Meantóir",
 		notes: "Nótaí cinnidh (riachtanach)",
+		ownChild: "Caithfidh meantóir eile iarratas do pháiste a athbhreithniú.",
 		pending: "Ar feitheamh",
 		reject: "Diúltaigh",
 		rejected: "Diúltaithe",
@@ -209,6 +221,15 @@ export default {
 		label: "Tuismitheoir",
 		plural: "Tuismitheoirí",
 	},
+	printing: {
+		awardedTo: "Bronnta ar",
+		beltAward: "Crios {belt}",
+		certificate: "Teastas crios",
+		id: "Priontáil cárta",
+		mentorIds: "Priontáil cártaí meantóirí",
+		noBelt: "Níl crios bronnta le priontáil.",
+		registeredIds: "Priontáil cártaí códóirí cláraithe",
+	},
 	profile: {
 		cancel: "Cealaigh",
 		changePassword: "Athraigh pasfhocal",
@@ -300,7 +321,16 @@ export default {
 	userMenu: {
 		language: "Teanga",
 		logOut: "Logáil amach",
-		profile: "Próifíl",
+		printing: {
+		awardedTo: "Bronnta ar",
+		beltAward: "Crios {belt}",
+		certificate: "Teastas crios",
+		id: "Priontáil cárta",
+		mentorIds: "Priontáil cártaí meantóirí",
+		noBelt: "Níl crios bronnta le priontáil.",
+		registeredIds: "Priontáil cártaí códóirí cláraithe",
+	},
+	profile: "Próifíl",
 		theme: "Téama",
 	},
 	validation: {

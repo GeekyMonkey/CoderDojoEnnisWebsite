@@ -10,8 +10,8 @@ const querySchema: z.ZodType<{ kind: "badge" | "belt"; memberId: string }> = z.s
 
 /** List a member's achievement history for an authenticated mentor. */
 export default defineEventHandler(async (event: H3Event): Promise<ApiResponse<AchievementReview[]>> => {
-	const { client } = await requireRequestMentor(event);
+	const { id, client } = await requireRequestMentor(event);
 	const parsed: ReturnType<typeof querySchema.safeParse> = querySchema.safeParse(getQuery(event));
 	if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid history request" });
-	return { success: true, data: await getAchievementReviews(client, parsed.data.kind, parsed.data.memberId) };
+	return { success: true, data: await getAchievementReviews(client, parsed.data.kind, parsed.data.memberId, id) };
 });

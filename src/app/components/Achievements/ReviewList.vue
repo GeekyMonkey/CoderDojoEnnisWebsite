@@ -111,7 +111,7 @@
 			</template>
 			<template #expanded="{ row }">
 				<div class="ReviewDetails">
-					<p>{{ row.original.description }}</p>
+					<p>{{ row.original.description }}</p><p v-if="row.original.canReview === false && !row.original.awarded && !row.original.rejectedDate" role="status">{{ t('achievementReviews.ownChild') }}</p>
 					<p>{{ t("achievementReviews.applied") }}: {{ displayDate(row.original.applicationDate) }}</p>
 					<blockquote>{{ row.original.applicationNotes || "—" }}</blockquote>
 					<template v-if="row.original.awarded || row.original.rejectedDate">
@@ -122,10 +122,10 @@
 					</template>
 					<template v-else-if="row.original.applicationDate">
 						<label :for="`decision-notes-${row.original.id}`">{{ t("achievementReviews.notes") }}</label>
-						<UTextarea :id="`decision-notes-${row.original.id}`" v-model="notes[row.original.id]" :maxlength="4000" :disabled="Boolean(busy)" class="DecisionNotes" />
+						<UTextarea :id="`decision-notes-${row.original.id}`" v-model="notes[row.original.id]" :maxlength="4000" :disabled="Boolean(busy) || row.original.canReview === false" class="DecisionNotes" />
 						<div class="ReviewActions">
-							<UButton :loading="busy === row.original.id" :disabled="Boolean(busy) || !notes[row.original.id]?.trim()" @click="submit(row.original, 'approve')">{{ t("achievementReviews.approve") }}</UButton>
-							<UButton color="error" :disabled="Boolean(busy) || !notes[row.original.id]?.trim()" @click="requestConfirmation(row.original, 'reject')">{{ t("achievementReviews.reject") }}</UButton>
+							<UButton :loading="busy === row.original.id" :disabled="Boolean(busy) || row.original.canReview === false || !notes[row.original.id]?.trim()" @click="submit(row.original, 'approve')">{{ t("achievementReviews.approve") }}</UButton>
+							<UButton color="error" :disabled="Boolean(busy) || row.original.canReview === false || !notes[row.original.id]?.trim()" @click="requestConfirmation(row.original, 'reject')">{{ t("achievementReviews.reject") }}</UButton>
 						</div>
 					</template>
 				</div>

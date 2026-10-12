@@ -7,7 +7,7 @@
  import type { TeamModel } from "#shared/types/models/TeamModel";
  import type { AchievementReview } from "#shared/types/AchievementReview";
  import { useAchievementReviewsStore } from "~/stores/useAchievementReviewsStore";
- const props = defineProps<{ member: MemberModel; team: TeamModel }>();
+ const props = defineProps<{ member: MemberModel; team: TeamModel | null; skillNames: string[] }>();
  const emit = defineEmits<{ ready: [id: string, ready: boolean] }>();
  type BadgeCount = { name: string; count: number };
  const { t } = useI18n();
@@ -34,21 +34,22 @@
 <template>
 	<article class="MemberIdCard">
 	<h2>{{ member.nameFirst }} {{ member.nameLast }}</h2>
-	<p>{{ team.teamName }}</p>
+	<p>{{ member.isNinja ? team?.teamName ?? t('maintenance.noTeam') : t(member.isMentor ? 'maintenance.isMentor' : 'maintenance.isParent') }}</p>
 	<div class="IdentityImages">
 	<MemberAvatar :member="member" size="lg" linkTo="NONE" />
-	<TeamLogo :for="team" size="lg" />
+	<TeamLogo :for="team ?? 'UNASSIGNED'" size="lg" />
 	<img v-if="qr" class="IdentityQr" :src="qr" :alt="`${member.nameFirst} ${member.nameLast} QR`" />
 	<UAlert v-if="failed || badges.isError.value || belts.isError.value" color="error" :title="t('profile.loadError')" />
 	</div>
 	<p>{{ member.login ?? '—' }}</p>
-	<div class="BadgeCounts">
+	<div v-if="member.isNinja" class="BadgeCounts">
 	<span v-for="category in categories" :key="category.name">{{ category.name }}: {{ category.count }}</span>
 	</div>
+	<div v-else class="BadgeCounts"><span v-for="name in skillNames" :key="name">{{ name }}</span></div>
 	<footer>
 	<span>CoderDojo Ennis</span>
-	<BeltColor :belt="currentBelt?.belt ?? 'noob'" size="md" />
-	<span>{{ t('nav.Badges') }}: {{ awarded.length }}</span>
+	<BeltColor v-if="member.isNinja" :belt="currentBelt?.belt ?? 'noob'" size="md" />
+	<span v-if="member.isNinja">{{ t('nav.Badges') }}: {{ awarded.length }}</span>
 	</footer>
 	</article>
 	</template>

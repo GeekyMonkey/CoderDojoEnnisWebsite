@@ -7,6 +7,17 @@ import { type enMessagesType } from "./en";
  * spell-checker:ignoreRegExp ".*"
  */
 export default {
+	accountMerge: {
+		choose: "Choisir le compte en double",
+		confirm: "Fusionner ces comptes",
+		description: "Le compte actuel est conservé avec son nom, identifiant, mot de passe et images. Historique, relations et compétences sont réunis ; le doublon est archivé.",
+		duplicate: "Compte en double",
+		error: "Fusion impossible. Actualisez et vérifiez les comptes.",
+		keep: "Compte conservé",
+		saved: "Comptes fusionnés",
+		title: "Fusionner un compte",
+		value: "Valeur à conserver",
+	},
 	actionNotifications: {
 		created: "Créé.",
 		deleted: "Supprimé.",
@@ -33,6 +44,7 @@ export default {
 		loadError: "Impossible de charger les récompenses.",
 		mentor: "Mentor",
 		notes: "Notes de décision (obligatoires)",
+		ownChild: "Un autre mentor doit examiner la demande de votre enfant.",
 		pending: "En attente",
 		reject: "Refuser",
 		rejected: "Refusé",
@@ -210,6 +222,15 @@ export default {
 		label: "Parent",
 		plural: "Parents",
 	},
+	printing: {
+		awardedTo: "Décerné à",
+		beltAward: "Ceinture {belt}",
+		certificate: "Certificat de ceinture",
+		id: "Imprimer la carte",
+		mentorIds: "Imprimer les cartes des mentors",
+		noBelt: "Aucune ceinture obtenue à imprimer.",
+		registeredIds: "Imprimer les cartes des codeurs inscrits",
+	},
 	profile: {
 		cancel: "Annuler",
 		changePassword: "Changer le mot de passe",
@@ -301,7 +322,16 @@ export default {
 	userMenu: {
 		language: "Langue",
 		logOut: "Se déconnecter",
-		profile: "Profil",
+		printing: {
+		awardedTo: "Décerné à",
+		beltAward: "Ceinture {belt}",
+		certificate: "Certificat de ceinture",
+		id: "Imprimer la carte",
+		mentorIds: "Imprimer les cartes des mentors",
+		noBelt: "Aucune ceinture obtenue à imprimer.",
+		registeredIds: "Imprimer les cartes des codeurs inscrits",
+	},
+	profile: "Profil",
 		theme: "Thème",
 	},
 	validation: {
