@@ -1,0 +1,12 @@
+meta {
+ name: Preview Registrations
+ type: http
+}
+get {
+ url: {{Host}}/api/Management/data-maintenance/registrations
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

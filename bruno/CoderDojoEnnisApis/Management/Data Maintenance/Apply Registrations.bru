@@ -1,0 +1,19 @@
+meta {
+ name: Apply Registrations
+ type: http
+}
+post {
+ url: {{Host}}/api/Management/data-maintenance
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+ {"action": "registrations", "revision": "{{MaintenanceRevision}}"}
+}
+docs {
+ Run the matching preview first and copy its revision into MaintenanceRevision.
+ This request applies the action to every previewed account. It returns 409 if the preview changed.
+}

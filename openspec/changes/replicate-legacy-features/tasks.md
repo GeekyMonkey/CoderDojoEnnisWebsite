@@ -21,7 +21,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
 - [x] 8. Duplicate accounts: merge coders/adults, preserving relationships and history.
 - [x] 9. Reports: recent belts, belt CSV, parent emails and mentor emails. Shared searchable report UI, two-year default/date filter, authenticated store-owned CSV exports and realtime refresh. Single queries suit the small tables; build, type and focused checks pass. Browser visual review remains pending because local server startup is blocked in this session.
 - [x] 10. Printing: coder/mentor passports, batch passports, certificates and team cards.
-- [ ] 11. Data maintenance: inactive member/parent cleanup and registration purge.
+- [x] 11. Data maintenance: legacy inactive coder/orphan-parent archival and term-registration reset, including never-attended and archived coders; shared store-backed preview/confirmation, atomic mentor-only apply, stale-preview conflicts, realtime invalidation and result counts. Builds, API guards, isolated database fixtures and desktop/390px screens verified.
 - [x] 12. My Profile: role-neutral own-profile store and reusable UI, names/contact details, external handles, guarded save and password change; separate selected-user profile store and realtime refresh.
 - [x] Review feature 12 code before starting feature 1.
 - [x] Review the features 1–4 batch before progressing to feature 5.

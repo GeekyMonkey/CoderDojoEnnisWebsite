@@ -1,0 +1,12 @@
+meta {
+ name: Preview Members
+ type: http
+}
+get {
+ url: {{Host}}/api/Management/data-maintenance/members
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

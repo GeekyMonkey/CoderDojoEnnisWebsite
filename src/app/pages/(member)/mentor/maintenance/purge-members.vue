@@ -1,14 +1,11 @@
 <script setup lang="ts">
-	const { pageTitle } = useMemberLayoutContext();
+import DataMaintenance from "~/components/Maintenance/DataMaintenance.vue";
+const { t }: { t: (key: string) => string } = useI18n();
 </script>
 
 <template>
-	<UDashboardPanel id="mentor-maintenance-purge-members">
-		<template #header>
-			<DashboardHeading :page-title="pageTitle" />
-		</template>
-		<template #body>
-			<PlaceholderPage description="Maintenance tools are coming soon." />
-		</template>
-	</UDashboardPanel>
+ <UDashboardPanel id="mentor-maintenance-purge-members">
+  <template #header><DashboardHeading :pageTitle="t('nav.Purge Members')" /></template>
+  <template #body><DataMaintenance action="members" /></template>
+ </UDashboardPanel>
 </template>
