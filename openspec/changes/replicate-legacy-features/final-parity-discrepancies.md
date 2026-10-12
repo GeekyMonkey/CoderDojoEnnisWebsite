@@ -67,6 +67,10 @@ These six differences remain open decisions. Safer role checks and guarded APIs 
 | V03 | Verify photo/avatar/category/team storage migration, fallbacks, object permissions and cross-device realtime with role-specific accounts. | Storage inventory without personal exports, negative authorization tests, payload checks and a clean production cutover rehearsal. |
 | V04 | Identify and test external fingerprint/NFC devices, QR cards, GitHub directory, chatbot consumers, old bookmarks, WebHub/chat/session destinations and public downloads. | Written compatibility/retirement decisions plus successful contract tests on supported integrations. |
 
+## F01 implementation status — 12 October 2026
+
+The [F01 branch implementation](../secure-role-based-data-access/implementation.md) prepares policies for all 12 tables, protected identity binding, service-only execution, safe private realtime invalidations and public-image preservation. Synthetic database and focused app checks pass. F01 remains open for deployed-state acceptance: no shared Supabase migration or hosted runtime verification has been performed. F02 remains deferred and the independent scanner/kiosk/data-integrity findings are not closed by enabling RLS.
+
 ## F02 deferral — 12 October 2026
 
 The user explicitly directed that F02 remain as-is until production. Retain the current legacy import implementation and old database during development/migration. Removal of the legacy web import/read routes and decommissioning of the old database are production-cutover tasks. Before decommissioning, verify final data reconciliation, remove remaining runtime dependencies and retain the required recovery backup. No endpoint or database was changed by this decision. F19/F20 import-quality and credential findings remain separate open items.

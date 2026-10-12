@@ -41,4 +41,4 @@ The user requires mentors to have full rights, parents and members to edit their
 
 The proposal includes [technical design and rollout](design.md), [per-table and field rules](policy-matrix.md), [verification matrix](verification-matrix.md), [implementation tasks](tasks.md) and normative spec deltas. Completion requires every legitimate role feature to pass plus denial tests across direct REST, APIs, RPCs, storage and realtime; enabling RLS alone is not acceptance.
 
-Status: **proposed, not implemented**. No database policies, permissions, buckets or application behavior have changed.
+Status: **F01 implementation prepared on an isolated branch; not deployed**. See the [implementation record](implementation.md). The broader proposal is not fully implemented and shared Supabase policies, permissions and buckets are unchanged.

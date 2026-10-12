@@ -1,0 +1,1 @@
+export const MEMBER_READ_COLUMNS: string = "id,birth_year,deleted,email,garda_vetted,github_login,goal_long_term,goal_short_term,is_mentor,is_ninja,is_parent,login,login_date,login_date_previous,name_first,name_last,phone,registered_current_term,scratch_name,team_id,xbox_gamertag,has_photo,has_avatar";

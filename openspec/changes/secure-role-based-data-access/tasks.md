@@ -29,3 +29,15 @@
 - [ ] 5.3 Run production build/focused checks and metadata/security advisor review; document evidence and unresolved issues.
 - [ ] 5.4 At production cutover remove CopyData/legacy read dependencies, complete final reconciliation and recovery-backup checks, then decommission the old database; execute coordinated cutover and retain protective grants/policies/route closure on rollback.
 - [ ] 5.5 Update expected features/security docs and audit finding status only after implementation and acceptance; archive proposal after deployment.
+
+## F01 branch delivery (approved 12 October 2026)
+- [x] Commit/push current documentation to develop before creating the isolated F01 worktree.
+- [x] Implement all 12 table read policies/column grants and deny direct client writes; service-only RPC grants and fixed attendance search paths.
+- [x] Implement protected identity binding, compatible login provisioning and request-token profile/pod/history readers.
+- [x] Replace raw sensitive publications/subscriptions with scoped private invalidations, renewal and observer cache clearing; preserve public images.
+- [x] Guard related legacy global private read routes and add headers/identity API Bruno request.
+- [x] Run synthetic database authorization, focused app/lifecycle tests, production build and changed-file type checks; capture read-only reconciliation/advisor baseline.
+- [ ] Apply to hosted staging and verify actual REST/Broadcast/public image/UI behavior; shared deployment is not performed by this branch delivery.
+- [ ] Complete remaining broader proposal tasks and production cutover, including deferred F02 retirement.
+
+Evidence and limitations: [F01 implementation record](implementation.md). Original full-proposal tasks above remain unchecked where this pass does not complete their full acceptance criteria.

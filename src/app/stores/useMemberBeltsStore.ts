@@ -1,3 +1,4 @@
+import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { ComputedRef, Ref } from "vue";
 import type { BeltModel } from "#shared/types/models/BeltModel";
@@ -30,6 +31,7 @@ export function useBeltReviewsStore(memberId?: MaybeRefOrGetter<string>): Return
  * Client-side store for member_belts with realtime invalidation.
  */
 export function useMemberBeltsStore() {
+ const headers: ReturnType<typeof useProfileAuthorization> = useProfileAuthorization();
 	// const store = baseDbTableStore<MemberBeltModel>({
 	// 	apiPath: "memberBelts",
 	// 	tableName: "member_belts",
@@ -52,7 +54,7 @@ export function useMemberBeltsStore() {
 		queryFn: async ({ signal }) => {
 			const response = await $fetch<ApiResponse<MemberBeltModel[]>>(
 				"/api/memberBelts/pending",
-				{ signal },
+				{ signal, headers: await headers() },
 			);
 			if (!response.success) {
 				throw new Error(response.error || "api error");
@@ -78,7 +80,7 @@ export function useMemberBeltsStore() {
 		queryFn: async ({ signal }) => {
 			const response = await $fetch<ApiResponse<MemberBeltModel[]>>(
 				"/api/memberBelts/latest",
-				{ signal },
+				{ signal, headers: await headers() },
 			);
 			if (!response.success) {
 				throw new Error(response.error || "api error");
@@ -106,6 +108,7 @@ export function useMemberBeltsStore() {
 				>("/api/memberBelts/byMemberId", {
 					method: "GET",
 					signal,
+     headers: await headers(),
 					query: { memberId },
 				});
 				if (!response.success) {

@@ -76,6 +76,6 @@ export async function readMemberAttendance(actor: VerifiedMember, id: string): P
 	const { data: member, error: memberError } = await actor.client.schema("coderdojo").from("members").select("id").eq("id", id).eq("deleted", false).maybeSingle();
 	if (memberError) throw createError({ statusCode: 503, statusMessage: "Unable to load member" });
 	if (!member) throw createError({ statusCode: 404, statusMessage: "Member not found" });
- const rows: MemberAttendanceRecord[] = await readRows<MemberAttendanceRecord>((): RowQuery => actor.client.schema("coderdojo").from("member_attendances").select("*").eq("member_id", id).order("date", { ascending: false }).order("id"));
+ const rows: MemberAttendanceRecord[] = await readRows<MemberAttendanceRecord>((): RowQuery => actor.readClient.schema("coderdojo").from("member_attendances").select("*").eq("member_id", id).order("date", { ascending: false }).order("id"));
  return memberAttendanceFromRecords(rows);
 }

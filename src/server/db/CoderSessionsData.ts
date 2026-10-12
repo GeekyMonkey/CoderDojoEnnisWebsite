@@ -10,7 +10,7 @@ type HostRecord = Pick<Database["coderdojo"]["Tables"]["members"]["Row"], "id" |
 export async function readCoderSessions(actor: VerifiedMember): Promise<CoderSession[]> {
  const now: Date = new Date();
  const today: string = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Dublin", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
- const { data, error } = await actor.client.schema("coderdojo").from("session_pods").select("*").eq("mentors_only", false).eq("deleted", false)
+ const { data, error } = await actor.readClient.schema("coderdojo").from("session_pods").select("*").eq("mentors_only", false).eq("deleted", false)
   .or(`ends_at.gt.${now.toISOString()},and(ends_at.is.null,session_date.gte.${today})`).order("topic").order("id");
  if (error) throw createError({ statusCode: 503, statusMessage: "Unable to load sessions" });
  const sessions: SessionRecord[] = data ?? [];
@@ -21,7 +21,7 @@ export async function readCoderSessions(actor: VerifiedMember): Promise<CoderSes
 
 /** Validate the URL before a locked join transaction records only today's own attendance. */
 export async function joinOwnSession(actor: VerifiedMember, sessionId: string): Promise<CoderSessionJoined> {
- const { data: session, error: sessionError } = await actor.client.schema("coderdojo").from("session_pods").select("url").eq("id", sessionId).maybeSingle();
+ const { data: session, error: sessionError } = await actor.readClient.schema("coderdojo").from("session_pods").select("url").eq("id", sessionId).maybeSingle();
  if (sessionError) throw createError({ statusCode: 503, statusMessage: "Unable to load session" });
  if (!session) throw createError({ statusCode: 404, statusMessage: "Session unavailable" });
  const url: string | null = safeSessionUrl(session.url);

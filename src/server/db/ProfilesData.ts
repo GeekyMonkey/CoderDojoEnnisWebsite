@@ -1,3 +1,4 @@
+import { MEMBER_READ_COLUMNS } from "./MemberReadColumns";
 import { createError } from "h3";
 import type { VerifiedMember } from "#server/utils/requestMember";
 import { memberFromRecord, type MemberModel, type MemberRecord } from "#shared/types/models/MemberModel";
@@ -18,10 +19,10 @@ export function requireProfileAccess(actor: VerifiedMember, memberId: string): v
 /** Read a profile with permissions derived from the actor and viewed member. */
 export async function readProfile(actor: VerifiedMember, memberId: string): Promise<MemberProfileResponse> {
 	requireProfileAccess(actor, memberId);
-	const { data, error } = await actor.client.schema("coderdojo").from("members").select("*").eq("id", memberId).eq("deleted", false).maybeSingle();
+	const { data, error } = await actor.readClient.schema("coderdojo").from("members").select(MEMBER_READ_COLUMNS).eq("id", memberId).eq("deleted", false).maybeSingle();
 	if (error) throw createError({ statusCode: 503, statusMessage: "Unable to load profile" });
 	if (!data) throw createError({ statusCode: 404, statusMessage: "Profile not found" });
-	return { member: memberFromRecord(data as MemberRecord), permissions: { editDetails: true, changePassword: actor.id === memberId } };
+	return { member: memberFromRecord({ ...(data as unknown as MemberRecord), fingerprint_id: null, nfc_tag: null } as MemberRecord), permissions: { editDetails: true, changePassword: actor.id === memberId } };
 }
 
 /** Apply only allowed fields with guarded comparison of the original snapshot. */

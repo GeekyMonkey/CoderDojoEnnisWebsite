@@ -1,3 +1,4 @@
+import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import { UseSupabaseRealtimeAllTables } from "../composables/UseSupabaseRealtimeAllTables";
 
@@ -18,26 +19,16 @@ export default function baseDbTableStore<T extends BaseModel>({
 	apiPath,
 	tableName,
 	getLabel,
-	onInsert,
-	onUpdate,
-	onDelete,
 }: {
 	apiPath: string;
 	tableName: string;
 	getLabel: (item: T) => string | null;
-	onInsert?: (evt: { table: string; id: string; newData: T }) => void;
-	onUpdate?: (evt: {
-		table: string;
-		id: string;
-		newData: T;
-		oldData: T;
-	}) => void;
-	onDelete?: (evt: { table: string; id: string; oldData: T }) => void;
 }) {
 	const log = useLogger(`${tableName}Store`);
 	log.info(`Initializing ${tableName}Store`);
 
 	const queryClient = useQueryClient();
+ const headers: ReturnType<typeof useProfileAuthorization> = useProfileAuthorization();
 
 	const {
 		data: Items,
@@ -52,7 +43,7 @@ export default function baseDbTableStore<T extends BaseModel>({
 			log.info(`Fetching table ${tableName}`, { includeDeleted });
 			const response = await $fetch<ApiResponse<T[]>>(
 				`/api/${apiPath}/list?include_deleted=${includeDeleted}`,
-				{ signal },
+				{ signal, headers: await headers() },
 			);
 			if (!response.success) {
 				throw new Error(response.error || "api error");
@@ -62,40 +53,16 @@ export default function baseDbTableStore<T extends BaseModel>({
 		},
 	});
 
-	// Subscribe to realtime changes via global all-tables channel (single WS)
-	const { events: allEvents } = UseSupabaseRealtimeAllTables();
-	allEvents.on("INSERT", (evt) => {
-		if (evt.table !== tableName) {
-			return;
-		}
-		if (onInsert) {
-			onInsert(evt as { table: string; id: string; newData: T });
-		} else {
-			queryClient.invalidateQueries({ queryKey: [tableName] });
-		}
-	});
-	allEvents.on("UPDATE", (evt) => {
-		if (evt.table !== tableName) {
-			return;
-		}
-		if (onUpdate) {
-			onUpdate(evt as { table: string; id: string; newData: T; oldData: T });
-		} else {
-			queryClient.invalidateQueries({ queryKey: [tableName] });
-		}
-	});
-	allEvents.on("DELETE", (evt) => {
-		if (evt.table !== tableName) {
-			return;
-		}
-		if (onDelete) {
-			onDelete(evt as { table: string; id: string; oldData: T });
-		} else {
-			queryClient.setQueryData<T[]>([tableName], (items) =>
-				items?.filter((item) => item.id !== evt.id),
-			);
-		}
-	});
+ // Invalidate and refetch; no row or record-ID payload is available on the safe transport.
+ const { events: allEvents } = UseSupabaseRealtimeAllTables();
+ /** Refresh this table's authorized projection for any operation. */
+ function invalidate(event: { table: string }): void {
+  if (event.table === tableName) void queryClient.invalidateQueries({ queryKey: [tableName] });
+ }
+ for (const operation of ["INSERT", "UPDATE", "DELETE"] as const) allEvents.on(operation, invalidate);
+ onScopeDispose((): void => {
+  for (const operation of ["INSERT", "UPDATE", "DELETE"] as const) allEvents.off(operation, invalidate);
+ });
 
 	const Options = computed<SelectOption[]>(() => {
 		return (Items.value || [])
