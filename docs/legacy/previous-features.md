@@ -1,4 +1,8 @@
-# MemberWebsiteFeaturesDetailed
+# Historical legacy feature notes
+
+This is a historical description of the checked-in ASP.NET site, not the current app contract or a completion checklist. Some scaffold templates are stale and source descriptions do not establish deployed behavior. See [expected app features](../app-features.md), the [final discrepancy list](../../openspec/changes/replicate-legacy-features/final-parity-discrepancies.md) and the [field/action ledger](../../openspec/changes/replicate-legacy-features/final-parity-coverage.md) for current expectations and qualifications.
+
+Corrections verified on 12 October 2026: parent child-account Login is editable in the legacy view/controller; cleanup and registration reset are legacy GET actions that mutate data; GitHub accounts returns an object with Members/Mentors lists. Current maintenance instead requires a guarded preview and confirmed POST apply.
 
 ## Members (Students/Ninjas)
 - **Profile Management**: View and edit personal profile including Github login, Xbox gamertag, Scratch name, short-term and long-term goals.
@@ -75,9 +79,9 @@
   - Possible outcomes: Save - redirect to /Mentor/Teams, success. Delete - POST to TeamDelete, redirect. Errors - return view.
 - **Data Maintenance**: Data cleanup (delete old inactive records), purge registrations.
   - Presented fields: Results (members/parents deleted/unregistered counts, exception if any).
-  - Required inputs: None (POST actions).
+  - Required inputs: None (legacy GET actions that mutate data).
   - Validation rules: None.
-  - Possible outcomes: POST to actions, display results.
+  - Possible outcomes: GET actions mutate archive/registration fields and display results.
 - **Sign In Mode**: Initiate sign-in mode for sessions.
   - Presented fields: None.
   - Required inputs: None.
@@ -101,8 +105,8 @@
   - Validation rules: ModelState.IsValid, Trim strings.
   - Possible outcomes: Save - POST to MyAccountSave, redirect to /Parent/MyAccount, success. Errors - return view.
 - **Child Management**: View/edit limited child details (birth year, logins, goals), view child badges/attendance/goals/belts/parents.
-  - Presented fields: Similar to member views, limited editing (no name, login disabled).
-  - Required inputs: BirthYear (int), GithubLogin, ScratchName, XboxGamertag, NewPassword (optional) - strings.
+  - Presented fields: Similar to member views, limited editing (names display only; login editable).
+  - Required inputs: BirthYear (int), Login, GithubLogin, ScratchName, XboxGamertag, NewPassword (optional) - strings.
   - Validation rules: ModelState.IsValid, Trim strings.
   - Possible outcomes: Save - POST to MemberSave, redirect to /Parent/Member/{id}, success. Errors - return view.
 - **Sessions**: View upcoming non-mentor-only sessions.
@@ -154,7 +158,7 @@
   - Details: CRUD operations, foreign keys, constraints. Errors: DB exceptions.
 
 ## Integration APIs
-- **GithubAccounts API**: GET endpoint returning JSON list of members and mentors with Github logins for external integration.
+- **GithubAccounts API**: GET endpoint returning a JSON object with Members and Mentors lists containing names and Github logins for external integration.
   - Details: Controllers/Api/GithubAccountsController.cs, GetMemberAttendances, returns GithubUsersCollection. Inputs: None. Outcomes: Json data. Errors: None.
 - **Chatbot API**: GET endpoints for badges and belts data in JSON format for chatbot consumption.
   - Details: Controllers/ChatbotController.cs, Badges/Belts actions, return Json lists. Inputs: None. Outcomes: Json data. Errors: None.

@@ -128,3 +128,20 @@ This is the authoritative planning checklist. The screen audit is reference evid
 - Desktop and 390px mobile checks show next-belt requirements, badge goal category/description and pending evidence, grouped history and existing deleted-definition feedback. No horizontal page overflow on mobile.
 - Two open views updated without reload when a belt was awarded and when a badge goal was cleared/restored; next belt, selected goals and pending goal markers changed together.
 - Production build/start and strict change validation passed; typecheck retains only the existing 25 legacy errors. No legacy code or database schema changed. Disposable verification data cleaned up.
+
+
+## Final app-wide audit — 12 October 2026
+
+- [x] Inventory legacy UI templates/controller methods, all database columns and side effects against the current implementation; inspect live database schema metadata read-only. Evidence: [coverage ledger](final-parity-coverage.md), [source inventory](final-parity-source-inventory.json), [database snapshot](final-parity-database-snapshot.json).
+- [x] Publish a fresh [discrepancy list](final-parity-discrepancies.md): F01–F23 confirmed gaps, Q01–Q06 decisions, V01–V04 verification work. Earlier completed implementation rows remain historical completion records, not an app-wide parity certification. F13 maps to open D08; F14 maps to open D30–D33.
+- [x] Update [expected app features](../../../docs/app-features.md), README, historical feature notes and page/API access documentation with current coverage and open gaps.
+- [ ] Resolve the new findings and compatibility decisions before declaring app-wide parity complete; prioritize database/older API/import/kiosk authority and credential-migration gaps.
+- [ ] Complete legacy/new runtime comparison, frozen-data reconciliation, storage/realtime and external consumer verification V01–V04. No live member-data mutation or legacy deployment visual certification was performed in this audit.
+
+## Final audit finding closure — 12 October 2026
+
+- [x] **F21 · P2 · Closed by accepted configuration mitigation:** User reports setting Supabase Data API Max rows to **1,000,000** and accepts closure. No pagination code changed or independent setting/load verification performed. Retain existing paging; reopen if result sets approach the cap, the setting changes or large-response reliability fails. See the [closure note](final-parity-discrepancies.md#f21-closure-note--12-october-2026).
+
+## Production cutover deferral — 12 October 2026
+
+- [ ] **F02 · P1 · Deferred by user:** Leave the legacy import and old database unchanged until production cutover. Then remove CopyData/legacy read dependencies, verify final migration reconciliation and recovery backup, and decommission the old database. This does not close F19/F20 or authorize immediate removal/decommissioning. See the [decision note](final-parity-discrepancies.md#f02-deferral--12-october-2026).

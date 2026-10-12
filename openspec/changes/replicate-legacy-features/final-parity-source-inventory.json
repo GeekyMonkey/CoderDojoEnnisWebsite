@@ -1,0 +1,4394 @@
+{
+  "date": "2026-10-12",
+  "commit": "0a76125dcee12530c26baf87879219eb725db45a",
+  "limitations": "Source inventory, not proof of visual/runtime equivalence. Comments stripped for controller methods. Razor fields include computed/model references; controls include DOM ids. Guards may be delegated. Vendor JavaScript excluded.",
+  "legacyControllers": [
+    {
+      "source": "src_legacy/Controllers/Api/AdultAttendanceController.cs",
+      "methods": [
+        {
+          "name": "GetAdultAttendances",
+          "signature": "public IEnumerable<AdultAttendance> GetAdultAttendances()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetAdultAttendance",
+          "signature": "public AdultAttendance GetAdultAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutAdultAttendance",
+          "signature": "public HttpResponseMessage PutAdultAttendance(Guid id, AdultAttendance adultAttendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostAdultAttendance",
+          "signature": "public HttpResponseMessage PostAdultAttendance(AdultAttendance adultattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteAdultAttendance",
+          "signature": "public HttpResponseMessage DeleteAdultAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/AdultController.cs",
+      "methods": [
+        {
+          "name": "GetAdults",
+          "signature": "public IEnumerable<ApiAdult> GetAdults()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetAdult",
+          "signature": "public ApiAdult GetAdult(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutAdult",
+          "signature": "public HttpResponseMessage PutAdult(Guid id, ApiAdult apiAdult)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostAdult",
+          "signature": "public HttpResponseMessage PostAdult(ApiAdult apiAdult)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteAdult",
+          "signature": "public HttpResponseMessage DeleteAdult(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/BadgeController.cs",
+      "methods": [
+        {
+          "name": "GetBadges",
+          "signature": "public IEnumerable<Badge> GetBadges()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetBadge",
+          "signature": "public Badge GetBadge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutBadge",
+          "signature": "public HttpResponseMessage PutBadge(Guid id, Badge badge)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostBadge",
+          "signature": "public HttpResponseMessage PostBadge(Badge badge)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteBadge",
+          "signature": "public HttpResponseMessage DeleteBadge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/BeltController.cs",
+      "methods": [
+        {
+          "name": "GetBelts",
+          "signature": "public IEnumerable<Belt> GetBelts()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetBelt",
+          "signature": "public Belt GetBelt(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutBelt",
+          "signature": "public HttpResponseMessage PutBelt(Guid id, Belt belt)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostBelt",
+          "signature": "public HttpResponseMessage PostBelt(Belt belt)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteBelt",
+          "signature": "public HttpResponseMessage DeleteBelt(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/GithubAccountsController.cs",
+      "methods": [
+        {
+          "name": "GetMemberAttendances",
+          "signature": "public GithubUsersCollection GetMemberAttendances()",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/MemberAttendanceController.cs",
+      "methods": [
+        {
+          "name": "GetMemberAttendances",
+          "signature": "public IEnumerable<MemberAttendance> GetMemberAttendances()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetMemberAttendance",
+          "signature": "public MemberAttendance GetMemberAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutMemberAttendance",
+          "signature": "public HttpResponseMessage PutMemberAttendance(Guid id, MemberAttendance memberattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostMemberAttendance",
+          "signature": "public HttpResponseMessage PostMemberAttendance(MemberAttendance memberattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteMemberAttendance",
+          "signature": "public HttpResponseMessage DeleteMemberAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "FingerprintSignIn",
+          "signature": "public HttpResponseMessage FingerprintSignIn(int id, bool testing = false)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/MemberBadgeController.cs",
+      "methods": [
+        {
+          "name": "GetMemberBadges",
+          "signature": "public IEnumerable<MemberBadge> GetMemberBadges()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetMemberBadge",
+          "signature": "public MemberBadge GetMemberBadge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutMemberBadge",
+          "signature": "public HttpResponseMessage PutMemberBadge(Guid id, MemberBadge memberbadge)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostMemberBadge",
+          "signature": "public HttpResponseMessage PostMemberBadge(MemberBadge memberbadge)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteMemberBadge",
+          "signature": "public HttpResponseMessage DeleteMemberBadge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/MemberBeltController.cs",
+      "methods": [
+        {
+          "name": "GetMemberBelts",
+          "signature": "public IEnumerable<MemberBelt> GetMemberBelts()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetMemberBelt",
+          "signature": "public MemberBelt GetMemberBelt(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutMemberBelt",
+          "signature": "public HttpResponseMessage PutMemberBelt(Guid id, MemberBelt memberbelt)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostMemberBelt",
+          "signature": "public HttpResponseMessage PostMemberBelt(MemberBelt memberbelt)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteMemberBelt",
+          "signature": "public HttpResponseMessage DeleteMemberBelt(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/MemberController.cs",
+      "methods": [
+        {
+          "name": "GetMembers",
+          "signature": "public IEnumerable<Member> GetMembers()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetMember",
+          "signature": "public Member GetMember(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutMember",
+          "signature": "public HttpResponseMessage PutMember(Guid id, Member member)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostMember",
+          "signature": "public HttpResponseMessage PostMember(Member member)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteMember",
+          "signature": "public HttpResponseMessage DeleteMember(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/MemberParentController.cs",
+      "methods": [
+        {
+          "name": "GetMemberParents",
+          "signature": "public IEnumerable<MemberParent> GetMemberParents()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetMemberParent",
+          "signature": "public MemberParent GetMemberParent(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutMemberParent",
+          "signature": "public HttpResponseMessage PutMemberParent(Guid id, MemberParent memberparent)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostMemberParent",
+          "signature": "public HttpResponseMessage PostMemberParent(MemberParent memberparent)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteMemberParent",
+          "signature": "public HttpResponseMessage DeleteMemberParent(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Api/TeamController.cs",
+      "methods": [
+        {
+          "name": "GetTeams",
+          "signature": "public IEnumerable<Team> GetTeams()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetTeam",
+          "signature": "public Team GetTeam(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PutTeam",
+          "signature": "public HttpResponseMessage PutTeam(Guid id, Team team)",
+          "visibility": "public"
+        },
+        {
+          "name": "PostTeam",
+          "signature": "public HttpResponseMessage PostTeam(Team team)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteTeam",
+          "signature": "public HttpResponseMessage DeleteTeam(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/ChatbotController.cs",
+      "methods": [
+        {
+          "name": "Badges",
+          "signature": "public ActionResult Badges()",
+          "visibility": "public"
+        },
+        {
+          "name": "Belts",
+          "signature": "public ActionResult Belts()",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/AdultAttendanceController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(AdultAttendance adultattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(AdultAttendance adultattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/AdultController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(Adult adult)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Adult adult)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/BadgeController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(Badge badge)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Badge badge)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/BeltController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(Belt belt)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Belt belt)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/MemberAttendanceController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(MemberAttendance memberattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(MemberAttendance memberattendance)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/MemberBadgeController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(MemberBadge memberbadge)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(MemberBadge memberbadge)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/MemberBeltController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(MemberBelt memberbelt)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(MemberBelt memberbelt)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/MemberDataController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(Member member)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Member member)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/Data/TeamController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Details",
+          "signature": "public ActionResult Details(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create()",
+          "visibility": "public"
+        },
+        {
+          "name": "Create",
+          "signature": "public ActionResult Create(Team team)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Edit",
+          "signature": "public ActionResult Edit(Team team)",
+          "visibility": "public"
+        },
+        {
+          "name": "Delete",
+          "signature": "public ActionResult Delete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteConfirmed",
+          "signature": "public ActionResult DeleteConfirmed(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Dispose",
+          "signature": "protected override void Dispose(bool disposing)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/HomeController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "Tools",
+          "signature": "public ActionResult Tools()",
+          "visibility": "public"
+        },
+        {
+          "name": "Login",
+          "signature": "public ActionResult Login()",
+          "visibility": "public"
+        },
+        {
+          "name": "Login",
+          "signature": "public ActionResult Login(LoginModel loginModel)",
+          "visibility": "public"
+        },
+        {
+          "name": "LogOut",
+          "signature": "public ActionResult LogOut()",
+          "visibility": "public"
+        },
+        {
+          "name": "Passport",
+          "signature": "public ActionResult Passport(string Id)",
+          "visibility": "public"
+        },
+        {
+          "name": "PassportMentor",
+          "signature": "public ActionResult PassportMentor(string Id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Passports",
+          "signature": "public ActionResult Passports()",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltCertificate",
+          "signature": "public ActionResult BeltCertificate(string Id)",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamCard",
+          "signature": "public ActionResult TeamCard(string Id)",
+          "visibility": "public"
+        },
+        {
+          "name": "SignIn",
+          "signature": "public ActionResult SignIn()",
+          "visibility": "public"
+        },
+        {
+          "name": "SignInQR",
+          "signature": "public ActionResult SignInQR()",
+          "visibility": "public"
+        },
+        {
+          "name": "SignInQR",
+          "signature": "public ActionResult SignInQR(string Id)",
+          "visibility": "public"
+        },
+        {
+          "name": "SignIn",
+          "signature": "public ActionResult SignIn(LoginModel loginModel)",
+          "visibility": "public"
+        },
+        {
+          "name": "SignInMember",
+          "signature": "private ActionResult SignInMember(Member member)",
+          "visibility": "private"
+        },
+        {
+          "name": "SignInAdult",
+          "signature": "private ActionResult SignInAdult(Adult adult)",
+          "visibility": "private"
+        },
+        {
+          "name": "GetSignedInMembers",
+          "signature": "private IEnumerable<MemberAttendance> GetSignedInMembers()",
+          "visibility": "private"
+        },
+        {
+          "name": "GetSignedInAdults",
+          "signature": "private IEnumerable<AdultAttendance> GetSignedInAdults()",
+          "visibility": "private"
+        },
+        {
+          "name": "ImageUpload",
+          "signature": "public ActionResult ImageUpload(HttpPostedFileBase file, string filename)",
+          "visibility": "public"
+        },
+        {
+          "name": "SessionPodLogin",
+          "signature": "public ActionResult SessionPodLogin(string memberId)",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/MemberController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "ProfileSave",
+          "signature": "public ActionResult ProfileSave(Member memberChanges)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberGoalChange",
+          "signature": "public ActionResult MemberGoalChange(Guid MemberId, Guid BadgeId, bool IsGoal)",
+          "visibility": "public"
+        },
+        {
+          "name": "Goals",
+          "signature": "public ActionResult Goals()",
+          "visibility": "public"
+        },
+        {
+          "name": "Badges",
+          "signature": "public ActionResult Badges()",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgesAvailable",
+          "signature": "public ActionResult BadgesAvailable()",
+          "visibility": "public"
+        },
+        {
+          "name": "Belts",
+          "signature": "public ActionResult Belts()",
+          "visibility": "public"
+        },
+        {
+          "name": "Attendance",
+          "signature": "public ActionResult Attendance()",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltApplication",
+          "signature": "public ActionResult BeltApplication(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeApplication",
+          "signature": "public ActionResult BadgeApplication(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "Sessions",
+          "signature": "public ActionResult Sessions()",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamMember",
+          "signature": "public ActionResult TeamMember(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "OnActionExecuting",
+          "signature": "protected override void OnActionExecuting(ActionExecutingContext filterContext)",
+          "visibility": "protected"
+        },
+        {
+          "name": "GetBadgeCategories",
+          "signature": "private IEnumerable<BadgeCategory> GetBadgeCategories()",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/MentorController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "DataCleanup",
+          "signature": "public ActionResult DataCleanup()",
+          "visibility": "public"
+        },
+        {
+          "name": "PurgeRegistrations",
+          "signature": "public ActionResult PurgeRegistrations()",
+          "visibility": "public"
+        },
+        {
+          "name": "AttendanceRandom",
+          "signature": "public ActionResult AttendanceRandom()",
+          "visibility": "public"
+        },
+        {
+          "name": "Attendance",
+          "signature": "public ActionResult Attendance(string attendanceDate = null, Guid? memberId = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "AttendanceChange",
+          "signature": "public ActionResult AttendanceChange(string memberId, bool present, string attendanceDate)",
+          "visibility": "public"
+        },
+        {
+          "name": "Adults",
+          "signature": "public ActionResult Adults(Guid? id = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "Parents",
+          "signature": "public ActionResult Parents(Guid? id = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "Mentors",
+          "signature": "public ActionResult Mentors(Guid? id = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "Adult",
+          "signature": "public ActionResult Adult(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "AdultMerge",
+          "signature": "public ActionResult AdultMerge(string adultMode, Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberMerge",
+          "signature": "public ActionResult MemberMerge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "ParentKids",
+          "signature": "public ActionResult ParentKids(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "AdultSignup",
+          "signature": "public ActionResult AdultSignup(string adultMode)",
+          "visibility": "public"
+        },
+        {
+          "name": "MentorSave",
+          "signature": "public ActionResult MentorSave(Adult adultChanges)",
+          "visibility": "public"
+        },
+        {
+          "name": "ParentSave",
+          "signature": "public ActionResult ParentSave(Adult adultChanges)",
+          "visibility": "public"
+        },
+        {
+          "name": "AdultSave",
+          "signature": "public ActionResult AdultSave(Adult adultChanges)",
+          "visibility": "public"
+        },
+        {
+          "name": "AdultSave",
+          "signature": "private ActionResult AdultSave(Adult adultChanges, string adultMode)",
+          "visibility": "private"
+        },
+        {
+          "name": "SearchMembersByName",
+          "signature": "public ActionResult SearchMembersByName(string name)",
+          "visibility": "public"
+        },
+        {
+          "name": "SearchParentsByName",
+          "signature": "public ActionResult SearchParentsByName(string name)",
+          "visibility": "public"
+        },
+        {
+          "name": "SearchAdultMergeByName",
+          "signature": "public ActionResult SearchAdultMergeByName(string name, Guid adultId)",
+          "visibility": "public"
+        },
+        {
+          "name": "SearchMemberMergeByName",
+          "signature": "public ActionResult SearchMemberMergeByName(string name, Guid memberId)",
+          "visibility": "public"
+        },
+        {
+          "name": "MergeAdults",
+          "signature": "public ActionResult MergeAdults(Guid adultId, Guid mergeId, int newPhone, int newEmail)",
+          "visibility": "public"
+        },
+        {
+          "name": "MergeMembers",
+          "signature": "public ActionResult MergeMembers(Guid memberId, Guid mergeId, int newBirthYear, int newScratchName)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberSignup",
+          "signature": "public ActionResult MemberSignup(string previousPage = \"\")",
+          "visibility": "public"
+        },
+        {
+          "name": "Members",
+          "signature": "public ActionResult Members(Guid? id = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "Member",
+          "signature": "public ActionResult Member(Guid id, string previousPage = \"\")",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberGoals",
+          "signature": "public ActionResult MemberGoals(Guid id, string previousPage = \"\")",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberSave",
+          "signature": "public ActionResult MemberSave(Member memberChanges, string previousPage)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberParents",
+          "signature": "public ActionResult MemberParents(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberAttendance",
+          "signature": "public ActionResult MemberAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberBadges",
+          "signature": "public ActionResult MemberBadges(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberBelts",
+          "signature": "public ActionResult MemberBelts(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeApprove",
+          "signature": "public ActionResult BadgeApprove(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeUndo",
+          "signature": "public ActionResult BadgeUndo(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeReject",
+          "signature": "public ActionResult BadgeReject(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltApprove",
+          "signature": "public ActionResult BeltApprove(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltReject",
+          "signature": "public ActionResult BeltReject(Guid id, string message)",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltUndo",
+          "signature": "public ActionResult BeltUndo(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "DeleteRelationship",
+          "signature": "public ActionResult DeleteRelationship(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "CreateRelationship",
+          "signature": "public ActionResult CreateRelationship(Guid parentId, Guid memberId)",
+          "visibility": "public"
+        },
+        {
+          "name": "AddMember",
+          "signature": "private void AddMember(string firstName, string lastName, string scratch, int birthYear)",
+          "visibility": "private"
+        },
+        {
+          "name": "SignInMode",
+          "signature": "public ActionResult SignInMode()",
+          "visibility": "public"
+        },
+        {
+          "name": "Belts",
+          "signature": "public ActionResult Belts()",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltAdd",
+          "signature": "public ActionResult BeltAdd()",
+          "visibility": "public"
+        },
+        {
+          "name": "Belt",
+          "signature": "public ActionResult Belt(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltSave",
+          "signature": "public ActionResult BeltSave(Belt b)",
+          "visibility": "public"
+        },
+        {
+          "name": "BeltDelete",
+          "signature": "public ActionResult BeltDelete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeCategories",
+          "signature": "public ActionResult BadgeCategories()",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeCategoryAdd",
+          "signature": "public ActionResult BadgeCategoryAdd()",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeCategory",
+          "signature": "public ActionResult BadgeCategory(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeCategorySave",
+          "signature": "public ActionResult BadgeCategorySave(BadgeCategory b)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeCategoryDelete",
+          "signature": "public ActionResult BadgeCategoryDelete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Badges",
+          "signature": "public ActionResult Badges()",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeAdd",
+          "signature": "public ActionResult BadgeAdd()",
+          "visibility": "public"
+        },
+        {
+          "name": "Badge",
+          "signature": "public ActionResult Badge(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "GetBadgeCategories",
+          "signature": "private IEnumerable<BadgeCategory> GetBadgeCategories()",
+          "visibility": "private"
+        },
+        {
+          "name": "BadgeSave",
+          "signature": "public ActionResult BadgeSave(Badge b)",
+          "visibility": "public"
+        },
+        {
+          "name": "BadgeDelete",
+          "signature": "public ActionResult BadgeDelete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Sessions",
+          "signature": "public ActionResult Sessions()",
+          "visibility": "public"
+        },
+        {
+          "name": "SessionAdd",
+          "signature": "public ActionResult SessionAdd()",
+          "visibility": "public"
+        },
+        {
+          "name": "SessionEdit",
+          "signature": "public ActionResult SessionEdit(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "SessionSave",
+          "signature": "public ActionResult SessionSave(Session s)",
+          "visibility": "public"
+        },
+        {
+          "name": "SessionDelete",
+          "signature": "public ActionResult SessionDelete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Teams",
+          "signature": "public ActionResult Teams()",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamAdd",
+          "signature": "public ActionResult TeamAdd()",
+          "visibility": "public"
+        },
+        {
+          "name": "Team",
+          "signature": "public ActionResult Team(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamSave",
+          "signature": "public ActionResult TeamSave(Team t)",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamDelete",
+          "signature": "public ActionResult TeamDelete(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "OnActionExecuting",
+          "signature": "protected override void OnActionExecuting(ActionExecutingContext filterContext)",
+          "visibility": "protected"
+        },
+        {
+          "name": "GetActiveMentors",
+          "signature": "protected List<Adult> GetActiveMentors(bool includeBlank)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/MentorController_Reports.cs",
+      "methods": [
+        {
+          "name": "ExportMentorEmails",
+          "signature": "public ActionResult ExportMentorEmails()",
+          "visibility": "public"
+        },
+        {
+          "name": "ExportParentEmails",
+          "signature": "public ActionResult ExportParentEmails()",
+          "visibility": "public"
+        },
+        {
+          "name": "ExportCsv",
+          "signature": "private ActionResult ExportCsv(string csv, string fileName)",
+          "visibility": "private"
+        },
+        {
+          "name": "RecentBelts",
+          "signature": "public ActionResult RecentBelts(DateTime? since = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "RecentBeltsCsv",
+          "signature": "public ActionResult RecentBeltsCsv(DateTime? since = null)",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/ParentController.cs",
+      "methods": [
+        {
+          "name": "Index",
+          "signature": "public ActionResult Index()",
+          "visibility": "public"
+        },
+        {
+          "name": "MyKids",
+          "signature": "public ActionResult MyKids(Guid? id = null)",
+          "visibility": "public"
+        },
+        {
+          "name": "MyKid",
+          "signature": "public ActionResult MyKid(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MyAccount",
+          "signature": "public ActionResult MyAccount()",
+          "visibility": "public"
+        },
+        {
+          "name": "MyAccountSave",
+          "signature": "public ActionResult MyAccountSave(Adult adultChanges)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberBadges",
+          "signature": "public ActionResult MemberBadges(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberAttendance",
+          "signature": "public ActionResult MemberAttendance(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Member",
+          "signature": "public ActionResult Member(Guid id, string previousPage = \"\")",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberSave",
+          "signature": "public ActionResult MemberSave(Member memberChanges, string previousPage)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberParents",
+          "signature": "public ActionResult MemberParents(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberGoals",
+          "signature": "public ActionResult MemberGoals(Guid id, string previousPage = \"\")",
+          "visibility": "public"
+        },
+        {
+          "name": "MemberBelts",
+          "signature": "public ActionResult MemberBelts(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "Sessions",
+          "signature": "public ActionResult Sessions()",
+          "visibility": "public"
+        },
+        {
+          "name": "TeamMember",
+          "signature": "public ActionResult TeamMember(Guid id)",
+          "visibility": "public"
+        },
+        {
+          "name": "OnActionExecuting",
+          "signature": "protected override void OnActionExecuting(ActionExecutingContext filterContext)",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/ViewSwitcherController.cs",
+      "methods": [
+        {
+          "name": "SwitchView",
+          "signature": "public RedirectResult SwitchView(bool mobile, string returnUrl)",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "source": "src_legacy/Controllers/_BaseController.cs",
+      "methods": [
+        {
+          "name": "GetCurrentMember",
+          "signature": "public Member GetCurrentMember()",
+          "visibility": "public"
+        },
+        {
+          "name": "GetCurrentAdult",
+          "signature": "public Adult GetCurrentAdult()",
+          "visibility": "public"
+        },
+        {
+          "name": "OnActionExecuting",
+          "signature": "protected override void OnActionExecuting(ActionExecutingContext filterContext)",
+          "visibility": "protected"
+        },
+        {
+          "name": "RedirectClient",
+          "signature": "public ActionResult RedirectClient(string url)",
+          "visibility": "public"
+        },
+        {
+          "name": "TrimNullableString",
+          "signature": "public string TrimNullableString(string val)",
+          "visibility": "public"
+        },
+        {
+          "name": "DoMemberAttendanceChange",
+          "signature": "protected void DoMemberAttendanceChange(Guid memberId, bool present, DateTime sessionDate)",
+          "visibility": "protected"
+        },
+        {
+          "name": "DoAdultAttendanceChange",
+          "signature": "protected void DoAdultAttendanceChange(Guid adultId, bool present, DateTime sessionDate)",
+          "visibility": "protected"
+        },
+        {
+          "name": "MergeValues",
+          "signature": "public T MergeValues<T>(T Entity1Value, T Entity2Value)",
+          "visibility": "public"
+        }
+      ]
+    }
+  ],
+  "legacyViews": [
+    {
+      "source": "src_legacy/Views/Data/Adult/Create.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "GithubLogin",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "Phone",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Adult/Delete.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "GithubLogin",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "Phone",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Adult/Details.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "Phone",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Adult/Edit.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "Phone",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Adult/Index.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "GithubLogin",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "Phone",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Badge/Create.cshtml",
+      "fields": [
+        "Achievement"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Badge/Delete.cshtml",
+      "fields": [
+        "Achievement"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Badge/Details.cshtml",
+      "fields": [
+        "Achievement",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Badge/Edit.cshtml",
+      "fields": [
+        "Achievement",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Badge/Index.cshtml",
+      "fields": [
+        "Achievement"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Belt/Create.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Belt/Delete.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Belt/Details.cshtml",
+      "fields": [
+        "Color",
+        "Description",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Belt/Edit.cshtml",
+      "fields": [
+        "Color",
+        "Description",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Belt/Index.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberAttendance/Create.cshtml",
+      "fields": [
+        "Date",
+        "MemberId"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberAttendance/Delete.cshtml",
+      "fields": [
+        "Date",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberAttendance/Details.cshtml",
+      "fields": [
+        "Date",
+        "Id",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberAttendance/Edit.cshtml",
+      "fields": [
+        "Date",
+        "Id",
+        "MemberId"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberAttendance/Index.cshtml",
+      "fields": [
+        "Date",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBadge/Create.cshtml",
+      "fields": [
+        "Awarded",
+        "AwardedByAdultId",
+        "BadgeId",
+        "MemberId",
+        "Notes"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBadge/Delete.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Badge",
+        "Member",
+        "Notes"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBadge/Details.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Badge",
+        "Id",
+        "Member",
+        "Notes"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBadge/Edit.cshtml",
+      "fields": [
+        "Awarded",
+        "AwardedByAdultId",
+        "BadgeId",
+        "Id",
+        "MemberId",
+        "Notes"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBadge/Index.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Badge",
+        "Member",
+        "Notes"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBelt/Create.cshtml",
+      "fields": [
+        "Awarded",
+        "AwardedByAdultId",
+        "BeltId",
+        "MemberId"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBelt/Delete.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Belt",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBelt/Details.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Belt",
+        "Id",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBelt/Edit.cshtml",
+      "fields": [
+        "Awarded",
+        "AwardedByAdultId",
+        "BeltId",
+        "Id",
+        "MemberId"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberBelt/Index.cshtml",
+      "fields": [
+        "Adult",
+        "Awarded",
+        "Belt",
+        "Member"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberData/Create.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberData/Delete.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberData/Details.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberData/Edit.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/MemberData/Index.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "LastName",
+        "Login",
+        "PasswordHash",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Team/Create.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Team/Delete.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Team/Details.cshtml",
+      "fields": [
+        "Color",
+        "Description",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Edit",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Team/Edit.cshtml",
+      "fields": [
+        "Color",
+        "Description",
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Data/Team/Index.cshtml",
+      "fields": [
+        "Color",
+        "Description"
+      ],
+      "controls": [],
+      "routes": [
+        "Create",
+        "Delete",
+        "Details",
+        "Edit"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Home/BeltCertificate.cshtml",
+      "fields": [
+        "Awarded",
+        "MemberBelts",
+        "MemberName"
+      ],
+      "controls": [
+        "Belt",
+        "Date",
+        "Name"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Home/Index.cshtml",
+      "fields": [],
+      "controls": [
+        "body"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Home/Login.cshtml",
+      "fields": [
+        "Password",
+        "Username"
+      ],
+      "controls": [
+        "LoginButton",
+        "returnurl"
+      ],
+      "routes": [
+        "Login"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Home/Passport.cshtml",
+      "fields": [
+        "Awarded"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Home/PassportMentor.cshtml",
+      "fields": [
+        "BadgeCategory"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Home/SignIn.cshtml",
+      "fields": [
+        "Adult",
+        "Deleted",
+        "HexCode",
+        "Id",
+        "ImageUrl",
+        "Member",
+        "Password",
+        "TeamName",
+        "Username"
+      ],
+      "controls": [
+        "DojoAttendanceCount",
+        "MemberMessages",
+        "SessionDate",
+        "SignInButton",
+        "SignInWelcomeDialog",
+        "TeamMentor"
+      ],
+      "routes": [
+        "SignIn"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Home/SignInQR.cshtml",
+      "fields": [
+        "Adult",
+        "Deleted",
+        "HexCode",
+        "Id",
+        "ImageUrl",
+        "Member",
+        "Password",
+        "TeamName",
+        "Username"
+      ],
+      "controls": [
+        "DojoAttendanceCount",
+        "MemberMessages",
+        "QR",
+        "SessionDate",
+        "SignInButton",
+        "SignInWelcomeDialog",
+        "TeamMentor",
+        "v"
+      ],
+      "routes": [
+        "SignIn"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Home/TeamCard.cshtml",
+      "fields": [
+        "FirstName",
+        "HexCode",
+        "ImageUrl",
+        "LastName",
+        "Members",
+        "TeamName"
+      ],
+      "controls": [],
+      "routes": [
+        "/content/Paper.css"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Home/Tools.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": [
+        "/Content/tools/ReadNFC.zip",
+        "/Content/tools/WriteNFC.zip"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/Attendance.cshtml",
+      "fields": [
+        "Date",
+        "FirstName",
+        "MemberAttendances"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Member/Badges.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Description",
+        "Id",
+        "MemberBadges",
+        "RejectedDate"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Member/BadgesAvailable.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategoryId",
+        "BadgeId",
+        "CategoryName",
+        "Description",
+        "Id",
+        "MemberBadges",
+        "RejectedDate"
+      ],
+      "controls": [
+        "BadgeApplicationMessage"
+      ],
+      "routes": [
+        "/Member/BadgeApplication/@badge.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/Belts.cshtml",
+      "fields": [
+        "Awarded",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "HexCode",
+        "Id",
+        "MemberBelts",
+        "RejectedDate"
+      ],
+      "controls": [
+        "BeltApplicationMessage",
+        "BeltApplyButton"
+      ],
+      "routes": [
+        "/Member/BeltApplication/@belt.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/Goals.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "GithubLogin",
+        "GoalLongTerm",
+        "GoalShortTerm",
+        "HexCode",
+        "Id",
+        "Login",
+        "MemberBadges",
+        "MemberBelts",
+        "RejectedDate",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "BadgeApplicationMessage"
+      ],
+      "routes": [
+        "/Member/BadgeApplication/@badge.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/Index.cshtml",
+      "fields": [
+        "FirstName",
+        "GetLoginMessage"
+      ],
+      "controls": [
+        "MemberIndexMessages"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Member/Profile.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "GoalLongTerm",
+        "GoalShortTerm",
+        "Id",
+        "Login",
+        "MemberName",
+        "ScratchName",
+        "Team",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "GithubButton",
+        "PrintButton",
+        "ScratchButton",
+        "TeamMembers",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Member/TeamMember/@teamMember.Id.ToString()"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/Sessions.cshtml",
+      "fields": [],
+      "controls": [
+        "BrowserSuggest",
+        "SessionList"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Member/TeamMember.cshtml",
+      "fields": [
+        "Awarded",
+        "Badge",
+        "Belt",
+        "BirthYear",
+        "FirstName",
+        "Id",
+        "LastName",
+        "MemberBadges",
+        "MemberBelts",
+        "MemberName",
+        "ScratchName",
+        "Team",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "ScratchButton",
+        "TeamMembers",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Member/TeamMember/@teamMember.Id.ToString()"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Member/_MemberMenu.cshtml",
+      "fields": [],
+      "controls": [
+        "LeftMenu",
+        "PanelClose"
+      ],
+      "routes": [
+        "/Home/LogOut",
+        "/Member/Attendance",
+        "/Member/Badges",
+        "/Member/BadgesAvailable",
+        "/Member/Belts",
+        "/Member/Goals",
+        "/Member/Profile",
+        "/Member/Sessions"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Adult.cshtml",
+      "fields": [
+        "BadgeCategories",
+        "BadgeCategoryId",
+        "Email",
+        "FingerprintId",
+        "FirstName",
+        "FullName",
+        "GithubLogin",
+        "Id",
+        "IsMentor",
+        "IsParent",
+        "LastName",
+        "Login",
+        "NewPassword",
+        "Phone",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "BadgeCategoriesSelected",
+        "ConfirmPassword",
+        "GithubButton",
+        "PrintButton",
+        "SaveButton",
+        "ScratchButton",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Mentor/AdultMerge?AdultMode=@(adultMode)&id=@adult.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/AdultMerge.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "FullName",
+        "Id",
+        "LastName",
+        "Phone"
+      ],
+      "controls": [
+        "AdultId",
+        "AdultSelect",
+        "Email",
+        "Email1",
+        "Email2",
+        "MergeButton",
+        "Phone",
+        "Phone1",
+        "Phone2"
+      ],
+      "routes": [
+        "/Mentor/Adult/",
+        "/Mentor/MergeAdults",
+        "/Mentor/SearchAdultMergeByName"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Adults.cshtml",
+      "fields": [],
+      "controls": [
+        "PrintButton",
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Attendance.cshtml",
+      "fields": [
+        "IsAdult",
+        "Present"
+      ],
+      "controls": [
+        "AttendanceDateSelect",
+        "MemberMessages",
+        "MemberWelcomeDialog",
+        "TotalAttendanceNumber",
+        "WelcomeDetailsButton",
+        "myFilter"
+      ],
+      "routes": [
+        "Attendance"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/AttendanceRandom.cshtml",
+      "fields": [
+        "Present"
+      ],
+      "controls": [
+        "AttendanceDateSelect",
+        "MemberMessages",
+        "MemberWelcomeDialog",
+        "TotalAttendanceNumber",
+        "WelcomeDetailsButton",
+        "myFilter"
+      ],
+      "routes": [
+        "Attendance"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Badge.cshtml",
+      "fields": [
+        "Achievement",
+        "BadgeCategoryId",
+        "Description",
+        "Id",
+        "MemberBadges"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "Delete",
+        "DeleteConfirmPopup"
+      ],
+      "routes": [
+        "/Mentor/BadgeDelete",
+        "/Mentor/Badges",
+        "BadgeSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/BadgeCategories.cshtml",
+      "fields": [],
+      "controls": [
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/BadgeCategory.cshtml",
+      "fields": [
+        "CategoryDescription",
+        "CategoryName",
+        "Id"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "Delete",
+        "DeleteConfirmPopup"
+      ],
+      "routes": [
+        "/Mentor/BadgeCategories",
+        "/Mentor/BadgeCategoryDelete",
+        "BadgeCategorySave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Badges.cshtml",
+      "fields": [],
+      "controls": [
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Belt.cshtml",
+      "fields": [
+        "Color",
+        "Description",
+        "HexCode",
+        "Id",
+        "SortOrder"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "Delete",
+        "DeleteConfirmPopup"
+      ],
+      "routes": [
+        "/Mentor/BeltDelete",
+        "/Mentor/Belts",
+        "BeltSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Belts.cshtml",
+      "fields": [],
+      "controls": [
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/DataCleanup.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Index.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": [
+        "/Mentor/MemberBadges/@mb.MemberId.ToString(",
+        "/Mentor/MemberBelts/@mb.MemberId.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Member.cshtml",
+      "fields": [
+        "AttendedToday",
+        "BirthYear",
+        "FingerprintId",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "LastName",
+        "Login",
+        "MemberName",
+        "NewPassword",
+        "RegisteredCurrentTerm",
+        "ScratchName",
+        "TeamId",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "BeltCertificate",
+        "ConfirmPassword",
+        "GithubButton",
+        "PrintButton",
+        "SaveButton",
+        "ScratchButton",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Mentor/MemberMerge?id=@member.Id.ToString(",
+        "MemberSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberAttendance.cshtml",
+      "fields": [
+        "Date",
+        "MemberAttendances",
+        "MemberName"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberBadges.cshtml",
+      "fields": [
+        "Achievement",
+        "AdultId",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Description",
+        "Id",
+        "MemberBadges",
+        "MemberName",
+        "MemberParents",
+        "RejectedDate"
+      ],
+      "controls": [
+        "ApproveRejectMessage"
+      ],
+      "routes": [
+        "/Mentor/BadgeApprove/@badgeApplication.Id.ToString(",
+        "/Mentor/BadgeReject/@badgeApplication.Id.ToString(",
+        "/Mentor/BadgeUndo/@memberBadge.Id.ToString(",
+        "/Mentor/BadgeUndo/@rejection.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberBelts.cshtml",
+      "fields": [
+        "AdultId",
+        "Awarded",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "HexCode",
+        "Id",
+        "MemberBelts",
+        "MemberName",
+        "MemberParents",
+        "RejectedDate"
+      ],
+      "controls": [
+        "ApproveBelt",
+        "ApproveRejectMessage",
+        "RejectBelt"
+      ],
+      "routes": [
+        "/Mentor/BeltApprove/@beltApplication.Id.ToString(",
+        "/Mentor/BeltReject/@beltApplication.Id.ToString(",
+        "/Mentor/BeltUndo/@memberBelt.Id.ToString(",
+        "/Mentor/BeltUndo/@rejection.Id.ToString("
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberGoals.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "GoalLongTerm",
+        "GoalShortTerm",
+        "HexCode",
+        "Id",
+        "MemberBadges",
+        "MemberBelts",
+        "MemberName",
+        "RejectedDate"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberMerge.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "Id",
+        "LastName",
+        "MemberName",
+        "ScratchName"
+      ],
+      "controls": [
+        "BirthYear",
+        "BirthYear1",
+        "BirthYear2",
+        "MemberId",
+        "MemberSelect",
+        "MergeButton",
+        "ScratchName",
+        "ScratchName1",
+        "ScratchName2"
+      ],
+      "routes": [
+        "/Mentor/Member/",
+        "/Mentor/MergeMembers",
+        "/Mentor/SearchMemberMergeByName"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/MemberParents.cshtml",
+      "fields": [
+        "Adult",
+        "FirstName",
+        "Id",
+        "LastName",
+        "MemberName",
+        "MemberParents"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "DeleteRelationshipPopup",
+        "ParentList",
+        "ParentSelect"
+      ],
+      "routes": [
+        "/Mentor/Adult/",
+        "/Mentor/CreateRelationship",
+        "/Mentor/DeleteRelationship",
+        "/Mentor/SearchParentsByName"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Members.cshtml",
+      "fields": [],
+      "controls": [
+        "PrintButton",
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/ParentKids.cshtml",
+      "fields": [
+        "FirstName",
+        "FullName",
+        "Id",
+        "LastName",
+        "Member",
+        "MemberParents"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "DeleteKidPopup",
+        "KidList",
+        "MemberSelect"
+      ],
+      "routes": [
+        "/Mentor/CreateRelationship",
+        "/Mentor/DeleteRelationship",
+        "/Mentor/Member/",
+        "/Mentor/SearchMembersByName"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/PurgeRegistrations.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/RecentBelts.cshtml",
+      "fields": [],
+      "controls": [
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Session.cshtml",
+      "fields": [
+        "Adult2Id",
+        "AdultId",
+        "CreatedDate",
+        "EndDate",
+        "Id",
+        "MentorsOnly",
+        "Topic",
+        "Url"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "Delete",
+        "DeleteConfirmPopup"
+      ],
+      "routes": [
+        "/Mentor/SessionDelete",
+        "/Mentor/Sessions",
+        "SessionSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Sessions.cshtml",
+      "fields": [],
+      "controls": [
+        "SessionList"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Team.cshtml",
+      "fields": [
+        "FirstName",
+        "Goal",
+        "HexCode",
+        "Id",
+        "LastName",
+        "Members",
+        "Notes",
+        "TeamName"
+      ],
+      "controls": [
+        "ConfirmDelete",
+        "Delete",
+        "DeleteConfirmPopup",
+        "PrintButton",
+        "PrintTeamCardButton"
+      ],
+      "routes": [
+        "/Home/TeamCard/@(team.Id.ToString(",
+        "/Mentor/Member/@(member.Id.ToString())",
+        "/Mentor/TeamDelete",
+        "/Mentor/Teams",
+        "TeamSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/Teams.cshtml",
+      "fields": [],
+      "controls": [
+        "myFilter"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Mentor/_MemberMenu.cshtml",
+      "fields": [
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "/Mentor/Member/@memberId",
+        "/Mentor/MemberAttendance/@memberId",
+        "/Mentor/MemberBadges/@memberId",
+        "/Mentor/MemberBelts/@memberId",
+        "/Mentor/MemberGoals/@memberId",
+        "/Mentor/MemberParents/@memberId"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/_MentorMenu.cshtml",
+      "fields": [],
+      "controls": [
+        "LeftMenu",
+        "PanelClose"
+      ],
+      "routes": [
+        "/Home/LogOut",
+        "/Mentor/SignInMode",
+        "Attendance",
+        "BadgeCategories",
+        "Badges",
+        "Belts",
+        "DataCleanup",
+        "ExportMentorEmails",
+        "ExportParentEmails",
+        "Index",
+        "Members",
+        "Mentors",
+        "Parents",
+        "PurgeRegistrations",
+        "RecentBelts",
+        "RecentBeltsCsv",
+        "Teams"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Mentor/_ParentMenu.cshtml",
+      "fields": [
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "/Mentor/Adult/@adultId",
+        "/Mentor/ParentKids/@adultId"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Parent/Index.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/Member.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "LastName",
+        "Login",
+        "MemberName",
+        "NewPassword",
+        "ScratchName",
+        "Team",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "ConfirmPassword",
+        "GithubButton",
+        "PrintButton",
+        "SaveButton",
+        "ScratchButton",
+        "TeamMembers",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Parent/TeamMember/@teamMember.Id.ToString(",
+        "MemberSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Parent/MemberAttendance.cshtml",
+      "fields": [
+        "Date",
+        "MemberAttendances",
+        "MemberName"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MemberBadges.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Description",
+        "Id",
+        "MemberBadges",
+        "MemberName",
+        "RejectedDate"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MemberBelts.cshtml",
+      "fields": [
+        "Awarded",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "HexCode",
+        "Id",
+        "MemberBelts",
+        "MemberName",
+        "RejectedDate"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MemberGoals.cshtml",
+      "fields": [
+        "Achievement",
+        "Awarded",
+        "Badge",
+        "BadgeCategory",
+        "BadgeId",
+        "Belt",
+        "BeltId",
+        "Color",
+        "Description",
+        "GoalLongTerm",
+        "GoalShortTerm",
+        "HexCode",
+        "Id",
+        "MemberBadges",
+        "MemberBelts",
+        "MemberName",
+        "RejectedDate"
+      ],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MemberParents.cshtml",
+      "fields": [
+        "Adult",
+        "MemberName",
+        "MemberParents"
+      ],
+      "controls": [
+        "ParentList"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MyAccount.cshtml",
+      "fields": [
+        "Email",
+        "FirstName",
+        "Id",
+        "LastName",
+        "NewPassword",
+        "Phone"
+      ],
+      "controls": [
+        "ConfirmPassword",
+        "SaveButton"
+      ],
+      "routes": [
+        "MyAccountSave"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Parent/MyKid.cshtml",
+      "fields": [
+        "BirthYear",
+        "FirstName",
+        "GithubLogin",
+        "Id",
+        "MemberAttendances",
+        "MemberName",
+        "ScratchName",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "PrintButton"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/MyKids.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/Sessions.cshtml",
+      "fields": [],
+      "controls": [
+        "SessionList"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Parent/TeamMember.cshtml",
+      "fields": [
+        "Awarded",
+        "Badge",
+        "Belt",
+        "BirthYear",
+        "FirstName",
+        "Id",
+        "LastName",
+        "MemberBadges",
+        "MemberBelts",
+        "MemberName",
+        "ScratchName",
+        "Team",
+        "XboxGamertag"
+      ],
+      "controls": [
+        "ScratchButton",
+        "TeamMembers",
+        "XboxButton"
+      ],
+      "routes": [
+        "/Parent/TeamMember/@teamMember.Id.ToString()"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Parent/_MemberMenu.cshtml",
+      "fields": [
+        "Id"
+      ],
+      "controls": [],
+      "routes": [
+        "/Parent/Member/@memberId",
+        "/Parent/MemberAttendance/@memberId",
+        "/Parent/MemberBadges/@memberId",
+        "/Parent/MemberBelts/@memberId",
+        "/Parent/MemberGoals/@memberId",
+        "/Parent/MemberParents/@memberId",
+        "/Parent/Sessions"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Parent/_ParentMenu.cshtml",
+      "fields": [],
+      "controls": [
+        "LeftMenu",
+        "PanelClose"
+      ],
+      "routes": [
+        "/Home/LogOut",
+        "/Parent/MyAccount",
+        "/Parent/MyKids",
+        "/Parent/Sessions",
+        "Index"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Shared/Error.cshtml",
+      "fields": [],
+      "controls": [
+        "viewport"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Shared/Redirect.cshtml",
+      "fields": [],
+      "controls": [
+        "redirect"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Shared/RedirectExternal.cshtml",
+      "fields": [],
+      "controls": [
+        "redirectexternal"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Shared/_ImageEditable.cshtml",
+      "fields": [],
+      "controls": [
+        "DropMessage",
+        "EntityImage",
+        "ImageInstructions",
+        "holder",
+        "upload",
+        "uploadprogress"
+      ],
+      "routes": [
+        "/Home/ImageUpload"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/Shared/_Layout.Mobile.cshtml",
+      "fields": [],
+      "controls": [
+        "ShowMenuButton",
+        "viewport"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Shared/_Layout.cshtml",
+      "fields": [],
+      "controls": [
+        "viewport"
+      ],
+      "routes": []
+    },
+    {
+      "source": "src_legacy/Views/Shared/_ViewSwitcher.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": [
+        "SwitchView"
+      ]
+    },
+    {
+      "source": "src_legacy/Views/_ViewStart.cshtml",
+      "fields": [],
+      "controls": [],
+      "routes": []
+    }
+  ],
+  "legacyEntities": [
+    {
+      "table": "AdultAttendance",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "AdultId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Date",
+          "Type": "date",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "AdultBadgeCategory",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "AdultId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "BadgeCategoryId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "Adults",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "FirstName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "LastName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "IsParent",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "IsMentor",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Email",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "Phone",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "Login",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "PasswordHash",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "GithubLogin",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "XboxGamertag",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "ScratchName",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "GardaVetted",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "LoginDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "LoginDatePrevious",
+          "Type": "datetime"
+        },
+        {
+          "Name": "FingerprintId",
+          "Type": "int"
+        }
+      ]
+    },
+    {
+      "table": "BadgeCategories",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "CategoryName",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "CategoryDescription",
+          "Type": "ntext"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "Badges",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "Achievement",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "BadgeCategoryId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Description",
+          "Type": "ntext"
+        }
+      ]
+    },
+    {
+      "table": "Belts",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "Color",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Description",
+          "Type": "nvarchar(max)"
+        },
+        {
+          "Name": "HexCode",
+          "Type": "nvarchar",
+          "MaxLength": "10"
+        },
+        {
+          "Name": "SortOrder",
+          "Type": "int",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "Dojos",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "DojoName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "MemberAttendance",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "MemberId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Date",
+          "Type": "datetime",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "MemberBadges",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "MemberId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "BadgeId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Awarded",
+          "Type": "datetime"
+        },
+        {
+          "Name": "AwardedByAdultId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "ApplicationNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "ApplicationDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "RejectedByAdultId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "RejectedNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "RejectedDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "AwardedNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "GoalDate",
+          "Type": "datetime"
+        }
+      ]
+    },
+    {
+      "table": "MemberBelts",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "MemberId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "BeltId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "AwardedByAdultId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "ApplicationNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "AwardedNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "RejectedByAdultId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "RejectedNotes",
+          "Type": "ntext"
+        },
+        {
+          "Name": "ApplicationDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "Awarded",
+          "Type": "datetime"
+        },
+        {
+          "Name": "RejectedDate",
+          "Type": "datetime"
+        }
+      ]
+    },
+    {
+      "table": "MemberParent",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "MemberId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "AdultId",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "Members",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "FirstName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "LastName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "BirthYear",
+          "Type": "int"
+        },
+        {
+          "Name": "ScratchName",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "XboxGamertag",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "Login",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "PasswordHash",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "GithubLogin",
+          "Type": "nvarchar",
+          "MaxLength": "50"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "LoginDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "LoginDatePrevious",
+          "Type": "datetime"
+        },
+        {
+          "Name": "TeamId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "FingerprintId",
+          "Type": "int"
+        },
+        {
+          "Name": "RegisteredCurrentTerm",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "GoalShortTerm",
+          "Type": "nvarchar(max)"
+        },
+        {
+          "Name": "GoalLongTerm",
+          "Type": "nvarchar(max)"
+        }
+      ]
+    },
+    {
+      "table": "Sessions",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false"
+        },
+        {
+          "Name": "CreatedDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "EndDate",
+          "Type": "datetime"
+        },
+        {
+          "Name": "Url",
+          "Type": "nvarchar",
+          "MaxLength": "256"
+        },
+        {
+          "Name": "Topic",
+          "Type": "nvarchar",
+          "MaxLength": "256"
+        },
+        {
+          "Name": "AdultId",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "Adult2Id",
+          "Type": "uniqueidentifier"
+        },
+        {
+          "Name": "MentorsOnly",
+          "Type": "bit",
+          "Nullable": "false"
+        }
+      ]
+    },
+    {
+      "table": "Teams",
+      "fields": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "Nullable": "false",
+          "StoreGeneratedPattern": "Identity"
+        },
+        {
+          "Name": "TeamName",
+          "Type": "nvarchar",
+          "MaxLength": "50",
+          "Nullable": "false"
+        },
+        {
+          "Name": "HexCode",
+          "Type": "nvarchar",
+          "MaxLength": "10"
+        },
+        {
+          "Name": "Deleted",
+          "Type": "bit",
+          "Nullable": "false"
+        },
+        {
+          "Name": "Goal",
+          "Type": "ntext"
+        },
+        {
+          "Name": "Notes",
+          "Type": "ntext"
+        }
+      ]
+    }
+  ],
+  "newApiRoutes": [
+    {
+      "source": "src/server/api/(tables)/badgeCategories/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 35
+    },
+    {
+      "source": "src/server/api/(tables)/badges/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 32
+    },
+    {
+      "source": "src/server/api/(tables)/belts/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 32
+    },
+    {
+      "source": "src/server/api/(tables)/memberBelts/byMemberId.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 37
+    },
+    {
+      "source": "src/server/api/(tables)/memberBelts/latest.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 29
+    },
+    {
+      "source": "src/server/api/(tables)/memberBelts/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 29
+    },
+    {
+      "source": "src/server/api/(tables)/memberBelts/pending.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 29
+    },
+    {
+      "source": "src/server/api/(tables)/members/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 32
+    },
+    {
+      "source": "src/server/api/(tables)/sessions/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 29
+    },
+    {
+      "source": "src/server/api/(tables)/teams/list.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 31
+    },
+    {
+      "source": "src/server/api/Achievements/Decision.post.ts",
+      "guardReferences": [
+        "requireRequestMentor"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 16
+    },
+    {
+      "source": "src/server/api/Achievements/History.get.ts",
+      "guardReferences": [
+        "requireRequestMentor"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 17
+    },
+    {
+      "source": "src/server/api/Achievements/Pending.get.ts",
+      "guardReferences": [
+        "requireRequestMentor"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 17
+    },
+    {
+      "source": "src/server/api/Auth/Login.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 56
+    },
+    {
+      "source": "src/server/api/Auth/LoginNfcTag.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 54
+    },
+    {
+      "source": "src/server/api/Auth/PasswordChange.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 62
+    },
+    {
+      "source": "src/server/api/Coder/achievements/[kind].get.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 17
+    },
+    {
+      "source": "src/server/api/Coder/applications.post.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Coder/attendance.get.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 15
+    },
+    {
+      "source": "src/server/api/Coder/badge-goal.post.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Coder/context.get.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Coder/goals.patch.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Coder/sessions/join.post.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Coder/sessions.get.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Coder/team-members/[memberId].get.ts",
+      "guardReferences": [
+        "requireRequestCoder"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Config/UiConfig.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 62
+    },
+    {
+      "source": "src/server/api/Legacy/CopyData.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": true,
+      "lines": 1501
+    },
+    {
+      "source": "src/server/api/Legacy/Teams.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 53
+    },
+    {
+      "source": "src/server/api/Management/[memberId]/account.patch.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/[memberId]/attendance.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Management/[memberId]/goals.patch.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/[memberId]/merge.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 23
+    },
+    {
+      "source": "src/server/api/Management/[memberId]/password.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 16
+    },
+    {
+      "source": "src/server/api/Management/data-maintenance/[action].get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 13
+    },
+    {
+      "source": "src/server/api/Management/data-maintenance/index.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/definitions/[kind]/[definitionId]/image.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 16
+    },
+    {
+      "source": "src/server/api/Management/definitions/[kind]/[definitionId].delete.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 13
+    },
+    {
+      "source": "src/server/api/Management/definitions/[kind]/[definitionId].patch.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 13
+    },
+    {
+      "source": "src/server/api/Management/definitions/[kind]/index.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 13
+    },
+    {
+      "source": "src/server/api/Management/definitions/index.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Management/index.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Management/index.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 15
+    },
+    {
+      "source": "src/server/api/Management/relationships.delete.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/relationships.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/reports/index.get.ts",
+      "guardReferences": [
+        "requireRequestMentor"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 44
+    },
+    {
+      "source": "src/server/api/Management/session-pods/[memberId].delete.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/session-pods/[memberId].patch.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Management/session-pods/index.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 9
+    },
+    {
+      "source": "src/server/api/Management/session-pods/index.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 10
+    },
+    {
+      "source": "src/server/api/Management/session-pods/join.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 10
+    },
+    {
+      "source": "src/server/api/Management/skills.delete.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/skills.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Management/teams/[teamId]/image.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 15
+    },
+    {
+      "source": "src/server/api/Management/teams/[teamId].delete.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 14
+    },
+    {
+      "source": "src/server/api/Management/teams/[teamId].patch.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 14
+    },
+    {
+      "source": "src/server/api/Management/teams/index.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Management/teams/index.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SessionCurrent.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 43
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SessionDate.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 55
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SessionDateRange.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 75
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SessionDates.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 47
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SessionStats.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 49
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SetPresent.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 69
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SignIn.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 60
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SignInGuid.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 51
+    },
+    {
+      "source": "src/server/api/MemberAttendance/SignInNfcTag.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 61
+    },
+    {
+      "source": "src/server/api/MemberAttendance/fingerprint.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 61
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/achievements/[kind].get.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/attendance.get.ts",
+      "guardReferences": [
+        "requireLinkedChild",
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/images.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 5
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/index.get.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 7
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/index.patch.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 7
+    },
+    {
+      "source": "src/server/api/Parent/children/[memberId]/password.post.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 14
+    },
+    {
+      "source": "src/server/api/Parent/children/index.get.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Parent/sessions/index.get.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Parent/sessions/join.post.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 11
+    },
+    {
+      "source": "src/server/api/Parent/team-members/[memberId].get.ts",
+      "guardReferences": [
+        "requireRequestParent"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 7
+    },
+    {
+      "source": "src/server/api/Profile/images.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Profile/index.get.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 12
+    },
+    {
+      "source": "src/server/api/Profile/index.patch.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 14
+    },
+    {
+      "source": "src/server/api/Profile/password.post.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 24
+    },
+    {
+      "source": "src/server/api/Profiles/[memberId]/images.post.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 6
+    },
+    {
+      "source": "src/server/api/Profiles/[memberId].get.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 13
+    },
+    {
+      "source": "src/server/api/Profiles/[memberId].patch.ts",
+      "guardReferences": [
+        "requireRequestMember"
+      ],
+      "usesAdminDirectly": false,
+      "lines": 14
+    },
+    {
+      "source": "src/server/api/githubaccounts.get.ts",
+      "guardReferences": [],
+      "usesAdminDirectly": false,
+      "lines": 19
+    }
+  ]
+}

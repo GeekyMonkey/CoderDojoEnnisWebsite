@@ -1,66 +1,19 @@
-Page security analysis
+# Page and API access expectations
 
-Date: 2025-09-28
+Updated 12 October 2026. This replaces the older 2025 analysis and its references to deleted page paths.
 
-Overview
+The [app feature contract](../app-features.md#roles-and-access) defines expected roles. `src/app/middleware/auth.global.ts` redirects unauthenticated navigation in `/mentor`, `/coder` and `/parent` to `/login`, restoring sessions on hard reload. It checks authentication, not current role authorization. `src/app/utils/memberNavigation.ts` filters menus using role metadata for presentation. Neither mechanism protects a server API or direct database access.
 
-This document records an analysis of how page security and redirects to login are implemented in the codebase.
+Login is `src/app/pages/(auth)/login.vue`; it calls the auth store and `/api/Auth/Login`, sets the returned Supabase session and navigates through `/logged_in`. NFC has a separate login API. Auth listener/store and session-recovery helpers handle initialization and expired sessions. Current portal login-history and imported-credential parity gaps are F06–F08.
 
-Key files inspected
+Protected APIs derive a verified member from the current Supabase user and stored account through `requestMember.ts`, then apply mentor/coder/parent checks. Linked-child access is rechecked with `parentRequest.ts`. Profile, management, review, coder and parent APIs use narrow response/edit contracts. Controlled mutation RPCs are service-only and recheck the current actor/eligibility inside the transaction with concurrency safeguards. The mentor-only pod realtime read helper separately verifies immutable auth identity and current role.
 
-- `src/app/middleware/auth.global.ts` — global route middleware that enforces protected sections and performs auth checks.
-- `src/app/stores/useAuthStore.ts` — an in-memory auth store (user, initializing, ready, roles, ...).
-- `src/app/plugins/auth-listener.client.ts` — loads initial session and subscribes to Supabase auth state changes to populate store.
-- `src/app/plugins/supabase-init.client.ts` — proactively calls `getSession()` to help populate `useSupabaseUser()` on hard reloads.
-- `src/app/pages/SignIn.client.vue` — the sign-in page that posts credentials and calls `supabaseClient.auth.setSession(...)` on success.
-- `src/server/utils/authUtils.ts` — server-side helpers that sign users into Supabase (admin create if needed) and return a session.
+Expected database permissions must restrict private reads, prevent arbitrary client writes and keep credentials out of REST/realtime projections. The live metadata sweep found RLS disabled and broad grants on most tables (F01). It also found unguarded import, older attendance mutations and private lookup APIs (F02–F04). These are open findings, so the presence of guarded newer APIs must not be described as complete app-wide security.
 
-How security is enforced
+Expected shared kiosk mode removes management authority and uses scoped device/sign-in access. Current mentor SignIn layout retains the mentor session (F12); direct scanner routes also need a documented authority boundary (F03).
 
-- Global route middleware (`auth.global.ts`) runs on every route navigation.
-- The middleware only enforces authentication for specific top-level path segments: `mentor`, `coder`, and `parent`.
-- When a route is in one of those protected sections the middleware determines if the user is authenticated by:
-  - Prefer using `authStore.ready.value ? authStore.isAuthenticated.value : await isAuthenticated()`.
-  - `authStore.isAuthenticated` is `computed(() => !!user.value)` in the store.
-  - Fallback `isAuthenticated()` checks `useSupabaseUser().value?.aud === "authenticated"`, and if not present it calls `supabaseClient.auth.getSession()` and treats presence of `data.session.user` as authenticated.
-- If not authenticated, the middleware returns `navigateTo("/login")` which redirects to the login page.
+See the [final discrepancy list](../../openspec/changes/replicate-legacy-features/final-parity-discrepancies.md) for evidence, priorities and verification requirements. This documentation update did not execute exploit requests or modify live permissions/data.
 
-Login flow
+The [proposed data-access design](../../openspec/changes/secure-role-based-data-access/design.md) covers all twelve tables, current-role identity bindings, controlled writes, public images and safe realtime invalidations. See the [table/field matrix](../../openspec/changes/secure-role-based-data-access/policy-matrix.md) and [verification matrix](../../openspec/changes/secure-role-based-data-access/verification-matrix.md). It is a proposal, not evidence that the policies are deployed.
 
-- `SignIn.client.vue` sends credentials to `/api/Auth/Login`.
-- The server calls `LoginToSupabase(...)` in `src/server/utils/authUtils.ts` which:
-  - Derives a Supabase email and password for the member and attempts `supabase.auth.signInWithPassword`.
-  - If sign-in fails it may delete an old user and admin-create a fresh Supabase user with metadata, then sign-in again.
-  - Returns an auth token/session object from Supabase.
-- The client receives the session, calls `supabaseClient.auth.setSession(session)`, and then the Supabase auth state listener updates `useAuthStore()` user ref. The sign-in page then redirects to `/logged_in`.
-
-Race conditions and mitigation
-
-- On a hard reload the Supabase user ref and the auth store may not be populated when `auth.global` first runs, producing a false-negative authentication check and an unwanted redirect.
-- Mitigations present in the code:
-  - `auth-listener.client.ts` calls `getSession()` and then `store.markReady()` to populate the store early.
-  - `supabase-init.client.ts` calls `client.auth.getSession()` proactively to populate `useSupabaseUser()`.
-  - `auth.global.ts` will wait up to ~500ms while `authStore.initializing` is true before proceeding to reduce spurious redirects.
-
-Edge cases and recommendations
-
-- Expired or revoked sessions will cause the middleware to redirect to login. This is expected.
-- Role checks are not implemented here; the middleware only gates based on top-level path section.
-  - If you need role-based access (mentor-only pages), add server-provided role metadata or check `useSupabaseUser().value.user_metadata`/ `useAuthStore().roles` and enforce it in the middleware.
-- If users see sporadic redirects on hard reloads increase the initialization wait duration or hook middleware to wait for the auth-store `ready` more robustly (e.g., use an awaitable promise that resolves once the listener marks ready rather than a busy loop).
-- Consider switching to route meta protection rather than hard-coded top-level sections for more flexible per-page rules.
-
-Files/Lines of interest (quick reference)
-
-- `src/app/middleware/auth.global.ts` — contains `return navigateTo("/login")` when redirect needed.
-- `src/app/plugins/auth-listener.client.ts` — initial session load and listener.
-- `src/app/pages/SignIn.client.vue` — posts to `/api/Auth/Login` and calls `setSession(...)` and `router.replace("/logged_in")` on success.
-- `src/server/utils/authUtils.ts` — `LoginToSupabase` implements server sign-in and admin-create logic when required.
-
-Next steps (optional)
-
-- Convert protection to page-level `definePageMeta({ requiresAuth: true, roles: ['mentor'] })` and update middleware to read meta. This would allow fine-grained role checks per page.
-- Add explicit role-checking in middleware and wire `roles` into the `useAuthStore()`.
-- Add logging around the session restoration path to diagnose intermittent redirect complaints.
-
-End of analysis
+F02 is explicitly deferred by the user until production cutover: keep the current legacy import unchanged during development/migration, then remove legacy import/read routes and decommission the old database after final reconciliation and dependency checks. This is a scheduled cutover action, not a resolved security finding.

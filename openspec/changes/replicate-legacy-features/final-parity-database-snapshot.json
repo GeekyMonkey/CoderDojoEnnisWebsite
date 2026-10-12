@@ -1,0 +1,1389 @@
+{
+  "auditDate": "2026-10-12",
+  "projectId": "newsofwpimzmfbqsooka",
+  "scope": "Read-only coderdojo schema metadata; no member records",
+  "metadata": [
+    {
+      "kind": "columns",
+      "details": [
+        {
+          "type": "uuid",
+          "table": "badge_categories",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "badge_categories",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "badge_categories",
+          "column": "category_name",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "badge_categories",
+          "column": "category_description",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "badge_categories",
+          "column": "has_image",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "badge_categories",
+          "column": "image_revision",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "badges",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "badges",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "badges",
+          "column": "achievement",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "badges",
+          "column": "badge_category_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "badges",
+          "column": "description",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "belts",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "belts",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "belts",
+          "column": "color",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "belts",
+          "column": "hex_code",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "belts",
+          "column": "description",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "integer",
+          "table": "belts",
+          "column": "sort_order",
+          "default": "0",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_attendances",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_attendances",
+          "column": "member_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "date",
+          "table": "member_attendances",
+          "column": "date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badge_categories",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badge_categories",
+          "column": "member_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badge_categories",
+          "column": "badge_category_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badges",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badges",
+          "column": "member_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badges",
+          "column": "badge_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badges",
+          "column": "awarded_by_adult_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_badges",
+          "column": "application_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_badges",
+          "column": "awarded_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_badges",
+          "column": "rejected_by_adult_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_badges",
+          "column": "rejected_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_badges",
+          "column": "application_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_badges",
+          "column": "awarded",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_badges",
+          "column": "rejected_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_badges",
+          "column": "goal_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_belts",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_belts",
+          "column": "member_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_belts",
+          "column": "belt_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_belts",
+          "column": "awarded_by_adult_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_belts",
+          "column": "application_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_belts",
+          "column": "awarded_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_belts",
+          "column": "rejected_by_adult_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "member_belts",
+          "column": "rejected_notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_belts",
+          "column": "application_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_belts",
+          "column": "awarded",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "member_belts",
+          "column": "rejected_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_parents",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "member_parents",
+          "column": "member_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "member_parents",
+          "column": "parent_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "members",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "integer",
+          "table": "members",
+          "column": "birth_year",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "email",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "integer",
+          "table": "members",
+          "column": "fingerprint_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "garda_vetted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "github_login",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "goal_long_term",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "goal_short_term",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "is_mentor",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "is_ninja",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "is_parent",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "login",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "members",
+          "column": "login_date",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "timestamp without time zone",
+          "table": "members",
+          "column": "login_date_previous",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "name_first",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "name_last",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "password_hash",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "phone",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "registered_current_term",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "scratch_name",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "members",
+          "column": "team_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "xbox_gamertag",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "has_photo",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "members",
+          "column": "has_avatar",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "members",
+          "column": "nfc_tag",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "session_pods",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "date",
+          "table": "session_pods",
+          "column": "session_date",
+          "default": null,
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "session_pods",
+          "column": "topic",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "session_pods",
+          "column": "mentors_only",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "timestamp with time zone",
+          "table": "session_pods",
+          "column": "ends_at",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "session_pods",
+          "column": "url",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "session_pods",
+          "column": "host_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "uuid",
+          "table": "session_pods",
+          "column": "host2_id",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "session_pods",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "sessions",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "sessions",
+          "column": "topic",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "boolean",
+          "table": "sessions",
+          "column": "mentors_only",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "date",
+          "table": "sessions",
+          "column": "session_date",
+          "default": null,
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "teams",
+          "column": "id",
+          "default": "gen_random_uuid()",
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "teams",
+          "column": "deleted",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "text",
+          "table": "teams",
+          "column": "goal",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "teams",
+          "column": "hexcode",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "teams",
+          "column": "notes",
+          "default": null,
+          "nullable": "YES"
+        },
+        {
+          "type": "text",
+          "table": "teams",
+          "column": "team_name",
+          "default": null,
+          "nullable": "NO"
+        },
+        {
+          "type": "boolean",
+          "table": "teams",
+          "column": "has_image",
+          "default": "false",
+          "nullable": "NO"
+        },
+        {
+          "type": "uuid",
+          "table": "teams",
+          "column": "image_revision",
+          "default": null,
+          "nullable": "YES"
+        }
+      ]
+    },
+    {
+      "kind": "tables",
+      "details": [
+        {
+          "rls": false,
+          "table": "member_belts",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "teams",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "belts",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "sessions",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "members",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "badges",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "member_attendances",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "member_badge_categories",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "member_parents",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "member_badges",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": false,
+          "table": "badge_categories",
+          "anon_select": true,
+          "authenticated_delete": true,
+          "authenticated_update": true
+        },
+        {
+          "rls": true,
+          "table": "session_pods",
+          "anon_select": false,
+          "authenticated_delete": false,
+          "authenticated_update": false
+        }
+      ]
+    },
+    {
+      "kind": "constraints",
+      "details": [
+        {
+          "name": "member_belts_awarded_by_adult_id_fkey",
+          "table": "member_belts",
+          "definition": "FOREIGN KEY (awarded_by_adult_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "member_belts_belt_id_fkey",
+          "table": "member_belts",
+          "definition": "FOREIGN KEY (belt_id) REFERENCES coderdojo.belts(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_belts_member_id_fkey",
+          "table": "member_belts",
+          "definition": "FOREIGN KEY (member_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_belts_pkey",
+          "table": "member_belts",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_belts_rejected_by_adult_id_fkey",
+          "table": "member_belts",
+          "definition": "FOREIGN KEY (rejected_by_adult_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "teams_pkey",
+          "table": "teams",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "belts_pkey",
+          "table": "belts",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "sessions_pkey",
+          "table": "sessions",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "sessions_session_date_key",
+          "table": "sessions",
+          "definition": "UNIQUE (session_date)"
+        },
+        {
+          "name": "members_pkey",
+          "table": "members",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "members_team_id_fkey",
+          "table": "members",
+          "definition": "FOREIGN KEY (team_id) REFERENCES coderdojo.teams(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "badges_badge_category_id_fkey",
+          "table": "badges",
+          "definition": "FOREIGN KEY (badge_category_id) REFERENCES coderdojo.badge_categories(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "badges_pkey",
+          "table": "badges",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_attendances_member_date_unique",
+          "table": "member_attendances",
+          "definition": "UNIQUE (member_id, date)"
+        },
+        {
+          "name": "member_attendances_member_id_fkey",
+          "table": "member_attendances",
+          "definition": "FOREIGN KEY (member_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_attendances_pkey",
+          "table": "member_attendances",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_badge_categories_badge_category_id_fkey",
+          "table": "member_badge_categories",
+          "definition": "FOREIGN KEY (badge_category_id) REFERENCES coderdojo.badge_categories(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_badge_categories_member_id_fkey",
+          "table": "member_badge_categories",
+          "definition": "FOREIGN KEY (member_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_badge_categories_pkey",
+          "table": "member_badge_categories",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_parents_member_id_fkey",
+          "table": "member_parents",
+          "definition": "FOREIGN KEY (member_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_parents_parent_id_fkey",
+          "table": "member_parents",
+          "definition": "FOREIGN KEY (parent_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_parents_pkey",
+          "table": "member_parents",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_badges_awarded_by_adult_id_fkey",
+          "table": "member_badges",
+          "definition": "FOREIGN KEY (awarded_by_adult_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "member_badges_badge_id_fkey",
+          "table": "member_badges",
+          "definition": "FOREIGN KEY (badge_id) REFERENCES coderdojo.badges(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_badges_member_id_fkey",
+          "table": "member_badges",
+          "definition": "FOREIGN KEY (member_id) REFERENCES coderdojo.members(id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_badges_pkey",
+          "table": "member_badges",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "member_badges_rejected_by_adult_id_fkey",
+          "table": "member_badges",
+          "definition": "FOREIGN KEY (rejected_by_adult_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "badge_categories_pkey",
+          "table": "badge_categories",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "session_pods_host2_id_fkey",
+          "table": "session_pods",
+          "definition": "FOREIGN KEY (host2_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "session_pods_host_id_fkey",
+          "table": "session_pods",
+          "definition": "FOREIGN KEY (host_id) REFERENCES coderdojo.members(id) ON DELETE SET NULL"
+        },
+        {
+          "name": "session_pods_pkey",
+          "table": "session_pods",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "kind": "indexes",
+      "details": [
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_belts_pkey ON coderdojo.member_belts USING btree (id)",
+          "indexname": "member_belts_pkey",
+          "tablename": "member_belts",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX teams_pkey ON coderdojo.teams USING btree (id)",
+          "indexname": "teams_pkey",
+          "tablename": "teams",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX belts_pkey ON coderdojo.belts USING btree (id)",
+          "indexname": "belts_pkey",
+          "tablename": "belts",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX sessions_pkey ON coderdojo.sessions USING btree (id)",
+          "indexname": "sessions_pkey",
+          "tablename": "sessions",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX sessions_session_date_key ON coderdojo.sessions USING btree (session_date)",
+          "indexname": "sessions_session_date_key",
+          "tablename": "sessions",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX members_pkey ON coderdojo.members USING btree (id)",
+          "indexname": "members_pkey",
+          "tablename": "members",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX coderdojo_members_nfc_tag_idx ON coderdojo.members USING btree (nfc_tag) WHERE (nfc_tag IS NOT NULL)",
+          "indexname": "coderdojo_members_nfc_tag_idx",
+          "tablename": "members",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX badges_pkey ON coderdojo.badges USING btree (id)",
+          "indexname": "badges_pkey",
+          "tablename": "badges",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_attendances_pkey ON coderdojo.member_attendances USING btree (id)",
+          "indexname": "member_attendances_pkey",
+          "tablename": "member_attendances",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE INDEX idx_member_attendances_date ON coderdojo.member_attendances USING btree (date)",
+          "indexname": "idx_member_attendances_date",
+          "tablename": "member_attendances",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE INDEX idx_member_attendances_member_id ON coderdojo.member_attendances USING btree (member_id)",
+          "indexname": "idx_member_attendances_member_id",
+          "tablename": "member_attendances",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_attendances_member_date_unique ON coderdojo.member_attendances USING btree (member_id, date)",
+          "indexname": "member_attendances_member_date_unique",
+          "tablename": "member_attendances",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_badge_categories_pkey ON coderdojo.member_badge_categories USING btree (id)",
+          "indexname": "member_badge_categories_pkey",
+          "tablename": "member_badge_categories",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_parents_pkey ON coderdojo.member_parents USING btree (id)",
+          "indexname": "member_parents_pkey",
+          "tablename": "member_parents",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX member_badges_pkey ON coderdojo.member_badges USING btree (id)",
+          "indexname": "member_badges_pkey",
+          "tablename": "member_badges",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX badge_categories_pkey ON coderdojo.badge_categories USING btree (id)",
+          "indexname": "badge_categories_pkey",
+          "tablename": "badge_categories",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE UNIQUE INDEX session_pods_pkey ON coderdojo.session_pods USING btree (id)",
+          "indexname": "session_pods_pkey",
+          "tablename": "session_pods",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        },
+        {
+          "indexdef": "CREATE INDEX session_pods_public_end_idx ON coderdojo.session_pods USING btree (ends_at, session_date) WHERE (NOT mentors_only)",
+          "indexname": "session_pods_public_end_idx",
+          "tablename": "session_pods",
+          "schemaname": "coderdojo",
+          "tablespace": null
+        }
+      ]
+    },
+    {
+      "kind": "triggers",
+      "details": null
+    },
+    {
+      "kind": "policies",
+      "details": [
+        {
+          "cmd": "SELECT",
+          "qual": "((NOT deleted) AND ((NOT mentors_only) OR ( SELECT coderdojo.can_read_mentor_pods() AS can_read_mentor_pods)))",
+          "roles": [
+            "authenticated"
+          ],
+          "tablename": "session_pods",
+          "permissive": "PERMISSIVE",
+          "policyname": "session_pods_visible_read",
+          "schemaname": "coderdojo",
+          "with_check": null
+        }
+      ]
+    },
+    {
+      "kind": "publication",
+      "details": [
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "deleted",
+            "goal",
+            "hexcode",
+            "notes",
+            "team_name",
+            "has_image",
+            "image_revision"
+          ],
+          "rowfilter": null,
+          "tablename": "teams",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "deleted",
+            "category_name",
+            "category_description",
+            "has_image",
+            "image_revision"
+          ],
+          "rowfilter": null,
+          "tablename": "badge_categories",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "deleted",
+            "achievement",
+            "badge_category_id",
+            "description"
+          ],
+          "rowfilter": null,
+          "tablename": "badges",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "deleted",
+            "color",
+            "hex_code",
+            "description",
+            "sort_order"
+          ],
+          "rowfilter": null,
+          "tablename": "belts",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "birth_year",
+            "deleted",
+            "email",
+            "fingerprint_id",
+            "garda_vetted",
+            "github_login",
+            "goal_long_term",
+            "goal_short_term",
+            "is_mentor",
+            "is_ninja",
+            "is_parent",
+            "login",
+            "login_date",
+            "login_date_previous",
+            "name_first",
+            "name_last",
+            "password_hash",
+            "phone",
+            "registered_current_term",
+            "scratch_name",
+            "team_id",
+            "xbox_gamertag",
+            "has_photo",
+            "has_avatar",
+            "nfc_tag"
+          ],
+          "rowfilter": null,
+          "tablename": "members",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "topic",
+            "mentors_only",
+            "session_date"
+          ],
+          "rowfilter": null,
+          "tablename": "sessions",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "member_id",
+            "date"
+          ],
+          "rowfilter": null,
+          "tablename": "member_attendances",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "member_id",
+            "badge_category_id"
+          ],
+          "rowfilter": null,
+          "tablename": "member_badge_categories",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "member_id",
+            "parent_id"
+          ],
+          "rowfilter": null,
+          "tablename": "member_parents",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "member_id",
+            "belt_id",
+            "awarded_by_adult_id",
+            "application_notes",
+            "awarded_notes",
+            "rejected_by_adult_id",
+            "rejected_notes",
+            "application_date",
+            "awarded",
+            "rejected_date"
+          ],
+          "rowfilter": null,
+          "tablename": "member_belts",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "member_id",
+            "badge_id",
+            "awarded_by_adult_id",
+            "application_notes",
+            "awarded_notes",
+            "rejected_by_adult_id",
+            "rejected_notes",
+            "application_date",
+            "awarded",
+            "rejected_date",
+            "goal_date"
+          ],
+          "rowfilter": null,
+          "tablename": "member_badges",
+          "schemaname": "coderdojo"
+        },
+        {
+          "pubname": "supabase_realtime",
+          "attnames": [
+            "id",
+            "session_date",
+            "topic",
+            "mentors_only",
+            "ends_at",
+            "url",
+            "host_id",
+            "host2_id",
+            "deleted"
+          ],
+          "rowfilter": null,
+          "tablename": "session_pods",
+          "schemaname": "coderdojo"
+        }
+      ]
+    },
+    {
+      "kind": "functions",
+      "details": [
+        {
+          "name": "get_attendance_dates",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.get_attendance_dates()\n RETURNS TABLE(date text)\n LANGUAGE sql\n STABLE\nAS $function$\r\n  SELECT DISTINCT date\r\n  FROM coderdojo.member_attendances\r\n  WHERE date IS NOT NULL\r\n  ORDER BY date DESC;\r\n$function$\n",
+          "anon_execute": true,
+          "authenticated_execute": true
+        },
+        {
+          "name": "get_attendance_stats",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.get_attendance_stats()\n RETURNS TABLE(date text, attendance_count bigint)\n LANGUAGE sql\n STABLE\nAS $function$\r\n  SELECT\r\n    date,\r\n    COUNT(*)::bigint AS attendance_count\r\n  FROM coderdojo.member_attendances\r\n  WHERE date IS NOT NULL\r\n  GROUP BY date\r\n  ORDER BY date DESC;\r\n$function$\n",
+          "anon_execute": true,
+          "authenticated_execute": true
+        },
+        {
+          "name": "get_attendance_stats_split",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.get_attendance_stats_split()\n RETURNS TABLE(date text, mentor_count bigint, ninja_count bigint, total_count bigint)\n LANGUAGE sql\n STABLE\nAS $function$\r\n  SELECT\r\n    ma.date,\r\n    SUM(CASE WHEN m.is_mentor THEN 1 ELSE 0 END)::bigint AS mentor_count,\r\n    SUM(CASE WHEN m.is_ninja THEN 1 ELSE 0 END)::bigint AS ninja_count,\r\n    COUNT(*)::bigint AS total_count\r\n  FROM coderdojo.member_attendances ma\r\n  LEFT JOIN coderdojo.members m ON m.id = ma.member_id\r\n  WHERE ma.date IS NOT NULL\r\n  GROUP BY ma.date\r\n  ORDER BY ma.date DESC;\r\n$function$\n",
+          "anon_execute": true,
+          "authenticated_execute": true
+        },
+        {
+          "name": "maintain_member",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_member(p_actor uuid, p_action text, p_id uuid, p_fields jsonb DEFAULT '{}'::jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n  current_member coderdojo.members%rowtype;\n  actor_member coderdojo.members%rowtype;\n  result_id uuid;\n  target_parent_id uuid;\n  target_category_id uuid;\n  account_value coderdojo.members%rowtype;\nbegin\n  -- A single lock gives deterministic duplicate checks across simultaneous maintenance requests.\n  perform pg_advisory_xact_lock(731101);\n  select * into actor_member from coderdojo.members where id = p_actor and not deleted and is_mentor for share;\n  if not found then raise exception 'Mentor access required' using errcode = '42501'; end if;\n  if p_action = 'create' then\n    account_value := jsonb_populate_record(null::coderdojo.members, p_fields);\n  else\n    select * into current_member from coderdojo.members where id = p_id and not deleted for update;\n    if not found then raise exception 'Member not found' using errcode = 'P0002'; end if;\n    account_value := jsonb_populate_record(current_member, p_fields);\n  end if;\n\n  if p_action in ('create', 'account', 'goals', 'profile') then\n    if p_action <> 'create' and not (to_jsonb(current_member) @> p_expected) then\n      raise exception 'Member changed; reload before saving' using errcode = 'P0001';\n    end if;\n    if p_action in ('create', 'account') then\n      if not (account_value.is_ninja or account_value.is_parent or account_value.is_mentor) then\n        raise exception 'Select at least one role' using errcode = '22023';\n      end if;\n      if p_actor = p_id and not account_value.is_mentor then\n        raise exception 'Cannot remove your own mentor role' using errcode = '22023';\n      end if;\n      if account_value.team_id is not null and not exists (select 1 from coderdojo.teams where id = account_value.team_id and not deleted) then\n        raise exception 'Team not found' using errcode = '22023';\n      end if;\n      if exists (select 1 from coderdojo.members where not deleted and id <> p_id and\n        ((account_value.login is not null and lower(trim(login)) = lower(trim(account_value.login))) or\n         (account_value.fingerprint_id is not null and fingerprint_id = account_value.fingerprint_id) or\n         (account_value.nfc_tag is not null and nfc_tag = account_value.nfc_tag))) then\n        raise exception 'Login, fingerprint or NFC identifier already used' using errcode = '23505';\n      end if;\n      if p_action = 'account' and\n         ((not account_value.is_parent and exists (select 1 from coderdojo.member_parents where parent_id = p_id)) or\n          (not account_value.is_ninja and exists (select 1 from coderdojo.member_parents where member_id = p_id)) or\n          (not account_value.is_mentor and exists (select 1 from coderdojo.member_badge_categories where member_id = p_id))) then\n        raise exception 'Remove related children, parents or skills before removing their role' using errcode = '22023';\n      end if;\n    end if;\n    if p_action = 'create' then\n      insert into coderdojo.members (id,name_first,name_last,email,phone,github_login,scratch_name,xbox_gamertag,\n        birth_year,fingerprint_id,nfc_tag,login,team_id,registered_current_term,is_ninja,is_parent,is_mentor,garda_vetted,password_hash)\n      values (p_id,account_value.name_first,account_value.name_last,account_value.email,account_value.phone,\n        account_value.github_login,account_value.scratch_name,account_value.xbox_gamertag,account_value.birth_year,\n        account_value.fingerprint_id,account_value.nfc_tag,account_value.login,account_value.team_id,\n        account_value.registered_current_term,account_value.is_ninja,account_value.is_parent,account_value.is_mentor,\n        account_value.garda_vetted,account_value.password_hash) returning * into current_member;\n    elsif p_action = 'account' then\n      update coderdojo.members set birth_year=account_value.birth_year,fingerprint_id=account_value.fingerprint_id,\n        nfc_tag=account_value.nfc_tag,login=account_value.login,team_id=account_value.team_id,\n        registered_current_term=account_value.registered_current_term,is_ninja=account_value.is_ninja,\n        is_parent=account_value.is_parent,is_mentor=account_value.is_mentor,garda_vetted=account_value.garda_vetted\n      where id=p_id returning * into current_member;\n    elsif p_action = 'goals' then\n      if not current_member.is_ninja then raise exception 'Coder required' using errcode='22023'; end if;\n      update coderdojo.members set goal_short_term=account_value.goal_short_term,goal_long_term=account_value.goal_long_term\n      where id=p_id returning * into current_member;\n    else\n      update coderdojo.members set name_first=account_value.name_first,name_last=account_value.name_last,\n        email=account_value.email,phone=account_value.phone,github_login=account_value.github_login,\n        scratch_name=account_value.scratch_name,xbox_gamertag=account_value.xbox_gamertag\n      where id=p_id returning * into current_member;\n    end if;\n    return to_jsonb(current_member) - 'password_hash';\n  elsif p_action = 'password' then\n    update coderdojo.members set password_hash=p_fields->>'password_hash' where id=p_id;\n    return null;\n  elsif p_action in ('link', 'unlink') then\n    target_parent_id := (p_fields->>'parent_id')::uuid;\n    perform 1 from coderdojo.members where id=target_parent_id and not deleted and is_parent for share;\n    if not found or not current_member.is_ninja or p_id=target_parent_id then\n      raise exception 'Active coder and parent required' using errcode='22023';\n    end if;\n    if p_action='unlink' then\n      delete from coderdojo.member_parents where member_id=p_id and member_parents.parent_id=target_parent_id;\n      return null;\n    end if;\n    select id into result_id from coderdojo.member_parents where member_id=p_id and member_parents.parent_id=target_parent_id limit 1;\n    if result_id is null then\n      insert into coderdojo.member_parents(member_id,parent_id) values(p_id,target_parent_id) returning id into result_id;\n    end if;\n    return jsonb_build_object('id',result_id,'memberId',p_id,'parentId',target_parent_id);\n  elsif p_action in ('skill', 'unskill') then\n    target_category_id := (p_fields->>'badge_category_id')::uuid;\n    if not current_member.is_mentor then raise exception 'Mentor required' using errcode='22023'; end if;\n    if p_action='unskill' then\n      delete from coderdojo.member_badge_categories where member_id=p_id and badge_category_id=target_category_id;\n      return null;\n    end if;\n    if not exists(select 1 from coderdojo.badge_categories where id=target_category_id and not deleted) then\n      raise exception 'Category not found' using errcode='22023';\n    end if;\n    select id into result_id from coderdojo.member_badge_categories where member_id=p_id and badge_category_id=target_category_id limit 1;\n    if result_id is null then\n      insert into coderdojo.member_badge_categories(member_id,badge_category_id) values(p_id,target_category_id) returning id into result_id;\n    end if;\n    return jsonb_build_object('id',result_id,'memberId',p_id,'badgeCategoryId',target_category_id);\n  end if;\n  raise exception 'Unsupported maintenance action' using errcode='22023';\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "maintain_definition",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_definition(p_actor uuid, p_kind text, p_action text, p_id uuid, p_fields jsonb DEFAULT '{}'::jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n current_value jsonb;\n name_value text;\n description_value text;\n hex_value text;\n sort_value integer;\n category_value uuid;\nbegin\n perform pg_advisory_xact_lock(731101);\n perform 1 from coderdojo.members where id=p_actor and not deleted and is_mentor for share;\n if not found then raise exception 'Mentor access required' using errcode='42501'; end if;\n if p_kind not in ('belt','badge','category') or p_action not in ('create','update','delete') then raise exception 'Invalid definition action' using errcode='22023'; end if;\n if p_action <> 'create' then\n  if p_kind='belt' then\n   select jsonb_build_object('name',coalesce(color,''),'description',description,'hexCode',hex_code,'sortOrder',sort_order,'categoryId',null) into current_value from coderdojo.belts where id=p_id and not deleted for update;\n  elsif p_kind='badge' then\n   select jsonb_build_object('name',coalesce(achievement,''),'description',description,'hexCode',null,'sortOrder',null,'categoryId',badge_category_id) into current_value from coderdojo.badges where id=p_id and not deleted for update;\n  else\n   select jsonb_build_object('name',coalesce(category_name,''),'description',category_description,'hexCode',null,'sortOrder',null,'categoryId',null) into current_value from coderdojo.badge_categories where id=p_id and not deleted for update;\n  end if;\n  if current_value is null then raise exception 'Definition not found' using errcode='P0002'; end if;\n  if p_expected is distinct from current_value then raise exception 'Definition changed elsewhere. Reload before saving.' using errcode='P0001'; end if;\n end if;\n if p_action='delete' then\n  if p_kind='category' and (exists(select 1 from coderdojo.badges where badge_category_id=p_id and not deleted) or exists(select 1 from coderdojo.member_badge_categories where badge_category_id=p_id)) then raise exception 'Reassign badges and remove mentor skills before deleting this category.' using errcode='P0001'; end if;\n  if p_kind='belt' then update coderdojo.belts set deleted=true where id=p_id;\n  elsif p_kind='badge' then update coderdojo.badges set deleted=true where id=p_id;\n  else update coderdojo.badge_categories set deleted=true where id=p_id; end if;\n  return current_value || jsonb_build_object('id',p_id,'kind',p_kind,'deleted',true);\n end if;\n if p_fields is null or (p_fields - array['name','description','hexCode','sortOrder','categoryId']) <> '{}'::jsonb then raise exception 'Invalid definition fields' using errcode='22023'; end if;\n name_value := btrim(p_fields->>'name'); description_value := p_fields->>'description'; hex_value := p_fields->>'hexCode'; sort_value := (p_fields->>'sortOrder')::integer; category_value := (p_fields->>'categoryId')::uuid;\n if name_value is null or length(name_value) not between 1 and 150 or length(coalesce(description_value,''))>4000 or (hex_value is not null and hex_value !~ '^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$') or (p_kind='belt' and (sort_value is null or sort_value not between 0 and 10000)) or (p_kind<>'belt' and (sort_value is not null or hex_value is not null)) or (p_kind<>'badge' and category_value is not null) then raise exception 'Invalid definition fields' using errcode='22023'; end if;\n if p_kind='badge' and not exists(select 1 from coderdojo.badge_categories where id=category_value and not deleted) then raise exception 'Select an active category.' using errcode='22023'; end if;\n if (p_kind='belt' and exists(select 1 from coderdojo.belts where not deleted and id<>p_id and lower(btrim(color))=lower(name_value))) or (p_kind='category' and exists(select 1 from coderdojo.badge_categories where not deleted and id<>p_id and lower(btrim(category_name))=lower(name_value))) or (p_kind='badge' and exists(select 1 from coderdojo.badges where not deleted and id<>p_id and badge_category_id=category_value and lower(btrim(achievement))=lower(name_value))) then raise exception 'A definition with this name already exists.' using errcode='P0001'; end if;\n if p_kind='belt' then\n  if p_action='create' then insert into coderdojo.belts(id,deleted,color,description,hex_code,sort_order) values(p_id,false,name_value,description_value,hex_value,sort_value);\n  else update coderdojo.belts set color=name_value,description=description_value,hex_code=hex_value,sort_order=sort_value where id=p_id; end if;\n elsif p_kind='badge' then\n  if p_action='create' then insert into coderdojo.badges(id,deleted,achievement,description,badge_category_id) values(p_id,false,name_value,description_value,category_value);\n  else update coderdojo.badges set achievement=name_value,description=description_value,badge_category_id=category_value where id=p_id; end if;\n else\n  if p_action='create' then insert into coderdojo.badge_categories(id,deleted,category_name,category_description) values(p_id,false,name_value,description_value);\n  else update coderdojo.badge_categories set category_name=name_value,category_description=description_value where id=p_id; end if;\n end if;\n return jsonb_build_object('id',p_id,'kind',p_kind,'deleted',false,'name',name_value,'description',description_value,'hexCode',hex_value,'sortOrder',sort_value,'categoryId',category_value);\nend; $function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "signup_member",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.signup_member(p_actor uuid, p_id uuid, p_fields jsonb, p_attendance_date date DEFAULT NULL::date)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare created_member jsonb;\nbegin\n  created_member := coderdojo.maintain_member(p_actor, 'create', p_id, p_fields - 'attendance_date', '{}'::jsonb);\n  if p_attendance_date is not null then\n    if p_attendance_date < date '1900-01-01' or p_attendance_date > current_date then\n      raise exception 'Invalid signup attendance date' using errcode = '22023';\n    end if;\n    insert into coderdojo.member_attendances(member_id, date) values (p_id, p_attendance_date);\n  end if;\n  return created_member;\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "maintain_team",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_team(p_actor uuid, p_action text, p_id uuid, p_fields jsonb DEFAULT '{}'::jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n current_team coderdojo.teams%rowtype;\n next_team coderdojo.teams%rowtype;\nbegin\n perform pg_advisory_xact_lock(731101);\n perform 1 from coderdojo.members where id=p_actor and not deleted and is_mentor for share;\n if not found then raise exception 'Mentor access required' using errcode='42501'; end if;\n if p_action not in ('create','update','delete') then raise exception 'Invalid team action' using errcode='22023'; end if;\n if p_action <> 'create' then\n  select * into current_team from coderdojo.teams where id=p_id and not deleted for update;\n  if not found then raise exception 'Team not found' using errcode='P0002'; end if;\n  if p_expected is null or p_expected = '{}'::jsonb or not (to_jsonb(current_team) @> p_expected) then raise exception 'Team changed elsewhere. Reload before saving.' using errcode='P0001'; end if;\n end if;\n if p_action='delete' then\n  if exists(select 1 from coderdojo.members where team_id=p_id and not deleted) then raise exception 'Reassign members before deleting this team.' using errcode='P0001'; end if;\n  update coderdojo.teams set deleted=true where id=p_id returning * into next_team;\n else\n  if p_fields is null or (p_fields - array['team_name','goal','notes','hexcode']) <> '{}'::jsonb then raise exception 'Invalid team fields' using errcode='22023'; end if;\n  next_team := jsonb_populate_record(null::coderdojo.teams,p_fields);\n  if next_team.team_name is null or length(btrim(next_team.team_name)) not between 1 and 100 or length(coalesce(next_team.goal,''))>2000 or length(coalesce(next_team.notes,''))>4000 or (next_team.hexcode is not null and next_team.hexcode !~ '^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$') then raise exception 'Invalid team fields' using errcode='22023'; end if;\n  if exists(select 1 from coderdojo.teams where not deleted and id<>p_id and lower(btrim(team_name))=lower(btrim(next_team.team_name))) then raise exception 'A team with this name already exists.' using errcode='P0001'; end if;\n  if p_action='create' then\n   insert into coderdojo.teams(id,deleted,team_name,goal,notes,hexcode) values(p_id,false,btrim(next_team.team_name),next_team.goal,next_team.notes,next_team.hexcode) returning * into next_team;\n  else\n   update coderdojo.teams set team_name=btrim(next_team.team_name),goal=next_team.goal,notes=next_team.notes,hexcode=next_team.hexcode where id=p_id returning * into next_team;\n  end if;\n end if;\n return to_jsonb(next_team);\nend; $function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "save_profile",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.save_profile(p_actor uuid, p_id uuid, p_fields jsonb, p_expected jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n actor_member coderdojo.members%rowtype;\n current_member coderdojo.members%rowtype;\n updated_member coderdojo.members%rowtype;\n allowed_keys text[] := array['login','name_first','name_last','email','phone','github_login','scratch_name','xbox_gamertag'];\nbegin\n perform pg_advisory_xact_lock(731101);\n select * into actor_member from coderdojo.members where id=p_actor and not deleted for share;\n if not found or (p_actor <> p_id and not actor_member.is_mentor) then\n  raise exception 'Profile access denied' using errcode='42501';\n end if;\n if jsonb_typeof(p_fields) <> 'object' or jsonb_typeof(p_expected) <> 'object' or\n    not (p_fields ?& allowed_keys) or not (p_expected ?& allowed_keys) or\n    (p_fields - allowed_keys) <> '{}'::jsonb or (p_expected - allowed_keys) <> '{}'::jsonb then\n  raise exception 'Invalid profile fields' using errcode='22023';\n end if;\n select * into current_member from coderdojo.members where id=p_id and not deleted for update;\n if not found then raise exception 'Profile not found' using errcode='P0002'; end if;\n if not (to_jsonb(current_member) @> p_expected) then\n  raise exception 'Profile changed; reload before saving' using errcode='P0001';\n end if;\n updated_member := jsonb_populate_record(current_member,p_fields);\n updated_member.login := trim(updated_member.login);\n if updated_member.login is null or length(updated_member.login) < 1 or length(updated_member.login) > 100 then\n  raise exception 'Enter a login of at most 100 characters' using errcode='22023';\n end if;\n -- Existing duplicate identities remain untouched until their owners choose a new login.\n if updated_member.login is distinct from current_member.login and exists (\n  select 1 from coderdojo.members where not deleted and id <> p_id and lower(trim(login))=lower(updated_member.login)\n ) then raise exception 'Login already used; choose another login' using errcode='23505'; end if;\n update coderdojo.members set login=updated_member.login,name_first=updated_member.name_first,name_last=updated_member.name_last,\n  email=updated_member.email,phone=updated_member.phone,github_login=updated_member.github_login,\n  scratch_name=updated_member.scratch_name,xbox_gamertag=updated_member.xbox_gamertag\n where id=p_id returning * into updated_member;\n return to_jsonb(updated_member) - 'password_hash';\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "coder_action",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.coder_action(p_actor uuid, p_action text, p_kind text DEFAULT NULL::text, p_definition uuid DEFAULT NULL::uuid, p_fields jsonb DEFAULT '{}'::jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n member_value coderdojo.members%rowtype;\n current_goal timestamp without time zone;\n expected_goal timestamp without time zone;\n record_id uuid;\n next_belt uuid;\n selected boolean;\n notes text;\nbegin\n -- Definition/merge maintenance uses this same lock before member row locks.\n perform pg_advisory_xact_lock(731101);\n select * into member_value from coderdojo.members where id=p_actor and not deleted and is_ninja for update;\n if not found then raise exception 'Coder access required' using errcode='42501'; end if;\n if p_action='goals' then\n  if p_fields is null or p_expected is null or (p_fields-array['goalShortTerm','goalLongTerm'])<>'{}'::jsonb or (p_expected-array['goalShortTerm','goalLongTerm'])<>'{}'::jsonb or not(p_fields?'goalShortTerm' and p_fields?'goalLongTerm' and p_expected?'goalShortTerm' and p_expected?'goalLongTerm') then raise exception 'Invalid goals' using errcode='22023'; end if;\n  if length(coalesce(p_fields->>'goalShortTerm',''))>4000 or length(coalesce(p_fields->>'goalLongTerm',''))>4000 then raise exception 'Goals too long' using errcode='22023'; end if;\n  if jsonb_build_object('goalShortTerm',member_value.goal_short_term,'goalLongTerm',member_value.goal_long_term) is distinct from p_expected then raise exception 'Goals changed. Reload before saving.' using errcode='P0001'; end if;\n  update coderdojo.members set goal_short_term=nullif(btrim(p_fields->>'goalShortTerm'),''),goal_long_term=nullif(btrim(p_fields->>'goalLongTerm'),'') where id=p_actor;\n  return null;\n end if;\n if p_action not in ('goal','apply') or p_kind not in ('badge','belt') or p_definition is null then raise exception 'Invalid coder action' using errcode='22023'; end if;\n if p_kind='badge' then\n  perform 1 from coderdojo.badges b join coderdojo.badge_categories c on c.id=b.badge_category_id where b.id=p_definition and not b.deleted and not c.deleted for share of b,c;\n else\n  perform 1 from coderdojo.belts where id=p_definition and not deleted for share;\n end if;\n if not found then raise exception 'Active achievement required' using errcode='P0002'; end if;\n if (p_kind='badge' and exists(select 1 from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and awarded is not null)) or (p_kind='belt' and exists(select 1 from coderdojo.member_belts where member_id=p_actor and belt_id=p_definition and awarded is not null)) then raise exception 'Achievement already earned' using errcode='P0001'; end if;\n if p_action='goal' then\n  if p_kind<>'badge' or p_fields is null or p_expected is null or (p_fields-array['selected'])<>'{}'::jsonb or (p_expected-array['goalDate'])<>'{}'::jsonb or jsonb_typeof(p_fields->'selected') is distinct from 'boolean' or not(p_expected?'goalDate') then raise exception 'Invalid badge goal' using errcode='22023'; end if;\n  selected:=(p_fields->>'selected')::boolean;\n  select max(goal_date) into current_goal from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and awarded is null;\n  expected_goal:=(p_expected->>'goalDate')::timestamp;\n  if date_trunc('milliseconds',current_goal) is distinct from expected_goal then raise exception 'Goal changed. Reload before saving.' using errcode='P0001'; end if;\n  if not selected then\n   update coderdojo.member_badges set goal_date=null where member_id=p_actor and badge_id=p_definition and awarded is null;\n  elsif current_goal is null then\n   select id into record_id from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and awarded is null and rejected_date is null order by application_date desc nulls last,id limit 1 for update;\n   if record_id is null then insert into coderdojo.member_badges(member_id,badge_id,goal_date) values(p_actor,p_definition,date_trunc('milliseconds',timezone('UTC',now())));\n   else update coderdojo.member_badges set goal_date=date_trunc('milliseconds',timezone('UTC',now())) where id=record_id; end if;\n  end if;\n  return null;\n end if;\n if p_fields is null or (p_fields-array['notes'])<>'{}'::jsonb then raise exception 'Invalid application fields' using errcode='22023'; end if;\n notes:=btrim(p_fields->>'notes');\n if notes is null or length(notes) not between 5 and 4000 then raise exception 'Application evidence requires 5 to 4000 characters' using errcode='22023'; end if;\n if p_kind='belt' then\n  select id into next_belt from coderdojo.belts b where not b.deleted and not exists(select 1 from coderdojo.member_belts mb where mb.member_id=p_actor and mb.belt_id=b.id and mb.awarded is not null) order by b.sort_order,b.color,b.id limit 1;\n  if next_belt is distinct from p_definition then raise exception 'Apply only for your next belt' using errcode='P0001'; end if;\n  select id into record_id from coderdojo.member_belts where member_id=p_actor and belt_id=p_definition and application_date is not null and awarded is null and rejected_date is null order by id limit 1 for update;\n  if record_id is null then insert into coderdojo.member_belts(member_id,belt_id,application_date,application_notes) values(p_actor,p_definition,date_trunc('milliseconds',timezone('UTC',now())),notes) returning id into record_id; end if;\n else\n  select id into record_id from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and application_date is not null and awarded is null and rejected_date is null order by id limit 1 for update;\n  if record_id is null then\n   select id into record_id from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and application_date is null and awarded is null and rejected_date is null order by goal_date desc nulls last,id limit 1 for update;\n   if record_id is null then\n    select max(goal_date) into current_goal from coderdojo.member_badges where member_id=p_actor and badge_id=p_definition and awarded is null;\n    insert into coderdojo.member_badges(member_id,badge_id,goal_date,application_date,application_notes) values(p_actor,p_definition,current_goal,date_trunc('milliseconds',timezone('UTC',now())),notes) returning id into record_id;\n   else update coderdojo.member_badges set application_date=date_trunc('milliseconds',timezone('UTC',now())),application_notes=notes where id=record_id; end if;\n  end if;\n end if;\n return jsonb_build_object('id',record_id);\nend; $function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "can_read_mentor_pods",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.can_read_mentor_pods()\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select exists(select 1 from auth.users a join coderdojo.members m on a.email=m.id::text||'@coderdojoennis.com'\n  where a.id=(select auth.uid()) and a.email_confirmed_at is not null and m.is_mentor and not m.deleted);\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": true
+        },
+        {
+          "name": "merge_members",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.merge_members(p_actor uuid, p_keep uuid, p_duplicate uuid, p_fields jsonb, p_expected_keep jsonb, p_expected_duplicate jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n keep_member coderdojo.members%rowtype;\n duplicate_member coderdojo.members%rowtype;\n selected coderdojo.members%rowtype;\nbegin\n if p_keep = p_duplicate or p_actor in (p_keep, p_duplicate) then raise exception 'Cannot merge this account' using errcode='22023'; end if;\n perform 1 from coderdojo.members where id in (p_actor,p_keep,p_duplicate) order by id for update;\n if not exists(select 1 from coderdojo.members where id=p_actor and is_mentor and not deleted) then raise exception 'Mentor access required' using errcode='42501'; end if;\n select * into keep_member from coderdojo.members where id=p_keep and not deleted;\n if not found then raise exception 'Survivor unavailable' using errcode='P0002'; end if;\n select * into duplicate_member from coderdojo.members where id=p_duplicate and not deleted;\n if not found then raise exception 'Duplicate unavailable' using errcode='P0001'; end if;\n if keep_member.is_ninja <> duplicate_member.is_ninja then raise exception 'Choose compatible accounts' using errcode='22023'; end if;\n if exists(select 1 from coderdojo.member_parents where (member_id=p_keep and parent_id=p_duplicate) or (member_id=p_duplicate and parent_id=p_keep)) then raise exception 'Linked accounts cannot be merged' using errcode='22023'; end if;\n if (to_jsonb(keep_member)-array['password_hash','login_date','login_date_previous']) is distinct from p_expected_keep or (to_jsonb(duplicate_member)-array['password_hash','login_date','login_date_previous']) is distinct from p_expected_duplicate then raise exception 'Accounts changed; review again' using errcode='P0001'; end if;\n if p_fields is null or exists(select 1 from jsonb_object_keys(p_fields) k where k not in ('birth_year','email','phone','github_login','scratch_name','xbox_gamertag','team_id','goal_short_term','goal_long_term')) then raise exception 'Invalid merge fields' using errcode='22023'; end if;\n selected := jsonb_populate_record(keep_member,p_fields);\n if selected.team_id is not null and not exists(select 1 from coderdojo.teams where id=selected.team_id and not deleted) then raise exception 'Team unavailable' using errcode='P0001'; end if;\n update coderdojo.members set birth_year=selected.birth_year,email=selected.email,phone=selected.phone,github_login=selected.github_login,scratch_name=selected.scratch_name,xbox_gamertag=selected.xbox_gamertag,team_id=selected.team_id,goal_short_term=selected.goal_short_term,goal_long_term=selected.goal_long_term,\n is_parent=keep_member.is_parent or duplicate_member.is_parent,is_mentor=keep_member.is_mentor or duplicate_member.is_mentor,garda_vetted=keep_member.garda_vetted or duplicate_member.garda_vetted,registered_current_term=keep_member.registered_current_term or duplicate_member.registered_current_term\n where id=p_keep;\n -- Redundant source rows remain on the archived account; no history is permanently discarded.\n update coderdojo.member_attendances s set member_id=p_keep where s.member_id=p_duplicate and not exists(select 1 from coderdojo.member_attendances k where k.member_id=p_keep and k.date=s.date);\n update coderdojo.member_parents s set member_id=p_keep where s.member_id=p_duplicate and not exists(select 1 from coderdojo.member_parents k where k.member_id=p_keep and k.parent_id=s.parent_id);\n update coderdojo.member_parents s set parent_id=p_keep where s.parent_id=p_duplicate and not exists(select 1 from coderdojo.member_parents k where k.parent_id=p_keep and k.member_id=s.member_id);\n update coderdojo.member_badge_categories s set member_id=p_keep where s.member_id=p_duplicate and not exists(select 1 from coderdojo.member_badge_categories k where k.member_id=p_keep and k.badge_category_id=s.badge_category_id);\n update coderdojo.member_badges s set member_id=p_keep where s.member_id=p_duplicate and (s.awarded is null or not exists(select 1 from coderdojo.member_badges k where k.member_id=p_keep and k.badge_id=s.badge_id and k.awarded is not null));\n update coderdojo.member_belts s set member_id=p_keep where s.member_id=p_duplicate and (s.awarded is null or not exists(select 1 from coderdojo.member_belts k where k.member_id=p_keep and k.belt_id=s.belt_id and k.awarded is not null));\n update coderdojo.member_badges set awarded_by_adult_id=p_keep where awarded_by_adult_id=p_duplicate;\n update coderdojo.member_badges set rejected_by_adult_id=p_keep where rejected_by_adult_id=p_duplicate;\n update coderdojo.member_belts set awarded_by_adult_id=p_keep where awarded_by_adult_id=p_duplicate;\n update coderdojo.member_belts set rejected_by_adult_id=p_keep where rejected_by_adult_id=p_duplicate;\n update coderdojo.members set deleted=true where id=p_duplicate;\n select * into keep_member from coderdojo.members where id=p_keep;\n return to_jsonb(keep_member)-'password_hash';\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "decide_achievement",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.decide_achievement(p_actor uuid, p_kind text, p_id uuid, p_action text, p_notes text, p_expected_awarded timestamp with time zone, p_expected_rejected timestamp with time zone)\n RETURNS void\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n applicant uuid;\n current_application timestamp;\n current_awarded timestamp;\n current_rejected timestamp;\n now_value timestamp := date_trunc('milliseconds', current_timestamp at time zone 'UTC');\nbegin\n if p_kind not in ('badge','belt') or p_action not in ('approve','reject','undo') or length(coalesce(p_notes,''))>4000 or (p_action<>'undo' and nullif(trim(p_notes),'') is null) then raise exception 'Invalid decision' using errcode='22023'; end if;\n if p_kind='badge' then select member_id into applicant from coderdojo.member_badges where id=p_id; else select member_id into applicant from coderdojo.member_belts where id=p_id; end if;\n if applicant is null then raise exception 'Application unavailable' using errcode='P0002'; end if;\n -- Relationships and account merges lock these members too, preventing a link/merge race.\n perform 1 from coderdojo.members where id in (p_actor,applicant) order by id for update;\n if not exists(select 1 from coderdojo.members where id=p_actor and is_mentor and not deleted) then raise exception 'Mentor access required' using errcode='42501'; end if;\n if not exists(select 1 from coderdojo.members where id=applicant and not deleted) then raise exception 'Applicant unavailable' using errcode='P0002'; end if;\n if p_action <> 'undo' and exists(select 1 from coderdojo.member_parents where parent_id=p_actor and member_id=applicant) then raise exception 'Another mentor must review your child' using errcode='42501'; end if;\n if p_kind='badge' then\n  select application_date,awarded,rejected_date into current_application,current_awarded,current_rejected from coderdojo.member_badges where id=p_id and member_id=applicant for update;\n else\n  select application_date,awarded,rejected_date into current_application,current_awarded,current_rejected from coderdojo.member_belts where id=p_id and member_id=applicant for update;\n end if;\n if not found or current_application is null or date_trunc('milliseconds',current_awarded) is distinct from (p_expected_awarded at time zone 'UTC') or date_trunc('milliseconds',current_rejected) is distinct from (p_expected_rejected at time zone 'UTC') or (p_action='undo' and current_awarded is null and current_rejected is null) or (p_action<>'undo' and (current_awarded is not null or current_rejected is not null)) then raise exception 'Application changed; review again' using errcode='P0001'; end if;\n if p_kind='badge' then\n  update coderdojo.member_badges set awarded=case when p_action='approve' then now_value end,awarded_by_adult_id=case when p_action='approve' then p_actor end,awarded_notes=case when p_action='approve' then trim(p_notes) end,rejected_date=case when p_action='reject' then now_value end,rejected_by_adult_id=case when p_action='reject' then p_actor end,rejected_notes=case when p_action='reject' then trim(p_notes) end where id=p_id;\n else\n  update coderdojo.member_belts set awarded=case when p_action='approve' then now_value end,awarded_by_adult_id=case when p_action='approve' then p_actor end,awarded_notes=case when p_action='approve' then trim(p_notes) end,rejected_date=case when p_action='reject' then now_value end,rejected_by_adult_id=case when p_action='reject' then p_actor end,rejected_notes=case when p_action='reject' then trim(p_notes) end where id=p_id;\n end if;\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "join_coder_session",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.join_coder_session(p_actor uuid, p_session uuid, p_expected_url text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin\n perform 1 from coderdojo.members where id=p_actor and not deleted and is_ninja;\n if not found then raise exception 'Coder access required' using errcode='42501'; end if;\n return coderdojo.join_member_session(p_actor,p_session,p_expected_url);\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "maintain_session_pod",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_session_pod(p_actor uuid, p_action text, p_id uuid DEFAULT NULL::uuid, p_fields jsonb DEFAULT '{}'::jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n current_value coderdojo.session_pods%rowtype;\n current_snapshot jsonb;\n result_id uuid;\n topic_value text;\n url_value text;\n host_value uuid;\n host2_value uuid;\n now_value timestamptz := date_trunc('milliseconds',now());\nbegin\n perform pg_advisory_xact_lock(731101);\n perform 1 from coderdojo.members where id=p_actor and is_mentor and not deleted for update;\n if not found then raise exception 'Mentor access required' using errcode='42501'; end if;\n if p_action not in ('create','update','delete') then raise exception 'Invalid pod action' using errcode='22023'; end if;\n if p_action<>'create' then\n  select * into current_value from coderdojo.session_pods where id=p_id and not deleted for update;\n  if not found then raise exception 'Session unavailable' using errcode='P0002'; end if;\n  current_snapshot:=jsonb_build_object('topic',current_value.topic,'url',current_value.url,'hostId',current_value.host_id,'host2Id',current_value.host2_id,'mentorsOnly',current_value.mentors_only,'sessionDate',current_value.session_date::text,'endsAt',case when current_value.ends_at is null then null else floor(extract(epoch from current_value.ends_at)*1000)::bigint end);\n  if current_snapshot is distinct from p_expected then raise exception 'Session changed. Reload before saving.' using errcode='P0001'; end if;\n  if p_action='delete' then update coderdojo.session_pods set deleted=true where id=p_id; return jsonb_build_object('id',p_id); end if;\n end if;\n if p_fields is null or (p_fields-array['topic','url','hostId','host2Id','mentorsOnly'])<>'{}'::jsonb or not(p_fields?'topic' and p_fields?'url' and p_fields?'hostId' and p_fields?'host2Id' and p_fields?'mentorsOnly') or jsonb_typeof(p_fields->'mentorsOnly')<>'boolean' then raise exception 'Invalid pod fields' using errcode='22023'; end if;\n topic_value:=nullif(btrim(p_fields->>'topic'),'');url_value:=nullif(btrim(p_fields->>'url'),'');\n if topic_value is null or length(topic_value)>200 or length(coalesce(url_value,''))>2000 or (url_value is not null and url_value!~'^https?://[^/?#[:space:]@]+') then raise exception 'Invalid topic or URL' using errcode='22023'; end if;\n begin host_value:=(p_fields->>'hostId')::uuid;host2_value:=(p_fields->>'host2Id')::uuid;exception when invalid_text_representation then raise exception 'Invalid host' using errcode='22023';end;\n if host_value is null or host_value=host2_value then raise exception 'Choose distinct active mentor hosts' using errcode='22023'; end if;\n perform 1 from coderdojo.members where id=host_value and is_mentor and not deleted for share;\n if not found then raise exception 'Primary host is unavailable' using errcode='P0001'; end if;\n if host2_value is not null then\n  perform 1 from coderdojo.members where id=host2_value and is_mentor and not deleted for share;\n  if not found then raise exception 'Second host is unavailable' using errcode='P0001'; end if;\n end if;\n if p_action='create' then\n  insert into coderdojo.session_pods(topic,url,host_id,host2_id,mentors_only,session_date,ends_at)\n   values(topic_value,url_value,host_value,host2_value,(p_fields->>'mentorsOnly')::boolean,(now_value at time zone 'Europe/Dublin')::date,now_value+interval '150 minutes') returning id into result_id;\n else\n  update coderdojo.session_pods set topic=topic_value,url=url_value,host_id=host_value,host2_id=host2_value,mentors_only=(p_fields->>'mentorsOnly')::boolean,session_date=(now_value at time zone 'Europe/Dublin')::date,ends_at=now_value+interval '150 minutes' where id=p_id returning id into result_id;\n end if;\n return jsonb_build_object('id',result_id);\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "join_member_session",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.join_member_session(p_actor uuid, p_session uuid, p_expected_url text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n member_value coderdojo.members%rowtype;\n session_value coderdojo.session_pods%rowtype;\n today date := (now() at time zone 'Europe/Dublin')::date;\nbegin\n perform pg_advisory_xact_lock(731101);\n select * into member_value from coderdojo.members where id=p_actor and not deleted and (is_ninja or is_mentor or is_parent) for update;\n if not found then raise exception 'Member access required' using errcode='42501'; end if;\n select * into session_value from coderdojo.session_pods where id=p_session and not deleted for share;\n if not found or (session_value.mentors_only and not member_value.is_mentor) then raise exception 'Session unavailable' using errcode='P0002'; end if;\n if (session_value.ends_at is not null and session_value.ends_at<=now()) or (session_value.ends_at is null and session_value.session_date<today) then raise exception 'Session has ended' using errcode='P0001'; end if;\n if session_value.url is null or session_value.url!~'^https?://[^/?#[:space:]@]+' then raise exception 'Session has no valid joining URL' using errcode='22023'; end if;\n if session_value.url is distinct from p_expected_url then raise exception 'Session URL changed. Refresh before joining.' using errcode='P0001'; end if;\n insert into coderdojo.member_attendances(member_id,date) values(p_actor,today) on conflict(member_id,date) do nothing;\n return jsonb_build_object('url',session_value.url,'attendanceDate',today::text);\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "maintain_data",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_data(p_actor uuid, p_action text, p_apply boolean DEFAULT false, p_expected text DEFAULT NULL::text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n cutoff date := ((now() at time zone 'Europe/Dublin')::date - interval '1 year')::date;\n coder_ids uuid[] := '{}';\n parent_ids uuid[] := '{}';\n registration_ids uuid[] := '{}';\n candidates jsonb;\n revision text;\n result jsonb;\nbegin\n if p_action is null or p_action not in ('members', 'registrations') or p_apply is null\n  or (p_apply and (p_expected is null or p_expected !~ '^[0-9a-f]{32}$'))\n  or (not p_apply and p_expected is not null) then\n  raise exception 'Invalid maintenance action' using errcode = '22023';\n end if;\n -- Match the shared mutation lock order; prevent attendance/link/role edits during apply.\n perform pg_advisory_xact_lock(731101);\n if p_apply then\n  lock table coderdojo.members, coderdojo.member_attendances, coderdojo.member_parents in share row exclusive mode;\n end if;\n perform 1 from coderdojo.members where id = p_actor and is_mentor and not deleted for share;\n if not found then raise exception 'Mentor access required' using errcode = '42501'; end if;\n\n if p_action = 'members' then\n  select coalesce(array_agg(m.id order by m.id), '{}') into coder_ids\n  from coderdojo.members m\n  where not m.deleted and m.is_ninja and not m.is_mentor\n   and coalesce((select max(a.date) from coderdojo.member_attendances a where a.member_id = m.id), date '2000-01-01') < cutoff;\n  -- In the unified table, never archive an active coder or mentor via their parent role.\n  select coalesce(array_agg(p.id order by p.id), '{}') into parent_ids\n  from coderdojo.members p\n  where not p.deleted and p.is_parent and not p.is_mentor\n   and (not p.is_ninja or p.id = any(coder_ids))\n   and not exists(select 1 from coderdojo.member_parents r join coderdojo.members c on c.id = r.member_id\n    where r.parent_id = p.id and not c.deleted and not(c.id = any(coder_ids)));\n  -- A multi-role coder/parent is counted once, as a coder.\n  parent_ids := array(select unnest(parent_ids) except select unnest(coder_ids));\n else\n  -- Legacy purge includes archived coders, but excludes adult-only accounts.\n  select coalesce(array_agg(m.id order by m.id), '{}') into registration_ids\n  from coderdojo.members m where m.is_ninja and m.registered_current_term;\n end if;\n\n select coalesce(jsonb_agg(jsonb_build_object('id',m.id,'name',concat_ws(' ',m.name_first,m.name_last),\n  'kind',case when m.id = any(coder_ids) then 'coder' when m.id = any(parent_ids) then 'parent' else 'registration' end,\n  'lastAttendance',(select max(a.date)::text from coderdojo.member_attendances a where a.member_id=m.id),\n  'archived',m.deleted) order by m.name_first,m.name_last,m.id),'[]'::jsonb) into candidates\n from coderdojo.members m where m.id = any(coder_ids || parent_ids || registration_ids);\n revision := md5(jsonb_build_object('action',p_action,'cutoff',cutoff,'candidates',candidates)::text);\n if p_apply and revision is distinct from p_expected then\n  raise exception 'Maintenance preview changed. Refresh and review again.' using errcode = 'P0001';\n end if;\n result := jsonb_build_object('action',p_action,'cutoff',cutoff::text,'revision',revision,'candidates',candidates,\n  'coders',cardinality(coder_ids),'parents',cardinality(parent_ids),'registrations',cardinality(registration_ids),'applied',p_apply);\n if p_apply then\n  if p_action = 'members' then\n   update coderdojo.members set deleted = true where id = any(coder_ids || parent_ids);\n  else\n   update coderdojo.members set registered_current_term = false where id = any(registration_ids);\n  end if;\n end if;\n return result;\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        },
+        {
+          "name": "maintain_parent_child",
+          "definition": "CREATE OR REPLACE FUNCTION coderdojo.maintain_parent_child(p_actor uuid, p_id uuid, p_action text, p_fields jsonb, p_expected jsonb DEFAULT '{}'::jsonb)\n RETURNS jsonb\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\ndeclare\n actor_member coderdojo.members%rowtype;\n current_member coderdojo.members%rowtype;\n updated_member coderdojo.members%rowtype;\n allowed_keys text[];\nbegin\n perform pg_advisory_xact_lock(731101);\n select * into actor_member from coderdojo.members where id=p_actor and not deleted for share;\n if not found or not actor_member.is_parent then raise exception 'Parent access required' using errcode='42501'; end if;\n perform 1 from coderdojo.member_parents where parent_id=p_actor and member_id=p_id for share;\n if not found then raise exception 'Child unavailable' using errcode='42501'; end if;\n select * into current_member from coderdojo.members where id=p_id and not deleted and is_ninja for update;\n if not found then raise exception 'Child unavailable' using errcode='P0002'; end if;\n if p_action='save' then allowed_keys:=array['birth_year','login','github_login','scratch_name','xbox_gamertag'];\n elsif p_action='password' then allowed_keys:=array['password_hash'];\n elsif p_action='images' then allowed_keys:=array['has_photo','has_avatar'];\n else raise exception 'Invalid child action' using errcode='22023'; end if;\n if jsonb_typeof(p_fields) is distinct from 'object' or not(p_fields ?& allowed_keys) or (p_fields-allowed_keys)<>'{}'::jsonb then raise exception 'Invalid child fields' using errcode='22023'; end if;\n if p_action<>'password' then\n  if jsonb_typeof(p_expected) is distinct from 'object' or not(p_expected ?& allowed_keys) or (p_expected-allowed_keys)<>'{}'::jsonb then raise exception 'Invalid child snapshot' using errcode='22023'; end if;\n  if not(to_jsonb(current_member) @> p_expected) then raise exception 'Child changed; reload before saving' using errcode='P0001'; end if;\n elsif p_expected<>'{}'::jsonb then raise exception 'Invalid password snapshot' using errcode='22023'; end if;\n updated_member:=jsonb_populate_record(current_member,p_fields);\n if p_action='save' then\n  updated_member.login:=trim(updated_member.login);\n  if updated_member.login is null or length(updated_member.login)<1 or length(updated_member.login)>100 or\n   (updated_member.birth_year is not null and (updated_member.birth_year<1900 or updated_member.birth_year>extract(year from current_date))) or\n   length(coalesce(updated_member.github_login,''))>100 or length(coalesce(updated_member.scratch_name,''))>100 or length(coalesce(updated_member.xbox_gamertag,''))>100 then raise exception 'Invalid child account fields' using errcode='22023'; end if;\n  if updated_member.login is distinct from current_member.login and exists(select 1 from coderdojo.members where not deleted and id<>p_id and lower(trim(login))=lower(updated_member.login)) then raise exception 'Login already used; choose another login' using errcode='23505'; end if;\n  update coderdojo.members set birth_year=updated_member.birth_year,login=updated_member.login,github_login=updated_member.github_login,scratch_name=updated_member.scratch_name,xbox_gamertag=updated_member.xbox_gamertag where id=p_id returning * into updated_member;\n elsif p_action='password' then\n  if updated_member.password_hash is null or updated_member.password_hash!~'^[0-9a-f]{64}$' then raise exception 'Invalid password hash' using errcode='22023'; end if;\n  update coderdojo.members set password_hash=updated_member.password_hash where id=p_id returning * into updated_member;\n else\n  if jsonb_typeof(p_fields->'has_photo')<>'boolean' or jsonb_typeof(p_fields->'has_avatar')<>'boolean' then raise exception 'Invalid image flags' using errcode='22023'; end if;\n  update coderdojo.members set has_photo=updated_member.has_photo,has_avatar=updated_member.has_avatar where id=p_id returning * into updated_member;\n end if;\n return to_jsonb(updated_member)-'password_hash';\nend;\n$function$\n",
+          "anon_execute": false,
+          "authenticated_execute": false
+        }
+      ]
+    }
+  ]
+}

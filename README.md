@@ -1,10 +1,15 @@
-# CoderDojo Ennis Public Website
+# CoderDojo Ennis Website and Member App
 
-This is the publicly visible information about our Dojo.
+Public dojo information and authenticated coder, parent and mentor portals, built with Nuxt 4, Nuxt UI 4 and Supabase. The public information site currently uses static HTML under `src/public/`; the member portals use Vue components, store-backed APIs and Postgres workflows.
 
-The source code is built on the Nuxt 4 framework.  But the actual content is not taking advantage of this.  It is simply static html, styles, and iamges in the /src/public folder.
+- [Expected app features and implementation status](docs/app-features.md)
+- [Proposed per-table RLS and data-access rules](openspec/changes/secure-role-based-data-access/proposal.md)
+- [Final legacy discrepancy list](openspec/changes/replicate-legacy-features/final-parity-discrepancies.md)
+- [Field, action and database coverage ledger](openspec/changes/replicate-legacy-features/final-parity-coverage.md)
+- [Master legacy implementation checklist](openspec/changes/replicate-legacy-features/tasks.md)
+- [Historical legacy feature notes](docs/legacy/previous-features.md)
 
-Feel free to make content changes or more major changes to actual Vue/Nuxt components.  Pull Requests welcome.
+The core role portals are implemented; the final audit records remaining behavioral, integration and database-access gaps. See the feature document before treating app-wide legacy parity as complete.
 
 ## Getting started (developers)
 
@@ -34,4 +39,4 @@ This workspace includes MCP server configuration for:
 - Context7 (up-to-date library docs in Copilot Chat)
 - Playwright MCP (browser automation for quick UI checks)
 
-See `docs/mcp.md`.
+See [docs/agents/mcp.md](docs/agents/mcp.md).
