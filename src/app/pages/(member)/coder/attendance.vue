@@ -1,18 +1,13 @@
 <script setup lang="ts">
-	const { pageTitle } = useMemberLayoutContext();
+ import MemberAttendanceHistory from "~/components/Maintenance/MemberAttendanceHistory.vue";
+ const { pageTitle } = useMemberLayoutContext();
 </script>
-
 <template>
-	<UDashboardPanel id="coder-attendance">
-		<template #header>
-			<DashboardHeading :page-title="pageTitle" />
-		</template>
-		<template #body>
-			<div class="p-4">
-				<p>Placeholder: coder attendance coming soon.</p>
-			</div>
-		</template>
-	</UDashboardPanel>
+ <UDashboardPanel id="coder-attendance">
+  <template #header><DashboardHeading :pageTitle="pageTitle" /></template>
+  <template #body><div class="CoderAttendance"><MemberAttendanceHistory :memberId="null" /></div></template>
+ </UDashboardPanel>
 </template>
-
-<style scoped lang="css"></style>
+<style scoped lang="scss">
+ .CoderAttendance { padding:calc(var(--spacing) * 4); max-width:60rem; }
+</style>

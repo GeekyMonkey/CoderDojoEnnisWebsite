@@ -1,0 +1,5 @@
+- [x] Review legacy MemberController.Attendance and Views/Member/Attendance.cshtml.
+- [x] Implement strict own-coder API and corresponding Bruno request.
+- [x] Reuse shared attendance history store/component with authenticated and selected-member modes.
+- [x] Verify API ownership/role checks, ordering, realtime, mobile and production build.
+- [x] Leave feature uncommitted for code review and update the master checklist.

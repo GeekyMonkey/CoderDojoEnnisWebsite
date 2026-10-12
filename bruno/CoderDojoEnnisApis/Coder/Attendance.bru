@@ -1,0 +1,15 @@
+meta {
+  name: My attendance
+  type: http
+}
+get {
+  url: {{Host}}/api/Coder/attendance
+  body: none
+  auth: bearer
+}
+auth:bearer {
+  token: {{AccessToken}}
+}
+docs {
+  Requires a current active coder session. Returns only the authenticated member's attendance, newest first. Unexpected query fields (including memberId) return 400; mentors without a coder role receive 403. No member ID is accepted.
+}
