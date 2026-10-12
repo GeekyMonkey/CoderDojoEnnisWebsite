@@ -1,5 +1,6 @@
 import type { Session } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
+import { GetSupabaseAdminClient, type SupabaseClientType } from "#server/db/DatabaseClient";
 import { useRuntimeConfig } from "#imports";
 import type { MemberRecord } from "#server/db/MembersData";
 import { MembersData } from "#server/db/MembersData";
@@ -16,7 +17,8 @@ export type AuthServiceErrorCode =
 	| "DATABASE_UNAVAILABLE"
 	| "NO_MATCHING_MEMBER"
 	| "INVALID_CREDENTIALS"
-	| "SESSION_ERROR";
+	| "SESSION_ERROR"
+ | "LOGIN_HISTORY_ERROR";
 
 export class AuthServiceError extends Error {
 	constructor(
@@ -102,7 +104,7 @@ export class AuthService {
 		if (!session) {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);
 		}
-		return { member, session };
+		return { member: await this.recordLogin(member.id, session, "password", memberRecord.password_hash ?? "", logs), session };
 	}
 
 	/**
@@ -127,8 +129,24 @@ export class AuthService {
 			throw new AuthServiceError("Auth session error", "SESSION_ERROR", logs);
 		}
 
-		return { member, session };
+		return { member: await this.recordLogin(member.id, session, "nfc", trimmedTag, logs), session };
 	}
+
+ /** Persist successful portal login history using current credentials and the bound session. */
+ private async recordLogin(memberId: string, session: Session, kind: "password" | "nfc", credential: string, logs: string[]): Promise<MemberModel> {
+  const client: SupabaseClientType | null = await GetSupabaseAdminClient(this.event);
+  if (!client) throw new AuthServiceError("Unable to record login", "LOGIN_HISTORY_ERROR", logs);
+  const { data, error } = await client.schema("coderdojo").rpc("record_portal_login", {
+   p_member: memberId, p_auth_user: session.user.id, p_kind: kind, p_credential: credential,
+  });
+  if (error || !data) throw new AuthServiceError("Unable to record login", "LOGIN_HISTORY_ERROR", logs);
+  const parsed: unknown = data;
+  try {
+   const result: MemberModel = memberFromRecord(parsed as MemberRecord);
+   if (result.id !== memberId) throw new Error("Invalid committed member");
+   return result;
+  } catch { throw new AuthServiceError("Unable to confirm login", "LOGIN_HISTORY_ERROR", logs); }
+ }
 
 	/**
 	 * Find potential member records matching the input against login, email, or first+last name

@@ -53,3 +53,10 @@ Evidence and limitations: [F01 implementation record](implementation.md). Origin
 - [x] Verify rollback on attendance/member failure, repeated sign-ins, newer field/credential preservation, denied client execution and service failure responses.
 - [x] Apply additive migration and verify shared database execution using a rolled-back service-role transaction.
 - [x] Push completed changes to develop through the F05 pull request.
+
+## F06 portal login history (approved 12 October 2026)
+- [x] Add a narrow service-only successful portal login transaction after Supabase session creation, independently of attendance.
+- [x] Preserve unrelated fields and recheck current binding/active account/password or NFC credential under the shared mutation lock.
+- [x] Add first/repeated login, password/NFC success/failure, failed session/persistence, stale credential/archive, client denial and welcome-boundary tests.
+- [x] Apply the additive migration and verify shared database execution.
+- [x] Push completed changes to develop through the F06 pull request and update F06 status.
