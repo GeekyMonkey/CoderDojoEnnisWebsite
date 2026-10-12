@@ -20,14 +20,14 @@ F02 CopyData and Legacy/Teams code and the old database remain unchanged until p
 
 F03 scanner/manual attendance APIs remain unchanged as a known vulnerability accepted for the third-party hardware kiosk. The browser kiosk lifecycle finding F12, global attendance transaction issue F05, public GitHub/export gaps and final production retirement remain separate work. RLS cannot restrict those service-role paths by itself. F21 stays closed under the user's accepted one-million-row configuration.
 
-## Verification and deployment boundary
+## Pre-application verification and deployment boundary (historical)
 
 - Synthetic PostgreSQL/PGlite fixtures exercise actual roles, grants, RLS, service-only RPC execution, self-profile save/stale/protected fields, role/link/archive/anonymous revocation, historical definitions, pod expiry/Dublin date fallback, scoped row-free events and transaction rollback. No live personal records are copied into fixtures.
 - The F01 baseline passed 87 focused tests across 12 files, covering request identity, mentor, login provisioning, profile/maintenance/store, private read middleware, realtime lifecycle and PostgreSQL authorization. Client dependencies vue/h3 are explicitly pinned to the versions already in the lockfile so a fresh install can resolve existing tests; PGlite is a pinned dev dependency.
 - Production build passed. Typecheck retains existing legacy API/SQL and sessionRecovery.test diagnostics; changed-file diagnostics are checked separately. The prohibited broad test/format scripts were not run.
 - Read-only shared-database reconciliation preflight: 21 eligible synthetic auth identities, zero orphaned identities and zero duplicate groups. Shared security-advisor results remain baseline findings because this migration is not applied: [RLS disabled](https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public) and [mutable function search path](https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable).
 
-**Not applied to shared Supabase or deployed.** The migration is a checked-in release artifact under src, matching the existing application migration convention; the ignored shared migration repository is not modified or pushed automatically. Before deployment, copy the reviewed artifact into the approved shared migration workflow, rehearse in a hosted staging project, run real REST/JWT/Broadcast/storage and UI checks, then perform a coordinated migration/app cutover. PGlite verifies Postgres authorization but not the hosted gateway, WAL transport or public storage HTTP service. No million-row tests or database decommissioning were performed.
+**At branch review, not yet applied to shared Supabase or deployed. See the application record below for current database status.** The migration is a checked-in release artifact under src, matching the existing application migration convention; the ignored shared migration repository is not modified or pushed automatically. Before deployment, copy the reviewed artifact into the approved shared migration workflow, rehearse in a hosted staging project, run real REST/JWT/Broadcast/storage and UI checks, then perform a coordinated migration/app cutover. PGlite verifies Postgres authorization but not the hosted gateway, WAL transport or public storage HTTP service. No million-row tests or database decommissioning were performed.
 
 Do not run old raw realtime clients after publication removal. Do not restore insecure grants/publications on rollback; use a guarded-compatible app or pause the affected workflow. Keep F01 open in the deployed-state audit until hosted acceptance checks pass. Keep the broader proposal's unimplemented tasks unchecked.
 
@@ -40,3 +40,15 @@ Own-profile current belt no longer constructs broad member/belt directory stores
 F03 SetPresent/sign-in/fingerprint contracts and F02 import remain unchanged. No new endpoints or database migration were added. Shared deployment and hosted API/UI verification remain pending.
 
 Follow-up validation: all 103 focused tests across 13 files pass, production build passes, strict OpenSpec validation passes and git diff checks are clean. Full typecheck retains the existing unrelated diagnostics; there are no diagnostics for the changed middleware, store or profile components. Hosted acceptance was not performed.
+
+## Shared database application — 12 October 2026
+
+User explicitly requested pushing develop and applying database migrations. PR #57 was merged to develop at `0ebab1896cfa7d5ea4b368bf881abf6619b632ec` and pushed. The existing GeekyMonkeyData project (`newsofwpimzmfbqsooka`) received `f01_role_based_rls`, recorded as version `20261012200254`. All preceding application migrations were already recorded; no reset, legacy import or decommissioning was performed.
+
+Live verification confirms 12/12 application tables have RLS, 21 protected bindings, 12 invalidation triggers, zero coderdojo raw-row publications, three realtime policies and four scoped storage policies. Password/scanner column reads, browser member writes and client identity-binding RPC execution are denied; service identity RPC execution is allowed. The coderdojo bucket remains public.
+
+Hosted PostgreSQL role checks passed for every existing bound actor, unbound private reads and anonymous member denial/active definition access. The actual realtime trigger/send function executed during a rolled-back no-op member update; neither that update nor its broadcast was committed. These checks do not substitute for end-to-end client JWT/Broadcast/UI tests.
+
+Security advisors no longer report coderdojo RLS-disabled tables or mutable attendance-function search paths. The private binding table intentionally has RLS with no client policy ([advisor explanation](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)); access remains service/helper-only. Unrelated monkeyschool functions and existing project-wide Auth/Postgres settings were left unchanged.
+
+Database migration application is complete. The older Cloudflare PR check failed, and the develop merge has no confirmed successful deployment check. Hosted application deployment, authenticated REST/private channel reconnect and role-specific UI acceptance remain unconfirmed. F01/F04 acceptance stays pending for those checks; F03 remains accepted unchanged and F02 remains deferred.
