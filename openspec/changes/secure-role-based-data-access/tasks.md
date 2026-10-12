@@ -46,3 +46,10 @@ Evidence and limitations: [F01 implementation record](implementation.md). Origin
 - [x] Merge PR #57 to develop and push the merge.
 - [x] Apply f01_role_based_rls to GeekyMonkeyData and confirm migration history, table grants/RLS/bindings/publications/policies, current actor role scopes and rolled-back hosted trigger execution.
 - [ ] Confirm successful hosted app deployment and complete authenticated REST/Broadcast/UI acceptance.
+
+## F05 atomic sign-in follow-up (approved 12 October 2026)
+- [x] Replace whole-member snapshot upsert with service-only transactional attendance/login-date RPC.
+- [x] Preserve F03 request/response authorization and archived/roleless target compatibility; preserve fingerprint testing simulation and login-date effects.
+- [x] Verify rollback on attendance/member failure, repeated sign-ins, newer field/credential preservation, denied client execution and service failure responses.
+- [x] Apply additive migration and verify shared database execution using a rolled-back service-role transaction.
+- [x] Push completed changes to develop through the F05 pull request.

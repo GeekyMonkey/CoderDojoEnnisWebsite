@@ -531,7 +531,8 @@ export type Database = {
 		};
 		Functions: {
    ensure_member_auth_binding: { Args: { p_auth_user: string; p_member: string }; Returns: undefined };
-   resolve_member_identity: { Args: { p_auth_user: string }; Returns: string | null };
+   sign_in_attendance: { Args: { p_member: string; p_date: string; p_testing?: boolean }; Returns: Json };
+      resolve_member_identity: { Args: { p_auth_user: string }; Returns: string | null };
 			maintain_data: { Args: { p_actor: string; p_action: string; p_apply?: boolean; p_expected?: string | null }; Returns: Json };
  maintain_parent_child: { Args: { p_actor:string; p_id:string; p_action:string; p_fields:Json; p_expected?:Json }; Returns:Json };
  can_read_mentor_pods: { Args: Record<string, never>; Returns: boolean };

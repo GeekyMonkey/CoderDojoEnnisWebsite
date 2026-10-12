@@ -91,3 +91,18 @@ The legacy import SHALL remain unchanged during development/migration by explici
 #### Scenario: Production retirement
 - **WHEN** the final migration is reconciled and old-database runtime dependencies are removed at production cutover
 - **THEN** legacy import/read endpoints SHALL be removed and the old database decommissioned with the required recovery backup retained
+
+### Requirement: Atomic attendance sign-in
+Attendance sign-in SHALL commit daily attendance and login-date rotation in one service-only transaction, using the current stored account and updating no unrelated account fields. Failures SHALL NOT produce success. Repeated sign-ins SHALL retain one member/date attendance row. Existing F03 API authorization, archived-target compatibility and fingerprint testing semantics SHALL remain unchanged.
+
+#### Scenario: Attendance or login-date persistence fails
+- **WHEN** either write fails during sign-in
+- **THEN** both writes SHALL roll back and the API SHALL report failure
+
+#### Scenario: Account changed after kiosk lookup
+- **WHEN** profile, role, archive or credential fields change after the initial member lookup
+- **THEN** sign-in SHALL preserve those current fields and return the committed current member projection
+
+#### Scenario: Fingerprint testing mode
+- **WHEN** testing mode is requested
+- **THEN** attendance SHALL remain unpersisted while login dates rotate and the displayed count is simulated under the existing contract
