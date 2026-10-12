@@ -41,3 +41,8 @@
 - [ ] Complete remaining broader proposal tasks and production cutover, including deferred F02 retirement.
 
 Evidence and limitations: [F01 implementation record](implementation.md). Original full-proposal tasks above remain unchecked where this pass does not complete their full acceptance criteria.
+
+## Shared database application (authorized 12 October 2026)
+- [x] Merge PR #57 to develop and push the merge.
+- [x] Apply f01_role_based_rls to GeekyMonkeyData and confirm migration history, table grants/RLS/bindings/publications/policies, current actor role scopes and rolled-back hosted trigger execution.
+- [ ] Confirm successful hosted app deployment and complete authenticated REST/Broadcast/UI acceptance.
