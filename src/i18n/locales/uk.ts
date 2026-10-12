@@ -90,15 +90,25 @@ export default {
 		heading: "Заявки на пояси",
 	},
 	coder: {
+		applicationFeedback: "Відгук про вашу заявку {name}",
 		applicationSaved: "Заявку подано.",
 		apply: "Подати заявку",
 		askMentor: "Обговоріть заявку з ментором.",
 		chooseBadges: "Вибрати цілі для значків",
 		chooseGoal: "Вибрати ціль",
+		earnedCongratulations: "Вітаємо! Ви отримали {name}.",
 		evidence: "Поясніть свої досягнення (щонайменше 5 символів)",
+		previousLogin: "Останній вхід: {date}.",
 		reapply: "Врахуйте відгук і подайте заявку ще раз.",
+		recentDecisions: "Останні рішення про досягнення",
 		removeGoal: "Видалити ціль",
 		unassigned: "Зверніться до ментора, щоб приєднатися до команди.",
+		viewAchievement: "Переглянути досягнення",
+		viewGoals: "Переглянути цілі",
+		welcome: "Ласкаво просимо, {name}",
+		welcomeBack: "З поверненням, {name}",
+		yourActivities: "Ваші заняття",
+		yourTeam: "Ваша команда — {name}.",
 	},
 	coders: {
 		label: "Кодер",
@@ -303,9 +313,11 @@ export default {
 	},
 	signIn: {
 		qrPlaceholder: "Увімкніть камеру, щоб сканувати QR-код.",
-		sessionCount: "1 сесія | {count} сесій",
 		signInButton: "Увійти",
 		title: "Реєстрація на сесію CoderDojo Ennis",
+	},
+	sessions: {
+		label: "Заняття",
 	},
 	teams: {
 		colour: "Колір",

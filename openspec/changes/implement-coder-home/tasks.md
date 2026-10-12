@@ -1,0 +1,4 @@
+- [x] Review legacy Index and GetLoginMessage.
+- [x] Implement focused welcome/decision components and store-backed home.
+- [x] Verify feedback boundary, reapplication suppression, browser and production build.
+- [x] Update master checklist and publish C07.

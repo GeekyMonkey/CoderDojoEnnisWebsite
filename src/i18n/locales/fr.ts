@@ -91,15 +91,25 @@ export default {
 		heading: "Demandes de ceinture",
 	},
 	coder: {
+		applicationFeedback: "Retour sur votre candidature {name}",
 		applicationSaved: "Demande envoyée.",
 		apply: "Postuler",
 		askMentor: "Parlez de votre demande à un mentor.",
 		chooseBadges: "Choisir des objectifs de badges",
 		chooseGoal: "Choisir cet objectif",
+		earnedCongratulations: "Félicitations ! Vous avez obtenu {name}.",
 		evidence: "Expliquez pourquoi vous le méritez (5 caractères minimum)",
+		previousLogin: "Votre dernière connexion : {date}.",
 		reapply: "Vous pouvez postuler à nouveau après avoir suivi les conseils.",
+		recentDecisions: "Décisions récentes",
 		removeGoal: "Retirer cet objectif",
 		unassigned: "Contactez un mentor pour rejoindre une équipe.",
+		viewAchievement: "Voir la réussite",
+		viewGoals: "Voir les objectifs",
+		welcome: "Bienvenue {name}",
+		welcomeBack: "Bon retour {name}",
+		yourActivities: "Vos activités",
+		yourTeam: "Votre équipe est {name}.",
 	},
 	coders: {
 		label: "Codeur",
@@ -304,9 +314,11 @@ export default {
 	},
 	signIn: {
 		qrPlaceholder: "Activez la caméra pour scanner un code QR.",
-		sessionCount: "1 session | {count} sessions",
 		signInButton: "Connexion",
 		title: "Connexion à la session CoderDojo Ennis",
+	},
+	sessions: {
+		label: "Séances",
 	},
 	teams: {
 		colour: "Couleur",

@@ -37,7 +37,7 @@ Feature 12 and features 1–4 reviewed and committed; feature 5 team management 
   - [x] C04 Earned badges: category grouping, descriptions, evidence, award date, mentor and feedback. Legacy `MemberController.Badges` and `Views/Member/Badges.cshtml`.
   - [x] C05 Available badges and applications: category grouping, selected goals, pending evidence, rejection feedback and reapplication; prevent duplicate pending applications and upgrade an existing goal. Legacy `MemberController.BadgesAvailable/BadgeApplication` and `Views/Member/BadgesAvailable.cshtml`.
   - [x] C06 Belts and applications: earned/unearned belts ordered by progression, award evidence, next-belt-only applications, pending/rejection feedback and duplicate prevention. Legacy `MemberController.Belts/BeltApplication` and `Views/Member/Belts.cshtml`.
-  - [ ] C07 Coder home: personal welcome, current team/progress and contextual achievement messages. Legacy `MemberController.Index`, `Views/Member/Index.cshtml` and `Member.GetLoginMessage`.
+  - [x] C07 Coder home: personal welcome, current team/progress and contextual achievement messages. Legacy `MemberController.Index`, `Views/Member/Index.cshtml` and `Member.GetLoginMessage`.
   - [ ] C08 Sessions: upcoming non-mentor sessions and joining. Legacy `MemberController.Sessions`, `Views/Member/Sessions.cshtml` and the session join handler.
   - [x] C09 Team member display: reusable read-only profile with team, public handles and earned achievements, restricted to the authorized roster. Legacy `MemberController.TeamMember` and `Views/Member/TeamMember.cshtml`.
 

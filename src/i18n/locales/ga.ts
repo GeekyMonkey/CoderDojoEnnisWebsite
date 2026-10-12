@@ -90,15 +90,25 @@ export default {
 		heading: "Iarratais ar Chriosanna",
 	},
 	coder: {
+		applicationFeedback: "Aiseolas ar d’iarratas {name}",
 		applicationSaved: "Iarratas curtha isteach.",
 		apply: "Déan iarratas",
 		askMentor: "Labhair le meantóir faoi d’iarratas.",
 		chooseBadges: "Roghnaigh spriocanna suaitheantais",
 		chooseGoal: "Roghnaigh sprioc",
+		earnedCongratulations: "Comhghairdeas! Ghnóthaigh tú {name}.",
 		evidence: "Inis cén fáth a bhfuil sé tuillte agat (5 charachtar ar a laghad)",
+		previousLogin: "Do logáil isteach dheireanach: {date}.",
 		reapply: "Is féidir iarratas eile a dhéanamh tar éis an aiseolais.",
+		recentDecisions: "Cinntí gnóthachtála le déanaí",
 		removeGoal: "Bain sprioc",
 		unassigned: "Déan teagmháil le meantóir chun dul isteach i bhfoireann.",
+		viewAchievement: "Féach ar an ngnóthachtáil",
+		viewGoals: "Féach ar spriocanna",
+		welcome: "Fáilte {name}",
+		welcomeBack: "Fáilte ar ais {name}",
+		yourActivities: "Do ghníomhaíochtaí",
+		yourTeam: "Is é {name} d’fhoireann.",
 	},
 	coders: {
 		label: "Códóir",
@@ -303,9 +313,11 @@ export default {
 	},
 	signIn: {
 		qrPlaceholder: "Cumasaigh an ceamara chun cód QR a scanadh.",
-		sessionCount: "1 seisiún | {count} seisiúin",
 		signInButton: "Logáil Isteach",
 		title: "Logáil Isteach Cód Cinnte CoderDojo Ennis",
+	},
+	sessions: {
+		label: "Seisiúin",
 	},
 	teams: {
 		colour: "Dath",

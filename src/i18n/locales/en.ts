@@ -89,15 +89,25 @@ export default {
 		heading: "Belt Applications",
 	},
 	coder: {
+		applicationFeedback: "Feedback on your {name} application",
 		applicationSaved: "Application submitted.",
 		apply: "Apply",
 		askMentor: "Talk to a mentor about your application.",
 		chooseBadges: "Choose badge goals",
 		chooseGoal: "Choose goal",
+		earnedCongratulations: "Congratulations! You earned {name}.",
 		evidence: "Tell us why you deserve this (at least 5 characters)",
+		previousLogin: "Your last login was {date}.",
 		reapply: "You can apply again after addressing the feedback.",
+		recentDecisions: "Recent achievement decisions",
 		removeGoal: "Remove goal",
 		unassigned: "Contact a mentor to be assigned to a team.",
+		viewAchievement: "View achievement",
+		viewGoals: "View goals",
+		welcome: "Welcome {name}",
+		welcomeBack: "Welcome back {name}",
+		yourActivities: "Your activities",
+		yourTeam: "Your team is {name}.",
 	},
 	coders: {
 		label: "Coder",
@@ -302,9 +312,11 @@ export default {
 	},
 	signIn: {
 		qrPlaceholder: "Enable the camera to scan a QR code.",
-		sessionCount: "1 session | {count} sessions",
 		signInButton: "Sign In",
 		title: "CoderDojo Ennis Session Sign In",
+	},
+	sessions: {
+		label: "Sessions",
 	},
 	teams: {
 		colour: "Colour",
