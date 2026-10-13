@@ -1,2 +1,20 @@
 packages:
   - 'src'
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  vue-demi: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - '@electric-sql/pglite@0.5.9'
+  - '@vitest/mocker@5.0.4'
+  - '@vitest/spy@5.0.4'
+  - vitest@5.0.4
+  - zod@4.6.7
+overrides:
+  '@simple-git/argv-parser': 2.0.1
+  simple-git: 4.0.2
+  'fontless>esbuild': 0.28.2
+patchedDependencies:
+  'braces@3.0.3': patches/braces@3.0.3.patch
+  'node-forge@1.4.0': patches/node-forge@1.4.0.patch

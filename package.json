@@ -1,6 +1,6 @@
 {
 	"private": true,
-	"packageManager": "pnpm@10.29.1",
+	"packageManager": "pnpm@12.12.0",
 	"scripts": {
 		"dev": "pnpm -r --parallel dev",
 		"build": "pnpm -r --parallel build",
@@ -18,25 +18,5 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.5.15"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@hebilicious/vue-query-nuxt",
-			"@parcel/watcher",
-			"esbuild",
-			"sharp",
-			"vue-demi",
-			"workerd",
-			"supabase"
-		],
-		"overrides": {
-			"@simple-git/argv-parser": "2.0.1",
-			"simple-git": "4.0.2",
-			"fontless>esbuild": "0.28.2"
-		},
-		"patchedDependencies": {
-			"braces@3.0.3": "patches/braces@3.0.3.patch",
-			"node-forge@1.4.0": "patches/node-forge@1.4.0.patch"
-		}
 	}
 }
