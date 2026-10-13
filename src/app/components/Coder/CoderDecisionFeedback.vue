@@ -11,7 +11,7 @@
   <h2>{{ t('coder.recentDecisions') }}</h2>
   <UPageCard v-for="decision in decisions" :key="`${decision.kind}-${decision.id}`">
    <h3>{{ t(decision.awarded !== null ? 'coder.earnedCongratulations' : 'coder.applicationFeedback', { name: decision.label }) }}</h3>
-   <BeltColor v-if="decision.belt" :belt="decision.belt" mode="big" />
+   <BeltColor v-if="decision.belt" :belt="decision.belt" size="lg" />
    <p v-else>{{ decision.categoryName }}</p>
    <AchievementEvidence :review="decision" />
    <UButton :to="decision.kind === 'belt' ? '/coder/belts' : '/coder/badges-available'" variant="outline" class="DecisionLink">{{ t('coder.viewAchievement') }}</UButton>

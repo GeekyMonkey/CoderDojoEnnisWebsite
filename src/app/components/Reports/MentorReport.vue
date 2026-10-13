@@ -52,7 +52,7 @@ async function download(): Promise<void> {
        <span>{{ row.nameFirst }} {{ row.nameLast }}</span>
       </NuxtLink>
       <template v-if="kind === 'belts'">
-       <BeltColor mode="small" showLabel :belt="row.belt" />
+       <BeltColor size="sm" :belt="row.belt" />
        <time :datetime="row.awarded ?? undefined">{{ row.awarded?.slice(0, 10) }}</time>
        <p v-if="row.notes" class="report-notes">{{ row.notes }}</p>
       </template>

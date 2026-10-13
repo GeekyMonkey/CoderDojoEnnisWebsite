@@ -1,12 +1,14 @@
-# Change: Share big and small belt displays
+# Change: Share small, medium and large belt displays
 
 ## Why
 Large belt displays vary between screens, cannot open belt details, and black belt text can be unreadable.
 
 ## What Changes
-- Extend the existing BeltColor component with big and small modes.
-- Big displays fill their container and open a dialog with the supplied belt description.
-- Small displays preserve attendance-table styling and remain non-interactive.
+- Extend the existing BeltColor component with small, medium and large sizes.
+- Large profile displays fill their container by default and open a dialog with the supplied belt description.
+- All tables use small displays, whose labels respond to component width through CSS container queries. Small displays remain non-interactive.
+- Medium is the default size and also supports the details dialog.
+- Remove page-specific belt sizing overrides and viewport-based label decisions.
 - Correct contrasting text colours and migrate existing consumers.
 
 ## Impact

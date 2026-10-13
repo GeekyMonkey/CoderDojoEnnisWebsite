@@ -7,4 +7,4 @@
  const props = defineProps<{member:PublicMember;currentBelt:BeltModel|null}>();
  const { t } = useI18n();
 </script>
-<template><UPageCard :title="`${member.nameFirst ?? ''} ${member.nameLast ?? ''}`"><div v-if="member.isNinja">{{ t('achievementReviews.currentBelt') }} <BeltColor :belt="currentBelt ?? 'noob'" mode="big" /></div><MemberPhoto :member="member" size="lg" /><p>{{ t('maintenance.birthYear') }}: {{ member.birthYear ?? '—' }}</p><ProfileExternalLinks :member="member" /></UPageCard></template>
+<template><UPageCard :title="`${member.nameFirst ?? ''} ${member.nameLast ?? ''}`"><div v-if="member.isNinja">{{ t('achievementReviews.currentBelt') }} <BeltColor :belt="currentBelt ?? 'noob'" size="lg" /></div><MemberPhoto :member="member" size="lg" /><p>{{ t('maintenance.birthYear') }}: {{ member.birthYear ?? '—' }}</p><ProfileExternalLinks :member="member" /></UPageCard></template>
