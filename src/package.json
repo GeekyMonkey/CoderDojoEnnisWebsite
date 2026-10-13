@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@iconify/json": "2.2.437",
-		"@nuxt/ui": "4.4.0",
+		"@nuxt/ui": "4.8.1",
 		"@nuxtjs/google-fonts": "3.2.0",
 		"@nuxtjs/i18n": "10.2.4",
 		"@nuxtjs/supabase": "2.0.3",
