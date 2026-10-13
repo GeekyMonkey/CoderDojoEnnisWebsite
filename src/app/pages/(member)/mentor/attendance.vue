@@ -29,7 +29,6 @@
 	const { publish } = useActionNotifications();
 	const route = useRoute();
 	const router = useRouter();
-	const { width: windowWidth } = useWindowSize();
 	const { speak } = useSpeechSynth();
 
 	const includeOptions = computed<{ value: IncludeMode; label: string }[]>(
@@ -1045,8 +1044,7 @@
 						<template #beltColor-cell="{ row }">
 							<MemberBelt
 								:member="row.original.member"
-								mode="small"
-								:showLabel="windowWidth >= 768"
+								size="sm"
 							/>
 						</template>
 					</UTable>
@@ -1175,9 +1173,6 @@
 		}
 	}
 
-	.MemberBelt {
-		margin: 0 auto;
-	}
 
 	.AttendanceDashboardToolbar {
 		width: 100%;

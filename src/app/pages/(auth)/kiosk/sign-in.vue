@@ -359,7 +359,7 @@
 								{{ sessionCountMessage }}
 							</div>
 
-							<BeltColor mode="big" :belt="signInResponse.memberDetails.isMentor ? 'mentor' : signInResponse.memberDetails.isParent ? 'parent' : signInResponse.belt" />
+							<BeltColor size="lg" :belt="signInResponse.memberDetails.isMentor ? 'mentor' : signInResponse.memberDetails.isParent ? 'parent' : signInResponse.belt" />
 
 							<div v-if="signInResponse.teamName">{{ signInResponse.teamName }}</div>
 

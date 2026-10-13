@@ -48,7 +48,7 @@
 	<div v-else class="BadgeCounts"><span v-for="name in skillNames" :key="name">{{ name }}</span></div>
 	<footer>
 	<span>CoderDojo Ennis</span>
-	<BeltColor v-if="member.isNinja" :belt="currentBelt?.belt ?? 'noob'" mode="small" showLabel />
+	<BeltColor v-if="member.isNinja" :belt="currentBelt?.belt ?? 'noob'" size="sm" />
 	<span v-if="member.isNinja">{{ t('nav.Badges') }}: {{ awarded.length }}</span>
 	</footer>
 	</article>
@@ -56,6 +56,5 @@
 <style scoped lang="scss">
  .MemberIdCard { width: 100mm; max-width: 100%; min-height: 65mm; padding: 2.5mm; font-size: 3mm; line-height: 1.15; border: 1px dashed #555; background: white; color: #111; break-inside: avoid; display: grid; align-content: space-between; gap: 1mm; }
  h2 { line-height: 1.1; font-size: 5mm; font-weight: 700; } p { margin: 0; } .IdentityImages { display: flex; align-items: center; justify-content: space-between; gap: 2mm; } .IdentityQr { width: 24mm; height: 24mm; } .BadgeCounts { display: flex; flex-wrap: wrap; gap: 1mm; font-size: 3mm; } footer { display: flex; align-items: center; justify-content: space-between; gap: 2mm; font-size: 3mm; }
- footer :deep(.MemberBelt) { print-color-adjust: exact; width: 18mm; flex-shrink: 0; }
  @media print { .MemberIdCard { max-width: none; } }
 </style>

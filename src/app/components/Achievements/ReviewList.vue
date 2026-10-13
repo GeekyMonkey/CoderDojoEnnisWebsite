@@ -124,10 +124,10 @@
 					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" :present="presentById === null ? null : presentById[row.original.memberId] === true" size="sm" />
 					<NuxtLink :to="`/mentor/coder/${row.original.memberId}`" @click.stop>{{ row.original.memberName }}</NuxtLink>
 				</div>
-				<MemberCurrentBelt mode="small" v-if="(kind !== 'belt' || memberId) && MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" />
+				<MemberCurrentBelt size="sm" v-if="(kind !== 'belt' || memberId) && MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" />
 			</template>
 			<template #label-cell="{ row }">
-				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" mode="small" showLabel class="RequestedBelt" />
+				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="sm" />
 				<span v-else>{{ row.original.categoryName ?? t("definitionMaintenance.unavailableCategory") }} — {{ row.original.label }}</span><span v-if="goalIds.has(row.original.definitionId)" class="GoalMarker">★ {{ t("achievementReviews.goal") }}</span>
 			</template>
 			<template #team-cell="{ row }">
@@ -181,7 +181,6 @@
 	:deep(.ReviewRow) { cursor: pointer; }
  .MemberCell { padding: calc(var(--spacing) * 2); }
  .MemberCell a { white-space: normal; overflow-wrap: anywhere; }
- .RequestedBelt { display: inline-block; width: 5rem; max-width: 100%; }
  @media (max-width: 640px) {
   :deep(thead) { display: none; }
   :deep(table), :deep(tbody) { display: block; width: 100%; }

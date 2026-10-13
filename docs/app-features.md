@@ -60,7 +60,7 @@ Profile/account flows are present. Import credential handling and private databa
 | Joinable pods | Active eligible non-Mentor-only pods, topic/host/date/expiry, safe join/fallback link and empty-state calendar | Present; joining records today's own Attendance once, checks current expiry/visibility/URL and opens only a validated destination. |
 | Passport | Own name/login/photo or avatar/team/QR/current belt/category badge counts and print readiness | Present; physical print/old-scanner verification V01/V04. |
 
-Belt displays share one component with big and small modes. Big displays fill their container and open the belt description in a keyboard-accessible dialog. Small displays preserve the attendance table’s labelled desktop and narrow mobile styles, remain non-interactive, and are reused in other tables and compact lists. Belt text uses contrasting colours, including white text on black belts.
+Belt displays share one component with small (`sm`), medium (`md`, default), and large (`lg`) sizes. Profile pages use large belts, which fill their container without page-specific sizing overrides and open the belt description in a keyboard-accessible dialog. Medium displays also support belt details. All tables use small belts; CSS container width determines whether the label is shown or the narrow strip is used, independently of viewport width. Small belts remain non-interactive and are also used in compact lists. Belt text uses contrasting colours, including white text on black belts.
 
 Badge and Belt history retains Achievement application evidence, decision feedback, and reviewer identities. Archived definitions remain readable when referenced by historical achievements but cannot receive new applications.
 

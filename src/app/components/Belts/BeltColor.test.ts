@@ -15,25 +15,25 @@ async function render(props: Record<string, unknown>): Promise<string> {
 }
 afterEach((): void => { vi.unstubAllGlobals(); });
 describe("shared belt display", (): void => {
- it("gives the black belt readable text and its description in big mode", async (): Promise<void> => {
-  const html: string = await render({ belt: black, mode: "big" });
+ it("gives the black belt readable text and its description in large size", async (): Promise<void> => {
+  const html: string = await render({ belt: black, size: "lg" });
   expect(html).toContain('type="button"');
   expect(html).toContain('aria-haspopup="dialog"');
   expect(html).toContain("Teach others and lead a project.");
   expect(html).toContain("--belt-foreground:#fff");
  });
  it("keeps table strips compact and non-interactive", async (): Promise<void> => {
-  const html: string = await render({ belt: black, mode: "small" });
-  expect(html).toContain("Mode_small");
+  const html: string = await render({ belt: black, size: "sm" });
+  expect(html).toContain("Size_sm");
   expect(html).toContain('aria-label="memberBelt.label"');
   expect(html).not.toContain('type="button"');
   expect(html).not.toContain("Teach others and lead a project.");
   expect(html).not.toContain("ShowLabel");
  });
- it("retains labelled small displays for desktop tables", async (): Promise<void> => {
-  const html: string = await render({ belt: black, mode: "small", showLabel: true });
-  expect(html).toContain("ShowLabel");
-  expect(html).not.toContain('aria-haspopup="dialog"');
+ it("supports medium displays without table label overrides", async (): Promise<void> => {
+  const html: string = await render({ belt: black, size: "md" });
+  expect(html).toContain("Size_md");
+  expect(html).toContain('aria-haspopup="dialog"');
  });
  it("uses dark text on light custom belt colors", async (): Promise<void> => {
   const html: string = await render({ belt: { ...black, hexCode: "#fff" } });

@@ -4,10 +4,9 @@ import type { BeltModel } from "#shared/types/models/BeltModel";
 
 const props = withDefaults(defineProps<{
  belt: BeltModel | string | null;
- mode?: "small" | "big";
- showLabel?: boolean;
+ size?: "sm" | "md" | "lg";
  labelOverride?: string | null;
-}>(), { mode: "big", showLabel: false });
+}>(), { size: "md" });
 
 type BeltColorKey = "white" | "yellow" | "green" | "blue" | "red" | "black" | "noob" | "mentor" | "parent";
 const { t }: { t: (key: string, values?: Record<string, string>) => string } = useI18n();
@@ -45,14 +44,14 @@ function showDetails(): void { open.value = true; }
 </script>
 
 <template>
- <div class="BeltDisplay" :class="`Mode_${mode}`">
-  <UModal v-if="mode === 'big'" v-model:open="open" :title="label" :description="t('belts.description')">
+ <div class="BeltDisplay" :class="`Size_${size}`">
+  <UModal v-if="size !== 'sm'" v-model:open="open" :title="label" :description="t('belts.description')">
    <button type="button" class="MemberBelt" :class="`Color_${colorKey}`" :style="colors" aria-haspopup="dialog" :aria-expanded="open" @click.stop.prevent="showDetails">
     {{ label }}
    </button>
    <template #body><p class="BeltDescription">{{ description }}</p></template>
   </UModal>
-  <span v-else class="MemberBelt" :class="[`Color_${colorKey}`, { ShowLabel: showLabel }]" :style="colors" :aria-label="label" :title="label"><span class="BeltLabel">{{ label }}</span></span>
+  <span v-else class="MemberBelt" :class="`Color_${colorKey}`" :style="colors" :aria-label="label" :title="label"><span class="BeltLabel">{{ label }}</span></span>
  </div>
 </template>
 
@@ -81,18 +80,33 @@ function showDetails(): void { open.value = true; }
  &.Color_parent { color: var(--ui-text); }
  &.Color_noob { border: dashed 2px var(--ui-border); color: var(--ui-text); }
 }
-.Mode_big {
- width: 100%;
- min-width: 0;
- .MemberBelt { width: 100%; min-height: 3rem; padding: calc(var(--spacing) * 2); cursor: pointer; overflow-wrap: anywhere; }
+.BeltDisplay {
+ container: belt-display / inline-size;
+ max-inline-size: 100%;
+ min-inline-size: 0;
+}
+.Size_lg {
+ inline-size: 100%;
+ .MemberBelt { inline-size: 100%; min-block-size: 3rem; padding: calc(var(--spacing) * 2); }
+}
+.Size_md {
+ display: inline-block;
+ inline-size: 8rem;
+ .MemberBelt { inline-size: 100%; min-block-size: 2rem; padding: var(--spacing); }
+}
+.Size_lg, .Size_md {
+ .MemberBelt { cursor: pointer; overflow-wrap: anywhere; }
  .MemberBelt:focus-visible { outline: 2px solid var(--ui-primary); outline-offset: 2px; }
 }
-.Mode_small {
+.Size_sm {
  display: inline-block;
- .MemberBelt { height: 32px; width: 10px; }
+ inline-size: 5rem;
+ .MemberBelt { block-size: 32px; inline-size: 10px; margin-inline: auto; }
  .BeltLabel { display: none; }
- .ShowLabel { height: auto; width: auto; }
- .ShowLabel .BeltLabel { display: inline; }
+}
+@container belt-display (min-width: 4rem) {
+ .Size_sm > .MemberBelt { block-size: auto; inline-size: 100%; }
+ .Size_sm .BeltLabel { display: inline; }
 }
 .BeltDescription { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media print { .MemberBelt { print-color-adjust: exact; } }

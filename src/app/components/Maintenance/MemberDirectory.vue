@@ -39,7 +39,7 @@
 					<MemberPresenceLegend v-if="role === 'coder'" /><p>{{ t('maintenance.membersCount', { count: filtered.length }) }}</p><p v-if="!filtered.length">{{ t('maintenance.noMembers') }}</p>
 					<ul class="DirectoryMembers"><li v-for="member in visible" :key="member.id">
 						<NuxtLink class="DirectoryMember" :to="`/mentor/member/${member.id}`"><MemberPresencePhoto v-if="role === 'coder'" :member="member" :present="presentById === null ? null : presentById[member.id] === true" size="sm" /><MemberAvatar v-else :member="member" size="sm" linkTo="NONE" /><span>{{ member.nameFirst }} {{ member.nameLast }}<small>{{ member.login || '—' }} · {{ teamNames[member.teamId ?? ''] ?? t('maintenance.noTeam') }}</small></span></NuxtLink>
-						<MemberCurrentBelt :member="member" /><TeamLogo v-if="member.teamId" :for="member" size="sm" /><span v-if="role !== 'coder'">{{ member.email || member.phone || '—' }}</span><UBadge v-if="member.registeredCurrentTerm" variant="soft">{{ t('maintenance.registeredCurrentTerm') }}</UBadge>
+						<MemberCurrentBelt size="sm" :member="member" /><TeamLogo v-if="member.teamId" :for="member" size="sm" /><span v-if="role !== 'coder'">{{ member.email || member.phone || '—' }}</span><UBadge v-if="member.registeredCurrentTerm" variant="soft">{{ t('maintenance.registeredCurrentTerm') }}</UBadge>
 					</li></ul><UButton v-if="visible.length < filtered.length" variant="outline" @click="limit += 50">{{ t('maintenance.showMore') }}</UButton>
 				</template>
 			</template>
