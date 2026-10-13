@@ -1,10 +1,11 @@
 <script setup lang="ts">
  import { computed, type ComputedRef } from "vue";
  import type { MemberModel } from "#shared/types/models/MemberModel";
+ import { formatDateTime } from "#shared/utils/DateHelpers";
  const props = defineProps<{ member: MemberModel; attendanceCount: number | null; teamName: string | null }>();
  const { t, locale } = useI18n();
  const previousLogin: ComputedRef<string | null> = computed((): string | null => props.member.loginDatePrevious === null
-  ? null : new Intl.DateTimeFormat(locale.value, { dateStyle: "medium", timeStyle: "short" }).format(props.member.loginDatePrevious));
+  ? null : formatDateTime(props.member.loginDatePrevious, locale.value));
 </script>
 
 <template>

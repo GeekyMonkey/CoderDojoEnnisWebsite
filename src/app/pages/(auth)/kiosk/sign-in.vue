@@ -1,11 +1,12 @@
 <script setup lang="ts">
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import BeltColor from "~/components/Belts/BeltColor.vue";
-	import { nextTick } from "vue";
+	import { computed, type ComputedRef, nextTick } from "vue";
 	import type { FormSubmitEvent } from "@nuxt/ui";
 	import { z } from "zod";
 	import { useKioskStore } from "~/stores/useKioskStore";
 	import type { KioskSignInResponse } from "#shared/types/Kiosk";
+	import { formatDateTime } from "#shared/utils/DateHelpers";
 	import { useRouteQuery } from "@vueuse/router";
 
 	definePageMeta({
@@ -13,7 +14,7 @@
 		middleware: "kiosk",
 	});
 
-	const { t } = useI18n();
+	const { t, locale } = useI18n();
 	const { publish } = useActionNotifications();
 	const log = useLogger("mentor/SignIn");
 	const { signInMember, signInMemberByGuid, signInMemberByNfcTag } =
@@ -26,6 +27,10 @@
 	const signInForm = ref<unknown>(null);
 	const signInResponse = shallowRef<KioskSignInResponse | null>(null);
 	const showSignInNotifications = ref(false);
+	const previousLogin: ComputedRef<string | null> = computed((): string | null => {
+		const timestamp: number | null = signInResponse.value?.memberDetails.loginDatePrevious ?? null;
+		return timestamp === null ? null : formatDateTime(timestamp, locale.value);
+	});
 
 	/**
 	 * Form Schema Type
@@ -358,6 +363,7 @@
 								</div>
 								{{ sessionCountMessage }}
 							</div>
+							<div v-if="previousLogin">{{ t('coder.previousLogin', { date: previousLogin }) }}</div>
 
 							<BeltColor size="lg" :belt="signInResponse.memberDetails.isMentor ? 'mentor' : signInResponse.memberDetails.isParent ? 'parent' : signInResponse.belt" />
 
