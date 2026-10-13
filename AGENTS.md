@@ -29,6 +29,7 @@ This is being developed on Windows machines with PowerShell. Ensure any commands
 - Data access pattern: for new UI features and specs, page/components SHOULD perform API interactions via functions exposed by the relevant client-side stores (rather than calling APIs directly) so stores can own caching, invalidation, and realtime refresh behavior
 - API testing: any new API endpoint added under `src/server/api/**` SHOULD have a corresponding Bruno request added under `bruno/` (for example under `bruno/CoderDojoEnnisApis/**`). The `seq` value in `.bru` files is optional and can be omitted
 - Command policy: during agentic coding steps, do NOT run `pnpm -C src format` or `pnpm -C src test` automatically. The user will run these manually
+- Branch cleanup: after merging a feature branch into `develop`, delete its local and remote branch refs and remove its worktree. First confirm its changes are merged and its worktree is clean; preserve and reconcile any remaining uncommitted or untracked work before removal.
 
 # Coding Conventions
 - Vue
