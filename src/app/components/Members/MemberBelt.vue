@@ -8,7 +8,8 @@
 	const props = defineProps<{
 		member: MemberModel;
 		earnedOnly?: boolean;
-		size?: "sm" | "md" | "lg";
+		mode?: "small" | "big";
+		showLabel?: boolean;
 	}>();
 
 	const { MembersLatestBeltsByMemberId } = useMemberBeltsStore();
@@ -48,5 +49,5 @@
 </script>
 
 <template>
-	<BeltColor :belt="beltDisplayValue" :size="props.size" />
+	<BeltColor :belt="beltDisplayValue" :mode="props.mode ?? 'small'" :showLabel="props.showLabel" />
 </template>

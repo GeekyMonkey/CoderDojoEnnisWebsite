@@ -36,7 +36,7 @@
       <UAlert v-if="attendance.isError.value" color="error" :title="t('profile.loadError')" />
       <p v-if="achievementsLoading">{{ t('profile.loading') }}</p>
       <UAlert v-else-if="achievementsError" color="error" :title="t('achievementReviews.loadError')" />
-      <div v-else class="CurrentBelt"><span>{{ t('achievementReviews.currentBelt') }}</span><BeltColor :belt="belts.currentBelt.value?.belt ?? 'noob'" size="md" /></div>
+      <div v-else class="CurrentBelt"><span>{{ t('achievementReviews.currentBelt') }}</span><BeltColor :belt="belts.currentBelt.value?.belt ?? 'noob'" mode="big" /></div>
      </CoderWelcome>
      <nav class="CoderLinks" :aria-label="t('coder.yourActivities')">
       <UButton v-for="link in LINKS" :key="link.path" :to="`/coder/${link.path}`" variant="outline">{{ t(link.label) }}</UButton>

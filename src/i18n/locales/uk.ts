@@ -189,7 +189,9 @@ export default {
 			yellow: "Жовтий",
 		},
 		label: "{Color}",
+		noDescription: "Опис цього поясу недоступний.",
 		noob: "Новачок",
+		noobDescription: "Пояс ще не присвоєно.",
 	},
 	maintenance: {
 		account: "Налаштування облікового запису",

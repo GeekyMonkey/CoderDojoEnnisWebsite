@@ -359,7 +359,7 @@
 								{{ sessionCountMessage }}
 							</div>
 
-							<BeltColor :belt="signInResponse.memberDetails.isMentor ? 'mentor' : signInResponse.memberDetails.isParent ? 'parent' : signInResponse.belt" />
+							<BeltColor mode="big" :belt="signInResponse.memberDetails.isMentor ? 'mentor' : signInResponse.memberDetails.isParent ? 'parent' : signInResponse.belt" />
 
 							<div v-if="signInResponse.teamName">{{ signInResponse.teamName }}</div>
 
@@ -397,9 +397,6 @@
 	.SignInPage {
 		width: 100%;
 
-		.MemberBelt {
-			width: 100%;
-		}
 	}
 
 	.SignInPageGrid {

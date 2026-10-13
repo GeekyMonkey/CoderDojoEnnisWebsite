@@ -8,14 +8,14 @@
 </script>
 
 <template>
- <span class="CurrentBelt">
+ <div class="CurrentBelt">
   <span>{{ t('achievementReviews.currentBelt') }}</span>
   <span v-if="isPending">{{ t('profile.loading') }}</span>
   <span v-else-if="isError">{{ t('achievementReviews.loadError') }}</span>
-  <BeltColor v-else :belt="data ?? 'noob'" size="md" />
- </span>
+  <BeltColor v-else :belt="data ?? 'noob'" mode="big" />
+ </div>
 </template>
 
 <style scoped lang="scss">
- .CurrentBelt { display: inline-flex; flex-wrap: wrap; align-items: center; gap: calc(var(--spacing) * 2); font-size: var(--text-xs); color: var(--ui-text-muted); }
+ .CurrentBelt { width: 100%; display: grid; flex-wrap: wrap; align-items: center; gap: calc(var(--spacing) * 2); font-size: var(--text-xs); color: var(--ui-text-muted); }
 </style>
