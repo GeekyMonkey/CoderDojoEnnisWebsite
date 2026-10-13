@@ -1,6 +1,5 @@
 {
 	"recommendations": [
-		"esbenp.prettier-vscode",
 		"herrmannplatz.npm-dependency-links",
 		"vue.volar",
 		"bradlc.vscode-tailwindcss",
