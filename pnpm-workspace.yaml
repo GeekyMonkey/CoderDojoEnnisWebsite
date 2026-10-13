@@ -1,2 +1,9 @@
 packages:
   - 'src'
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  sharp: true
+  supabase: true
+  vue-demi: true
+  workerd: true
