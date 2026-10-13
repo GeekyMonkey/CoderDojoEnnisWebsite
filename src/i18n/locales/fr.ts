@@ -190,7 +190,9 @@ export default {
 			yellow: "Jaune",
 		},
 		label: "{Color}",
+		noDescription: "Aucune description disponible pour cette ceinture.",
 		noob: "Novice",
+		noobDescription: "Aucune ceinture attribuée pour le moment.",
 	},
 	maintenance: {
 		account: "Paramètres du compte",

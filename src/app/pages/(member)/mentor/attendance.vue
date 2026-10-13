@@ -1045,7 +1045,8 @@
 						<template #beltColor-cell="{ row }">
 							<MemberBelt
 								:member="row.original.member"
-								:size="windowWidth >= 768 ? 'md' : 'sm'"
+								mode="small"
+								:showLabel="windowWidth >= 768"
 							/>
 						</template>
 					</UTable>

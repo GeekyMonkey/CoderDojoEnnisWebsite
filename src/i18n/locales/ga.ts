@@ -189,7 +189,9 @@ export default {
 			yellow: "Buí",
 		},
 		label: "{Color}",
+		noDescription: "Níl cur síos ar fáil don chrios seo.",
 		noob: "Tosaitheoir",
+		noobDescription: "Níor bronnadh crios fós.",
 	},
 	maintenance: {
 		account: "Socruithe cuntais",

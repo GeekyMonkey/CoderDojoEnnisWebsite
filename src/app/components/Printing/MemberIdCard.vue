@@ -48,7 +48,7 @@
 	<div v-else class="BadgeCounts"><span v-for="name in skillNames" :key="name">{{ name }}</span></div>
 	<footer>
 	<span>CoderDojo Ennis</span>
-	<BeltColor v-if="member.isNinja" :belt="currentBelt?.belt ?? 'noob'" size="md" />
+	<BeltColor v-if="member.isNinja" :belt="currentBelt?.belt ?? 'noob'" mode="small" showLabel />
 	<span v-if="member.isNinja">{{ t('nav.Badges') }}: {{ awarded.length }}</span>
 	</footer>
 	</article>

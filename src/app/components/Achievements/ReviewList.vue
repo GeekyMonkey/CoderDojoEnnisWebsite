@@ -124,10 +124,10 @@
 					<MemberPresencePhoto v-if="MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" :present="presentById === null ? null : presentById[row.original.memberId] === true" size="sm" />
 					<NuxtLink :to="`/mentor/coder/${row.original.memberId}`" @click.stop>{{ row.original.memberName }}</NuxtLink>
 				</div>
-				<MemberCurrentBelt v-if="(kind !== 'belt' || memberId) && MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" />
+				<MemberCurrentBelt mode="small" v-if="(kind !== 'belt' || memberId) && MembersById[row.original.memberId]" :member="MembersById[row.original.memberId]!" />
 			</template>
 			<template #label-cell="{ row }">
-				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" size="md" class="RequestedBelt" />
+				<BeltColor v-if="kind === 'belt'" :belt="row.original.belt" mode="small" showLabel class="RequestedBelt" />
 				<span v-else>{{ row.original.categoryName ?? t("definitionMaintenance.unavailableCategory") }} — {{ row.original.label }}</span><span v-if="goalIds.has(row.original.definitionId)" class="GoalMarker">★ {{ t("achievementReviews.goal") }}</span>
 			</template>
 			<template #team-cell="{ row }">

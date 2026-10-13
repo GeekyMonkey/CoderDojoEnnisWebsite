@@ -188,7 +188,9 @@ export default {
 			yellow: "Yellow",
 		},
 		label: "{Color}",
+		noDescription: "No description is available for this belt.",
 		noob: "Noob",
+		noobDescription: "No belt has been awarded yet.",
 	},
 	maintenance: {
 		account: "Account settings",
