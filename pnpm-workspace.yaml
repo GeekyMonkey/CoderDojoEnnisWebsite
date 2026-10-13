@@ -5,11 +5,24 @@ allowBuilds:
   esbuild: true
   vue-demi: true
   workerd: true
+minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - '@electric-sql/pglite@0.5.9'
+  - '@intlify/core-base@11.4.14'
+  - '@intlify/core@11.4.14'
+  - '@intlify/devtools-types@11.4.14'
+  - '@intlify/message-compiler@11.4.14'
+  - '@intlify/shared@11.4.14'
+  - '@tanstack/query-core@5.104.2'
+  - '@tanstack/vue-query@5.104.2'
   - '@vitest/mocker@5.0.4'
   - '@vitest/spy@5.0.4'
+  - '@vue/language-core@3.3.13'
+  - postcss-calc@11.2.3
+  - tinybench@6.2.2
   - vitest@5.0.4
+  - vue-i18n@11.4.14
+  - vue-tsc@3.3.13
   - zod@4.6.7
 overrides:
   '@simple-git/argv-parser': 2.0.1

@@ -15,6 +15,18 @@ The core role portals are implemented; the final audit records remaining behavio
 
 This repo uses pnpm workspaces. The Nuxt app lives under `src/`.
 
+Use Node 24 LTS, version 24.15.0 or newer within the 24.x line. The repository pins 24.21.0 in `.node-version` and `.nvmrc`; this release has passed the three-day cooldown. Build environments, including Cloudflare Pages, should use the same version.
+
+With fnm installed, run these commands from the repository root in PowerShell:
+
+```powershell
+fnm install
+fnm use
+node --version
+```
+
+pnpm requires dependency releases to be at least 4,320 minutes (three days) old. This also applies when verifying an existing lockfile: installs and builds can be blocked if pinned releases are still cooling down. Existing version-specific exceptions are listed in `pnpm-workspace.yaml`; do not add broad package exceptions for routine updates.
+
 ### One-time setup (Biome)
 
 We use Biome for formatting. Some environments (e.g. Cloudflare Pages) don't support `pnpm add -g` during install, so we do **not** rely on package install hooks to install Biome globally.

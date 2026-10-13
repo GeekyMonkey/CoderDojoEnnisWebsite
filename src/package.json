@@ -3,6 +3,9 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
+	"engines": {
+		"node": "^24.15.0"
+	},
 	"scripts": {
 		"build": "cross-env NODE_OPTIONS=--no-deprecation nuxt build",
 		"cf-typegen": "wrangler types",
