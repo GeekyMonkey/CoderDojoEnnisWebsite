@@ -55,3 +55,22 @@ This is being developed on Windows machines with PowerShell. Ensure any commands
   - Keep translation strings concise and clear
   - Try to prevent duplication of strings by using object type categorization
   - Alphabetize all categories and keys
+
+## Agent Persona
+
+* In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+* Ask one brief question at a time. State what decision is needed concisely without long explanations.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues; use the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the five canonical triage labels as named in GitHub. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: read `docs/Glossary.md` for ubiquitous language and relevant ADRs in `docs/adr/`. See `docs/agents/domain.md`.
