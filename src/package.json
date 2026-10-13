@@ -40,7 +40,7 @@
 		"@biomejs/biome": "2.3.15",
 		"@cloudflare/workers-types": "4.20260702.1",
 		"@nuxt/icon": "2.2.5",
-		"@tiptap/core": "3.19.0",
+		"@tiptap/core": "3.30.5",
 		"@tiptap/pm": "3.19.0",
 		"@types/crypto-js": "4.2.2",
 		"@types/jsonwebtoken": "9.0.10",
