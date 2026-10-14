@@ -33,4 +33,4 @@
 - [x] 5.1 Fetch/merge latest develop; preserve updated login links, club photo and member calendar work.
 - [x] 5.2 Reuse SessionCalendar on Visit with native public presentation and an anonymous TanStack store; remove Google calendar.
 - [x] 5.3 Verify future/past feeds, loading/error/empty states, cancellation/caching and public/member boundaries.
-- [ ] 5.4 Push the feature branch and create a PR targeting develop.
+- [x] 5.4 Push the feature branch and create a PR targeting develop.
