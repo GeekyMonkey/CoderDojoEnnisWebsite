@@ -2,8 +2,7 @@
 definePageMeta({ layout: false, siteSection: "tidy-towns" });
 useHead({ title: "Ennis Tidy Towns 2020 Competition", meta: [{ name: "description", content: "" }] });
 </script>
-<template><div class="standalone-page">
-<div>
+<template><div class="tidy-towns-content">
 <h1>Ennis Tidy Towns 2020 Competition</h1>
 <p>
 				These are the entries for the Ennis Tidy Towns competition. Ninjas were
@@ -164,52 +163,4 @@ useHead({ title: "Ennis Tidy Towns 2020 Competition", meta: [{ name: "descriptio
 
 
 </table>
-</div>
 </div></template>
-
-<style lang="scss">
-/* Original declarations; selectors confined to this standalone document. */
-html[data-site-section="tidy-towns"] { all: revert; color-scheme: light; }
-:where(html[data-site-section="tidy-towns"]) body,
-:where(html[data-site-section="tidy-towns"] .standalone-page *) { all: revert; }
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page div {
-				margin: auto;
-				width: 80%;
-				font-family: "Open Sans", sans-serif;
-				font-size: 14px;
-				line-height: 21px;
-			}
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page table {
-				border-collapse: collapse;
-				/*  margin-left:auto; 
-  margin-right:auto;
-*/
-			}
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page th,
-:where(html[data-site-section="tidy-towns"]) .standalone-page td {
-				text-align: left;
-				padding: 10px;
-			}
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page tr th:nth-child(1) {
-				text-align: center;
-			}
-			:where(html[data-site-section="tidy-towns"]) .standalone-page tr td:nth-child(1) {
-				text-align: center;
-			}
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page tr:nth-child(even) {
-				background-color: #f2f2f2;
-			}
-
-			:where(html[data-site-section="tidy-towns"]) .standalone-page th {
-				background-color: #5a77a6;
-				color: white;
-			}
-		
-/* Restore the original HTML height hints after clearing framework image defaults. */
-:where(html[data-site-section="tidy-towns"]) .standalone-page img[height="120px"] { height: 120px; width: auto; }
-</style>

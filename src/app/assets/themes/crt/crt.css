@@ -1,5 +1,5 @@
 @layer dojo-theme {
-	html[data-site-section="application"][theme="crt"] {
+	html[theme="crt"] {
 		body {
 			--BrightGreen: #77ff77;
 

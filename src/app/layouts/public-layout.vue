@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import "~/assets/css/public.css";
 import PublicHeader from "~/components/Public/PublicHeader.vue";
 import PublicFooter from "~/components/Public/PublicFooter.vue";
 </script>

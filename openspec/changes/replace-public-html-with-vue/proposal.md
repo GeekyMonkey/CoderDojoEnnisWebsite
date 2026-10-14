@@ -21,7 +21,7 @@ Route-group names do not appear in URLs. Eleven pages use `public-layout`. Lab a
 | `home.html` | `/` | `index.vue` | Introduction, club photography, joining/visit actions, topic cards |
 | `_about.html` | `/about` | `about.vue` | Club, Teams, conduct, supporters, existing PayPal donation form |
 | `_join.html` | `/join` | `join.vue` | Waiting-list form, joining steps, volunteer contact and anchor |
-| `_whenwhere.html` | `/visit` | `visit.vue` | Times, venue, supervision guidance, calendar and map |
+| `_whenwhere.html` | `/visit` | `visit.vue` | Times, venue, supervision guidance, shared session calendar and map |
 | `_topics.html` | `/explore` | `explore.vue` | Topic groups, tutorials and local downloads |
 | `_members.html` | `/projects` | `projects.vue` | Public Coder/Mentor GitHub directory and portal-login action |
 | `_news.html` | `/news` | `news.vue` | Facebook updates and dated mentor-note archive |
@@ -35,7 +35,7 @@ Route-group names do not appear in URLs. Eleven pages use `public-layout`. Lab a
 `foo.vue` is removed without a replacement. `/chat` uses the standard public layout and an explicit external action instead of automatically redirecting visitors. Archived products, sales, software versions and events are retained as dated content, without presenting them as current recommendations.
 
 ## New Layout and Components
-Public components live only in `src/app/components/Public/` and use explicit imports. They do not import member, auth, Common, Modals, Themes or other application presentation components.
+Public components live only in `src/app/components/Public/` and use explicit imports. They do not import member, auth, Common, Modals or Themes presentation components. As explicitly requested after approval, Visit reuses `Sessions/SessionCalendar.vue`; its public branch delegates to isolated public presentation and a public store, without initializing member stores or rendering member controls.
 
 | File | Responsibility / pages |
 | --- | --- |
@@ -49,21 +49,23 @@ Public components live only in `src/app/components/Public/` and use explicit imp
 | `Public/PublicSupporters.vue` | Supporter logos and links; About |
 | `Public/PublicDonationForm.vue` | Existing PayPal form contract; About |
 | `Public/PublicEmbed.vue` | Responsive titled iframe with external fallback link; Visit |
+| `Public/PublicCalendarView.vue` | Native public presentation for the shared SessionCalendar component; Visit |
 | `Public/PublicProjectDirectory.vue` | Directory sections and loading/empty/error/retry states; Projects |
 | `Public/PublicDirectoryEntry.vue` | Safely rendered public GitHub entry |
 | `Public/PublicArchiveNotice.vue` | Date and archive context; News and Gifts |
 | `Public/PublicGiftCard.vue` | Gift image, description and existing product link; Gifts |
 | `src/app/components/Application/ApplicationShell.vue` | Application-only extraction of current UApp, notifications, UI-config bootstrap and ThemeFooter; never used by public pages |
 
-Lab preserves its own header, footer, tables, embedded CSS rules and `/theme/retro/css/retro.css` appearance within one `lab.vue`. Retain its retro stylesheet asset; mechanically isolate selectors only where needed to prevent cross-page leakage, without changing declarations or appearance. Do not add shared navigation, archive notices, theme support or redesigned content to Lab or Tidy Towns. Tidy Towns keeps its own embedded CSS, structure, competition copy, winners and entries in one `archive/tidy-towns-2020.vue`; preserve its existing appearance, with mechanical CSS isolation only where necessary.
+Lab preserves its own header, footer, tables, layout/content within one `lab.vue`, with the original embedded and retro CSS declarations retained in its `lab.css` area entry. Retain its retro stylesheet asset; load only its own area stylesheet without changing declarations or appearance. Do not add shared navigation, archive notices, theme support or redesigned content to Lab or Tidy Towns. Tidy Towns keeps its structure, competition copy, winners and entries in one `archive/tidy-towns-2020.vue`, with its original CSS declarations in `tidy-towns.css`; preserve its existing appearance, with only the content selector adapted to Nuxt’s wrapper structure.
 
 Keep unique page copy in page templates; extract components for repeated structure or a distinct behavior rather than making every paragraph a component.
 
 ## Impact
 - New capability: `public-website`; amended capability: `ui-themes` to make the independent public palette explicit.
-- New supporting files: `src/app/assets/css/public.css`, `src/app/data/publicNavigation.ts`, `src/app/stores/public/usePublicDirectoryStore.ts`.
+- Area stylesheet entries: `src/app/assets/css/application.css`, `public.css`, `lab.css`, `tidy-towns.css`. The app head selects exactly one area entry and replaces that link during client navigation; no route-gating selectors or global member CSS on public pages.
+- New supporting files: `src/app/assets/css/public.css`, `src/app/data/publicNavigation.ts`, `src/app/stores/public/usePublicDirectoryStore.ts`, `src/app/stores/public/usePublicCalendarStore.ts`.
 - Integration boundary: `src/app/app.vue`, `src/nuxt.config.ts`, `src/app/assets/css/app.css`, theme CSS under `src/app/assets/themes/`, `src/app/plugins/vue-query.ts` (provider/error-handling compatibility audit), and existing auth/member layout styling as needed for selector isolation. Existing member workflows and appearance remain acceptance criteria.
 - Retire the 13 static HTML documents, `src/public/css/public.css`, `src/public/js/public-site.js` and `src/public-site/` after their behavior is migrated and references audited. Keep images, downloads, and assets still referenced by Vue pages.
 - All public-page API reads use public stores backed by `@tanstack/vue-query`, reusing the existing query provider and member-store conventions for query keys, typed results, cancellation, caching and request state. API mutations, if found during migration, use store-owned TanStack mutations and query invalidation. External links, embeds and native third-party form submissions retain their current behavior.
-- Existing `/api/githubaccounts` contract remains unchanged; no new endpoint or database work.
+- Existing `/api/githubaccounts` and `/api/calendar` contracts remain unchanged; no new endpoint or database work. Replace the Google calendar iframe/link with the latest shared session calendar, retaining the map embed.
 - No changes to login URLs, protected-route authorization, deployment configuration, global SSR mode or unrelated member features.

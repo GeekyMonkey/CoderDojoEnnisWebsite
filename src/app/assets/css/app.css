@@ -6,26 +6,26 @@
 }
 
 @layer base {
-	html[data-site-section="application"] {
+	:root {
 		--card-border-color: #0a0;
 		--border-radius: 10px;
 	}
 
-	html[data-site-section="application"] {
+	html {
 		height: 100%;
 		font-size: clamp(0.8rem, 0.625rem + 0.3125vw, 1rem);
 	}
 
 	@media (max-width: 640px) {
-		html[data-site-section="application"] { font-size: 100%; }
+		html { font-size: 100%; }
 	}
 
-	:where(html[data-site-section="application"]) * {
+	* {
 		box-sizing: border-box;
 		text-wrap: balance;
 	}
 
-	:where(html[data-site-section="application"]) body {
+	body {
 		min-height: 100%;
 		position: relative;
 		text-wrap: balance;
@@ -36,31 +36,31 @@
 			color 0.5s;
 	}
 
-	:where(html[data-site-section="application"]) a {
+	a {
 		user-select: none;
 	}
 
-	:where(html[data-site-section="application"]) blockquote,
-:where(html[data-site-section="application"]) q {
+	blockquote,
+q {
 		font-style: italic;
 	}
 
-	:where(html[data-site-section="application"]) .ModalOverlay {
+	.ModalOverlay {
 		background: #00000040;
 		backdrop-filter: blur(2px);
 	}
 
-	:where(html[data-site-section="application"]) .BulletList {
+	.BulletList {
 		list-style-type: disc;
 	}
 
-	:where(html[data-site-section="application"]) .Checkbox_Root {
+	.Checkbox_Root {
 		button {
 			cursor: pointer;
 		}
 	}
 
-	:where(html[data-site-section="application"]) .TableCell {
+	.TableCell {
 		&:has([role="checkbox"]) {
 			padding-left: 0 !important;
 			padding-right: 0 !important;
@@ -72,16 +72,16 @@
 		}
 	}
 
-	:where(html[data-site-section="application"]) tr[data-state="selected"] > .TableCell,
-:where(html[data-site-section="application"]) tr[data-selected="true"] > .TableCell,
-:where(html[data-site-section="application"]) tr[aria-selected="true"] > .TableCell,
-:where(html[data-site-section="application"]) tr[data-expanded="true"] > .TableCell {
+	tr[data-state="selected"] > .TableCell,
+tr[data-selected="true"] > .TableCell,
+tr[aria-selected="true"] > .TableCell,
+tr[data-expanded="true"] > .TableCell {
 		background: var(--ui-bg-elevated) !important;
 	}
 }
 
 
 @layer base {
-  html[data-site-section="application"] { background-color: Canvas; color-scheme: light dark; }
-  :where(html[data-site-section="application"]) body { margin: 0; min-height: 100vh; }
+  html { background-color: Canvas; color-scheme: light dark; }
+  body { margin: 0; min-height: 100vh; }
 }

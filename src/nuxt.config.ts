@@ -48,7 +48,9 @@ export default defineNuxtConfig({
 		{ path: "~/components/Themes", pathPrefix: false },
 	],
 
-	css: ["~/assets/css/app.css", "~/assets/themes/Themes.css"],
+	css: [],
+
+	ui: { fonts: false },
 
 	devtools: { enabled: false },
 
@@ -62,6 +64,7 @@ export default defineNuxtConfig({
 
 	googleFonts: {
 		download: true,
+		inject: false,
 		families: {
 			"Nunito Sans": {
 				wght: "200..900",

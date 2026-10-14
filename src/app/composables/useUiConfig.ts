@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/vue-query";
+import { effectScope, type EffectScope } from "vue";
 import {
 	FormatBucketFileName,
 	FormatBucketFileUrl,
@@ -9,6 +10,8 @@ import {
 
 let ColorModeService: ReturnType<typeof useColorMode> | null = null;
 let IsColorModeInitialized = false;
+// Keep document theme synchronization alive when the application shell is temporarily unmounted.
+const COLOR_MODE_SCOPE: EffectScope = effectScope(true);
 
 // Shared across all callers of useUiConfig()
 const CustomThemeId = ref<string | null>(null);
@@ -128,19 +131,21 @@ export function useUiConfig() {
 		applyThemeAttribute(initialThemeId);
 
 		// Keep theme attribute in sync with system light/dark unless a custom theme is selected
-		watch(
-			() => ColorModeService?.value,
-			(next) => {
-				if (!next) {
-					return;
-				}
-				if (CustomThemeId.value) {
-					return;
-				}
-				applyThemeAttribute(next);
-			},
-			{ immediate: true },
-		);
+		COLOR_MODE_SCOPE.run((): void => {
+			watch(
+				() => ColorModeService?.value,
+				(next) => {
+					if (!next) {
+						return;
+					}
+					if (CustomThemeId.value) {
+						return;
+					}
+					applyThemeAttribute(next);
+				},
+				{ immediate: true },
+			);
+		});
 
 		IsColorModeInitialized = true;
 	};
