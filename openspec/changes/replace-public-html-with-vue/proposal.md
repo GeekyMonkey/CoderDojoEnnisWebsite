@@ -5,7 +5,8 @@ Public content duplicates navigation and page structure across static HTML docum
 
 ## What Changes
 - Replace all 13 HTML documents under `src/public/` with Nuxt pages under `src/app/pages/(public)/`.
-- Add a standard public layout, public-only navigation and content components, and a separate variable-based public stylesheet supporting system light/dark.
+- Add a standard public layout, public-only navigation and content components, and a separate variable-based public stylesheet supporting system light/dark for 11 pages.
+- Convert Lab and Tidy Towns into one standalone Vue page each with no shared layout or components; preserve their existing layout, content and CSS.
 - Isolate public presentation from member/auth components, theme preferences, global CSS selectors, and the CRT overlay.
 - Preserve current content and working integrations using Vue templates and a public directory store; update internal links to the new routes.
 - **BREAKING**: retire old HTML URLs and modal-hash compatibility. No forwarding, redirect aliases, or old-URL support.
@@ -13,7 +14,7 @@ Public content duplicates navigation and page structure across static HTML docum
 - This follows the completed `redesign-public-pages` change and expands its nine-page scope to all public HTML. Its static-document and URL-preservation decisions do not apply to this change.
 
 ## Affected Pages
-Route-group names do not appear in URLs. Each page uses `public-layout`.
+Route-group names do not appear in URLs. Eleven pages use `public-layout`. Lab and Tidy Towns use `layout: false` and retain their own layouts and CSS.
 
 | Source under `src/public/` | New URL | Vue page under `src/app/pages/(public)/` | Content / behavior |
 | --- | --- | --- | --- |
@@ -26,10 +27,10 @@ Route-group names do not appear in URLs. Each page uses `public-layout`.
 | `_news.html` | `/news` | `news.vue` | Facebook updates and dated mentor-note archive |
 | `_contact.html` | `/contact` | `contact.vue` | Email, Facebook, joining/visit links |
 | `_privacy.html` | `/privacy` | `privacy.vue` | Existing policy content and disclosures |
-| `lab.html` | `/lab` | `lab.vue` | 2024 lab plan, prerequisites and project roster; marked historical |
+| `lab.html` | `/lab` | `lab.vue` | Existing 2024 lab page converted as-is; no shared layout, components or public theme CSS |
 | `chat.html` | `/chat` | `chat.vue` | Club chat introduction and explicit link to existing hack.chat room |
 | `xmas/index.html` | `/gift-ideas` | `gift-ideas.vue` | 2024 gift categories, images and existing product links; marked historical |
-| `pages/2020-TidyTowns.html` | `/archive/tidy-towns-2020` | `archive/tidy-towns-2020.vue` | Competition description, winners and complete entries |
+| `pages/2020-TidyTowns.html` | `/archive/tidy-towns-2020` | `archive/tidy-towns-2020.vue` | Existing competition page converted as-is; no shared layout, components or public theme CSS |
 
 `foo.vue` is removed without a replacement. `/chat` uses the standard public layout and an explicit external action instead of automatically redirecting visitors. Archived products, sales, software versions and events are retained as dated content, without presenting them as current recommendations.
 
@@ -38,7 +39,7 @@ Public components live only in `src/app/components/Public/` and use explicit imp
 
 | File | Responsibility / pages |
 | --- | --- |
-| `src/app/layouts/public-layout.vue` | Public wrapper, stylesheet, skip link, header, main slot and footer; all pages |
+| `src/app/layouts/public-layout.vue` | Public wrapper, stylesheet, skip link, header, main slot and footer; all pages except Lab and Tidy Towns |
 | `Public/PublicHeader.vue` | Branding, portal-login link and primary navigation |
 | `Public/PublicNavigation.vue` | Responsive primary links, active state and keyboard-accessible mobile navigation |
 | `Public/PublicFooter.vue` | Contact/privacy links and secondary discovery links to lab, chat, gifts and archive |
@@ -50,10 +51,11 @@ Public components live only in `src/app/components/Public/` and use explicit imp
 | `Public/PublicEmbed.vue` | Responsive titled iframe with external fallback link; Visit |
 | `Public/PublicProjectDirectory.vue` | Directory sections and loading/empty/error/retry states; Projects |
 | `Public/PublicDirectoryEntry.vue` | Safely rendered public GitHub entry |
-| `Public/PublicArchiveNotice.vue` | Date and archive context; News, Lab, Gifts, Tidy Towns |
-| `Public/PublicProjectTable.vue` | Small semantic tables via typed columns/rows or slots; Lab and Tidy Towns, no pagination |
+| `Public/PublicArchiveNotice.vue` | Date and archive context; News and Gifts |
 | `Public/PublicGiftCard.vue` | Gift image, description and existing product link; Gifts |
 | `src/app/components/Application/ApplicationShell.vue` | Application-only extraction of current UApp, notifications, UI-config bootstrap and ThemeFooter; never used by public pages |
+
+Lab preserves its own header, footer, tables, embedded CSS rules and `/theme/retro/css/retro.css` appearance within one `lab.vue`. Retain its retro stylesheet asset; mechanically isolate selectors only where needed to prevent cross-page leakage, without changing declarations or appearance. Do not add shared navigation, archive notices, theme support or redesigned content to Lab or Tidy Towns. Tidy Towns keeps its own embedded CSS, structure, competition copy, winners and entries in one `archive/tidy-towns-2020.vue`; preserve its existing appearance, with mechanical CSS isolation only where necessary.
 
 Keep unique page copy in page templates; extract components for repeated structure or a distinct behavior rather than making every paragraph a component.
 

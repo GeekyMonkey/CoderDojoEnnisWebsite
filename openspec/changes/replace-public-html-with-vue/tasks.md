@@ -15,13 +15,15 @@
 - [ ] 3.2 Add About, Join and Visit; preserve supporters, donations, waiting-list and embeds.
 - [ ] 3.3 Add Explore, Projects, News, Contact and Privacy; preserve content and integrations.
 - [ ] 3.4 Migrate directory validation/fetch/cache/state into the public store and directory components.
-- [ ] 3.5 Add Lab, Chat, Gift ideas and Tidy Towns archive with dated historical context.
+- [ ] 3.5 Add Chat and Gift ideas with dated historical context.
+- [ ] 3.7 Convert Lab and Tidy Towns into one Vue page each with `layout: false`; preserve existing layout/content/CSS, including Lab retro stylesheet appearance, with no shared components or public theme.
 - [ ] 3.6 Update all internal links/assets, remove all 13 old HTML documents and retire obsolete static public CSS/scripts after a reference audit; add no URL forwarding.
 
 ## 4. Verification
 - [ ] 4.1 Check 13 routes, placeholders, document links, assets and removal of compatibility behavior.
 - [ ] 4.2 Verify directory success/empty/error/retry and invalid-login cases.
-- [ ] 4.3 Inspect every public page at desktop/mobile in both OS color schemes, keyboard access and 200% zoom.
+- [ ] 4.3 Inspect the 11 shared-layout pages at desktop/mobile in both OS color schemes, keyboard access and 200% zoom.
+- [ ] 4.7 Compare Lab and Tidy Towns with their source HTML for unchanged appearance and verify CSS isolation during route transitions.
 - [ ] 4.4 Verify public/auth/member transitions and direct loads with stored light/dark/CRT application preferences; record CSS/overlay isolation evidence.
 - [ ] 4.5 Run a production build and focused checks; leave prohibited format/test commands to the user.
 - [ ] 4.6 Review final diff for preserved member behavior, privacy content, external integration contracts and unrelated-work exclusion.
