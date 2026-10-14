@@ -12,7 +12,7 @@
 	const valid: ComputedRef<boolean> = computed((): boolean => profileIdentitySchema.safeParse(props.memberId).success);
 	const member: ComputedRef<MemberModel | null> = computed((): MemberModel | null => store.membersById.value[props.memberId] ?? null);
 	const title: ComputedRef<string> = computed((): string => member.value ? `${member.value.nameFirst ?? ""} ${member.value.nameLast ?? ""}`.trim() : t("maintenance.member"));
-	const directory: ComputedRef<{ label: string; to: string }> = computed((): { label: string; to: string } => member.value?.isNinja ? { label: t("nav.Members"), to: "/mentor/members" } : member.value?.isParent ? { label: t("nav.Parents"), to: "/mentor/parents" } : { label: t("nav.Mentors"), to: "/mentor/mentors" });
+	const directory: ComputedRef<{ label: string; to: string }> = computed((): { label: string; to: string } => member.value?.isNinja ? { label: t("nav.Coders"), to: "/mentor/coders" } : member.value?.isParent ? { label: t("nav.Parents"), to: "/mentor/parents" } : { label: t("nav.Mentors"), to: "/mentor/mentors" });
 	/** Delegate account changes to the maintenance store. */
 	async function saveAccount(body: GuardedUpdate<AccountFields>): Promise<MemberModel> { return store.saveAccount(props.memberId, body); }
 	/** Delegate goal changes to the maintenance store. */

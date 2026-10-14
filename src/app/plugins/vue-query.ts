@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp): void => {
 	const user: ReturnType<typeof useSupabaseUser> = useSupabaseUser();
 	const router: ReturnType<typeof useRouter> = useRouter();
 	const recover: (error: unknown) => Promise<void> = createSessionRecovery({
-		isProtectedPage: (): boolean => /^\/(mentor|coder|parent)(\/|$)/.test(router.currentRoute.value.path),
+		isProtectedPage: (): boolean => /^\/(mentor|coder|parent|member)(\/|$)/.test(router.currentRoute.value.path),
 		signOut: async (): Promise<void> => { await client.auth.signOut({ scope: "local" }); },
 		clear: (): void => { user.value = null; useAuthStore().reset(); queryClient.clear(); },
 		redirect: async (): Promise<void> => { await router.replace({ path: "/login", query: { reason: "session-expired" } }); },

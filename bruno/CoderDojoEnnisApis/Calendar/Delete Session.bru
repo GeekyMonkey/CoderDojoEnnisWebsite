@@ -1,0 +1,17 @@
+meta {
+ name: Delete Session
+ type: http
+}
+delete {
+ url: {{Host}}/api/Management/calendar-sessions/{{calendarSessionId}}
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "expected": "{{calendarRevision}}"
+}
+}

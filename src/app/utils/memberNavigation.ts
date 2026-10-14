@@ -22,6 +22,13 @@ export type MemberNavGroup = {
 	items: MemberNavItem[];
 };
 
+export type MemberNavSection = {
+	role: MemberRole;
+	items: NavigationMenuItem[];
+};
+
+const ROLE_ORDER: readonly MemberRole[] = ["mentor", "parent", "coder"];
+
 export function getRoleFlagsFromUserMeta(
 	meta: SupabaseUserMetaType | null | undefined,
 ): MemberRoleFlags {
@@ -96,7 +103,6 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					roles: ["parent"],
 					to: `${parentBase}/kids`,
 				},
-                { label: "Sessions", to: `${parentBase}/sessions`, icon: "i-lucide-calendar", roles: ["parent"] },
 				{
 					label: "Mentor Home",
 					to: `${mentorBase}`,
@@ -110,8 +116,8 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					roles: ["mentor"],
 				},
 				{
-					label: "Members",
-					to: `${mentorBase}/members`,
+					label: "Coders",
+					to: `${mentorBase}/coders`,
 					icon: "i-lucide-users",
 					roles: ["mentor"],
 				},
@@ -133,7 +139,6 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					icon: "i-lucide-log-in",
 					roles: ["mentor"],
 				},
-                { label: "Sessions", to: `${mentorBase}/sessions`, icon: "i-lucide-calendar", roles: ["mentor"] },
 				{
 					label: "Coder Home",
 					to: `${coderBase}`,
@@ -170,7 +175,6 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 					icon: "i-lucide-calendar-check",
 					roles: ["coder"],
 				},
-                { label: "Sessions", to: `${coderBase}/sessions`, icon: "i-lucide-calendar", roles: ["coder"] },
 			],
 		},
 		{
@@ -272,4 +276,73 @@ export function toNavigationMenuItems(
 			return item;
 		}),
 	);
+}
+
+/** Normalise translated labels for forgiving navigation searches. */
+export function normaliseNavigationSearch(
+	value: string,
+	locale: string,
+): string {
+	return value
+		.normalize("NFD")
+		.replace(/\p{M}/gu, "")
+		.toLocaleLowerCase(locale)
+		.trim();
+}
+
+/** Group allowed navigation by role, then sort and filter translated labels. */
+export function buildRoleNavigationSections(
+	groups: MemberNavGroup[],
+	roles: MemberRole[],
+	translateLabel: (label: string) => string,
+	locale: string,
+	search: string = "",
+): MemberNavSection[] {
+	const collator: Intl.Collator = new Intl.Collator(locale, {
+		sensitivity: "base",
+		numeric: true,
+	});
+	const query: string = normaliseNavigationSearch(search, locale);
+
+	/** Sort copied navigation items and submenu children without changing the model. */
+	function sortItems(items: NavigationMenuItem[]): NavigationMenuItem[] {
+		return items
+			.map((item: NavigationMenuItem): NavigationMenuItem => ({
+				...item,
+				value: typeof item.to === "string" ? item.to : item.label,
+				...(item.children?.length
+					? { children: sortItems(item.children) }
+					: {}),
+			}))
+			.sort((left: NavigationMenuItem, right: NavigationMenuItem): number =>
+				collator.compare(left.label ?? "", right.label ?? ""),
+			);
+	}
+
+	/** Retain matching items and the submenu context needed to reach them. */
+	function filterItems(items: NavigationMenuItem[]): NavigationMenuItem[] {
+		if (!query) return items;
+		return items.flatMap((item: NavigationMenuItem): NavigationMenuItem[] => {
+			if (normaliseNavigationSearch(item.label ?? "", locale).includes(query)) {
+				return [
+					{ ...item, ...(item.children?.length ? { defaultOpen: true } : {}) },
+				];
+			}
+			const children: NavigationMenuItem[] = filterItems(item.children ?? []);
+			return children.length ? [{ ...item, children, defaultOpen: true }] : [];
+		});
+	}
+
+	return ROLE_ORDER.filter((role: MemberRole): boolean =>
+		roles.includes(role),
+	).flatMap((role: MemberRole): MemberNavSection[] => {
+		const permitted: MemberNavGroup[] = filterNavByRoles(groups, [role]);
+		const items: NavigationMenuItem[] = filterItems(
+			sortItems(toNavigationMenuItems(permitted, translateLabel).flat()).sort(
+				(left: NavigationMenuItem, right: NavigationMenuItem): number =>
+					Number(right.to === `/${role}`) - Number(left.to === `/${role}`),
+			),
+		);
+		return items.length ? [{ role, items }] : [];
+	});
 }

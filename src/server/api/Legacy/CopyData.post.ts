@@ -732,16 +732,6 @@ async function CopySessionsTable(
 	db: SupabaseClient,
 ): Promise<string[]> {
 	const logs: string[] = [];
-	const { error: delError } = await db
-		.schema("coderdojo")
-		.from("sessions")
-		.delete()
-		.not("id", "is", null);
-	if (delError) {
-		logs.push(`Error deleting sessions: ${ErrorToString(delError)}`);
-	} else {
-		logs.push("Sessions deleted successfully");
-	}
 
 	const legacyMember = await ReadLegacyMemberAttendances();
 	const legacyAdult = await ReadLegacyAdultAttendances();
@@ -762,7 +752,7 @@ async function CopySessionsTable(
 				id: att.id,
 				sessionDate,
 				topic: "",
-				mentorsOnly: false,
+				sessionType: "CODING",
 				deleted: false,
 			});
 		}
@@ -772,15 +762,13 @@ async function CopySessionsTable(
 	);
 
 	try {
-		const { data, error } = await db
-			.schema("coderdojo")
-			.from("sessions")
-			.upsert(
-				models.map((m) => {
-					return sessionToRecord(m);
-				}),
-			)
-			.select();
+		const { error } = await db.schema("coderdojo").rpc("import_calendar_sessions", {
+			p_sessions: models.map((model: SessionModel): { session_date: string; topic: string; session_type: string } => ({
+				session_date: model.sessionDate,
+				topic: model.topic || "Coding Session",
+				session_type: model.sessionType,
+			})),
+		});
 		if (error) {
 			logs.push(`Error inserting sessions: ${error.message}`);
 			return logs;

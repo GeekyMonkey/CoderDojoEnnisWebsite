@@ -1,9 +1,10 @@
+import { clubToday } from "#shared/utils/CalendarDates";
 import { useProfileAuthorization } from "~/composables/useProfileAuthorization";
 import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import type { AttendanceSignInResponseModel } from "#shared/types/AttendanceModels";
 import type { MemberAttendanceSessionDateModel } from "#shared/types/models/MemberAttendanceSessionDateModel";
 import type { MemberAttendanceSessionStatsCollection } from "#shared/types/models/MemberAttendanceSessionStatsModel";
-import { IsYYYY_MM_dd, TodayYYYY_MM_dd } from "#shared/utils/DateHelpers";
+import { IsYYYY_MM_dd } from "#shared/utils/DateHelpers";
 
 // Using shared model: MemberAttendanceSessionStatsCollection
 
@@ -55,7 +56,8 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	}
 
 	const queryClient = useQueryClient();
- const headers: ReturnType<typeof useProfileAuthorization> = useProfileAuthorization();
+	const headers: ReturnType<typeof useProfileAuthorization> =
+		useProfileAuthorization();
 
 	const isSessionStatsEnabled = ref(false);
 
@@ -74,7 +76,10 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 		queryFn: async ({ signal }) => {
 			const response = await $fetch<
 				ApiResponse<MemberAttendanceSessionStatsCollection>
-			>("/api/MemberAttendance/SessionStats", { signal, headers: await headers() });
+			>("/api/MemberAttendance/SessionStats", {
+				signal,
+				headers: await headers(),
+			});
 			if (!response.success) {
 				throw new Error(
 					response.error || "Failed to load member attendance sessions",
@@ -106,7 +111,9 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 					response.error || "Failed to load member attendance session dates",
 				);
 			}
-			return response.data.dates;
+			return response.data.dates
+				.filter((date: string): boolean => date <= clubToday())
+				.sort((a: string, b: string): number => b.localeCompare(a));
 		},
 		placeholderData: () => [],
 		staleTime: 1000 * 60 * 5, // 5 minutes
@@ -126,7 +133,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	/**
 	 * Current local date in YYYY-MM-DD format
 	 */
-	const TodaysDate = computed(() => TodayYYYY_MM_dd());
+	const TodaysDate = computed(() => clubToday());
 
 	/**
 	 * On-demand query: get attendance for a specific session date.
@@ -146,7 +153,7 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 					ApiResponse<MemberAttendanceSessionDateModel>
 				>("/api/MemberAttendance/SessionDate", {
 					signal,
-     headers: await headers(),
+					headers: await headers(),
 					query: { sessionDate: date },
 				});
 				if (!response.success) {
@@ -165,15 +172,21 @@ export function useMemberAttendanceStore(): UseMemberAttendanceStoreResult {
 	const { data: currentSessionData } =
 		useSessionAttendanceForDate(CurrentSessionDate);
 
- // Invalidate all attendance-date queries without sending presence rows or IDs.
- UseSupabaseRealtimeTable({
-  table: "member_attendances",
-  onInvalidate: (): void => {
-   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionStats"] });
-   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionDate"] });
-   void queryClient.invalidateQueries({ queryKey: ["memberAttendanceSessionDates"] });
-  },
- });
+	// Invalidate all attendance-date queries without sending presence rows or IDs.
+	UseSupabaseRealtimeTable({
+		table: "member_attendances",
+		onInvalidate: (): void => {
+			void queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionStats"],
+			});
+			void queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDate"],
+			});
+			void queryClient.invalidateQueries({
+				queryKey: ["memberAttendanceSessionDates"],
+			});
+		},
+	});
 
 	/**
 	 * Computed session years from complete sessions list

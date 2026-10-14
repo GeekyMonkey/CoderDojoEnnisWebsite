@@ -16,7 +16,7 @@
  const badges: ReturnType<typeof useCoderAchievements> = useCoderAchievements("badge");
  const belts: ReturnType<typeof useCoderAchievements> = useCoderAchievements("belt");
  type CoderLink = { path: string; label: string };
- const LINKS: CoderLink[] = [{path:"profile",label:"userMenu.profile"},{path:"goals",label:"maintenance.goals"},{path:"badges",label:"achievementReviews.badgeHistory"},{path:"badges-available",label:"achievementReviews.available"},{path:"belts",label:"achievementReviews.beltHistory"},{path:"attendance",label:"maintenance.attendance"},{path:"sessions",label:"sessions.label"}];
+ const LINKS: CoderLink[] = [{path:"profile",label:"userMenu.profile"},{path:"goals",label:"maintenance.goals"},{path:"badges",label:"achievementReviews.badgeHistory"},{path:"badges-available",label:"achievementReviews.available"},{path:"belts",label:"achievementReviews.beltHistory"},{path:"attendance",label:"maintenance.attendance"},{path:"/member/calendar",label:"nav.Calendar"}];
  const decisions: ComputedRef<AchievementReview[]> = computed((): AchievementReview[] => coderRecentDecisions(
   [...(badges.store.data.value ?? []), ...(belts.store.data.value ?? [])], context.data.value?.member.loginDatePrevious ?? null,
  ));
@@ -39,7 +39,7 @@
       <div v-else class="CurrentBelt"><span>{{ t('achievementReviews.currentBelt') }}</span><BeltColor :belt="belts.currentBelt.value?.belt ?? 'noob'" size="lg" /></div>
      </CoderWelcome>
      <nav class="CoderLinks" :aria-label="t('coder.yourActivities')">
-      <UButton v-for="link in LINKS" :key="link.path" :to="`/coder/${link.path}`" variant="outline">{{ t(link.label) }}</UButton>
+      <UButton v-for="link in LINKS" :key="link.path" :to="link.path.startsWith('/') ? link.path : `/coder/${link.path}`" variant="outline">{{ t(link.label) }}</UButton>
      </nav>
      <CoderDecisionFeedback v-if="!achievementsLoading && !achievementsError" :decisions="decisions" />
      <UPageCard :title="t('maintenance.goals')">

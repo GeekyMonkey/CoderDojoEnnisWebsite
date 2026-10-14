@@ -1,0 +1,12 @@
+meta {
+ name: Calendar
+ type: http
+}
+get {
+ url: {{Host}}/api/member/calendar?view=future
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

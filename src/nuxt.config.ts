@@ -209,6 +209,7 @@ export default defineNuxtConfig({
 		"/coder/**": { appLayout: "member-layout" },
 		"/mentor/**": { appLayout: "member-layout" },
 		"/parent/**": { appLayout: "member-layout" },
+		"/member/**": { appLayout: "member-layout" },
 	},
 
 	runtimeConfig: {

@@ -434,7 +434,7 @@ export type Database = {
 			};
 			session_pods: {
 				Row: {
- deleted: boolean;
+					deleted: boolean;
 					ends_at: string | null;
 					url: string | null;
 					host_id: string | null;
@@ -445,7 +445,7 @@ export type Database = {
 					topic: string | null;
 				};
 				Insert: {
- deleted?: boolean;
+					deleted?: boolean;
 					ends_at?: string | null;
 					url?: string | null;
 					host_id?: string | null;
@@ -456,7 +456,7 @@ export type Database = {
 					topic?: string | null;
 				};
 				Update: {
- deleted?: boolean;
+					deleted?: boolean;
 					ends_at?: string | null;
 					url?: string | null;
 					host_id?: string | null;
@@ -467,26 +467,47 @@ export type Database = {
 					topic?: string | null;
 				};
 				Relationships: [
- { foreignKeyName: "session_pods_host_id_fkey"; columns: ["host_id"]; isOneToOne: false; referencedRelation: "members"; referencedColumns: ["id"]; },
- { foreignKeyName: "session_pods_host2_id_fkey"; columns: ["host2_id"]; isOneToOne: false; referencedRelation: "members"; referencedColumns: ["id"]; },
- ];
+					{
+						foreignKeyName: "session_pods_host_id_fkey";
+						columns: ["host_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "session_pods_host2_id_fkey";
+						columns: ["host2_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+				];
 			};
 			sessions: {
 				Row: {
+					description: string;
+					deleted: boolean;
+					revision: string;
 					id: string;
-					mentors_only: boolean;
+					session_type: "CODING" | "MENTOR_PLANNING" | "NOTE";
 					session_date: string;
 					topic: string | null;
 				};
 				Insert: {
+					description?: string;
+					deleted?: boolean;
+					revision?: string;
 					id?: string;
-					mentors_only?: boolean;
+					session_type?: "CODING" | "MENTOR_PLANNING" | "NOTE";
 					session_date: string;
 					topic?: string | null;
 				};
 				Update: {
+					description?: string;
+					deleted?: boolean;
+					revision?: string;
 					id?: string;
-					mentors_only?: boolean;
+					session_type?: "CODING" | "MENTOR_PLANNING" | "NOTE";
 					session_date?: string;
 					topic?: string | null;
 				};
@@ -530,20 +551,90 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
-   ensure_member_auth_binding: { Args: { p_auth_user: string; p_member: string }; Returns: undefined };
-   record_portal_login: { Args: { p_member: string; p_auth_user: string; p_kind: string; p_credential: string }; Returns: Json };
-   sign_in_attendance: { Args: { p_member: string; p_date: string; p_testing?: boolean }; Returns: Json };
-      resolve_member_identity: { Args: { p_auth_user: string }; Returns: string | null };
-			maintain_data: { Args: { p_actor: string; p_action: string; p_apply?: boolean; p_expected?: string | null }; Returns: Json };
- maintain_parent_child: { Args: { p_actor:string; p_id:string; p_action:string; p_fields:Json; p_expected?:Json }; Returns:Json };
- can_read_mentor_pods: { Args: Record<string, never>; Returns: boolean };
- maintain_session_pod: { Args: { p_actor: string; p_action: string; p_id?: string; p_fields?: Json; p_expected?: Json }; Returns: Json };
- join_member_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };
-			join_coder_session: { Args: { p_actor: string; p_session: string; p_expected_url: string }; Returns: Json };
-            coder_action: {
-                Args: {p_actor:string;p_action:string;p_kind?:string|null;p_definition?:string|null;p_fields?:Json;p_expected?:Json};
-                Returns: Json;
-            };
+			ensure_member_auth_binding: {
+				Args: { p_auth_user: string; p_member: string };
+				Returns: undefined;
+			};
+			record_portal_login: {
+				Args: {
+					p_member: string;
+					p_auth_user: string;
+					p_kind: string;
+					p_credential: string;
+				};
+				Returns: Json;
+			};
+			sign_in_attendance: {
+				Args: { p_member: string; p_date: string; p_testing?: boolean };
+				Returns: Json;
+			};
+			resolve_member_identity: {
+				Args: { p_auth_user: string };
+				Returns: string | null;
+			};
+			maintain_data: {
+				Args: {
+					p_actor: string;
+					p_action: string;
+					p_apply?: boolean;
+					p_expected?: string | null;
+				};
+				Returns: Json;
+			};
+			maintain_parent_child: {
+				Args: {
+					p_actor: string;
+					p_id: string;
+					p_action: string;
+					p_fields: Json;
+					p_expected?: Json;
+				};
+				Returns: Json;
+			};
+			can_read_mentor_pods: { Args: Record<string, never>; Returns: boolean };
+			maintain_calendar_session: {
+				Args: {
+					p_actor: string;
+					p_action: string;
+					p_id?: string;
+					p_fields?: Json;
+					p_expected?: string;
+				};
+				Returns: Json;
+			};
+			import_calendar_sessions: {
+				Args: { p_sessions: Json };
+				Returns: undefined;
+			};
+			maintain_session_pod: {
+				Args: {
+					p_actor: string;
+					p_action: string;
+					p_id?: string;
+					p_fields?: Json;
+					p_expected?: Json;
+				};
+				Returns: Json;
+			};
+			join_member_session: {
+				Args: { p_actor: string; p_session: string; p_expected_url: string };
+				Returns: Json;
+			};
+			join_coder_session: {
+				Args: { p_actor: string; p_session: string; p_expected_url: string };
+				Returns: Json;
+			};
+			coder_action: {
+				Args: {
+					p_actor: string;
+					p_action: string;
+					p_kind?: string | null;
+					p_definition?: string | null;
+					p_fields?: Json;
+					p_expected?: Json;
+				};
+				Returns: Json;
+			};
 			get_attendance_dates: {
 				Args: never;
 				Returns: {
@@ -587,12 +678,12 @@ export type Tables<
 	DefaultSchemaTableNameOrOptions extends
 		| keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
 		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
+	TableName extends (DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
 		? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
 				DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-		: never = never,
+		: never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
@@ -614,13 +705,12 @@ export type Tables<
 
 export type TablesInsert<
 	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema["Tables"]
-		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
+		keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+	TableName extends (DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
 		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-		: never = never,
+		: never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
@@ -639,13 +729,12 @@ export type TablesInsert<
 
 export type TablesUpdate<
 	DefaultSchemaTableNameOrOptions extends
-		| keyof DefaultSchema["Tables"]
-		| { schema: keyof DatabaseWithoutInternals },
-	TableName extends DefaultSchemaTableNameOrOptions extends {
+		keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+	TableName extends (DefaultSchemaTableNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
 		? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-		: never = never,
+		: never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
@@ -664,13 +753,12 @@ export type TablesUpdate<
 
 export type Enums<
 	DefaultSchemaEnumNameOrOptions extends
-		| keyof DefaultSchema["Enums"]
-		| { schema: keyof DatabaseWithoutInternals },
-	EnumName extends DefaultSchemaEnumNameOrOptions extends {
+		keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+	EnumName extends (DefaultSchemaEnumNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
 		? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-		: never = never,
+		: never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
@@ -683,11 +771,11 @@ export type CompositeTypes<
 	PublicCompositeTypeNameOrOptions extends
 		| keyof DefaultSchema["CompositeTypes"]
 		| { schema: keyof DatabaseWithoutInternals },
-	CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+	CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
 		schema: keyof DatabaseWithoutInternals;
 	}
 		? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-		: never = never,
+		: never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
 	schema: keyof DatabaseWithoutInternals;
 }
