@@ -28,7 +28,7 @@ Every page loads only `/css/public.css`. All visual choices live in custom prope
 ## Existing behavior
 The GitHub directory continues to use `/api/githubaccounts`, its existing published response, and safe text/URL construction. A public-only data helper owns fetching and state, keeping presentation separate from data access. No new endpoint or database query is needed. Inspect the actual endpoint contract before implementation.
 
-Preserve member sign-in at its current destination. Preserve old modal hashes on `/home.html` by mapping known hashes to the corresponding standalone pages with a small public-only script. Scripts must not inject inline CSS. Leave `js/app.js`, old theme files, and excluded pages unchanged.
+Member sign-in links use the current application route `/login`, as requested by the user on 2026-10-14. Preserve old modal hashes on `/home.html` by mapping known hashes to the corresponding standalone pages with a small public-only script. Scripts must not inject inline CSS. Leave `js/app.js`, old theme files, and excluded pages unchanged.
 
 ## Verification
 Check nine documents for semantic landmarks, heading order, a single shared CSS link, absence of embedded presentation, and resolvable internal links/assets. Verify all navigation and existing hash destinations, directory success/empty/error states, and current external integration paths. Inspect desktop and 360px mobile views in light and dark mode; check keyboard access, text zoom, contrast, and horizontal overflow. Run the production build when dependencies are available. Do not run the repository's format or test scripts automatically.

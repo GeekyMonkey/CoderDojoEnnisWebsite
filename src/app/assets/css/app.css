@@ -13,11 +13,13 @@
 
 	html {
 		height: 100%;
-		font-size: clamp(0.7rem, 0.625rem + 0.3125vw, 1rem);
+		font-size: clamp(0.8rem, 0.625rem + 0.3125vw, 1rem);
 	}
 
 	@media (max-width: 640px) {
-		html { font-size: 100%; }
+		html {
+			font-size: 100%;
+		}
 	}
 
 	* {
