@@ -2,7 +2,7 @@
 - [x] 1.1 Inventory all public HTML, placeholder routes and existing presentation boundaries.
 - [x] 1.2 List all 13 replacement routes, new components and affected integration files.
 - [x] 1.3 Validate the proposal with OpenSpec strict mode.
-- [ ] 1.4 Obtain proposal approval before implementation.
+- [x] 1.4 Obtain proposal approval before implementation.
 
 ## 2. Public foundation
 - [ ] 2.1 Add public route metadata, public layout and isolated application shell.

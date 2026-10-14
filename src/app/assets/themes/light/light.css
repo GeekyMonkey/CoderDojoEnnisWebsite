@@ -7,7 +7,7 @@
 
 @layer theme {
 	@layer dojo-theme {
-		html[theme="light"] {
+		html[data-site-section="application"][theme="light"] {
 			--app-theme: light;
 		}
 	}

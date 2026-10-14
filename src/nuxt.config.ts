@@ -10,13 +10,6 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			title: "CoderDojo Ennis",
-			htmlAttrs: {
-				style: "background-color:Canvas;color-scheme:light dark;",
-			},
-			bodyAttrs: {
-				class: "",
-				style: "margin:0;min-height:100vh;",
-			},
 			meta: [
 				{
 					name: "viewport",

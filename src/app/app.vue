@@ -1,34 +1,20 @@
 <script setup lang="ts">
- import { ACTION_TOASTER } from "~/utils/actionNotificationPolicy";
-	const log = useLogger("App.vue");
-	log.info("App.vue initialized");
+import { computed, type ComputedRef } from "vue";
+import ApplicationShell from "~/components/Application/ApplicationShell.vue";
 
-	// Load the UiConfig as early as possible
-	const { UiConfig } = useUiConfig();
-
-	// watch(
-	// 	UiConfig,
-	// 	(newConfig) => {
-	// 		if (newConfig) {
-	// 			log.info("Loaded with themesConfig:", {
-	// 				themesConfig: UiConfig.value?.themesConfig,
-	// 			});
-	// 		}
-	// 	},
-	// 	{ immediate: true },
-	// );
+type SiteSection = "application" | "public" | "lab" | "tidy-towns";
+const route: ReturnType<typeof useRoute> = useRoute();
+// Select the document scope without starting application presentation on public routes.
+const siteSection: ComputedRef<SiteSection> = computed<SiteSection>(() => {
+  const section: unknown = route.meta.siteSection;
+  return section === "public" || section === "lab" || section === "tidy-towns" ? section : "application";
+});
+useHead(() => ({ htmlAttrs: { "data-site-section": siteSection.value } }));
 </script>
 
 <template>
-	<UApp :toaster="ACTION_TOASTER">
-  <ActionNotificationPresenter />
-		<NuxtLoadingIndicator />
-
-		<NuxtLayout>
-			<NuxtPage />
-		</NuxtLayout>
-	</UApp>
-	<ThemeFooter />
+  <ApplicationShell v-if="siteSection === 'application'">
+    <NuxtLayout><NuxtPage /></NuxtLayout>
+  </ApplicationShell>
+  <NuxtLayout v-else><NuxtPage /></NuxtLayout>
 </template>
-
-<style lang="css"></style>

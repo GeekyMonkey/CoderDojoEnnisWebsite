@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { H3Event } from "h3";
-import { readFileSync } from "node:fs";
-import { runInNewContext } from "node:vm";
+import { parsePublicDirectory } from "~/stores/public/usePublicDirectoryStore";
 import handler from "./githubaccounts.get";
 
 const mocks = vi.hoisted(() => ({ client: vi.fn(), select: vi.fn(), eq: vi.fn(), or: vi.fn(), not: vi.fn(), neq: vi.fn(), order: vi.fn(), header: vi.fn() }));
@@ -46,19 +45,10 @@ describe("public GitHub directory", (): void => {
   await expect(handler(EVENT)).rejects.toMatchObject({ statusCode: 503, statusMessage: "GitHub directory unavailable" });
   expect(mocks.header).not.toHaveBeenCalled();
  });
- it("feeds the existing static directory through its same-origin loader", async (): Promise<void> => {
+ it("feeds the Vue directory store through the same raw public contract", async (): Promise<void> => {
   const response: unknown = await handler(EVENT);
-  const scope: { GithubUsers?: unknown; $apply: () => void } = { $apply: vi.fn() };
-  const ajax = vi.fn((): object => ({ done: (callback: (data: unknown) => void): void => callback(response) }));
-  runInNewContext(readFileSync("public/js/app.js", "utf8"), {
-   angular: { module: (): object => ({ controller: (_name: string, registration: [string, (value: typeof scope) => void]): void => registration[1](scope) }) },
-   location: { hash: "" }, console: { log: vi.fn() }, $: { ajax },
+  expect(parsePublicDirectory(response)).toEqual({
+   Members: [{ FirstName: "Mary Jane", LastName: "Smith", GithubLogin: "mary" }], Mentors: [],
   });
-  (scope as typeof scope & { LoadGithubAccounts: () => void }).LoadGithubAccounts();
-  expect(ajax).toHaveBeenCalledWith("/api/githubaccounts");
-  expect(scope.GithubUsers).toEqual(response); expect(scope.$apply).toHaveBeenCalled();
-  const template: string = readFileSync("public/_members.html", "utf8");
-  expect(template).toContain('ng-repeat="user in GithubUsers.Members"');
-  expect(template).toContain('ng-repeat="user in GithubUsers.Mentors"');
  });
 });
