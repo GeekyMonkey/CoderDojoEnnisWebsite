@@ -14,14 +14,15 @@
 - [ ] 3.1 Replace index.vue and remove foo.vue.
 - [ ] 3.2 Add About, Join and Visit; preserve supporters, donations, waiting-list and embeds.
 - [ ] 3.3 Add Explore, Projects, News, Contact and Privacy; preserve content and integrations.
-- [ ] 3.4 Migrate directory validation/fetch/cache/state into the public store and directory components.
+- [ ] 3.4 Migrate the directory to a typed TanStack Query public store following member-store conventions; reuse the existing provider, pass cancellation signals, expose query state/refetch and retain response/link validation.
+- [ ] 3.8 Audit all public API interactions; route reads and any writes through public TanStack stores, with query invalidation for writes and no component-level requests.
 - [ ] 3.5 Add Chat and Gift ideas with dated historical context.
 - [ ] 3.7 Convert Lab and Tidy Towns into one Vue page each with `layout: false`; preserve existing layout/content/CSS, including Lab retro stylesheet appearance, with no shared components or public theme.
 - [ ] 3.6 Update all internal links/assets, remove all 13 old HTML documents and retire obsolete static public CSS/scripts after a reference audit; add no URL forwarding.
 
 ## 4. Verification
 - [ ] 4.1 Check 13 routes, placeholders, document links, assets and removal of compatibility behavior.
-- [ ] 4.2 Verify directory success/empty/error/retry and invalid-login cases.
+- [ ] 4.2 Verify directory success/empty/error/retry, invalid-login, cache reuse, request deduplication, cancellation and background-refresh cases; verify the shared provider works on public routes without protected-page error redirects.
 - [ ] 4.3 Inspect the 11 shared-layout pages at desktop/mobile in both OS color schemes, keyboard access and 200% zoom.
 - [ ] 4.7 Compare Lab and Tidy Towns with their source HTML for unchanged appearance and verify CSS isolation during route transitions.
 - [ ] 4.4 Verify public/auth/member transitions and direct loads with stored light/dark/CRT application preferences; record CSS/overlay isolation evidence.

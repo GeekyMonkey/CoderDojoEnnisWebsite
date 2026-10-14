@@ -8,7 +8,7 @@ Public content duplicates navigation and page structure across static HTML docum
 - Add a standard public layout, public-only navigation and content components, and a separate variable-based public stylesheet supporting system light/dark for 11 pages.
 - Convert Lab and Tidy Towns into one standalone Vue page each with no shared layout or components; preserve their existing layout, content and CSS.
 - Isolate public presentation from member/auth components, theme preferences, global CSS selectors, and the CRT overlay.
-- Preserve current content and working integrations using Vue templates and a public directory store; update internal links to the new routes.
+- Preserve current content and working integrations using Vue templates and TanStack Query-based public stores following member data-store patterns; update internal links to the new routes.
 - **BREAKING**: retire old HTML URLs and modal-hash compatibility. No forwarding, redirect aliases, or old-URL support.
 - Replace the root redirect and remove the `/foo` placeholder.
 - This follows the completed `redesign-public-pages` change and expands its nine-page scope to all public HTML. Its static-document and URL-preservation decisions do not apply to this change.
@@ -62,7 +62,8 @@ Keep unique page copy in page templates; extract components for repeated structu
 ## Impact
 - New capability: `public-website`; amended capability: `ui-themes` to make the independent public palette explicit.
 - New supporting files: `src/app/assets/css/public.css`, `src/app/data/publicNavigation.ts`, `src/app/stores/public/usePublicDirectoryStore.ts`.
-- Integration boundary: `src/app/app.vue`, `src/nuxt.config.ts`, `src/app/assets/css/app.css`, theme CSS under `src/app/assets/themes/`, and existing auth/member layout styling as needed for selector isolation. Existing member workflows and appearance remain acceptance criteria.
+- Integration boundary: `src/app/app.vue`, `src/nuxt.config.ts`, `src/app/assets/css/app.css`, theme CSS under `src/app/assets/themes/`, `src/app/plugins/vue-query.ts` (provider/error-handling compatibility audit), and existing auth/member layout styling as needed for selector isolation. Existing member workflows and appearance remain acceptance criteria.
 - Retire the 13 static HTML documents, `src/public/css/public.css`, `src/public/js/public-site.js` and `src/public-site/` after their behavior is migrated and references audited. Keep images, downloads, and assets still referenced by Vue pages.
+- All public-page API reads use public stores backed by `@tanstack/vue-query`, reusing the existing query provider and member-store conventions for query keys, typed results, cancellation, caching and request state. API mutations, if found during migration, use store-owned TanStack mutations and query invalidation. External links, embeds and native third-party form submissions retain their current behavior.
 - Existing `/api/githubaccounts` contract remains unchanged; no new endpoint or database work.
 - No changes to login URLs, protected-route authorization, deployment configuration, global SSR mode or unrelated member features.

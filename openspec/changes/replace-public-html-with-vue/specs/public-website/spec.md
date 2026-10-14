@@ -50,7 +50,7 @@ The system SHALL preserve existing joining, donation, supporter, contact/social,
 - **THEN** existing policy disclosures, joining instructions, donation form contract and relevant embedded services remain available
 
 ### Requirement: Store-owned public directory
-The public directory SHALL access the existing `/api/githubaccounts` endpoint through a public store owning fetching, caching, validation and request state. It SHALL render only the existing public fields with safe text and validated GitHub links and provide loading, empty, error and retry states.
+The public directory SHALL access `/api/githubaccounts` through a typed TanStack Query public store following member-store patterns. TanStack SHALL own caching, request deduplication, retry and request state; the store SHALL own response validation and expose refetch. The directory SHALL render only existing public fields with safe text and validated GitHub links, with loading, empty, error and retry states.
 
 #### Scenario: Directory request fails then succeeds
 - **WHEN** the directory request fails and the visitor retries
@@ -93,3 +93,25 @@ The Tidy Towns HTML SHALL be converted into one `src/app/pages/(public)/archive/
 #### Scenario: Tidy Towns route transitions
 - **WHEN** a visitor moves between Tidy Towns, Lab, shared-layout public pages and application pages
 - **THEN** each retains its own appearance and standalone CSS does not leak across routes
+
+### Requirement: TanStack-based public API access
+All programmatic public-page API reads SHALL use store-owned TanStack Query queries following the member data-store patterns and the existing query provider. Any programmatic API writes SHALL use store-owned TanStack mutations and invalidate affected public query keys. Pages and components SHALL consume public store functions/state rather than make API calls or own queries directly. External links, iframes and native third-party form submissions SHALL retain their existing behavior.
+
+#### Scenario: Public read lifecycle
+- **WHEN** multiple public consumers request the same API data
+- **THEN** the public store uses a stable public query key and TanStack cache/deduplication
+- **AND** its query function passes the supplied AbortSignal to the request and exposes typed reactive data and query state
+
+#### Scenario: Anonymous query failure
+- **WHEN** a public API query fails
+- **THEN** the public page shows an error and offers store-owned refetch
+- **AND** no protected member store or protected-page login redirect is required
+
+#### Scenario: Cached data refresh
+- **WHEN** a public query refreshes previously loaded data
+- **THEN** valid cached content remains visible while fetching and on refresh failure
+- **AND** the store exposes the refresh state and error
+
+#### Scenario: Public API write
+- **WHEN** a migrated public page has a programmatic API write
+- **THEN** a public store executes a TanStack mutation and invalidates the affected public queries
