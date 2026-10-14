@@ -6,11 +6,14 @@
 		SESSION_ICONS,
 		type CalendarEntry,
 		type CalendarView,
+		type MemberCalendar,
 	} from "#shared/types/MemberCalendar";
 	import { calendarEntriesForView } from "#shared/utils/CalendarEntries";
 	import { clubToday } from "#shared/utils/CalendarDates";
 	import { useMemberCalendarStore } from "~/stores/useMemberCalendarStore";
 	import SessionCard from "./SessionCard.vue";
+	import PublicCalendarView from "~/components/Public/PublicCalendarView.vue";
+	import { usePublicCalendarStore } from "~/stores/public/usePublicCalendarStore";
 	const props = withDefaults(
 		defineProps<{
 			memberMode?: boolean;
@@ -21,10 +24,15 @@
 	);
 	const { t, locale } = useI18n();
 	const view: Ref<CalendarView> = ref("future");
-	const store: ReturnType<typeof useMemberCalendarStore> =
-		useMemberCalendarStore(view, null, (): "public" | "member" =>
-			props.memberMode ? "member" : "public",
-		);
+	const memberStore: ReturnType<typeof useMemberCalendarStore> | null = props.memberMode
+    ? useMemberCalendarStore(view, null, "member") : null;
+  const publicStore: ReturnType<typeof usePublicCalendarStore> | null = props.memberMode
+    ? null : usePublicCalendarStore(view);
+  const calendarData: ComputedRef<MemberCalendar | null> = computed((): MemberCalendar | null =>
+    memberStore?.data.value ?? publicStore?.data.value ?? null,
+  );
+  const isPending: ComputedRef<boolean> = computed((): boolean => memberStore?.isPending.value ?? publicStore?.isPending.value ?? false);
+  const isError: ComputedRef<boolean> = computed((): boolean => memberStore?.isError.value ?? publicStore?.isError.value ?? false);
 	const tabs: ComputedRef<TabsItem[]> = computed((): TabsItem[] => [
 		{
 			label: t("calendar.future"),
@@ -35,15 +43,15 @@
 	]);
 	const entries: ComputedRef<CalendarEntry[]> = computed((): CalendarEntry[] =>
 		calendarEntriesForView(
-			store.data.value?.sessions ?? [],
+			calendarData.value?.sessions ?? [],
 			view.value,
-			store.data.value?.today ?? clubToday(),
-			props.memberMode && store.isMentor.value,
+			calendarData.value?.today ?? clubToday(),
+			props.memberMode && memberStore?.isMentor.value === true,
 		),
 	);
 	const canManage: ComputedRef<boolean> = computed(
 		(): boolean =>
-			props.memberMode && props.showManagement && store.isMentor.value,
+			props.memberMode && props.showManagement && memberStore?.isMentor.value === true,
 	);
 	/** Format a date without converting it to the browser timezone. */
 	function displayDate(date: string): string {
@@ -51,9 +59,13 @@
 			dateStyle: "full",
 		});
 	}
+  // Retry the anonymous query without touching member data or management actions.
+  function retryPublicCalendar(): void { void publicStore?.refetch(); }
+
 </script>
 <template>
-	<div class="SessionCalendar">
+	<PublicCalendarView v-if="!memberMode" :view="view" :entries="entries" :pending="isPending" :failed="isError" :cached="calendarData !== null" :refreshing="publicStore?.isFetching.value ?? false" :displayDate="displayDate" @update:view="view = $event" @retry="retryPublicCalendar" />
+  <div v-else class="SessionCalendar">
 		<nav
 			v-if="canManage"
 			class="CalendarActions"
@@ -69,21 +81,21 @@
 			}}</UButton>
 		</nav>
 		<section
-			v-if="memberMode && showPods && store.data.value?.pods.length"
+			v-if="memberMode && showPods && calendarData?.pods.length"
 			class="CalendarSection"
 			:aria-label="t('calendar.pods')"
 		>
 			<h2>{{ t("calendar.pods") }}</h2>
 			<div
-				v-for="pod in store.data.value.pods"
+				v-for="pod in calendarData?.pods ?? []"
 				:key="pod.id"
 				class="CalendarPod"
 				:class="{ CalendarPrivate: pod.mentorsOnly }"
 			>
 				<SessionCard
 					:session="pod"
-					:joining="store.isSaving.value"
-					:join="store.join"
+					:joining="memberStore?.isSaving.value ?? false"
+					:join="memberStore!.join"
 					><UBadge v-if="pod.mentorsOnly" color="warning">{{
 						t("sessions.mentorsOnly")
 					}}</UBadge
@@ -99,11 +111,11 @@
 		<section class="CalendarSection" :aria-label="t('nav.Calendar')">
 			<UTabs v-model="view" :items="tabs" class="CalendarTabs"
 				><template #content>
-					<p v-if="store.isPending.value" role="status">
+					<p v-if="isPending" role="status">
 						{{ t("calendar.loading") }}
 					</p>
 					<UAlert
-						v-else-if="store.isError.value"
+						v-else-if="isError"
 						color="error"
 						:title="t('sessions.loadError')"
 					/>
