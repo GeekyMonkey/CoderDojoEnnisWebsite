@@ -1,3 +1,4 @@
+import { sessionTypeSchema } from "#shared/types/MemberCalendar";
 import { z } from "zod";
 import { DateStringSchema } from "../../utils/DateHelpers";
 import type { Database } from "../../../types/supabase";
@@ -9,7 +10,7 @@ export const SessionModelSchema = z.strictObject({
 	deleted: z.boolean().default(false),
 	sessionDate: DateStringSchema,
 	topic: z.string().nullable(),
-	mentorsOnly: z.boolean(),
+	sessionType: sessionTypeSchema,
 });
 
 export type SessionModel = z.infer<typeof SessionModelSchema>;
@@ -17,10 +18,10 @@ export type SessionModel = z.infer<typeof SessionModelSchema>;
 export function sessionFromRecord(record: SessionRecord): SessionModel {
 	return SessionModelSchema.parse({
 		id: record.id,
-		deleted: false,
+		deleted: record.deleted,
 		sessionDate: record.session_date,
 		topic: record.topic,
-		mentorsOnly: record.mentors_only,
+		sessionType: record.session_type,
 	});
 }
 
@@ -29,7 +30,7 @@ export function sessionToRecord(model: SessionModel): SessionRecord {
 		id: model.id,
 		session_date: model.sessionDate,
 		topic: model.topic,
-		mentors_only: model.mentorsOnly,
+		session_type: model.sessionType,
 	} as SessionRecord;
 }
 

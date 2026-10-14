@@ -1,0 +1,20 @@
+meta {
+ name: Create Session
+ type: http
+}
+post {
+ url: {{Host}}/api/Management/calendar-sessions
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "sessionDate": "2026-10-17",
+  "topic": "Coding Session",
+  "description": "",
+  "sessionType": "CODING"
+}
+}

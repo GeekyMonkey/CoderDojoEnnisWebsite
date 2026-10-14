@@ -29,10 +29,9 @@ useHead({ title: "Free coding club | CoderDojo Ennis", meta: [{ name: "descripti
 </ul>
 </article>
 <figure class="hero-image">
-<img alt="Young coders trying a hands-on electronics project at the dojo" fetchpriority="high" src="/images/HomeSlideshow/2015-03-07-Coder-Dojo-Soldering-4.jpg"/>
+<img alt="Coders using green laptops together at the club" fetchpriority="high" src="/images/HomeSlideshow/green_machines.jpg"/>
 <figcaption>
-<span class="photo-label">Club photo</span>Trying out electronics at
-						the club
+<span class="photo-label">Club photo</span>Coding together at the club
 					</figcaption>
 </figure>
 </section>

@@ -1,0 +1,23 @@
+meta {
+ name: Save Session
+ type: http
+}
+patch {
+ url: {{Host}}/api/Management/calendar-sessions/{{calendarSessionId}}
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "fields": {
+    "sessionDate": "2026-10-17",
+    "topic": "Coding Session",
+    "description": "",
+    "sessionType": "CODING"
+  },
+  "expected": "{{calendarRevision}}"
+}
+}

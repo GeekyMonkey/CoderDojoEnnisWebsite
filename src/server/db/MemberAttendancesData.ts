@@ -1,3 +1,4 @@
+import { clubToday } from "#shared/utils/CalendarDates";
 import type { EventHandlerRequest, H3Event } from "h3";
 import {
 	type MemberAttendanceModel,
@@ -5,7 +6,7 @@ import {
 	memberAttendanceFromRecords,
 	memberAttendanceToRecords,
 } from "#shared/types/models/MemberAttendanceModel";
-import { type DateString, TodayYYYY_MM_dd } from "#shared/utils/DateHelpers";
+import { type DateString } from "#shared/utils/DateHelpers";
 import { ErrorToString } from "#shared/utils/ErrorHelpers";
 import type { Database } from "../../types/supabase";
 import { GetSupabaseAdminClient } from "./DatabaseClient";
@@ -91,6 +92,7 @@ export const MemberAttendancesData = {
 				.schema("coderdojo")
 				.from("member_attendances")
 				.select("*")
+ .lte("date", clubToday())
 				.eq("date", date);
 			if (error || !data || data.length === 0) {
 				console.error("Error fetching member attendances for date:", error);
@@ -122,6 +124,7 @@ export const MemberAttendancesData = {
 				.from("member_attendances")
 				.select("*")
 				.gte("date", dateMin)
+ .lte("date", clubToday())
 				.lte("date", dateMax)
 				.order("date", { ascending: true });
 			if (error || !data || data.length === 0) {
@@ -192,6 +195,7 @@ export const MemberAttendancesData = {
 				.schema("coderdojo")
 				.from("member_attendances")
 				.select("*")
+ .lte("date", clubToday())
 				.eq("member_id", memberId)
 				.order("date", { ascending: false });
 			if (maxCount && maxCount > 0) {
@@ -227,7 +231,7 @@ export const MemberAttendancesData = {
 			const { count, error } = await supabase
 				.schema("coderdojo")
 				.from("member_attendances")
-				.select("*", { count: "exact", head: true })
+				.select("*", { count: "exact", head: true }).lte("date", clubToday())
 				.eq("member_id", memberId);
 			if (error) {
 				console.error("Error fetching member attendance count:", error);
@@ -270,11 +274,11 @@ export const MemberAttendancesData = {
 			const allDates: DateString[] = (data || []).map((r: any) => r.date);
 
 			// Ensure the dateToInclude is in the list
-			if (dateToInclude) {
+			if (dateToInclude && dateToInclude <= clubToday()) {
 				allDates.push(dateToInclude);
 			}
 			// Extract unique dates
-			const uniqueDates: DateString[] = Array.from(new Set(allDates));
+			const uniqueDates: DateString[] = Array.from(new Set(allDates)).filter((date: string): boolean => date <= clubToday()).sort((a: string, b: string): number => b.localeCompare(a));
 			return uniqueDates;
 		} catch (error) {
 			console.error(
@@ -355,7 +359,7 @@ export const MemberAttendancesData = {
 			// Upsert matching on member_id and date (so we don't duplicate attendances for same member/day)
 			const record = {
 				member_id: memberId,
-				date: date || TodayYYYY_MM_dd(),
+				date: date || clubToday(),
 			};
 			const { data, error } = await supabase
 				.schema("coderdojo")

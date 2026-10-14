@@ -1,3 +1,4 @@
+import { clubToday } from "#shared/utils/CalendarDates";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { GetSupabaseAdminClient, type SupabaseClientType } from "#server/db/DatabaseClient";
 import { z } from "zod";
@@ -7,7 +8,7 @@ import {
  type MemberRecord,
 	type MemberModel,
 } from "#shared/types/models/MemberModel";
-import { TodayYYYY_MM_dd, TimestampToDateString } from "#shared/utils/DateHelpers";
+import { TimestampToDateString } from "#shared/utils/DateHelpers";
 import { MemberBadgesData } from "../db/MemberBadgesData";
 import { MemberBeltsData } from "../db/MemberBeltsData";
 
@@ -50,7 +51,7 @@ export class AttendanceService {
 			throw new AttendanceServiceError("Member not provided", "NO_MEMBER");
 		}
 
-		const todayString: string = TodayYYYY_MM_dd();
+		const todayString: string = clubToday();
   const client: SupabaseClientType | null = await GetSupabaseAdminClient(this.event);
   if (!client) throw new AttendanceServiceError("Unable to record sign-in", "SIGN_IN_FAILED");
   const { data, error } = await client.schema("coderdojo").rpc("sign_in_attendance", {

@@ -57,6 +57,7 @@
 		return result;
 	});
 	const heading: ComputedRef<string> = computed((): string => t(`achievementReviews.${props.memberId ? `${props.kind}History` : `${props.kind}Pending`}`));
+	const pendingEmptyMessage: ComputedRef<string> = computed((): string => t(`achievementReviews.${props.kind}PendingEmpty`));
 	const columns: ComputedRef<ColumnDef<AchievementReview>[]> = computed((): ColumnDef<AchievementReview>[] => [
 		...(props.memberId ? [] : [{ accessorKey: "memberName", header: t("coders.label") }]),
 		{ accessorKey: "label", header: t(`achievementReviews.${props.kind}`) },
@@ -113,11 +114,11 @@
 			<p>{{ t("achievementReviews.loadError") }}</p>
 			<UButton @click="reviews.refetch()">{{ t("achievementReviews.retry") }}</UButton>
 		</div>
-		<p v-else-if="!isLoading && !rows.length">{{ t("achievementReviews.empty") }}</p>
+		<p v-else-if="!isLoading && !rows.length">{{ memberId ? t("achievementReviews.empty") : pendingEmptyMessage }}</p>
 		<MemberPresenceLegend v-if="!memberId && rows.length" />
 		<section v-for="group in groups" :key="group.key" class="HistorySection">
 		<h3 v-if="memberId">{{ t(`achievementReviews.${group.key}`) }} ({{ group.rows.length }})</h3>
-		<p v-if="memberId && !isLoading && !group.rows.length">{{ t("achievementReviews.empty") }}</p>
+		<p v-if="memberId && !isLoading && !group.rows.length">{{ group.key === "pending" ? pendingEmptyMessage : t("achievementReviews.empty") }}</p>
 		<UTable v-if="!isError && (isLoading || group.rows.length)" v-model:expanded="expanded" :data="group.rows" :columns="columns" :loading="isLoading" :getRowId="rowId" :meta="tableMeta" @select="selectRow">
 			<template #memberName-cell="{ row }">
 				<div class="MemberCell">

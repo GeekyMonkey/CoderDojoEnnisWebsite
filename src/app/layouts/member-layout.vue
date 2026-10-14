@@ -1,28 +1,46 @@
 <script setup lang="ts">
 	import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
+	import type { ComputedRef, Ref } from "vue";
 	import type { SupabaseUserMetaType } from "#shared/types/Supabase";
-	import type { MemberModel, MemberSupabaseModel } from "#shared/types/models/MemberModel";
+	import type {
+		MemberModel,
+		MemberSupabaseModel,
+	} from "#shared/types/models/MemberModel";
 	import { useMyProfileStore } from "~/stores/useMyProfileStore";
 	import { provideMemberLayoutContext } from "~/composables/useMemberLayoutContext";
 	import {
 		buildNavigationModel,
-		filterNavByRoles,
+		normaliseNavigationSearch,
+		buildRoleNavigationSections,
 		getMemberRoles,
 		getRoleFlagsFromUserMeta,
-		toNavigationMenuItems,
+		type MemberNavSection,
 		type MemberRole,
 		type MemberRoleFlags,
 	} from "~/utils/memberNavigation";
 
-	const route = useRoute();
-	const router = useRouter();
-	const user = useSupabaseUser();
-	const { profile: currentMember } = useMyProfileStore();
-	const { CurrentTheme, SetTheme, ThemesConfig } = useUiConfig();
-	const { locale, setLocale, setLocaleCookie, locales, t, te } = useI18n();
+	type RoleLabels = Record<MemberRole, string>;
 
-	const themeSelectRef = ref<{ isOpen: Ref<boolean> } | null>(null);
-	const languageSelectRef = ref<{ isOpen: Ref<boolean> } | null>(null);
+	const navigationUi: NonNullable<NavigationMenuItem["ui"]> = {
+		link: "MemberNavLink",
+		linkLabel: "MemberNavLabel",
+		linkLeadingIcon: "MemberNavIcon",
+		linkTrailing: "MemberNavTrailing",
+		linkTrailingIcon: "MemberNavIcon",
+		childLinkLabel: "MemberNavLabel",
+	};
+
+	const route: ReturnType<typeof useRoute> = useRoute();
+	const router: ReturnType<typeof useRouter> = useRouter();
+	const user: ReturnType<typeof useSupabaseUser> = useSupabaseUser();
+	const { profile: currentMember } = useMyProfileStore();
+	const { locale, t, te } = useI18n();
+
+	const themeSelectRef: Ref<{ isOpen: boolean } | null> = ref(null);
+	const languageSelectRef: Ref<{ isOpen: boolean } | null> = ref(null);
+	const navigationSearch: Ref<string> = ref("");
+	const searchInputRef: Ref<{ inputRef: HTMLInputElement | null } | null> =
+		ref(null);
 
 	const section = computed<string | null>(() => {
 		const seg = route.path.split("/")[1];
@@ -32,42 +50,83 @@
 	const roles = computed<MemberRole[]>(() => {
 		const meta = (user.value?.user_metadata ??
 			null) as SupabaseUserMetaType | null;
-		const flags: MemberRoleFlags = currentMember.value ? { isMentor: currentMember.value.isMentor, isParent: currentMember.value.isParent, isCoder: currentMember.value.isNinja } : getRoleFlagsFromUserMeta(meta);
+		const flags: MemberRoleFlags = currentMember.value
+			? {
+					isMentor: currentMember.value.isMentor,
+					isParent: currentMember.value.isParent,
+					isCoder: currentMember.value.isNinja,
+				}
+			: getRoleFlagsFromUserMeta(meta);
 		return getMemberRoles(flags);
 	});
 
-	const navGroups = computed(() => {
-		const groups = buildNavigationModel("");
-		return filterNavByRoles(groups, roles.value);
-	});
-
-	const navItems = computed<NavigationMenuItem[][]>(() => {
-		const translateLabel = (label: string) => {
-			const key = `nav.${label}`;
-			return te(key) ? t(key) : label;
-		};
-		return toNavigationMenuItems(navGroups.value, translateLabel);
-	});
-
-	const primaryNavItems = computed<NavigationMenuItem[][]>(() => {
-		return navItems.value.slice(0, 1);
-	});
-
-	const secondaryNavItems = computed<NavigationMenuItem[][]>(() => {
-		return navItems.value.slice(1);
-	});
-
-	const titleByPath = computed(() => {
-		const map = new Map<string, string>();
-		for (const group of navItems.value) {
-			for (const item of group) {
-				if (typeof item.to === "string") {
-					map.set(item.to, item.label ?? "");
+	const roleBase: ComputedRef<string> = computed((): string =>
+		section.value === "member"
+			? `/${roles.value[0] ?? "coder"}`
+			: `/${section.value ?? roles.value[0] ?? "coder"}`,
+	);
+	const sharedNavigation: ComputedRef<NavigationMenuItem[]> = computed(
+		(): NavigationMenuItem[] => [
+			{
+				label: t("nav.Calendar"),
+				to: "/member/calendar",
+				icon: "i-lucide-calendar",
+			},
+		],
+	);
+	const visibleSharedNavigation: ComputedRef<NavigationMenuItem[]> = computed(
+		(): NavigationMenuItem[] =>
+			sharedNavigation.value.filter((item: NavigationMenuItem): boolean =>
+				normaliseNavigationSearch(item.label ?? "", locale.value).includes(
+					normaliseNavigationSearch(navigationSearch.value, locale.value),
+				),
+			),
+	);
+	const roleLabels: ComputedRef<RoleLabels> = computed((): RoleLabels => ({
+		mentor: t("mentors.label"),
+		parent: t("parents.label"),
+		coder: t("coders.label"),
+	}));
+	const navSections: ComputedRef<MemberNavSection[]> = computed(
+		(): MemberNavSection[] =>
+			buildRoleNavigationSections(
+				buildNavigationModel(""),
+				roles.value,
+				translateNavigationLabel,
+				locale.value,
+			),
+	);
+	const visibleNavSections: ComputedRef<MemberNavSection[]> = computed(
+		(): MemberNavSection[] =>
+			buildRoleNavigationSections(
+				buildNavigationModel(""),
+				roles.value,
+				translateNavigationLabel,
+				locale.value,
+				navigationSearch.value,
+			),
+	);
+	const showRoleHeadings: ComputedRef<boolean> = computed(
+		(): boolean => roles.value.length > 1,
+	);
+	const navigationSearchKey: ComputedRef<string> = computed((): string =>
+		navigationSearch.value.trim(),
+	);
+	const titleByPath: ComputedRef<Map<string, string>> = computed(
+		(): Map<string, string> => {
+			const map: Map<string, string> = new Map();
+			/** Include submenu destinations in the unfiltered page-title lookup. */
+			function addItems(items: NavigationMenuItem[]): void {
+				for (const item of items) {
+					if (typeof item.to === "string") map.set(item.to, item.label ?? "");
+					if (item.children) addItems(item.children);
 				}
 			}
-		}
-		return map;
-	});
+			for (const navSection of navSections.value) addItems(navSection.items);
+			addItems(sharedNavigation.value);
+			return map;
+		},
+	);
 
 	const pageTitle = computed(() => {
 		return titleByPath.value.get(route.path) || "";
@@ -87,18 +146,33 @@
 		return full || user.value?.email || "User";
 	});
 
-	function openProfile() {
-		const base = section.value ? `/${section.value}` : "";
+	/** Translate a navigation label when a locale entry exists. */
+	function translateNavigationLabel(label: string): string {
+		const key: string = `nav.${label}`;
+		return te(key) ? t(key) : label;
+	}
+
+	/** Clear the filter and keep keyboard focus in the search field. */
+	function clearNavigationSearch(): void {
+		navigationSearch.value = "";
+		searchInputRef.value?.inputRef?.focus();
+	}
+
+	/** Open the profile for the current role area. */
+	function openProfile(): void {
+		const base: string = roleBase.value;
 		router.push(`${base}/profile`);
 	}
 
-	function openThemeMenu() {
+	/** Open theme preferences from the user menu. */
+	function openThemeMenu(): void {
 		if (themeSelectRef.value) {
 			themeSelectRef.value.isOpen = true;
 		}
 	}
 
-	function openLanguageMenu() {
+	/** Open language preferences from the user menu. */
+	function openLanguageMenu(): void {
 		if (languageSelectRef.value) {
 			languageSelectRef.value.isOpen = true;
 		}
@@ -167,7 +241,7 @@
 
 			<template #header="{ collapsed }">
 				<NuxtLink
-					:to="section ? `/${section}` : '/'"
+					:to="roleBase"
 					class="flex items-center gap-2 px-1 MemberLayoutHeaderLogo"
 				>
 					<img src="/images/Logos/Logo.png" class="h-8 w-8 CoderDojoLogo" />
@@ -175,63 +249,105 @@
 				</NuxtLink>
 			</template>
 
-			<template #default="{ collapsed }">
-				<UNavigationMenu
-					:collapsed="collapsed"
-					:items="primaryNavItems"
-					:ui="{
-						link: 'items-center',
-						linkLabel:
-							'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
-						linkLeadingIcon: 'self-center',
-						linkTrailing: 'self-center',
-						linkTrailingIcon: 'self-center',
-					}"
-					orientation="vertical"
-					class="mt-2"
-				/>
-
-				<UNavigationMenu
-					v-if="secondaryNavItems.length > 0"
-					:collapsed="collapsed"
-					:items="secondaryNavItems"
-					:ui="{
-						link: 'items-center',
-						linkLabel:
-							'whitespace-normal wrap-break-word overflow-visible text-clip leading-[1.1]',
-						linkLeadingIcon: 'self-center',
-						linkTrailing: 'self-center',
-						linkTrailingIcon: 'self-center',
-					}"
-					orientation="vertical"
-					class="mt-auto"
-				/>
+			<template #default="{ collapsed, collapse }">
+				<div class="MemberNavigation">
+					<UButton
+						v-if="collapsed"
+						icon="i-lucide-search"
+						color="neutral"
+						variant="ghost"
+						:aria-label="t('navigation.filter')"
+						@click="collapse(false)"
+					/>
+					<UInput
+						v-else
+						ref="searchInputRef"
+						v-model="navigationSearch"
+						class="MemberNavSearch"
+						icon="i-lucide-search"
+						:placeholder="t('navigation.filter')"
+						:aria-label="t('navigation.filter')"
+						autocomplete="off"
+						@keydown.esc.stop="clearNavigationSearch"
+					>
+						<template v-if="navigationSearch" #trailing>
+							<UButton
+								icon="i-lucide-x"
+								color="neutral"
+								variant="link"
+								size="xs"
+								:aria-label="t('navigation.clear')"
+								@click="clearNavigationSearch"
+							/>
+						</template>
+					</UInput>
+					<section
+						v-for="navSection in visibleNavSections"
+						:key="navSection.role"
+						class="MemberNavSection"
+						:class="{ MemberNavRoleSection: showRoleHeadings }"
+						:aria-label="roleLabels[navSection.role]"
+					>
+						<h2
+							v-if="showRoleHeadings && !collapsed"
+							class="MemberNavRoleHeading"
+						>
+							{{ roleLabels[navSection.role] }}
+						</h2>
+						<UNavigationMenu
+							:key="`${navSection.role}:${navigationSearchKey}`"
+							:collapsed="collapsed"
+							:items="navSection.items"
+							:ui="navigationUi"
+							orientation="vertical"
+						/>
+					</section>
+					<p
+						v-if="!visibleNavSections.length && !visibleSharedNavigation.length"
+						class="MemberNavEmpty"
+						role="status"
+					>
+						{{ t("navigation.noMatches") }}
+					</p>
+				</div>
 			</template>
 
 			<template #footer="{ collapsed }">
-				<UDropdownMenu
-					:items="userMenuItems"
-					:ui="{ content: 'w-(--reka-dropdown-menu-trigger-width)' }"
-				>
-					<UButton
-						:label="collapsed ? undefined : displayName"
-						color="neutral"
-						variant="ghost"
-						class="w-full justify-start items-center"
-						:block="collapsed"
-						icon="i-lucide-user"
-						:trailing-icon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
-						:ui="{
-							label:
-								'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
-							leadingIcon: 'self-center',
-							trailingIcon: 'ml-auto self-center',
-						}"
+				<div class="MemberNavFooter">
+					<UNavigationMenu
+						v-if="visibleSharedNavigation.length"
+						:items="visibleSharedNavigation"
+						:collapsed="collapsed"
+						:ui="navigationUi"
+						orientation="vertical"
+						class="MemberSharedNavigation"
 					/>
-				</UDropdownMenu>
+					<UDropdownMenu
+						:items="userMenuItems"
+						:ui="{ content: 'w-(--reka-dropdown-menu-trigger-width)' }"
+					>
+						<UButton
+							:label="collapsed ? undefined : displayName"
+							color="neutral"
+							variant="ghost"
+							class="w-full justify-start items-center"
+							:block="collapsed"
+							icon="i-lucide-user"
+							:trailing-icon="
+								collapsed ? undefined : 'i-lucide-chevrons-up-down'
+							"
+							:ui="{
+								label:
+									'flex-1 text-left whitespace-normal wrap-break-word leading-[1.1]',
+								leadingIcon: 'self-center',
+								trailingIcon: 'ml-auto self-center',
+							}"
+						/>
+					</UDropdownMenu>
 
-				<ThemeSelect ref="themeSelectRef" :showTriggerButton="false" />
-				<LanguageSelect ref="languageSelectRef" :showTriggerButton="false" />
+					<ThemeSelect ref="themeSelectRef" :showTriggerButton="false" />
+					<LanguageSelect ref="languageSelectRef" :showTriggerButton="false" />
+				</div>
 			</template>
 		</UDashboardSidebar>
 
@@ -249,5 +365,63 @@
 		div:has(> .MemberLayoutHeaderLogo) {
 			display: none;
 		}
+	}
+</style>
+
+<style scoped lang="scss">
+	.MemberNavigation {
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--spacing) * 2);
+		min-width: 0;
+	}
+	.MemberNavFooter {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: calc(var(--spacing) * 2);
+	}
+	.MemberSharedNavigation {
+		width: 100%;
+	}
+	.MemberNavSearch {
+		width: 100%;
+	}
+	.MemberNavSection {
+		min-width: 0;
+	}
+	.MemberNavRoleSection + .MemberNavRoleSection {
+		border-top: 1px solid var(--ui-border);
+		margin-top: calc(var(--spacing) * 2);
+		padding-top: calc(var(--spacing) * 2);
+	}
+	.MemberNavRoleHeading {
+		margin: 0;
+		padding: calc(var(--spacing) * 2);
+		color: var(--ui-text-dimmed);
+		font-size: var(--text-xs);
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	.MemberNavEmpty {
+		color: var(--ui-text-muted);
+		font-size: var(--text-sm);
+		padding: calc(var(--spacing) * 2);
+	}
+	:deep(.MemberNavLink) {
+		align-items: center;
+	}
+	:deep(.MemberNavLabel) {
+		white-space: normal;
+		overflow-wrap: anywhere;
+		overflow: visible;
+		text-overflow: clip;
+		line-height: 1.1;
+	}
+	:deep(.MemberNavIcon),
+	:deep(.MemberNavTrailing) {
+		align-self: center;
 	}
 </style>

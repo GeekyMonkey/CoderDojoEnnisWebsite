@@ -1,0 +1,17 @@
+meta {
+ name: Join Pod
+ type: http
+}
+post {
+ url: {{Host}}/api/member/calendar/join
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "sessionId": "{{podId}}"
+}
+}

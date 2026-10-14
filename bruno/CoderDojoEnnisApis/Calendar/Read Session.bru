@@ -1,0 +1,12 @@
+meta {
+ name: Read Session
+ type: http
+}
+get {
+ url: {{Host}}/api/Management/calendar-sessions/{{calendarSessionId}}
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
