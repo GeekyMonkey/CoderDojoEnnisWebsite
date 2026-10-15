@@ -163,6 +163,7 @@ export type Database = {
 				Row: {
 					application_date: string | null;
 					application_notes: string | null;
+					showcase_item_ids: string[];
 					awarded: string | null;
 					awarded_by_adult_id: string | null;
 					awarded_notes: string | null;
@@ -177,6 +178,7 @@ export type Database = {
 				Insert: {
 					application_date?: string | null;
 					application_notes?: string | null;
+					showcase_item_ids?: string[];
 					awarded?: string | null;
 					awarded_by_adult_id?: string | null;
 					awarded_notes?: string | null;
@@ -191,6 +193,7 @@ export type Database = {
 				Update: {
 					application_date?: string | null;
 					application_notes?: string | null;
+					showcase_item_ids?: string[];
 					awarded?: string | null;
 					awarded_by_adult_id?: string | null;
 					awarded_notes?: string | null;
@@ -237,6 +240,7 @@ export type Database = {
 				Row: {
 					application_date: string | null;
 					application_notes: string | null;
+					showcase_item_ids: string[];
 					awarded: string | null;
 					awarded_by_adult_id: string | null;
 					awarded_notes: string | null;
@@ -250,6 +254,7 @@ export type Database = {
 				Insert: {
 					application_date?: string | null;
 					application_notes?: string | null;
+					showcase_item_ids?: string[];
 					awarded?: string | null;
 					awarded_by_adult_id?: string | null;
 					awarded_notes?: string | null;
@@ -263,6 +268,7 @@ export type Database = {
 				Update: {
 					application_date?: string | null;
 					application_notes?: string | null;
+					showcase_item_ids?: string[];
 					awarded?: string | null;
 					awarded_by_adult_id?: string | null;
 					awarded_notes?: string | null;
@@ -623,6 +629,10 @@ export type Database = {
 			join_coder_session: {
 				Args: { p_actor: string; p_session: string; p_expected_url: string };
 				Returns: Json;
+			};
+			repair_application_showcase: {
+				Args: { p_kind: string; p_member?: string };
+				Returns: undefined;
 			};
 			coder_action: {
 				Args: {

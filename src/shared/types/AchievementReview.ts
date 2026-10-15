@@ -1,20 +1,27 @@
+import { showcaseItemSchema, type ShowcaseItem } from "./Showcase";
 import { z } from "zod";
 import { BeltModelSchema, type BeltModel } from "./models/BeltModel";
 
 export const AchievementKindSchema = z.enum(["badge", "belt"]);
 export type AchievementKind = z.infer<typeof AchievementKindSchema>;
-export const AchievementDecisionSchema = z.strictObject({
-	kind: AchievementKindSchema,
-	id: z.uuid(),
-	action: z.enum(["approve", "reject", "undo"]),
-	notes: z.string().trim().max(4000).default(""),
-	expectedAwarded: z.number().nullable(),
-	expectedRejected: z.number().nullable(),
-}).superRefine((value: AchievementDecision, context: z.RefinementCtx): void => {
-	if (value.action !== "undo" && !value.notes) {
-		context.addIssue({ code: "custom", path: ["notes"], message: "Decision notes are required" });
-	}
-});
+export const AchievementDecisionSchema = z
+	.strictObject({
+		kind: AchievementKindSchema,
+		id: z.uuid(),
+		action: z.enum(["approve", "reject", "undo"]),
+		notes: z.string().trim().max(4000).default(""),
+		expectedAwarded: z.number().nullable(),
+		expectedRejected: z.number().nullable(),
+	})
+	.superRefine((value: AchievementDecision, context: z.RefinementCtx): void => {
+		if (value.action !== "undo" && !value.notes) {
+			context.addIssue({
+				code: "custom",
+				path: ["notes"],
+				message: "Decision notes are required",
+			});
+		}
+	});
 export type AchievementDecision = {
 	kind: AchievementKind;
 	id: string;
@@ -40,20 +47,43 @@ export type AchievementReview = {
 	description: string;
 	applicationDate: number | null;
 	applicationNotes: string | null;
+	showcaseItemIds?: string[];
+	showcaseItems?: ShowcaseItem[];
 	awarded: number | null;
 	awardedNotes: string | null;
 	awardedByAdultId: string | null;
- awardedByName?:string|null;
- rejectedByName?:string|null;
+	awardedByName?: string | null;
+	rejectedByName?: string | null;
 	rejectedDate: number | null;
 	rejectedNotes: string | null;
 	rejectedByAdultId: string | null;
 };
 
 export const AchievementReviewSchema = z.strictObject({
- id: z.string().min(1), definitionId: z.uuid(), definitionDeleted: z.boolean(), goalDate: z.number().nullable(), memberId: z.string().min(1), memberName: z.string(), canReview: z.boolean().default(true), kind: AchievementKindSchema,
- categoryId: z.string().nullable(), categoryName: z.string().nullable(), label: z.string(), sortOrder: z.number(), belt: BeltModelSchema.nullable(), description: z.string(),
- applicationDate: z.number().nullable(), applicationNotes: z.string().nullable(), awarded: z.number().nullable(), awardedNotes: z.string().nullable(), awardedByAdultId: z.string().nullable(),
- awardedByName:z.string().nullable().default(null),rejectedByName:z.string().nullable().default(null),
- rejectedDate: z.number().nullable(), rejectedNotes: z.string().nullable(), rejectedByAdultId: z.string().nullable(),
+	id: z.string().min(1),
+	definitionId: z.uuid(),
+	definitionDeleted: z.boolean(),
+	goalDate: z.number().nullable(),
+	memberId: z.string().min(1),
+	memberName: z.string(),
+	canReview: z.boolean().default(true),
+	kind: AchievementKindSchema,
+	categoryId: z.string().nullable(),
+	categoryName: z.string().nullable(),
+	label: z.string(),
+	sortOrder: z.number(),
+	belt: BeltModelSchema.nullable(),
+	description: z.string(),
+	showcaseItemIds: z.array(z.uuid()).default([]),
+	showcaseItems: z.array(showcaseItemSchema).default([]),
+	applicationDate: z.number().nullable(),
+	applicationNotes: z.string().nullable(),
+	awarded: z.number().nullable(),
+	awardedNotes: z.string().nullable(),
+	awardedByAdultId: z.string().nullable(),
+	awardedByName: z.string().nullable().default(null),
+	rejectedByName: z.string().nullable().default(null),
+	rejectedDate: z.number().nullable(),
+	rejectedNotes: z.string().nullable(),
+	rejectedByAdultId: z.string().nullable(),
 });

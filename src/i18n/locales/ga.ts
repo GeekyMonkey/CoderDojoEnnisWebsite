@@ -67,6 +67,14 @@ export default {
 		status: "Stádas",
 		undo: "Cuir an cinneadh ar ceal",
 	},
+	applicationShowcase: {
+		add: "Cuir tionscadal leis",
+		delete: "Scrios an nasc",
+		empty:
+			"Níl tionscadail eile ann. Cuir tionscadal le do thaispeántas ar dtús.",
+		loadError: "Ní féidir na tionscadail a luchtú.",
+		title: "Fianaise tionscadail",
+	},
 	attendance: {
 		columns: {
 			name: "Ainm",

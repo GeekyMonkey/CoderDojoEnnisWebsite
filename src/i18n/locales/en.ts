@@ -64,6 +64,13 @@ export default {
 		status: "Status",
 		undo: "Undo decision",
 	},
+	applicationShowcase: {
+		add: "Add showcase item",
+		delete: "Delete link",
+		empty: "No more showcase items. Add a project on your Showcase page first.",
+		loadError: "Unable to load showcase items.",
+		title: "Showcase evidence",
+	},
 	attendance: {
 		columns: {
 			name: "Name",

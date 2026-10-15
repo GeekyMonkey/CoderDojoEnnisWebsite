@@ -68,6 +68,13 @@ export default {
 		status: "Statut",
 		undo: "Annuler la décision",
 	},
+	applicationShowcase: {
+		add: "Ajouter un projet",
+		delete: "Supprimer le lien",
+		empty: "Aucun autre projet. Ajoutez un projet à votre vitrine.",
+		loadError: "Impossible de charger les projets.",
+		title: "Projets justificatifs",
+	},
 	attendance: {
 		columns: {
 			name: "Nom",

@@ -7,7 +7,7 @@ import {
 	type UseMutationReturnType,
 } from "@tanstack/vue-query";
 import { computed, type ComputedRef } from "vue";
-import type { RealtimeChannel } from "@supabase/supabase-js";
+import { useShowcaseRealtime } from "~/composables/useShowcaseRealtime";
 import type {
 	ShowcaseContext,
 	ShowcaseFields,
@@ -46,7 +46,7 @@ export type ShowcaseStore = UseQueryReturnType<
 	validate: UseMutationReturnType<{ url: string }, Error, void, unknown>;
 	image: UseMutationReturnType<File, Error, string, unknown>;
 };
-const realtimeApps: WeakSet<object> = new WeakSet();
+
 /** Keep public/member data, mutations and row-free live refresh in TanStack stores. */
 export function useShowcaseStore(
 	memberId: () => string | null = (): null => null,
@@ -87,7 +87,11 @@ export function useShowcaseStore(
 	/** Refresh every mounted showcase projection after a saved action. */
 	async function invalidate(): Promise<void> {
 		await cache.cancelQueries({ queryKey: ["showcase"] });
-		await cache.invalidateQueries({ queryKey: ["showcase"] });
+		await Promise.all(
+			["showcase", "achievementReviews"].map((key: string): Promise<void> =>
+				cache.invalidateQueries({ queryKey: [key] }),
+			),
+		);
 	}
 	const save: UseMutationReturnType<ShowcaseItem, Error, SaveInput, unknown> =
 		useMutation<ShowcaseItem, Error, SaveInput>({
@@ -156,23 +160,7 @@ export function useShowcaseStore(
 			? (context.value?.items ?? [])
 			: ((query.data.value as ShowcaseItem[]) ?? []),
 	);
-	const app: ReturnType<typeof useNuxtApp> = useNuxtApp();
-	if (import.meta.client && !realtimeApps.has(app)) {
-		realtimeApps.add(app);
-		let channel: RealtimeChannel | null = null;
-		channel = client
-			.channel(`coderdojo:showcase`, { config: { private: false } })
-			.on("broadcast", { event: "invalidate" }, (): void => {
-				void invalidate();
-			})
-			.subscribe((status: string): void => {
-				if (status === "SUBSCRIBED") void invalidate();
-			});
-		app.vueApp.onUnmount((): void => {
-			if (channel) void client.removeChannel(channel);
-			realtimeApps.delete(app);
-		});
-	}
+	useShowcaseRealtime();
 
 	return { ...query, items, context, save, remove, discover, validate, image };
 }

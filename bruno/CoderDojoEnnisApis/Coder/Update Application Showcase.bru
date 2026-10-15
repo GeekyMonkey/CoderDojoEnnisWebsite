@@ -1,0 +1,18 @@
+meta {
+ name: Update Application Showcase
+ type: http
+}
+patch {
+ url: {{Host}}/api/Coder/applications/showcase
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+ {"kind":"badge","id":"{{ApplicationId}}","showcaseItemIds":["{{ShowcaseId}}"],"expectedShowcaseItemIds":[]}
+}
+docs {
+ Own pending application only. Ordered own showcase UUIDs, including hidden items. Empty array removes all links. Stale arrays or decided applications return 409; unrelated or missing projects return 400. Deletes links, never showcase items.
+}

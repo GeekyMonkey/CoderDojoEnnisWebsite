@@ -93,3 +93,16 @@ export function filterShowcase(
 					a.id.localeCompare(b.id)),
 		);
 }
+
+export const showcaseItemSchema = showcaseFieldsSchema.safeExtend({
+	id: z.uuid(),
+	memberId: z.uuid(),
+	thumbnailUrl: z.string().nullable(),
+	updatedAt: z.string(),
+	createdAt: z.string(),
+	memberName: z.string(),
+	username: z.string(),
+	roles: z.array(z.enum(["coder", "parent", "mentor"])),
+	avatarUrl: z.string().nullable(),
+	photoUrl: z.string().nullable(),
+});
