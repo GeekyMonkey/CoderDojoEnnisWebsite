@@ -10,6 +10,10 @@ export * from "./models/MemberModel";
 export * from "./models/MemberParentModel";
 export * from "./models/SessionModel";
 export * from "./models/TeamModel";
+export * from "./models/VexResourceModel";
+export * from "./models/VexSeasonModel";
+export * from "./models/VexSprintModel";
+export * from "./models/VexTaskModel";
 
 // Misc
 export * from "./ApiResponse";

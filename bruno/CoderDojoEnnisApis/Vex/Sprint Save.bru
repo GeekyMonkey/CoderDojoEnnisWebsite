@@ -1,0 +1,24 @@
+meta {
+  name: Sprint Save
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Vex/SprintSave
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "{{VexSprintId}}",
+    "seasonId": "{{VexSeasonId}}",
+    "sprintNumber": 1,
+    "title": null,
+    "objective": "Objective entered by a mentor",
+    "mentorNotes": null,
+    "startDate": "2026-10-03",
+    "reviewDate": "2026-10-10",
+    "status": "current"
+  }
+}

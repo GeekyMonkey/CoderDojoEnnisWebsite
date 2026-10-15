@@ -1,0 +1,14 @@
+meta {
+  name: Tasks - By Sprint
+  type: http
+}
+
+get {
+  url: {{Host}}/api/Vex/Tasks?sprintId={{VexSprintId}}
+  body: none
+  auth: inherit
+}
+
+params:query {
+  sprintId: {{VexSprintId}}
+}

@@ -474,6 +474,267 @@ export type Database = {
 				};
 				Relationships: [];
 			};
+			vex_resources: {
+				Row: {
+					category: string;
+					created_at: string;
+					deleted: boolean;
+					description: string | null;
+					id: string;
+					is_active: boolean;
+					resource_type: string;
+					season_id: string | null;
+					sort_order: number;
+					title: string;
+					updated_at: string;
+					url: string;
+				};
+				Insert: {
+					category: string;
+					created_at?: string;
+					deleted?: boolean;
+					description?: string | null;
+					id?: string;
+					is_active?: boolean;
+					resource_type?: string;
+					season_id?: string | null;
+					sort_order?: number;
+					title: string;
+					updated_at?: string;
+					url: string;
+				};
+				Update: {
+					category?: string;
+					created_at?: string;
+					deleted?: boolean;
+					description?: string | null;
+					id?: string;
+					is_active?: boolean;
+					resource_type?: string;
+					season_id?: string | null;
+					sort_order?: number;
+					title?: string;
+					updated_at?: string;
+					url?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "vex_resources_season_id_fkey";
+						columns: ["season_id"];
+						isOneToOne: false;
+						referencedRelation: "vex_seasons";
+						referencedColumns: ["id"];
+					},
+				];
+			};
+			vex_seasons: {
+				Row: {
+					competition_name: string;
+					created_at: string;
+					deleted: boolean;
+					description: string | null;
+					end_date: string | null;
+					id: string;
+					is_current: boolean;
+					program_name: string;
+					season_label: string;
+					slug: string;
+					start_date: string | null;
+					updated_at: string;
+				};
+				Insert: {
+					competition_name: string;
+					created_at?: string;
+					deleted?: boolean;
+					description?: string | null;
+					end_date?: string | null;
+					id?: string;
+					is_current?: boolean;
+					program_name?: string;
+					season_label: string;
+					slug: string;
+					start_date?: string | null;
+					updated_at?: string;
+				};
+				Update: {
+					competition_name?: string;
+					created_at?: string;
+					deleted?: boolean;
+					description?: string | null;
+					end_date?: string | null;
+					id?: string;
+					is_current?: boolean;
+					program_name?: string;
+					season_label?: string;
+					slug?: string;
+					start_date?: string | null;
+					updated_at?: string;
+				};
+				Relationships: [];
+			};
+			vex_sprints: {
+				Row: {
+					created_at: string;
+					created_by_member_id: string | null;
+					deleted: boolean;
+					id: string;
+					mentor_notes: string | null;
+					objective: string | null;
+					review_date: string | null;
+					season_id: string;
+					sprint_number: number;
+					start_date: string | null;
+					status: string;
+					title: string | null;
+					updated_at: string;
+				};
+				Insert: {
+					created_at?: string;
+					created_by_member_id?: string | null;
+					deleted?: boolean;
+					id?: string;
+					mentor_notes?: string | null;
+					objective?: string | null;
+					review_date?: string | null;
+					season_id: string;
+					sprint_number: number;
+					start_date?: string | null;
+					status?: string;
+					title?: string | null;
+					updated_at?: string;
+				};
+				Update: {
+					created_at?: string;
+					created_by_member_id?: string | null;
+					deleted?: boolean;
+					id?: string;
+					mentor_notes?: string | null;
+					objective?: string | null;
+					review_date?: string | null;
+					season_id?: string;
+					sprint_number?: number;
+					start_date?: string | null;
+					status?: string;
+					title?: string | null;
+					updated_at?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "vex_sprints_created_by_member_id_fkey";
+						columns: ["created_by_member_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "vex_sprints_season_id_fkey";
+						columns: ["season_id"];
+						isOneToOne: false;
+						referencedRelation: "vex_seasons";
+						referencedColumns: ["id"];
+					},
+				];
+			};
+			vex_task_members: {
+				Row: {
+					created_at: string;
+					id: string;
+					member_id: string;
+					task_id: string;
+				};
+				Insert: {
+					created_at?: string;
+					id?: string;
+					member_id: string;
+					task_id: string;
+				};
+				Update: {
+					created_at?: string;
+					id?: string;
+					member_id?: string;
+					task_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "vex_task_members_member_id_fkey";
+						columns: ["member_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "vex_task_members_task_id_fkey";
+						columns: ["task_id"];
+						isOneToOne: false;
+						referencedRelation: "vex_tasks";
+						referencedColumns: ["id"];
+					},
+				];
+			};
+			vex_tasks: {
+				Row: {
+					created_at: string;
+					created_by_member_id: string | null;
+					deleted: boolean;
+					id: string;
+					link_url: string | null;
+					notes: string | null;
+					sprint_id: string;
+					status: string;
+					title: string;
+					updated_at: string;
+					updated_by_member_id: string | null;
+				};
+				Insert: {
+					created_at?: string;
+					created_by_member_id?: string | null;
+					deleted?: boolean;
+					id?: string;
+					link_url?: string | null;
+					notes?: string | null;
+					sprint_id: string;
+					status?: string;
+					title: string;
+					updated_at?: string;
+					updated_by_member_id?: string | null;
+				};
+				Update: {
+					created_at?: string;
+					created_by_member_id?: string | null;
+					deleted?: boolean;
+					id?: string;
+					link_url?: string | null;
+					notes?: string | null;
+					sprint_id?: string;
+					status?: string;
+					title?: string;
+					updated_at?: string;
+					updated_by_member_id?: string | null;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "vex_tasks_created_by_member_id_fkey";
+						columns: ["created_by_member_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "vex_tasks_sprint_id_fkey";
+						columns: ["sprint_id"];
+						isOneToOne: false;
+						referencedRelation: "vex_sprints";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "vex_tasks_updated_by_member_id_fkey";
+						columns: ["updated_by_member_id"];
+						isOneToOne: false;
+						referencedRelation: "members";
+						referencedColumns: ["id"];
+					},
+				];
+			};
 		};
 		Views: {
 			[_ in never]: never;

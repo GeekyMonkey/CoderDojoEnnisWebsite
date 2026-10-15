@@ -70,4 +70,17 @@ describe("memberNavigation", () => {
 		expect(coderLabels).toContain("Goals");
 		expect(coderLabels).toContain("Attendance");
 	});
+
+	it("includes the VEX section for every role", () => {
+		const model = buildNavigationModel("");
+		for (const role of ["mentor", "parent", "coder"] as const) {
+			const nav = filterNavByRoles(model, [role]);
+			const vex = nav.flatMap((g) => g.items).find((i) => i.label === "VEX");
+			expect(vex?.children?.map((c) => c.to)).toEqual([
+				"/vex",
+				"/vex/this-week",
+				"/vex/resources",
+			]);
+		}
+	});
 });

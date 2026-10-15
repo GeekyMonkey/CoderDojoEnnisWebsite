@@ -1,0 +1,23 @@
+meta {
+  name: Resource Save
+  type: http
+}
+
+post {
+  url: {{Host}}/api/Vex/ResourceSave
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "seasonId": null,
+    "category": "programming",
+    "title": "VEXcode IQ",
+    "description": "Programming app for the real robot.",
+    "url": "https://codeiq.vex.com",
+    "resourceType": "tool",
+    "sortOrder": 10,
+    "isActive": true
+  }
+}
