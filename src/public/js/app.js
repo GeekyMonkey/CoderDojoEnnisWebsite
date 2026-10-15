@@ -13,9 +13,6 @@ angular.module("DojoWebApp", []).controller("DojoWebController", [
 				$("[href=" + modalId + "]").trigger("click");
 			}, 100);
 		}
-		scope.ShowMembers = function () {
-			scope.LoadGithubAccounts();
-		};
 		scope.LoadWebhubNinjas = function () {
 			$.ajax("https://webhub.coderdojoennis.com/ninja-list.php").done(
 				function (data) {
@@ -23,13 +20,6 @@ angular.module("DojoWebApp", []).controller("DojoWebController", [
 					scope.$apply();
 				},
 			);
-		};
-		scope.LoadGithubAccounts = function () {
-			console.log("AJAX CALL");
-			$.ajax("/api/githubaccounts").done(function (data) {
-				scope.GithubUsers = data;
-				scope.$apply();
-			});
 		};
 		/*
             var todoList = this;

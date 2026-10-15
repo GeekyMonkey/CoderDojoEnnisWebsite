@@ -1,0 +1,29 @@
+meta {
+ name: Update Showcase
+ type: http
+}
+post {
+ url: {{Host}}/api/showcase/save?memberId={{memberId}}
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "id": "{{showcaseId}}",
+  "expectedUpdatedAt": "{{showcaseUpdatedAt}}",
+  "fields": {
+    "title": "My project",
+    "description": "A game I made",
+    "projectType": "scratch",
+    "url": "https://scratch.mit.edu/projects/{{scratchProjectId}}/",
+    "showcaseDate": "2026-10-15",
+    "isVisible": true,
+    "sourceProjectId": "{{scratchProjectId}}"
+  },
+  "png": null,
+  "removeImage": false
+}
+}

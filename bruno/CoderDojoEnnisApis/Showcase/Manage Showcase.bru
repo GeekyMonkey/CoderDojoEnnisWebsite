@@ -1,0 +1,12 @@
+meta {
+ name: Manage Showcase
+ type: http
+}
+get {
+ url: {{Host}}/api/showcase/manage?memberId={{memberId}}
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

@@ -126,6 +126,7 @@ describe("role navigation sections", () => {
 			"Mentors",
 			"Parents",
 			"Reports",
+			"Showcase",
 			"Sign In Mode",
 		]);
 		expect(
@@ -250,7 +251,7 @@ describe("role navigation sections", () => {
 			"",
 		);
 		expect(cleared).toHaveLength(3);
-		expect(cleared[0]?.items).toHaveLength(8);
+		expect(cleared[0]?.items).toHaveLength(9);
 		expect(
 			cleared[0]?.items.find(
 				(item: NavigationMenuItem): boolean => item.label === "Reports",

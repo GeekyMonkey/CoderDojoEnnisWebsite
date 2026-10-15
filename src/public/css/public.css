@@ -778,3 +778,69 @@ figure {
 		box-shadow: none;
 	}
 }
+
+/* Live member showcase. */
+.public-showcase { color: var(--color-text, CanvasText); background: var(--color-bg, Canvas); min-height: 100vh; }
+.showcase-eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: .8rem; font-weight: 700; }
+.showcase-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-block: 2rem; }
+.showcase-filters label { display: grid; gap: .5rem; font-size: .9rem; font-weight: 650; }
+.showcase-filters input, .showcase-filters select { width: 100%; min-width: 0; padding: .8rem; border: 1px solid currentColor; border-radius: .6rem; background: Canvas; color: CanvasText; font: inherit; }
+.showcase-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }
+.showcase-card { min-width: 0; overflow: hidden; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); border-radius: 1rem; background: color-mix(in srgb, Canvas 95%, CanvasText 5%); }
+.showcase-disclosure { width: 100%; display: grid; gap: 1rem; padding: 1rem; border: 0; text-align: left; background: none; color: inherit; font: inherit; cursor: pointer; }
+.showcase-disclosure:focus-visible { outline: 3px solid Highlight; outline-offset: -4px; }
+.showcase-card-meta { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; font-size: .75rem; }
+.showcase-card-meta time { margin-inline-start: auto; opacity: .7; }
+.showcase-thumbnail { display: block; width: 100%; aspect-ratio: 4/3; object-fit: contain; background: color-mix(in srgb, CanvasText 6%, Canvas); border-radius: .5rem; }
+.showcase-placeholder { display: grid; place-items: center; font-size: 4rem; }
+.showcase-member { display: flex; align-items: center; gap: .7rem; font-size: .85rem; }
+.showcase-member img, .showcase-initial { width: 2.5rem; height: 2.5rem; object-fit: cover; border-radius: 50%; flex: 0 0 auto; }
+.showcase-initial { display: grid; place-items: center; background: color-mix(in srgb, Highlight 20%, Canvas); }
+.showcase-member small { display: block; opacity: .65; }
+.showcase-card-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 1.25rem; font-weight: 750; overflow-wrap: anywhere; }
+.showcase-details { padding: 0 1rem 1.3rem; }
+.showcase-details p { white-space: pre-wrap; overflow-wrap: anywhere; margin-block-end: 1rem; }
+.showcase-count { margin-block-end: 1rem; font-size: .85rem; }
+/* Zoom in, then burst out like a balloon when results disappear. */
+.showcase-card { position: relative; }
+.showcase-move { transition: transform 360ms ease; }
+.showcase-enter-active { transition: transform 420ms cubic-bezier(.2,.9,.3,1.25), opacity 240ms ease; }
+.showcase-enter-from { opacity: 0; transform: scale(.35); }
+.showcase-leave-active { position: absolute; width: calc((100% - 3rem) / 3); overflow: visible; pointer-events: none; background: transparent; border-color: transparent; animation: showcase-leave-duration 650ms linear; }
+.showcase-leave-active .showcase-disclosure, .showcase-leave-active .showcase-details { animation: showcase-pop 280ms ease-out forwards; }
+.showcase-burst { display: none; position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.showcase-leave-active .showcase-burst { display: block; }
+.showcase-particle { position: absolute; left: 50%; top: 45%; width: .55rem; height: .55rem; border-radius: 50%; background: var(--color-edge-purple); opacity: 0; animation: showcase-particle 600ms ease-out 60ms both; }
+.showcase-particle:nth-child(3n+2) { background: var(--color-edge-yellow); border-radius: 2px; }
+.showcase-particle:nth-child(3n) { background: var(--color-edge-pink); }
+@keyframes showcase-pop { 0% { transform: scale(1); opacity: 1; } 30% { transform: scale(1.08); opacity: 1; } 100% { transform: scale(.05); opacity: 0; } }
+@keyframes showcase-particle { 0% { transform: translate(0,0) scale(.3); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(var(--burst-x),var(--burst-y)) rotate(200deg) scale(.1); opacity: 0; } }
+@keyframes showcase-leave-duration { from { visibility: visible; } to { visibility: visible; } }
+.showcase-particle:nth-child(1) { --burst-x: 0rem; --burst-y: -8rem; }
+.showcase-particle:nth-child(2) { --burst-x: 4rem; --burst-y: -7rem; }
+.showcase-particle:nth-child(3) { --burst-x: 7rem; --burst-y: -4rem; }
+.showcase-particle:nth-child(4) { --burst-x: 8rem; --burst-y: 0rem; }
+.showcase-particle:nth-child(5) { --burst-x: 7rem; --burst-y: 4rem; }
+.showcase-particle:nth-child(6) { --burst-x: 4rem; --burst-y: 7rem; }
+.showcase-particle:nth-child(7) { --burst-x: 0rem; --burst-y: 8rem; }
+.showcase-particle:nth-child(8) { --burst-x: -4rem; --burst-y: 7rem; }
+.showcase-particle:nth-child(9) { --burst-x: -7rem; --burst-y: 4rem; }
+.showcase-particle:nth-child(10) { --burst-x: -8rem; --burst-y: 0rem; }
+.showcase-particle:nth-child(11) { --burst-x: -7rem; --burst-y: -4rem; }
+.showcase-particle:nth-child(12) { --burst-x: -4rem; --burst-y: -7rem; }
+@media (max-width: 800px) { .showcase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .showcase-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .showcase-grid, .showcase-filters { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .showcase-move, .showcase-enter-active, .showcase-leave-active { transition: none; } .showcase-enter-from, .showcase-leave-to { transform: none; } }
+
+.showcase-card-updated { animation: showcase-refresh 600ms ease; }
+@keyframes showcase-refresh { from { box-shadow: 0 0 0 3px var(--color-accent); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) { .showcase-card-updated { animation: none; } }
+
+@media (max-width: 800px) { .showcase-leave-active { width: calc((100% - 1.5rem) / 2); } }
+@media (max-width: 520px) { .showcase-leave-active { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+ .showcase-enter-active, .showcase-move { transition: none; }
+ .showcase-enter-from { transform: none; }
+ .showcase-leave-active, .showcase-leave-active .showcase-disclosure, .showcase-leave-active .showcase-details { animation: none; }
+ .showcase-leave-active .showcase-burst { display: none; }
+}

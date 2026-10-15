@@ -1,0 +1,12 @@
+meta {
+ name: Import Thumbnail
+ type: http
+}
+get {
+ url: {{Host}}/api/showcase/image-source?memberId={{memberId}}&url={{projectImageUrl}}
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

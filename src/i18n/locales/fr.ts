@@ -320,6 +320,7 @@ export default {
 		"Recent Belts CSV": "Ceintures récentes (CSV)",
 		Reports: "Rapports",
 		Sessions: "Séances",
+		Showcase: "Showcase",
 		"Sign In Mode": "Mode d'inscription",
 		Teams: "Équipes",
 	},

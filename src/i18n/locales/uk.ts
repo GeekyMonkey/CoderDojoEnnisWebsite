@@ -315,6 +315,7 @@ export default {
 		"Recent Belts CSV": "Останні пояси (CSV)",
 		Reports: "Звіти",
 		Sessions: "Заняття",
+		Showcase: "Showcase",
 		"Sign In Mode": "Режим реєстрації",
 		Teams: "Команди",
 	},

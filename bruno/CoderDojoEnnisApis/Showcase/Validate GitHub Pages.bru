@@ -1,0 +1,12 @@
+meta {
+ name: Validate GitHub Pages
+ type: http
+}
+post {
+ url: {{Host}}/api/showcase/validate?memberId={{memberId}}
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

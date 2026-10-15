@@ -1,0 +1,18 @@
+meta {
+ name: Delete Showcase
+ type: http
+}
+post {
+ url: {{Host}}/api/showcase/delete?memberId={{memberId}}
+ body: json
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}
+body:json {
+{
+  "id": "{{showcaseId}}",
+  "expectedUpdatedAt": "{{showcaseUpdatedAt}}"
+}
+}

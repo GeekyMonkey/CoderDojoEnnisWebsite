@@ -322,6 +322,7 @@ export default {
 		"Recent Belts CSV": "Criosanna le Déanaí (CSV)",
 		Reports: "Tuarascálacha",
 		Sessions: "Seisiúin",
+		Showcase: "Showcase",
 		"Sign In Mode": "Mód Sínithe Isteach",
 		Teams: "Foirne",
 	},

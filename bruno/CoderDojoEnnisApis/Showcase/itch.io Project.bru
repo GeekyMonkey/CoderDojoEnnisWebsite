@@ -1,0 +1,12 @@
+meta {
+ name: itch.io Project
+ type: http
+}
+get {
+ url: {{Host}}/api/showcase/projects?memberId={{memberId}}&projectType=itch&url={{itchProjectUrl}}
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

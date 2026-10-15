@@ -1,11 +1,9 @@
 # Public-site scripts
 
-TypeScript source for the static public site's existing GitHub directory and legacy modal bookmarks. The generated bundle is committed so static HTML works without the Nuxt application.
+Static-page legacy hash navigation. The new `/showcase` page is a Vue page using TanStack stores and live updates; the automatic GitHub directory has been removed.
 
-From the repository root (including PowerShell):
+Rebuild this small navigation bundle from the repository root:
 
 ```powershell
 pnpm -C src exec esbuild public-site/public-site.ts --bundle --target=es2022 --outfile=public/js/public-site.js
 ```
-
-The directory store owns fetching, caching, validation, and request state. The page code renders text nodes and validated GitHub links. These scripts do not modify styles or member application behavior.

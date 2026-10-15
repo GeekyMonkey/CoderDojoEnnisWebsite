@@ -1,0 +1,12 @@
+meta {
+ name: Scratch Projects
+ type: http
+}
+get {
+ url: {{Host}}/api/showcase/projects?memberId={{memberId}}&projectType=scratch&offset=0
+ body: none
+ auth: bearer
+}
+auth:bearer {
+ token: {{AccessToken}}
+}

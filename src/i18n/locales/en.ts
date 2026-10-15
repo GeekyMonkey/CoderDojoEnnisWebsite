@@ -316,6 +316,7 @@ export default {
 		"Recent Belts CSV": "Recent Belts CSV",
 		Reports: "Reports",
 		Sessions: "Sessions",
+		Showcase: "Showcase",
 		"Sign In Mode": "Sign In Mode",
 		Teams: "Teams",
 	},

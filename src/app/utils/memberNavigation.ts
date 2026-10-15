@@ -91,7 +91,10 @@ export function buildNavigationModel(basePath: string): MemberNavGroup[] {
 	return [
 		{
 			items: [
-				{
+                { label: "Showcase", to: `${coderBase}/showcase`, icon: "i-lucide-gallery-horizontal-end", roles: ["coder"] },
+                { label: "Showcase", to: `${parentBase}/showcase`, icon: "i-lucide-gallery-horizontal-end", roles: ["parent"] },
+                { label: "Showcase", to: `${mentorBase}/showcase`, icon: "i-lucide-gallery-horizontal-end", roles: ["mentor"] },
+                {
 					label: "Parent Home",
 					to: `${parentBase}`,
 					icon: "i-lucide-house",
