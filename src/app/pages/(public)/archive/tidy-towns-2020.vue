@@ -1,0 +1,166 @@
+<script setup lang="ts">
+definePageMeta({ layout: false, siteSection: "tidy-towns" });
+useHead({ title: "Ennis Tidy Towns 2020 Competition", meta: [{ name: "description", content: "" }] });
+</script>
+<template><div class="tidy-towns-content">
+<h1>Ennis Tidy Towns 2020 Competition</h1>
+<p>
+				These are the entries for the Ennis Tidy Towns competition. Ninjas were
+				challenged to create an Ennis Tidy Towns-themed project, and in the
+				midst of a viral lock-down many of them did!
+			</p>
+<table>
+<tbody><tr>
+<td><img height="120px" src="/pages/assets/coderdojoennis.jpg"/></td>
+<td><img height="120px" src="/pages/assets/ennis-tidy-towns1.png"/></td>
+</tr></tbody>
+</table>
+<h2>Winners</h2>
+<p>
+				Well done to all the entrants! The judges had some hard choices, and in
+				the end have awarded prizes in three categories. Prizes will be in the
+				form of
+				<a href="https://www.ennischamber.ie/services/ennis-gold-gift-voucher/">Ennis Gold Gift Vouchers</a>
+				which can be used in many shops around town, and supports local
+				businesses!
+			</p>
+<table>
+<tbody><tr>
+<th>Prize</th>
+<th>Winner</th>
+<th>Runner-Up</th>
+</tr><tr>
+<td>Ennis Tidy Towns Prize</td>
+<td>
+<a href="https://scratch.mit.edu/projects/386515655/">Rubbish Picking</a>
+</td>
+<td>
+<a href="https://scratch.mit.edu/projects/382649951/">Ennis Tidy Towns Comp.</a>
+</td>
+</tr><tr>
+<td>Biodiversity Prize</td>
+<td>
+<a href="https://scratch.mit.edu/projects/385240204/">Bee Tidy</a>
+</td>
+<td> </td>
+</tr><tr>
+<td>Technical Merit</td>
+<td>
+<a href="https://mj517.github.io/Tidy-Towns-Competition/">Green Hero</a>
+</td>
+<td>
+<a href="https://web.roblox.com/games/4942537847/sciencedude200s-Place-Number-8">Get to the Bin Obby</a>
+</td>
+</tr></tbody>
+
+
+
+</table>
+<h2>Entries</h2>
+<p>
+				Note these are best viewed with a computer (rather than a mobile) as
+				many of the projects require use of a keyboard.
+			</p>
+<table>
+<tbody><tr>
+<th>Entry Number</th>
+<th>Project Name and Link</th>
+<th>Notes</th>
+</tr><tr>
+<td>1</td>
+<td>
+<a href="https://scratch.mit.edu/projects/382649951/">Ennis Tidy Towns Comp.</a>
+</td>
+<td>
+						To reach the end of the game you must get 15 points. Instructions:
+						Move the mouse pointer Up and Down to get the 'Tidy Towns Cat'
+						active. At the same time use the Spacebar to shoot litter into the
+						bin. Try not to hit the walls otherwise you will lose points! When
+						you reach the finish you have tidied Ennis. Good luck! :)
+					</td>
+</tr><tr>
+<td>2</td>
+<td>
+<a href="https://scratch.mit.edu/projects/386515655/">Rubbish Picking</a>
+</td>
+<td>
+						Use arrow keys to move. Go to rubbish Bin to dump your rubbish if
+						your bag is full.
+					</td>
+</tr><tr>
+<td>3</td>
+<td>
+<a href="https://scratch.mit.edu/projects/386230540/">Pong</a>
+</td>
+<td>
+						Play against AI. Game not quite finished, imagine you are trying to
+						get trash into a bin, and the evil AI player is trying to stop you!
+					</td>
+</tr><tr>
+<td>4</td>
+<td>
+<a href="https://scratch.mit.edu/projects/388816518/">Lets clean up!!!!!!!</a>
+</td>
+<td>
+						Use your mouse and lead Monkey to things that need to be cleaned up.
+					</td>
+</tr><tr>
+<td>5</td>
+<td>
+<a href="https://web.roblox.com/games/4942537847/sciencedude200s-Place-Number-8">Get to the Bin Obby</a>
+</td>
+<td>
+						You will need to install Roblox in order to play this one (click on
+						the Play button and it will guide you)! Lead your character over
+						obstacles and get to the bin!
+					</td>
+</tr><tr>
+<td>6</td>
+<td>
+<a href="https://scratch.mit.edu/projects/385240204/">Bee Tidy</a>
+</td>
+<td>Help Polly collect pollen. What score will you get!</td>
+</tr><tr>
+<td>7</td>
+<td>
+<a href="https://scratch.mit.edu/projects/382642562/">Clean up time!!!</a>
+</td>
+<td>
+						Use the arrow keys to move the tidy towns person and just sit back
+						and enjoy!!!
+					</td>
+</tr><tr>
+<td>8</td>
+<td>
+<a href="https://scratch.mit.edu/projects/389175439/">Don't be Mean, Keep the Planet Clean:)</a>
+</td>
+<td>
+						The aim of this game is to pick up as much rubbish as possible
+						before the game is over. Every time you click on a piece of litter
+						you earn a point. However, if you step on dog poo, your score will
+						be set back zero:(
+					</td>
+</tr><tr>
+<td>9</td>
+<td>
+<a href="https://mj517.github.io/Tidy-Towns-Competition/">Green Hero</a>
+</td>
+<td>
+						Due to excess in litter and nuclear radiation, the rubbish of Ennis
+						has mutated into monsters known as Litterbugs. You, the Green Hero,
+						are our last hope. You must gain a score high enough by shooting
+						Litterbugs to challenge the three Mother Litterbugs at the Ennis
+						Cathederal, Market Square, and the Daniel O'Connell Statue.
+					</td>
+</tr></tbody>
+
+
+
+
+
+
+
+
+
+</table>
+</div></template>

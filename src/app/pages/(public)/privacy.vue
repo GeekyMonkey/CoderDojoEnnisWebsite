@@ -1,84 +1,46 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta
-			name="description"
-			content="The published privacy statement for CoderDojo Ennis, including information use, cookies, and contact details."
-		/>
-		<meta name="color-scheme" content="light dark" />
-		<title>Privacy policy | CoderDojo Ennis</title>
-		<link rel="icon" href="/favicon.ico" />
-		<link rel="stylesheet" href="/css/public.css" />
-	</head>
-	<body>
-		<a class="skip-link" href="#main">Skip to content</a>
-		<header class="site-header">
-			<section class="header-top container" aria-label="Club identity">
-				<a class="brand" href="/home.html" aria-label="CoderDojo Ennis home">
-					<img class="brand-logo" src="/images/Logos/Logo.png" alt="" />
-					<span class="brand-name"
-						>CoderDojo <span class="brand-place">Ennis, Ireland</span></span
-					>
-				</a>
-				<a
-					class="button button-small button-outline"
-					href="/login"
-					>Member sign-in <span aria-hidden="true">↗</span></a
-				>
-			</section>
-			<nav class="site-nav container" aria-label="Main navigation">
-				<ul>
-					<li><a href="/home.html">Home</a></li>
-					<li><a href="/_about.html">About</a></li>
-					<li><a href="/_whenwhere.html">Visit</a></li>
-					<li><a href="/_join.html">Join</a></li>
-					<li><a href="/_topics.html">Explore</a></li>
-					<li><a href="/showcase">Showcase</a></li>
-					<li><a href="/_news.html">News</a></li>
-					<li><a href="/_contact.html">Contact</a></li>
-				</ul>
-			</nav>
-		</header>
-		<main id="main" class="container" tabindex="-1">
-			<header class="page-intro">
-				<h1>Privacy policy</h1>
-				<p class="lead">
+<script setup lang="ts">
+import PublicPageIntro from "~/components/Public/PublicPageIntro.vue";
+definePageMeta({ layout: "public-layout", siteSection: "public" });
+useHead({ title: "Privacy policy | CoderDojo Ennis", meta: [{ name: "description", content: "The published privacy statement for CoderDojo Ennis, including information use, cookies, and contact details." }] });
+</script>
+
+<template>
+<div>
+
+<PublicPageIntro title="Privacy policy">
+<p class="lead">
 					Find out what information the club collects and how to ask about your
 					data.
 				</p>
-			</header>
-			<article class="policy">
-				<section class="prose" aria-label="Privacy overview">
-					<h2>How we use your information</h2>
-					<p>
+</PublicPageIntro>
+<article class="policy">
+<section aria-label="Privacy overview" class="prose">
+<h2>How we use your information</h2>
+<p>
 						When you sign up or contact us, we may keep the information you give
 						us. We may also record visits to this website. We use this
 						information to run the club, answer questions, and tell you about
 						changes.
 					</p>
-					<p>
+<p>
 						The full policy below explains where we keep your information, when
 						we share it, and how we protect it. It also explains cookies and how
 						to ask for a copy of your data or fix a mistake. Other websites have
 						their own privacy rules.
 					</p>
-					<p>
+<p>
 						For questions about your information, email
-						<a href="mailto:enniscoderdojo@gmail.com"
-							>enniscoderdojo@gmail.com</a
-						>
+						<a href="mailto:enniscoderdojo@gmail.com">enniscoderdojo@gmail.com</a>
 						or write to CoderDojo Ennis, c/o CBS Primary School, Ennis, Ireland.
 					</p>
-				</section>
-				<details class="archive section-block">
-					<summary>Read the full published privacy statement</summary>
-					<ol class="policy-sections">
-						<li>
-							<h2>Introduction</h2>
-							<p>
-								<strong>coderdojoennis.com and its sub-sites </strong>(the
+</section>
+<details class="archive section-block">
+<summary>Read the full published privacy statement</summary>
+<ol class="policy-sections">
+<li>
+<h2>Introduction</h2>
+<p>
+<strong>coderdojoennis.com and its sub-sites </strong>(the
 								"Website") are operated by CoderDojo Ennis. We have created this
 								Privacy Statement in order to demonstrate our firm commitment to
 								privacy. This Privacy Statement sets out the basis on which any
@@ -86,14 +48,14 @@
 								will be processed by us. In order to fully understand your
 								rights, we encourage you to read this Privacy Statement.
 							</p>
-							<p>
+<p>
 								For the purpose of the Data Protection Acts 1988 and 2003, the
 								data controller is contactable at info@coderdojo.com.
 							</p>
-						</li>
-						<li>
-							<h2>Acceptance of this Privacy Statement</h2>
-							<p>
+</li>
+<li>
+<h2>Acceptance of this Privacy Statement</h2>
+<p>
 								By using this Website you signify acceptance of this Privacy
 								Statement. If you do not agree with or you are not comfortable
 								with any aspect of this Privacy Statement, your only remedy is
@@ -102,39 +64,39 @@
 								any portion of the Website following notification or posting of
 								such changes will constitute your acceptance of those changes.
 							</p>
-						</li>
-						<li>
-							<h2>Information we collect</h2>
-							<p>
+</li>
+<li>
+<h2>Information we collect</h2>
+<p>
 								In operating our website we may collect and process the
 								following data about you:
 							</p>
-							<ul>
-								<li>
+<ul>
+<li>
 									Details of your visits to our website and the resources that
 									you access, including, but not limited to, traffic data,
 									location data, weblogs and other communication data.
 								</li>
-								<li>
+<li>
 									Information that you provide to us when using this Website.
 									This includes information provided at the time of registering
 									to use this Website, if applicable. We may also ask you for
 									information when you report a problem with the Website.
 								</li>
-								<li>
+<li>
 									If you contact us for any reason, we may keep a record of that
 									correspondence.
 								</li>
-								<li>
+<li>
 									We may also ask you to complete surveys that we use for
 									research purposes, although you do not have to respond to
 									them.
 								</li>
-							</ul>
-						</li>
-						<li>
-							<h2>Storing your personal data</h2>
-							<p>
+</ul>
+</li>
+<li>
+<h2>Storing your personal data</h2>
+<p>
 								The data that we collect from you may be transferred to, and
 								stored at, a destination outside the European Economic Area
 								("EEA"). It may also be processed by staff of CoderDojo
@@ -145,51 +107,51 @@
 								ensure that your data is treated securely and in accordance with
 								this Privacy Statement.
 							</p>
-							<p>
+<p>
 								All information you provide to us is stored on our secure
 								servers and user information is encrypted with SSL technology.
 							</p>
-							<p>
+<p>
 								Where we have given you (or where you have chosen) a password
 								which enables you to access certain parts of our Website, you
 								are responsible for keeping this password confidential. We ask
 								you not to share a password with anyone.
 							</p>
-						</li>
-						<li>
-							<h2>Use of your information</h2>
-							<p>
+</li>
+<li>
+<h2>Use of your information</h2>
+<p>
 								The information that we collect and store relating to you is
 								primarily used to enable us to provide our services to you. In
 								addition, we may use the information for the following purposes:
 							</p>
-							<ul>
-								<li>
+<ul>
+<li>
 									To ensure that content from our Website is presented in the
 									most effective manner for you and your computer.
 								</li>
-								<li>
+<li>
 									To provide you with information requested from us, relating to
 									our services.
 								</li>
-								<li>
+<li>
 									To allow you to participate in interactive features of our
 									Website.
 								</li>
-								<li>
+<li>
 									To notify you about changes to our Website and/or services.
 								</li>
-							</ul>
-							<p>
+</ul>
+<p>
 								We do not, without your consent, disclose information about
 								identifiable individuals to third parties, but we may send
 								anonymised statistical data to them for research and survey
 								purposes.
 							</p>
-						</li>
-						<li>
-							<h2>Disclosure of your information</h2>
-							<p>
+</li>
+<li>
+<h2>Disclosure of your information</h2>
+<p>
 								Your personal data will not be processed for marketing purposes
 								or publication on our Website. We will not disclose your
 								personal data to third parties unless you have consented to this
@@ -200,7 +162,7 @@
 								law, a summons, a search warrant, a court or regulatory order,
 								or other valid legal process.
 							</p>
-							<p>
+<p>
 								We may provide non-personal data to third parties, where such
 								information is combined with similar information of other users
 								of our Website. For example, we might inform third parties
@@ -218,7 +180,7 @@
 								collect your data. You can also exercise the right at any time
 								by contacting us using the contact details below.
 							</p>
-							<p>
+<p>
 								In the event that we sell or buy any business or assets, in
 								which case we may disclose your personal data to the prospective
 								seller or buyer of such business or assets. If we or
@@ -226,17 +188,17 @@
 								in which case personal data held by us about or customers will
 								be one of the transferred assets.
 							</p>
-							<p>
+<p>
 								The use of this Website by minors under the age of 16 is subject
 								to the consent of their parent or guardian. We advise parents or
 								guardians who permit their children to use the Internet that it
 								is important that they communicate with their children about
 								their safety online.
 							</p>
-						</li>
-						<li>
-							<h2>Security</h2>
-							<p>
+</li>
+<li>
+<h2>Security</h2>
+<p>
 								We are committed to ensuring that your information is secure. As
 								no data transmission over the Internet can be guaranteed as 100%
 								secure, we cannot ensure or warrant the security of any
@@ -249,10 +211,10 @@
 								or unauthorised disclosure or access and to otherwise protect
 								the security of such personal data.
 							</p>
-						</li>
-						<li>
-							<h2>Cookies</h2>
-							<p>
+</li>
+<li>
+<h2>Cookies</h2>
+<p>
 								This Website uses cookie technology. A cookie is a small file
 								which asks permission to be placed on your computer’s hard
 								drive. Once you agree, the file is added and the cookie helps
@@ -262,7 +224,7 @@
 								your needs, likes and dislikes by gathering and remembering
 								information about your preferences.
 							</p>
-							<p>
+<p>
 								A cookie in no way gives us access to your computer or any
 								information about you, other than the data you choose to share
 								with us. You can choose to accept or decline cookies. Most web
@@ -270,15 +232,15 @@
 								browser setting to decline cookies if you prefer. This may
 								prevent you from taking full advantage of the Website.
 							</p>
-							<p>
+<p>
 								If you click on a link to a third party website, such third
 								party may also transmit cookies to you. This Privacy Policy does
 								not cover the use of cookies by any third parties.
 							</p>
-						</li>
-						<li>
-							<h2>Links to other websites</h2>
-							<p>
+</li>
+<li>
+<h2>Links to other websites</h2>
+<p>
 								Our Website may, from time to time, contain links to third party
 								websites. If you follow a link to any of these websites, please
 								note that these websites have their own privacy policies and
@@ -286,10 +248,10 @@
 								policies. Please check these policies before you submit any
 								personal data to these websites.
 							</p>
-						</li>
-						<li>
-							<h2>Access to information</h2>
-							<p>
+</li>
+<li>
+<h2>Access to information</h2>
+<p>
 								You have the right to request a copy of the information held by
 								us about you. We may charge a fee for this which will not exceed
 								€6.35. You also have the right to access your data, have changed
@@ -298,10 +260,10 @@
 								specific uses of your data by contacting us using the contact
 								details below.
 							</p>
-						</li>
-						<li>
-							<h2>Changes to our Privacy Statement</h2>
-							<p>
+</li>
+<li>
+<h2>Changes to our Privacy Statement</h2>
+<p>
 								Any changes to this Privacy Statement will be posted on the
 								Website so you are always aware of what information we collect,
 								how we use it, and under what circumstances, if any, we disclose
@@ -312,32 +274,19 @@
 								choice as to whether or not we use your information in the new
 								manner.
 							</p>
-						</li>
-						<li>
-							<h2>Contact</h2>
-							<p>
+</li>
+<li>
+<h2>Contact</h2>
+<p>
 								We welcome any queries, comments or requests you may have
 								regarding this Privacy Statement. Please contact us in writing
 								at CoderDojo Ennis c/o CBS Primary School, Ennis, IRELAND or by
 								e-mail at enniscoderdojo@gmail.com.
 							</p>
-						</li>
-					</ol>
-				</details>
-			</article>
-		</main>
-		<footer class="site-footer">
-			<section class="footer-content container" aria-label="Club information">
-				<p class="footer-brand">
-					CoderDojo Ennis<span>Free coding club for ages 7+</span>
-				</p>
-				<p>Free to attend. Run by volunteers.<br />In Ennis since 2012.</p>
-				<nav class="footer-nav" aria-label="Footer navigation">
-					<a href="/_contact.html">Get in touch</a>
-					<a href="/_privacy.html" aria-current="page">Privacy</a>
-					<a href="/_news.html">Club news</a>
-				</nav>
-			</section>
-		</footer>
-	</body>
-</html>
+</li>
+</ol>
+</details>
+</article>
+
+</div>
+</template>

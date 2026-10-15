@@ -1,0 +1,57 @@
+## Context
+`develop` already contains the nine-page static redesign. Four additional HTML pages remain. `(public)/index.vue` redirects to `/home.html`; `foo.vue` is a placeholder. Route groups do not provide layout or CSS isolation automatically.
+
+`nuxt.config.ts` globally includes `app.css` and `Themes.css`. `app.css` imports Tailwind/Nuxt UI and styles html/body/elements globally. CRT CSS targets `html[theme="crt"]`. `app.vue` initializes `useUiConfig`, wraps every route in `UApp`, mounts notifications, and always renders `ThemeFooter`, which teleports the CRT overlay into the body. Merely adding a public layout is insufficient.
+
+## Decisions
+### Routing and content
+Use the 13-route map in proposal.md and `definePageMeta({ layout: "public-layout", siteSection: "public" })` on the 11 shared-layout pages. Lab and Tidy Towns use `layout: false` with separate `siteSection` markers (`lab` and `tidy-towns`), remain under `(public)`, and each render their entire existing page in one Vue component. Remove the root redirect and placeholder; do not add aliases or route rules forwarding HTML URLs or old hashes. Replace every internal HTML link with its Vue destination, including meaningful anchors such as `/join#volunteer`.
+
+Retain current photography, resource files, supporter links, donation form fields, waiting-list form, map source and the latest public session calendar, social/contact links and directory behavior. Convert old relative assets to absolute asset paths: Tidy Towns images remain under `/pages/assets/`. Keep asset URLs distinct from migrated document URLs. Use Vue templates/typed data; do not inject legacy HTML with `v-html` or carry over AngularJS/jQuery/Bootstrap.
+
+Retain historical entries and product-link content with archive notices and dates on the shared-layout pages. Lab and Tidy Towns retain their existing content and date presentation without new archive notices. Missing project links render as text. The chat page exposes the existing external room as a link; it does not embed a chat service or implement messaging. Privacy disclosures are migrated without substantive policy changes.
+
+### Shell and component boundary
+`app.vue` selects the public shell or `ApplicationShell` from route metadata. Public and standalone Lab/Tidy Towns rendering consists of NuxtLayout/NuxtPage and does not mount UApp, application notifications, ThemeFooter or initialize member UI configuration. `ApplicationShell` retains the existing application behavior for member/auth routes. Existing global plugins and middleware are audited for presentation effects; authorization behavior is preserved.
+
+Lab and Tidy Towns import no shared presentation components and preserve their existing structures, tables and styles. Tidy Towns keeps its embedded CSS and competition content without new headers, footers or archive notices.
+
+Use explicit imports for Public components to avoid the existing broad component auto-import configuration binding similarly named member components. Shared Vue/Nuxt primitives and generic TypeScript utilities are allowed; member presentation components and theme stores are not, except the explicitly authorized shared SessionCalendar coordinator with its isolated public branch. Public controls use native semantic HTML and public classes rather than Nuxt UI member styles.
+
+Primary navigation retains Home, About, Visit, Join, Explore, Projects, News and Contact. The footer provides Privacy and secondary routes to Lab, Chat, Gift ideas and the Tidy Towns archive. Share typed link data between header/footer; use `aria-current="page"`. A mobile menu, if collapsed, is a native button with expanded state, keyboard operation and close-on-navigation behavior. Keep navigation usable at 360px and 200% zoom.
+
+### CSS entries and themes
+Use four separate area entries under `src/app/assets/css/`: `application.css`, `public.css`, `lab.css` and `tidy-towns.css`. `app.vue` imports their compiled asset URLs with `?url` and registers a single keyed stylesheet link through `useHead`. The selected route section determines the href. Replacing that link removes the previous area stylesheet, including after client-side navigation. Area styles are not imported for side effects by layouts/pages and are not added to Nuxt's global css array. Use ordinary selectors inside each area file; no document-area selector prefixes or CSS reset countermeasures are needed.
+
+`application.css` bundles the existing app stylesheet, Nuxt UI/Tailwind, member/auth themes and downloaded Google fonts. Disable global font injection and Nuxt UI's unused automatic font module so the application entry owns fonts as well. Existing scoped component styles keep their component lifecycle/encapsulation; they are distinct from the one area entry. Keep existing application theme IDs, defaults, preferences and CRT behavior.
+
+`public.css` owns all public visual rules, responsive components and independent `--public-*` variables for colors, fonts, spacing, borders, shadows and focus. Public templates contain no inline styling or embedded style blocks. Light is the baseline; the dark OS media query overrides public tokens and native color-scheme. Public presentation does not depend on member palette variables, color-mode classes or stored CRT selection. No public theme selector or persisted preference is needed.
+
+Lab and Tidy Towns each remain one standalone Vue page with `layout: false`, loading their respective area entry. Preserve the original Lab embedded/retro declarations, animation and asset paths. Preserve Tidy Towns CSS declarations; change its original div selector to the explicit content class so Nuxt's required wrapper does not also receive the original 80% width. Neither standalone page adopts public variables or light/dark behavior. Keep the original retro asset available. Validate all four stylesheet switches and compare standalone appearance against the original HTML.
+
+### Public API stores and directory
+All API interactions performed by public pages go through dedicated public stores backed by `@tanstack/vue-query`, following the existing member data-store patterns. Reuse the QueryClient/VueQueryPlugin registered in `src/app/plugins/vue-query.ts`; presentation isolation does not require a separate query provider. Keep public query keys distinct from protected member keys and do not call protected member stores or add authorization headers to anonymous public requests.
+
+The updated inventory contains two programmatic API reads: `/api/githubaccounts` and the latest develop branch’s `/api/calendar`. Replace `createDirectoryStore` and its manual state/cache with `usePublicDirectoryStore`, using `useQuery` and `$fetch` inside its query function. Pass the query-provided AbortSignal to `$fetch`, validate the existing raw Members/Mentors response (do not assume an ApiResponse envelope), retain GitHub-login validation and expose typed data, loading/fetching/error state and refetch through the store. Use an explicit public query key, a five-minute stale time and disabled refetch-on-window-focus, matching the existing attendance-store read pattern. TanStack owns caching, concurrent-request deduplication and retry; do not retain a parallel manual cache or load state. The user-facing retry action calls the store's refetch operation. Preserve valid cached content during background refresh and show refresh errors without discarding it.
+
+Public pages/components consume store functions and reactive state; they do not call `$fetch`, `fetch`, `useFetch` or `useQuery` directly. Apply this requirement to any further API interactions discovered during migration, including standalone Lab/Tidy Towns if applicable. Any programmatic write uses store-owned `useMutation` and `useQueryClient` invalidation of affected public keys. No new writes are currently required. The map iframe, external links and native PayPal/Google form behavior are not API queries and remain unchanged.
+
+Render directory text with Vue escaping and construct links only from validated GitHub logins. Preserve only the existing public fields; use Coder/Mentor display terminology. No realtime subscription is needed for this existing small public directory. Verify that the shared query provider works outside ApplicationShell and that public query failures remain on the public page without invoking a protected-page login redirect.
+
+### Shared session calendar
+Replace the Google calendar iframe and external calendar link on Visit with the new `Sessions/SessionCalendar.vue` from develop. Retain its existing member presentation and management/pod behavior. Its default public branch uses `usePublicCalendarStore` and `PublicCalendarView`, native buttons, public CSS variables, the existing shared calendar schema/date/filtering helpers, and the anonymous `/api/calendar` endpoint. It does not initialize `useMemberCalendarStore`, protected profile queries or management mutations. Public keys include the selected future/past view; poll every 30 seconds, support loading/empty/error/refetch, preserve cached sessions on refresh failure, and strip planning sessions/pods/management privileges. Keep the map embed and its fallback link. This component reuse is explicitly authorized by the user's follow-up and is the sole presentation-boundary exception.
+
+### Delivery
+Work on `feature/public-vue-pages`, branched from `develop` commit `4fbf40f`, in a separate worktree. The primary checkout has unrelated staged/unstaged work and is not modified. The user approved implementation and requested a PR. Merge the latest develop before publishing; remove static files and obsolete script sources only after auditing references and preserving assets. Rollback is a Git revert of the eventual implementation.
+
+## Verification
+- Validate the proposal with OpenSpec strict mode from the repository root.
+- During implementation, verify every route and all migrated links/assets; verify the old documents and compatibility redirects are absent.
+- Exercise directory success, empty, error/retry and invalid-login responses; verify shared-key deduplication, fresh-cache reuse, cancellation, background-refresh behavior and public error handling. Audit public pages for direct API calls outside stores.
+- Compare Lab and Tidy Towns against their original HTML for unchanged layout, content and CSS appearance, including Lab retro styling and Tidy Towns tables. Verify transitions between both standalone pages, public pages and application pages do not leak styles.
+- Inspect the 11 shared-layout pages in light/dark at desktop and 360px mobile; check keyboard navigation, skip links, heading structure, embeds, contrast, zoom and overflow.
+- Test direct public entry and repeated public/login/member transitions with stored light, dark and CRT preferences. Compare member styling/overlays before and after; verify public colors follow the OS and public styles do not affect application pages.
+- Run the production build and focused static checks. Do not automatically run `pnpm -C src format` or `pnpm -C src test`; record any user-run checks separately.
+
+## Risks
+Global framework resets and teleporting CRT effects can defeat superficial CSS separation; route-marker scoping and cross-route browser checks are required. Old bookmarks will stop working by design. Historical links may no longer resolve; preserve their archive context rather than silently inventing updated recommendations. Coordinate the small app-shell/config diff with concurrent member work when merging.

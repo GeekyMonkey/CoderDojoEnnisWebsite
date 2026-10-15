@@ -23,7 +23,7 @@ The public Projects page automatically lists GitHub accounts rather than project
 - New capability: member-showcase.
 - Database migration, ownership controls, thumbnail storage, shared contracts, member/public APIs and GitHub validation and Bruno requests.
 - Coder/Parent/Mentor navigation, shared showcase management/editor components, client stores, translations.
-- Existing static public page, shared CSS, public TypeScript and generated script, public navigation labels.
+- Public Vue page/layout, isolated public CSS and shared navigation; remove superseded GitHub directory pages, components and stores.
 - Supersedes GitHub-directory behavior in the pending redesign-public-pages proposal. Unlinked public pages remain outside scope.
 
 ## Approved public card presentation
