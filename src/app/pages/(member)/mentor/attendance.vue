@@ -998,6 +998,7 @@
 				<template #coders>
 					<!-- Coders Table -->
 					<UTable v-bind="codersTableProps" class="CodersTable">
+						<template #loading><span /></template>
 						<template #present-cell="{ row }">
 							<div
 								:id="`MemberRow_${row.original.memberId}`"
@@ -1063,6 +1064,7 @@
 				<!-- Mentors Table -->
 				<template #mentors>
 					<UTable v-bind="mentorsTableProps" class="MentorsTable">
+						<template #loading><span /></template>
 						<template #present-cell="{ row }">
 							<div
 								:id="`MemberRow_${row.original.memberId}`"

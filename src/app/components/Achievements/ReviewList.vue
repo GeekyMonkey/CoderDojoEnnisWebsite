@@ -248,6 +248,7 @@
 				:meta="tableMeta"
 				@select="selectRow"
 			>
+				<template #loading><span /></template>
 				<template #memberName-cell="{ row }">
 					<div class="MemberCell">
 						<MemberPresencePhoto

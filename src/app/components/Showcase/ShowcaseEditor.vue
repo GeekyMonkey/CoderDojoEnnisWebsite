@@ -11,6 +11,7 @@
 	import { Temporal } from "temporal-polyfill";
 	import {
 		PROJECT_TYPES,
+		type ProjectType,
 		PROJECT_LABELS,
 		showcaseFieldsSchema,
 		type ShowcaseItem,
@@ -19,14 +20,16 @@
 		type ProjectPreview,
 	} from "#shared/types/Showcase";
 	import type { useShowcaseStore } from "~/stores/useShowcaseStore";
-	import { useImageSource } from "~/composables/useImageSource";
-	import ImageCropper from "~/components/Images/ImageCropper.vue";
+	import ImageEditor from "~/components/Images/ImageEditor.vue";
 	const props = defineProps<{
 		context: ShowcaseContext;
 		item: ShowcaseItem | null;
 		store: ReturnType<typeof useShowcaseStore>;
 	}>();
 	const emit = defineEmits<{ saved: []; cancel: [] }>();
+	type ImageChange = { action: "upload"; png: string } | { action: "delete" };
+	type ImageEditorHandle = { importFile: (file: File) => Promise<boolean>; close: () => void };
+	const PROJECT_OPTIONS: { label: string; value: ProjectType }[] = PROJECT_TYPES.map((value: ProjectType): { label: string; value: ProjectType } => ({ label: PROJECT_LABELS[value], value }));
 	const fields: ShowcaseFields = reactive(
 		props.item
 			? {
@@ -48,7 +51,7 @@
 					sourceProjectId: null,
 				},
 	);
-	const step: Ref<number> = ref(props.item ? 2 : 0);
+	const choosingProject: Ref<boolean> = ref(!props.item);
 	const projects: Ref<ProjectPreview[]> = ref([]);
 	const offset: Ref<number> = ref(0);
 	const more: Ref<boolean> = ref(false);
@@ -57,19 +60,15 @@
 	const validated: Ref<boolean> = ref(false);
 	const removeImage: Ref<boolean> = ref(false);
 	const selected: Ref<boolean> = ref(Boolean(props.item));
-	const source: ReturnType<typeof useImageSource> = useImageSource();
-	const cropper: Ref<{ getPng: () => string } | null> = ref(null);
+	const imageEditor: Ref<ImageEditorHandle | null> = ref(null);
+	const thumbnailPng: Ref<string | null> = ref(null);
+	const imageBusy: Ref<boolean> = ref(false);
+	const thumbnailUrl: ComputedRef<string | null> = computed((): string | null => thumbnailPng.value ? `data:image/png;base64,${thumbnailPng.value}` : removeImage.value ? null : props.item?.thumbnailUrl ?? null);
 	const needsProject: ComputedRef<boolean> = computed(
 		(): boolean =>
 			fields.projectType === "scratch" || fields.projectType === "itch",
 	);
-	const canContinue: ComputedRef<boolean> = computed((): boolean =>
-		step.value === 0
-			? true
-			: step.value === 1
-				? !needsProject.value || selected.value
-				: showcaseFieldsSchema.safeParse(fields).success,
-	);
+	const canSave: ComputedRef<boolean> = computed((): boolean => showcaseFieldsSchema.safeParse(fields).success && (!needsProject.value || selected.value));
 	let generation: number = 0;
 	/** Reset source-specific state when choosing another project type. */
 	function changeProjectType(): void {
@@ -82,7 +81,9 @@
 		validated.value = false;
 		projects.value = [];
 		selected.value = false;
-		source.close();
+		choosingProject.value = true;
+		imageEditor.value?.close();
+		thumbnailPng.value = null;
 		removeImage.value = true;
 		error.value = "";
 	}
@@ -131,7 +132,9 @@
 		fields.url = project.url;
 		fields.sourceProjectId = project.sourceProjectId;
 		selected.value = true;
-		source.close();
+		choosingProject.value = false;
+		imageEditor.value?.close();
+		thumbnailPng.value = null;
 		removeImage.value = true;
 		error.value = "";
 		if (project.imageUrl) {
@@ -141,13 +144,14 @@
 					project.imageUrl,
 				);
 				if (current !== generation) return;
-				const decoded: HTMLImageElement | null = await source.choose(file);
-				if (!decoded)
+				await nextTick();
+				const imported: boolean = await imageEditor.value?.importFile(file) ?? false;
+				if (current !== generation) return;
+				if (!imported)
 					error.value =
 						"Project details loaded. Upload a thumbnail because the imported image could not be decoded.";
-				await nextTick();
 			} catch (failure: unknown) {
-				error.value = `Project details loaded. Image could not be imported: ${message(failure)}`;
+				if (current === generation) error.value = `Project details loaded. Image could not be imported: ${message(failure)}`;
 			} finally {
 				if (current === generation) busy.value = false;
 			}
@@ -169,21 +173,16 @@
 			busy.value = false;
 		}
 	}
-	/** Process a local thumbnail using the existing image pipeline. */
-	async function choose(event: Event): Promise<void> {
-		const file: File | undefined = (event.target as HTMLInputElement)
-			.files?.[0];
-		if (file) {
-			await source.choose(file);
-			if (source.error.value)
-				error.value = "Choose a PNG, JPEG or WebP image up to 8 MB.";
-			else removeImage.value = false;
-		}
+	/** Keep thumbnail edits local until the whole showcase entry is saved. */
+	async function changeImage(action: ImageChange): Promise<void> {
+		thumbnailPng.value = action.action === "upload" ? action.png : null;
+		removeImage.value = action.action === "delete";
 	}
 	/** Save the final reviewed entry and its processed image through the TanStack mutation. */
 	async function save(): Promise<void> {
+		if (busy.value || imageBusy.value) return;
 		error.value = "";
-		if (!showcaseFieldsSchema.safeParse(fields).success) {
+		if (!canSave.value) {
 			error.value =
 				"Complete the title, description, public URL and valid date.";
 			return;
@@ -194,10 +193,11 @@
 				id: props.item?.id ?? null,
 				expectedUpdatedAt: props.item?.updatedAt ?? null,
 				fields: { ...fields },
-				png: cropper.value?.getPng() ?? null,
+				png: thumbnailPng.value,
 				removeImage: removeImage.value,
 			});
-			source.close();
+			imageEditor.value?.close();
+			thumbnailPng.value = null;
 			emit("saved");
 		} catch (failure: unknown) {
 			error.value = message(failure);
@@ -217,6 +217,7 @@
 		(): void => {
 			if (fields.projectType === "scratch") {
 				selected.value = false;
+				choosingProject.value = true;
 				projects.value = [];
 				error.value = "Scratch account changed. Select a project.";
 			}
@@ -227,7 +228,7 @@
 		(): readonly [string, string | null, boolean] => [
 			fields.projectType,
 			props.context.scratchName,
-			Boolean(props.item) || step.value === 1,
+			choosingProject.value,
 		],
 		([projectType, username, pickerVisible]): void => {
 			if (projectType === "scratch" && username && pickerVisible)
@@ -237,312 +238,83 @@
 	);
 </script>
 <template>
-	<form class="ShowcaseEditor" @submit.prevent="save">
-		<header>
-			<h2>{{ item ? "Edit showcase entry" : "Add to your showcase" }}</h2>
-			<p v-if="!item">
-				Step {{ step + 1 }} of 4 ·
-				{{
-					[
-						"Choose project type",
-						"Select your project",
-						"Review project details",
-						"Date and visibility",
-					][step]
-				}}
-			</p>
-		</header>
-		<fieldset v-show="step === 0 || !!item" :disabled="busy">
-			<legend>Project type</legend>
-			<select
-				v-model="fields.projectType"
-				aria-label="Project type"
-				@change="changeProjectType"
-			>
-				<option
-					v-for="projectType in PROJECT_TYPES"
-					:key="projectType"
-					:value="projectType"
-				>
-					{{ PROJECT_LABELS[projectType] }}
-				</option>
-			</select>
-		</fieldset>
-		<section v-show="step === 1 || !!item" class="ProjectSetup">
-			<template v-if="fields.projectType === 'scratch'"
-				><p v-if="!context.scratchName">
-					Add your Scratch username to your club profile to choose your shared
-					projects.
-					<a :href="context.profileUrl" target="_blank" rel="noopener"
-						>Open profile ↗</a
-					>
-				</p>
-				<template v-else
-					><p>Choose a shared project from {{ context.scratchName }}.</p>
-					<button type="button" :disabled="busy" @click="discover()">
-						Refresh projects
-					</button>
-					<p>
-						Project missing? Share it publicly on Scratch, then refresh this
-						list.
-					</p></template
-				></template
-			>
-			<template v-if="fields.projectType === 'itch'"
-				><label
-					>Public itch.io project URL<input
-						v-model="fields.url"
-						type="url"
-						placeholder="https://your-name.itch.io/your-project" /></label
-				><button
-					type="button"
-					:disabled="busy || !fields.url"
-					@click="discover()"
-				>
-					Find project
-				</button>
-				<p>
-					Publish your itch.io project, then paste its public page address.
-				</p></template
-			>
-			<template v-if="fields.projectType === 'github_profile'"
-				><p v-if="!context.githubLogin">
-					Add your GitHub username to your club profile first.
-					<a :href="context.profileUrl" target="_blank" rel="noopener"
-						>Open profile ↗</a
-					>
-				</p>
-				<template v-else
-					><p>GitHub account: {{ context.githubLogin }}</p>
-					<button type="button" :disabled="busy" @click="validate">
-						{{ validated ? "Check again" : "Validate public page" }}
-					</button>
-					<p v-if="validated" role="status">
-						Your GitHub Pages site is ready to share.
-					</p></template
-				>
-				<p>
-					Create and publish your user site before making this entry visible.
-					<a
-						href="https://docs.github.com/en/pages/quickstart"
-						target="_blank"
-						rel="noopener"
-						>GitHub Pages setup instructions ↗</a
-					>
-				</p></template
-			>
-			<p v-if="fields.projectType === 'website'">
-				Enter the public address of your website in the project details.
-			</p>
-			<div v-if="projects.length" class="ProjectOptions">
-				<div
-					v-for="project in projects"
-					:key="project.sourceProjectId"
-					class="ProjectOption"
-				>
-					<button
-						type="button"
-						:disabled="busy"
-						@click="selectProject(project)"
-					>
-						{{ project.title
-						}}<span v-if="fields.sourceProjectId === project.sourceProjectId">
-							✓</span
-						>
-					</button>
-					<a
-						:href="project.url"
-						target="_blank"
-						rel="noopener noreferrer"
-						:aria-label="`Open ${project.title} in a new tab`"
-						>Open project ↗</a
-					>
-				</div>
-				<button
-					v-if="more"
-					type="button"
-					:disabled="busy"
-					@click="discover(true)"
-				>
-					Load more
-				</button>
+	<UForm :schema="showcaseFieldsSchema" :state="fields" class="ShowcaseEditor" @submit="save">
+		<h2>{{ item ? "Edit showcase entry" : "Add to your showcase" }}</h2>
+		<UFormField label="Project type" name="projectType">
+			<USelect v-model="fields.projectType" :items="PROJECT_OPTIONS" class="FormControl" :disabled="busy || imageBusy" @update:modelValue="changeProjectType" />
+		</UFormField>
+		<section v-if="needsProject" class="ProjectSetup">
+			<div v-if="selected && !choosingProject" class="SelectedProject">
+				<p>Selected: <strong>{{ fields.title }}</strong></p>
+				<UButton type="button" variant="outline" :disabled="busy || imageBusy" @click="choosingProject = true">Change project</UButton>
 			</div>
-			<p
-				v-else-if="
-					store.discover.isSuccess.value && fields.projectType === 'scratch'
-				"
-			>
-				No shared projects found. Share your project on Scratch, then refresh.
-			</p>
-			<p v-if="selected && needsProject">
-				Project selected. Review its title, description and image below.
-			</p>
+			<template v-else>
+				<template v-if="fields.projectType === 'scratch'">
+					<p v-if="!context.scratchName">Add your Scratch username to your <a :href="context.profileUrl" target="_blank" rel="noopener">club profile ↗</a> to choose your shared projects.</p>
+					<template v-else>
+						<p>Shared projects from {{ context.scratchName }}.</p>
+						<UButton type="button" variant="outline" :loading="busy" @click="discover()">Refresh projects</UButton>
+						<p class="FormHint">Project missing? Share it publicly on Scratch, then refresh this list.</p>
+					</template>
+				</template>
+				<template v-else>
+					<UFormField label="Public itch.io project URL">
+						<UInput v-model="fields.url" type="url" placeholder="https://your-name.itch.io/your-project" class="FormControl" :disabled="busy" />
+					</UFormField>
+					<UButton type="button" variant="outline" :disabled="!fields.url" :loading="busy" @click="discover()">Find project</UButton>
+				</template>
+				<div v-if="projects.length" class="ProjectOptions">
+					<div v-for="project in projects" :key="project.sourceProjectId" class="ProjectOption">
+						<UButton type="button" variant="outline" :disabled="busy || imageBusy" :aria-pressed="fields.sourceProjectId === project.sourceProjectId" @click="selectProject(project)">{{ project.title }}<span v-if="fields.sourceProjectId === project.sourceProjectId"> ✓</span></UButton>
+						<a :href="project.url" target="_blank" rel="noopener noreferrer" :aria-label="`Open ${project.title} in a new tab`">Open project ↗</a>
+					</div>
+					<UButton v-if="more" type="button" variant="outline" :loading="busy" @click="discover(true)">Load more</UButton>
+				</div>
+				<p v-else-if="!busy && store.discover.isSuccess.value && fields.projectType === 'scratch'">No shared projects found. Share your project on Scratch, then refresh.</p>
+				<UButton v-if="selected" type="button" variant="ghost" :disabled="busy" @click="choosingProject = false">Keep selected project</UButton>
+			</template>
 		</section>
-		<fieldset v-show="step === 2 || !!item" :disabled="busy">
-			<legend>Project details</legend>
-			<label>Title<input v-model="fields.title" maxlength="200" /></label
-			><label
-				>Description<textarea
-					v-model="fields.description"
-					rows="5"
-					maxlength="10000"
-				/></label
-			><label
-				>Project URL<input
-					v-model="fields.url"
-					type="url"
-					:readonly="fields.projectType === 'github_profile'" /></label
-			><label
-				>Thumbnail<input
-					type="file"
-					accept="image/png,image/jpeg,image/webp"
-					@change="choose" /></label
-			><ImageCropper
-				v-if="source.image.value"
-				ref="cropper"
-				:image="source.image.value"
-				:round="false"
-				:disabled="busy"
-			/><img
-				v-else-if="item?.thumbnailUrl && !removeImage"
-				:src="item.thumbnailUrl"
-				alt="Current thumbnail"
-				class="CurrentThumbnail"
-			/><button
-				type="button"
-				@click="
-					source.close();
-					removeImage = true;
-				"
-			>
-				Remove thumbnail
-			</button>
-		</fieldset>
-		<fieldset v-show="step === 3 || !!item" :disabled="busy">
-			<legend>Date and visibility</legend>
-			<label
-				>Showcase date<input v-model="fields.showcaseDate" type="date" /></label
-			><label class="VisibleToggle"
-				><input
-					v-model="fields.isVisible"
-					type="checkbox"
-					role="switch"
-					:disabled="
-						fields.projectType === 'github_profile' &&
-						!validated &&
-						!fields.isVisible
-					"
-				/>Visible on the public showcase</label
-			>
-			<p
-				v-if="
-					fields.projectType === 'github_profile' &&
-					!validated &&
-					!fields.isVisible
-				"
-			>
-				Validate your GitHub Pages site to enable visibility. You can save this
-				entry hidden.
-			</p>
-			<p v-if="!item">
-				<strong>{{ fields.title }}</strong> ·
-				{{ PROJECT_LABELS[fields.projectType] }}
-			</p>
-		</fieldset>
-		<p v-if="error" role="alert">{{ error }}</p>
-		<p v-if="busy || source.loading.value" role="status">Working…</p>
+		<section v-if="fields.projectType === 'github_profile'" class="ProjectSetup">
+			<p v-if="!context.githubLogin">Add your GitHub username to your <a :href="context.profileUrl" target="_blank" rel="noopener">club profile ↗</a> first.</p>
+			<template v-else>
+				<p>GitHub account: {{ context.githubLogin }}</p>
+				<UButton type="button" variant="outline" :loading="busy" @click="validate">{{ validated ? "Check again" : "Validate public page" }}</UButton>
+				<p v-if="validated" role="status">Your GitHub Pages site is ready to share.</p>
+			</template>
+			<p class="FormHint">Publish your user site before making this entry visible. <a href="https://docs.github.com/en/pages/quickstart" target="_blank" rel="noopener">GitHub Pages setup ↗</a></p>
+		</section>
+		<UFormField label="Title" name="title"><UInput v-model="fields.title" :maxlength="200" class="FormControl" :disabled="busy" /></UFormField>
+		<UFormField label="Description" name="description"><UTextarea v-model="fields.description" :rows="3" :maxlength="10000" autoresize class="FormControl" :disabled="busy" /></UFormField>
+		<UFormField v-if="fields.projectType === 'website'" label="Project URL" name="url"><UInput v-model="fields.url" type="url" class="FormControl" :disabled="busy" /></UFormField>
+		<UFormField label="Thumbnail">
+			<ImageEditor ref="imageEditor" class="ThumbnailEditor" :identity="`${fields.projectType}:${fields.sourceProjectId ?? ''}`" :populated="!!thumbnailUrl" :saving="false" :locked="busy" :notify="false" :change="changeImage" @busy="imageBusy = $event">
+				<img v-if="thumbnailUrl" :src="thumbnailUrl" alt="Showcase thumbnail" class="Thumbnail" />
+				<UIcon v-else name="i-lucide-image-plus" class="EmptyThumbnail" />
+			</ImageEditor>
+		</UFormField>
+		<UFormField label="Showcase date" name="showcaseDate"><UInput v-model="fields.showcaseDate" type="date" :disabled="busy" /></UFormField>
+		<USwitch v-model="fields.isVisible" label="Visible on the public showcase" :disabled="busy || (fields.projectType === 'github_profile' && !validated && !fields.isVisible)" />
+		<p v-if="fields.projectType === 'github_profile' && !validated && !fields.isVisible" class="FormHint">Validate your GitHub Pages site to enable visibility. You can save this entry hidden.</p>
+		<UAlert v-if="error" color="error" :title="error" />
 		<div class="EditorActions">
-			<button
-				v-if="!item && step > 0"
-				type="button"
-				:disabled="busy"
-				@click="step--"
-			>
-				Back</button
-			><button
-				v-if="!item && step < 3"
-				type="button"
-				:disabled="busy || !canContinue"
-				@click="step++"
-			>
-				Next</button
-			><button v-else type="submit" :disabled="busy || source.loading.value">
-				Save entry</button
-			><button type="button" :disabled="busy" @click="emit('cancel')">
-				Cancel
-			</button>
+			<UButton type="submit" :loading="busy" :disabled="!canSave || imageBusy">Save entry</UButton>
+			<UButton type="button" variant="outline" :disabled="busy || imageBusy" @click="emit('cancel')">Cancel</UButton>
 		</div>
-	</form>
+	</UForm>
 </template>
+
 <style scoped lang="scss">
-	.ShowcaseEditor,
-	.ProjectSetup,
-	fieldset,
-	label {
-		display: grid;
-		gap: 1rem;
-	}
-	fieldset {
-		border: 1px solid var(--ui-border);
-		padding: 1rem;
-		border-radius: 0.5rem;
-		min-width: 0;
-	}
-	input,
-	select,
-	textarea {
-		width: 100%;
-		min-width: 0;
-		border: 1px solid var(--ui-border);
-		border-radius: 0.4rem;
-		padding: 0.6rem;
-		background: var(--ui-bg);
-		color: var(--ui-text);
-	}
-	button {
-		padding: 0.6rem 1rem;
-		border: 1px solid var(--ui-border);
-		border-radius: 0.5rem;
-		cursor: pointer;
-		justify-self: start;
-	}
-	button:disabled {
-		opacity: 0.5;
-		cursor: default;
-	}
-	.EditorActions,
-	.VisibleToggle {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-	.VisibleToggle input {
-		width: auto;
-	}
-	.ProjectOptions {
-		display: grid;
-		gap: 0.5rem;
-	}
-	.ProjectOption {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-	.ProjectOption button {
-		flex: 1;
-		min-width: 0;
-		text-align: left;
-		overflow-wrap: anywhere;
-	}
-	.ProjectOption a {
-		flex-shrink: 0;
-		text-decoration: underline;
-	}
-	.CurrentThumbnail {
-		width: min(100%, 20rem);
-		aspect-ratio: 1;
-		object-fit: contain;
-	}
+	.ShowcaseEditor { display: grid; align-content: start; align-self: start; gap: calc(var(--spacing) * 4); width: 100%; max-width: 42rem; min-width: 0; }
+	h2 { font-size: var(--text-lg); font-weight: 600; }
+	.ProjectSetup { display: grid; justify-items: start; gap: calc(var(--spacing) * 3); min-width: 0; }
+	.FormControl { width: 100%; }
+	.FormHint { color: var(--ui-text-muted); font-size: var(--text-sm); }
+	.ProjectOptions { display: grid; gap: calc(var(--spacing) * 2); width: 100%; max-height: 20rem; overflow-y: auto; padding: calc(var(--spacing) * 1); }
+	.ProjectOption, .SelectedProject, .EditorActions { display: flex; align-items: center; flex-wrap: wrap; gap: calc(var(--spacing) * 3); }
+	.ProjectOption > :first-child { flex: 1; min-width: 0; text-align: start; white-space: normal; overflow-wrap: anywhere; }
+	.ProjectOption a { flex-shrink: 0; }
+	.ProjectSetup a { text-decoration: underline; }
+	.ThumbnailEditor { width: min(100%, 12rem); }
+	.Thumbnail { width: 100%; height: 100%; aspect-ratio: 1; object-fit: contain; }
+	.EmptyThumbnail { width: 2rem; height: 2rem; color: var(--ui-text-muted); }
 </style>

@@ -36,6 +36,7 @@
 	);
 </script>
 <template>
+	<UDashboardPanel id="showcase"><template #body>
 	<section class="ShowcaseManagement">
 		<header>
 			<h1>Showcase</h1>
@@ -90,10 +91,13 @@
 		>
 		<p v-if="error" role="alert">{{ error }}</p>
 	</section>
+	</template></UDashboardPanel>
 </template>
 <style scoped lang="scss">
 	.ShowcaseManagement {
 		display: grid;
+		align-content: start;
+		align-self: start;
 		gap: 1.5rem;
 		padding: 1.5rem;
 		max-width: 65rem;
