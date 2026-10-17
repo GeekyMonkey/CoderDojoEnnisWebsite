@@ -8,12 +8,17 @@ import { type enMessagesType } from "./en";
 export default {
 	accountMerge: {
 		choose: "Roghnaigh cuntas dúblach",
+		combined: "Cuirtear róil, stair, caidrimh agus scileanna le chéile. Cartlannaítear an cuntas eile.",
 		confirm: "Cumaisc na cuntais",
-		description:
-			"Coinnítear an cuntas reatha, a ainm, logáil isteach, pasfhocal agus íomhánna. Cuirtear stair, caidrimh agus scileanna le chéile agus cartlannaítear an dúblach.",
-		duplicate: "Cuntas dúblach",
+		credentials: "Roghnaigh an t-ainm úsáideora le coinneáil. Fanann a chuntas agus a phasfhocal gníomhach.",
+		description: "Seiceáil an dá chuntas agus roghnaigh na luachanna le coinneáil roimh chumasc.",
+		duplicate: "Cuntas eile",
 		error: "Níorbh fhéidir cumasc. Athnuaigh agus seiceáil na cuntais.",
-		keep: "Cuntas le coinneáil",
+		imageReview: "Roghnaigh Grianghraf agus Abhatár má tá siad ar an dá chuntas. Coinnítear íomhá aonair go huathoibríoch.",
+		keep: "Cuntas reatha",
+		noUsername: "Gan ainm úsáideora",
+		required: "Roghnaigh ainm úsáideora agus réitigh gach coimhlint chun cumasc a chumasú.",
+		review: "Roghnaigh luach do gach difríocht thíos.",
 		saved: "Cuntais cumaiscthe",
 		title: "Cumaisc cuntas",
 		value: "Luach le coinneáil",

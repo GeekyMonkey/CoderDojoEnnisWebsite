@@ -9,12 +9,17 @@ import { type enMessagesType } from "./en";
 export default {
 	accountMerge: {
 		choose: "Choisir le compte en double",
+		combined: "Les rôles, historiques, relations et compétences sont réunis. L’autre compte est archivé.",
 		confirm: "Fusionner ces comptes",
-		description:
-			"Le compte actuel est conservé avec son nom, identifiant, mot de passe et images. Historique, relations et compétences sont réunis ; le doublon est archivé.",
-		duplicate: "Compte en double",
+		credentials: "Choisissez l’identifiant à conserver. Son compte et son mot de passe restent actifs.",
+		description: "Vérifiez les deux comptes et choisissez les valeurs à conserver avant la fusion.",
+		duplicate: "Autre compte",
 		error: "Fusion impossible. Actualisez et vérifiez les comptes.",
-		keep: "Compte conservé",
+		imageReview: "Choisissez la photo et l’avatar si les deux comptes en ont. Une image unique est conservée automatiquement.",
+		keep: "Compte actuel",
+		noUsername: "Sans identifiant",
+		required: "Choisissez un identifiant et résolvez chaque conflit pour fusionner.",
+		review: "Choisissez une valeur pour chaque différence ci-dessous.",
 		saved: "Comptes fusionnés",
 		title: "Fusionner un compte",
 		value: "Valeur à conserver",

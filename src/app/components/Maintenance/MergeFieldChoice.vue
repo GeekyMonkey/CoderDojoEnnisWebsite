@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import type { MergeField, MergeChoices } from "#shared/types/MemberMerge";
-const props = defineProps<{ field: MergeField; label: string; keep: string; duplicate: string; selected: MergeChoices[MergeField]; disabled: boolean }>();
-const emit = defineEmits<{ change: [field: MergeField, selected: MergeChoices[MergeField]] }>();
-/** Emit a field source using the closed choice set. */
-function change(event: Event): void { const value: string = (event.target as HTMLSelectElement).value; if (value === "keep" || value === "duplicate") emit("change", props.field, value); }
+import { useId } from "vue";
+import type { MergeSource } from "#shared/types/MemberMerge";
+const props = defineProps<{ field: string; label: string; keep: string; duplicate: string; selected?: MergeSource | null; disabled: boolean }>();
+const emit = defineEmits<{ change: [field: string, selected: MergeSource] }>();
+const groupId: string = useId();
+/** Emit the explicitly selected account source. */
+function change(selected: MergeSource): void { emit("change", props.field, selected); }
 </script>
-<template><label class="MergeFieldChoice"><span>{{ label }}</span><select :value="selected" :disabled="disabled" @change="change"><option value="keep">{{ keep }}</option><option value="duplicate">{{ duplicate }}</option></select></label></template>
+<template>
+ <fieldset class="MergeFieldChoice" :disabled="disabled">
+  <legend>{{ label }}</legend>
+  <label><input type="radio" :name="groupId" value="keep" :checked="selected === 'keep'" required @change="change('keep')" /><slot name="keep">{{ keep }}</slot></label>
+  <label><input type="radio" :name="groupId" value="duplicate" :checked="selected === 'duplicate'" required @change="change('duplicate')" /><slot name="duplicate">{{ duplicate }}</slot></label>
+ </fieldset>
+</template>
 <style scoped lang="scss">
-.MergeFieldChoice { display: grid; grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr); align-items: center; gap: calc(var(--spacing) * 3); } select { width: 100%; background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: var(--ui-radius); padding: calc(var(--spacing) * 2); }
-@media (max-width: 40rem) { .MergeFieldChoice { grid-template-columns: minmax(0, 1fr); } }
+.MergeFieldChoice { display: grid; gap: calc(var(--spacing) * 3); padding: calc(var(--spacing) * 3); border: 1px solid var(--ui-border); border-radius: var(--ui-radius); min-width: 0; }
+legend { font-weight: 600; }
+label { display: flex; align-items: baseline; gap: calc(var(--spacing) * 2); overflow-wrap: anywhere; white-space: pre-wrap; }
+input { flex-shrink: 0; accent-color: var(--ui-primary); }
 </style>

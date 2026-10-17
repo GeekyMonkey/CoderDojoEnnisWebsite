@@ -7,12 +7,17 @@ import type { BroadenLiterals } from "#shared/utils/TypeHelpers";
 export default {
 	accountMerge: {
 		choose: "Choose duplicate account",
+		combined: "Roles, history, relationships and skills are combined. The other account is archived.",
 		confirm: "Merge these accounts",
-		description:
-			"The current account is kept. Its name, login, password and images stay unchanged. History, relationships and skills are combined; the duplicate is archived.",
-		duplicate: "Duplicate account",
+		credentials: "Choose the username to keep. Its account ID and password remain active.",
+		description: "Review both accounts and choose which values to keep before merging.",
+		duplicate: "Other account",
 		error: "Unable to merge. Refresh and review both accounts again.",
-		keep: "Keep account",
+		imageReview: "Choose a Photo and Avatar where both accounts have one. A single existing image is kept automatically.",
+		keep: "Current account",
+		noUsername: "No username",
+		required: "Choose a username and resolve every conflict to enable merging.",
+		review: "Choose a value for each difference below.",
 		saved: "Accounts merged",
 		title: "Merge account",
 		value: "Value to keep",
