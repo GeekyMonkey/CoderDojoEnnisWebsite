@@ -43,6 +43,7 @@ export const FromLegacyAdultEntity = (
 		birthYear: null,
 		email: Utf8EncodeOrNull(legacy.Email),
 		fingerprintId: legacy.FingerprintId,
+        nfcTag: null,
 		gardaVetted: legacy.GardaVetted,
 		githubLogin: legacy.GithubLogin,
 		goalLongTerm: null,

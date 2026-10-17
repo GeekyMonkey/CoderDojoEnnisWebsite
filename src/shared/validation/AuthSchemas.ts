@@ -25,7 +25,7 @@ export const nfcTagSchema = z
 
 export const loginRequestSchema = z.object({
 	username: usernameSchema,
-	password: passwordSchema,
+	password: z.string().max(120).refine((value: string): boolean => passwordSchema.safeParse(value).success),
 });
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 

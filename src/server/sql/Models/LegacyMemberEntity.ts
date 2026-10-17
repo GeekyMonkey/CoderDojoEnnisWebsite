@@ -42,6 +42,7 @@ export const FromLegacyMemberEntity = (
 		birthYear: legacy.BirthYear,
 		email: null,
 		fingerprintId: legacy.FingerprintId,
+        nfcTag: null,
 		gardaVetted: false,
 		githubLogin: legacy.GithubLogin,
 		goalLongTerm: legacy.GoalLongTerm,

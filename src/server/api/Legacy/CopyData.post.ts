@@ -1,3 +1,4 @@
+import { importedLegacyHash } from "#server/utils/legacyPasswords";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { defineEventHandler } from "#imports";
@@ -39,7 +40,7 @@ import { FromLegacyMemberParentEntities } from "#server/sql/Models/LegacyMemberP
 import { FromLegacyTeamEntities } from "#server/sql/Models/LegacyTeamEntity";
 import {
 	type MemberModel,
-	memberFromRecords,
+	memberFromRecords, memberToRecord, MemberModelArraySchema,
 } from "#shared/types/models/MemberModel";
 import { FormatBucketFileName } from "#shared/types/Supabase";
 import { ErrorToString } from "#shared/utils/ErrorHelpers";
@@ -495,8 +496,7 @@ async function CopyBeltsTable(
 
 /**
  * Copy members (combining legacy ninjas and adults)
- * Password hashes are NOT migrated here (MemberModel excludes them). A separate
- * process can call MembersData.BulkMigrateLegacyPasswords afterwards if desired.
+ * Import marked legacy credentials alongside validated member data without exposing hashes in DTOs.
  */
 async function CopyMembersTable(
 	event: H3Event<EventHandlerRequest>,
@@ -525,6 +525,7 @@ async function CopyMembersTable(
 	const ninjaModels = FromLegacyMemberEntities(ninjas);
 	const adultModels = FromLegacyAdultEntities(adults);
 	const allModels = [...ninjaModels, ...adultModels];
+ const legacyHashes: Map<string, string | null> = new Map([...ninjas, ...adults].map((source: { Id: string; PasswordHash: string | null }): [string, string | null] => [source.Id.toLowerCase(), importedLegacyHash(source.PasswordHash)]));
 
 	// Summary metrics
 	const ninjaCount = ninjaModels.length;
@@ -540,7 +541,10 @@ async function CopyMembersTable(
 		let insertedTotal = 0;
 		for (let i = 0; i < allModels.length; i += batchSize) {
 			const batch = allModels.slice(i, i + batchSize);
-			const savedBatch = await MembersData.SaveMembers(event, batch);
+			const validated: MemberModel[] = MemberModelArraySchema.parse(batch);
+   const { data, error } = await db.schema("coderdojo").from("members").upsert(validated.map((member: MemberModel): ReturnType<typeof memberToRecord> & { password_hash: string | null } => ({ ...memberToRecord(member), password_hash: legacyHashes.get(member.id.toLowerCase()) ?? null })), { onConflict: "id" }).select("id");
+   if (error || !data) throw new Error("Unable to import members and legacy credentials");
+   const savedBatch: { id: string }[] = data;
 			insertedTotal += savedBatch.length;
 			logs.push(
 				`Inserted member batch ${i / batchSize + 1} size=${batch.length} returned=${savedBatch.length}`,
@@ -691,33 +695,9 @@ async function CopyMembersTable(
 			// (Probe diagnostics removed for cleaner logs)
 		}
 
-		// Bulk password migration AFTER verification so it cannot affect field comparison above
-		if (verificationPassed) {
-			try {
-				logs.push("Migrating legacy member passwords (mentors)...");
-				const passwordResult = await MembersData.BulkMigrateLegacyPasswords(
-					event,
-					allModels.map((m) => ({
-						id: m.id,
-						nameFirst: m.nameFirst,
-						nameLast: m.nameLast,
-						fingerprintId: m.fingerprintId,
-						isMentor: m.isMentor,
-						deleted: m.deleted,
-					})),
-					{ force: true },
-				);
-				logs.push(
-					`Password migration: updated=${passwordResult.updated} skipped=${passwordResult.skipped} errors=${passwordResult.errors}`,
-				);
-			} catch (pwErr: any) {
-				logs.push(`Error migrating passwords: ${pwErr.message || pwErr}`);
-			}
-		} else {
-			logs.push(
-				"Skipping password migration due to failed member verification",
-			);
-		}
+  if (!verificationPassed) throw new Error("Member verification failed after legacy credential import");
+  logs.push(`Legacy credentials imported unchanged: ${insertedTotal}`);
+
 	} catch (error) {
 		logs.push(`Error in Members insert: ${ErrorToString(error)}`);
 	}

@@ -5,7 +5,7 @@ import { MemberBadgeCategoryModel } from "#shared/types/models/MemberBadgeCatego
  */
 export type LegacyAdultBadgeCategoryEntity = {
 	Id: string;
-	MemberId: string;
+	AdultId: string;
 	BadgeCategoryId: string;
 };
 
@@ -14,7 +14,7 @@ export const FromLegacyAdultBadgeCategoryEntity = (
 ): MemberBadgeCategoryModel => {
 	return {
 		id: legacy.Id,
-		memberId: legacy.MemberId,
+		memberId: legacy.AdultId,
 		badgeCategoryId: legacy.BadgeCategoryId,
 	};
 };

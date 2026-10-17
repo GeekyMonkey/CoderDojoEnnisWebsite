@@ -4,6 +4,7 @@ import { GetSupabaseAdminClient, type SupabaseClientType } from "#server/db/Data
 import { useRuntimeConfig } from "#imports";
 import type { MemberRecord } from "#server/db/MembersData";
 import { MembersData } from "#server/db/MembersData";
+import { matchesLegacyPassword } from "#server/utils/legacyPasswords";
 import { GeneratePasswordHash, LoginToSupabase } from "#server/utils/authUtils";
 import {
 	type MemberModel,
@@ -75,9 +76,19 @@ export class AuthService {
 		const uniqueCandidates = this.deduplicateCandidates(candidates);
 		logs.push(`Candidates: ${uniqueCandidates.length}`);
 
-		const matched = uniqueCandidates.find(
+		let matched: MemberRecord | undefined = uniqueCandidates.find(
 			(candidate) => candidate.password_hash === passwordHash,
 		);
+		if (!matched) {
+   matched = uniqueCandidates.find((candidate: MemberRecord): boolean => !candidate.deleted && matchesLegacyPassword(password, candidate.password_hash));
+   if (matched) {
+    const client: SupabaseClientType | null = await GetSupabaseAdminClient(this.event);
+    if (!client) throw new AuthServiceError("Database unavailable", "DATABASE_UNAVAILABLE", logs);
+    const { data, error } = await client.schema("coderdojo").from("members").update({ password_hash: passwordHash }).eq("id", matched.id).eq("password_hash", matched.password_hash!).eq("deleted", false).select("*").maybeSingle();
+    if (error || !data) throw new AuthServiceError("Credentials changed; try again", "INVALID_CREDENTIALS", logs);
+    matched = data as MemberRecord;
+   }
+  }
 		if (!matched) {
 			logs.push("Password mismatch for all candidates");
 			throw new AuthServiceError("Invalid login", "INVALID_CREDENTIALS", logs);

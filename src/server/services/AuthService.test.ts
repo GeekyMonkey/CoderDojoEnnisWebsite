@@ -101,3 +101,35 @@ describe("full-name credentials", (): void => {
   expect(mocks.login).not.toHaveBeenCalled(); expect(mocks.rpc).not.toHaveBeenCalled();
  });
 });
+
+describe("legacy credential upgrade", (): void => {
+ it("upgrades only after an exact legacy password match and returns the new credential", async (): Promise<void> => {
+  const { importedLegacyHash, legacyPasswordHash } = await import("#server/utils/legacyPasswords");
+  const legacy: MemberRecord = { ...RECORD, password_hash: importedLegacyHash(legacyPasswordHash(" OldPassword ")) };
+  mocks.candidates.mockResolvedValue([legacy]); mocks.names.mockResolvedValue([]);
+  const single: ReturnType<typeof vi.fn> = vi.fn().mockResolvedValue({ data: { ...RECORD, password_hash: "valid-hash" }, error: null });
+  const query: { eq: ReturnType<typeof vi.fn>; select: ReturnType<typeof vi.fn>; maybeSingle: ReturnType<typeof vi.fn> } = { eq: vi.fn(), select: vi.fn(), maybeSingle: single };
+  query.eq.mockReturnValue(query); query.select.mockReturnValue(query);
+  const update: ReturnType<typeof vi.fn> = vi.fn().mockReturnValue(query);
+  mocks.client.mockResolvedValue({ schema: (): object => ({ from: (): object => ({ update }) }) });
+  const result: Awaited<ReturnType<AuthService["validateCredentials"]>> = await new AuthService(EVENT).validateCredentials("coder", " OldPassword ");
+  expect(update).toHaveBeenCalledWith({ password_hash: "valid-hash" });
+  expect(query.eq).toHaveBeenCalledWith("password_hash", legacy.password_hash);
+  expect(result.memberRecord.password_hash).toBe("valid-hash");
+ });
+ it("rejects a wrong legacy password without writing", async (): Promise<void> => {
+  const { importedLegacyHash, legacyPasswordHash } = await import("#server/utils/legacyPasswords");
+  mocks.candidates.mockResolvedValue([{ ...RECORD, password_hash: importedLegacyHash(legacyPasswordHash("Correct")) }]); mocks.names.mockResolvedValue([]);
+  await expect(new AuthService(EVENT).validateCredentials("coder", "Wrong")).rejects.toMatchObject({ code: "INVALID_CREDENTIALS" });
+  expect(mocks.client).not.toHaveBeenCalled();
+ });
+ it("rejects a credential changed concurrently with the upgrade", async (): Promise<void> => {
+  const { importedLegacyHash, legacyPasswordHash } = await import("#server/utils/legacyPasswords");
+  mocks.candidates.mockResolvedValue([{ ...RECORD, password_hash: importedLegacyHash(legacyPasswordHash("Correct")) }]); mocks.names.mockResolvedValue([]);
+  const query: { eq: ReturnType<typeof vi.fn>; select: ReturnType<typeof vi.fn>; maybeSingle: ReturnType<typeof vi.fn> } = { eq: vi.fn(), select: vi.fn(), maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }) };
+  query.eq.mockReturnValue(query); query.select.mockReturnValue(query);
+  mocks.client.mockResolvedValue({ schema: (): object => ({ from: (): object => ({ update: (): object => query }) }) });
+  await expect(new AuthService(EVENT).validateCredentials("coder", "Correct")).rejects.toMatchObject({ code: "INVALID_CREDENTIALS" });
+  expect(mocks.login).not.toHaveBeenCalled();
+ });
+});
