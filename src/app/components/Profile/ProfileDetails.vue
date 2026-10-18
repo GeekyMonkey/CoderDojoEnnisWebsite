@@ -50,7 +50,6 @@
 
 <template>
 	<UPageCard>
-		<MemberRoles v-if="editing" :modelValue="member" mode="view" />
 		<p v-if="editing && member.isNinja">{{ t("maintenance.birthYear") }}: {{ member.birthYear ?? '—' }}</p>
 		<ProfileCurrentBelt v-if="member.isNinja" :memberId="member.id" /><ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />

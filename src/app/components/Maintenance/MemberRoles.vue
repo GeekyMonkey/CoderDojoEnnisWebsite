@@ -1,4 +1,5 @@
 <script setup lang="ts">
+ import { computed, type ComputedRef } from "vue";
  import type { AccountFields } from "#shared/types/MemberMaintenance";
  import type { ProfileMode } from "#shared/types/MemberProfile";
 
@@ -9,10 +10,11 @@
  type RoleKey = keyof MemberRoles;
  const ROLE_KEYS: RoleKey[] = ["isNinja", "isParent", "isMentor"];
  const { t } = useI18n();
+ const selectedCount: ComputedRef<number> = computed((): number => ROLE_KEYS.filter((key: RoleKey): boolean => props.modelValue[key]).length);
 
  /** Emit role edits without allowing display mode to mutate account data. */
  function update(key: RoleKey, value: boolean | "indeterminate"): void {
-  if (props.mode !== "edit" || props.disabled) return;
+  if (props.mode !== "edit" || props.disabled || (value !== true && props.modelValue[key] && selectedCount.value <= 1)) return;
   emit("update:modelValue", { ...props.modelValue, [key]: value === true });
  }
 </script>
@@ -23,12 +25,11 @@
   <ul class="RoleLabels"><template v-for="key in ROLE_KEYS" :key="key"><li v-if="modelValue[key]">{{ t(`maintenance.${key}`) }}</li></template></ul>
  </div>
  <fieldset v-else class="MemberRoles">
-  <legend>{{ t('maintenance.roles') }}</legend>
-  <div class="RoleChecks">
-   <UFormField v-for="key in ROLE_KEYS" :key="key" :name="`${pathPrefix}${key}`">
-    <UCheckbox :modelValue="modelValue[key]" :disabled="mode !== 'edit' || disabled" :label="t(`maintenance.${key}`)" @update:modelValue="(value: boolean | 'indeterminate'): void => update(key, value)" />
-   </UFormField>
-  </div>
+  <UFormField :name="`${pathPrefix}isNinja`" :label="t('maintenance.roles')" required>
+   <div class="RoleChecks">
+    <UCheckbox v-for="key in ROLE_KEYS" :key="key" :modelValue="modelValue[key]" :disabled="disabled || (modelValue[key] && selectedCount === 1)" :label="t(`maintenance.${key}`)" @update:modelValue="(value: boolean | 'indeterminate'): void => update(key, value)" />
+   </div>
+  </UFormField>
  </fieldset>
 </template>
 

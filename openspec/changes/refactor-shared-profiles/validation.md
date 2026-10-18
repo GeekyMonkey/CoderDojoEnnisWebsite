@@ -18,3 +18,10 @@ Base: `develop` at `2929e6e989d891b0d55297ddfa2fdbf7f1dfcf14`.
 
 ## Delivery limitation
 Initial publication failed with `403 Resource not accessible by integration`. After the repository owner installed the Codex GitHub Connector, branch creation succeeded. Changes are published on `feature/shared-profiles` for a PR against `develop`. No merge, deployment, or live database write was performed.
+
+## Profile completeness follow-up
++- Removed the duplicate read-only role summary from the edit form header.
++- Reused the existing mentor account editor on My Profile, restoring Coder/Parent/Mentor checkboxes, badge/fingerprint ID, NFC tag, vetting status, and applicable birth year/team/term registration fields.
++- Restored own mentor skills and Print ID. Existing mentor authorization and account schema enforce role changes and require at least one role.
++- Prevented clearing the final selected role in the checkbox component; added SSR regression coverage for all three checkboxes and display mode. Tests remain for manual execution.
++- Saving basic details leaves the other account-section draft mounted.
