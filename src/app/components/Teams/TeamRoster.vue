@@ -2,13 +2,13 @@
  import type { TeamModel } from "#shared/types/models/TeamModel";
  import type { PublicMember } from "#shared/types/Coder";
  import TeamLogo from "./TeamLogo.vue";
- import MemberPhoto from "~/components/Members/MemberPhoto.vue";
+ import MemberAvatar from "~/components/Members/MemberAvatar.vue";
  const props = defineProps<{team:TeamModel|null;members:PublicMember[];profileBase:string}>();
  const { t } = useI18n();
 </script>
 <template>
  <UPageCard :title="team?.teamName ?? t('teams.label')">
-  <template v-if="team"><TeamLogo :for="team" size="lg" /><p class="TeamGoal">{{ team.goal || '—' }}</p><ul class="Roster"><li v-for="member in members" :key="member.id"><NuxtLink :to="`${profileBase}/${member.id}`"><MemberPhoto :member="member" size="sm" /><span>{{ member.nameFirst }} {{ member.nameLast }}</span></NuxtLink></li></ul></template>
+  <template v-if="team"><TeamLogo :for="team" size="lg" /><p class="TeamGoal">{{ team.goal || '—' }}</p><ul class="Roster"><li v-for="member in members" :key="member.id"><NuxtLink :to="`${profileBase}/${member.id}`"><MemberAvatar :member="member" size="sm" /><span>{{ member.nameFirst }} {{ member.nameLast }}</span></NuxtLink></li></ul></template>
   <p v-else>{{ t('coder.unassigned') }}</p>
  </UPageCard>
 </template>

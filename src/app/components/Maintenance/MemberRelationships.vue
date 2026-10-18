@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import type { ProfileMode } from "#shared/types/MemberProfile";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { compareMemberNames } from "#shared/utils/MemberNames";
@@ -6,11 +7,11 @@
 	import { memberSearchSchema, relationshipInputSchema, type RelationshipInput } from "#shared/types/MemberMaintenance";
 	import type { MemberModel } from "#shared/types/models/MemberModel";
 	import type { MemberParentModel } from "#shared/types/models/MemberParentModel";
-	const props = defineProps<{ member: MemberModel; members: MemberModel[]; relationships: MemberParentModel[]; side: "parents" | "children"; saving: boolean; link: (body: RelationshipInput) => Promise<null>; unlink: (body: RelationshipInput) => Promise<null> }>();
+	const props = withDefaults(defineProps<{ mode?: ProfileMode; member: MemberModel; members: MemberModel[]; relationships: MemberParentModel[]; side: "parents" | "children"; saving: boolean; link: (body: RelationshipInput) => Promise<null>; unlink: (body: RelationshipInput) => Promise<null> }>(), { mode: "view" });
 	type RelationshipRow = { member: MemberModel; input: RelationshipInput };
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
-	const editing: Ref<boolean> = ref(false);
+	const editing: ComputedRef<boolean> = computed((): boolean => props.mode === "edit");
 	const search: Ref<string> = ref("");
 	const removing: Ref<string | null> = ref(null);
 	const limit: Ref<number> = ref(20);
@@ -29,27 +30,27 @@
 	const candidates: ComputedRef<MemberModel[]> = computed((): MemberModel[] => matches.value.slice(0, limit.value));
 	/** Link or unlink only a validated parent-coder pair through store callbacks. */
 	async function change(input: RelationshipInput, remove: boolean): Promise<void> {
-		if (props.saving) return;
+		if (!editing.value || props.saving) return;
 		try { await (remove ? props.unlink : props.link)(relationshipInputSchema.parse(input)); removing.value = null; search.value = ""; publish({ name: "maintenance.memberrelationships.success", severity: "success", message: t("actionNotifications.saved") }); }
 		catch (failure: unknown) { publish({ name: "maintenance.memberrelationships.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
 	/** Build a pair from either profile's relationship view. */
 	function pair(target: MemberModel): RelationshipInput { return props.side === "parents" ? { memberId: props.member.id, parentId: target.id } : { memberId: target.id, parentId: props.member.id }; }
 	watch([search, (): string => props.member.id, (): string => props.side], (): void => { limit.value = 20; });
+	watch((): ProfileMode => props.mode, (): void => { search.value = ""; removing.value = null; });
 </script>
 <template>
 	<UPageCard :title="t(`maintenance.${side}`)">
 		<p v-if="!linked.length">{{ t('maintenance.noRelationships') }}</p>
 		<ul class="Relationships"><li v-for="row in linked" :key="row.member.id">
-			<NuxtLink :to="`/mentor/member/${row.member.id}`">{{ row.member.nameFirst }} {{ row.member.nameLast }}</NuxtLink>
+			<NuxtLink :to="`/member/member/${row.member.id}`">{{ row.member.nameFirst }} {{ row.member.nameLast }}</NuxtLink>
 			<template v-if="editing"><UButton v-if="removing !== row.member.id" variant="outline" color="error" :disabled="saving" @click="removing = row.member.id">{{ t('maintenance.unlink') }}</UButton><template v-else><span>{{ t('maintenance.confirmUnlink') }}</span><UButton color="error" :loading="saving" @click="change(row.input, true)">{{ t('maintenance.unlink') }}</UButton><UButton variant="ghost" @click="removing = null">{{ t('profile.cancel') }}</UButton></template></template>
 		</li></ul>
-		<UButton class="SectionEdit" variant="outline" :disabled="saving" @click="editing = !editing; search = ''; removing = null">{{ t(editing ? 'maintenance.done' : 'maintenance.editRelationships') }}</UButton>
+
 		<template v-if="editing"><UInput v-model="search" :maxlength="200" :aria-label="t('maintenance.search')" :placeholder="t('maintenance.search')" /><p v-if="search">{{ t('maintenance.membersCount', { count: matches.length }) }}</p><ul class="Relationships"><li v-for="candidate in candidates" :key="candidate.id"><span>{{ candidate.nameFirst }} {{ candidate.nameLast }}</span><UButton :loading="saving" @click="change(pair(candidate), false)">{{ t('maintenance.link') }}</UButton></li></ul><UButton v-if="candidates.length < matches.length" variant="outline" @click="limit += 20">{{ t('maintenance.showMore') }}</UButton></template>
 
 	</UPageCard>
 </template>
 <style scoped lang="scss">
-	.SectionEdit { width: fit-content; align-self: flex-start; justify-self: start; }
 	.Relationships { list-style: none; padding: 0; display: grid; gap: calc(var(--spacing) * 3); } .Relationships li { display: flex; align-items: center; gap: calc(var(--spacing) * 3); flex-wrap: wrap; }
 </style>

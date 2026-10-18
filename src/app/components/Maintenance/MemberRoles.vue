@@ -18,7 +18,11 @@
 </script>
 
 <template>
- <fieldset class="MemberRoles">
+ <div v-if="mode === 'view'" class="MemberRoles">
+  <strong>{{ t('maintenance.roles') }}</strong>
+  <ul class="RoleLabels"><template v-for="key in ROLE_KEYS" :key="key"><li v-if="modelValue[key]">{{ t(`maintenance.${key}`) }}</li></template></ul>
+ </div>
+ <fieldset v-else class="MemberRoles">
   <legend>{{ t('maintenance.roles') }}</legend>
   <div class="RoleChecks">
    <UFormField v-for="key in ROLE_KEYS" :key="key" :name="`${pathPrefix}${key}`">
@@ -29,6 +33,7 @@
 </template>
 
 <style scoped lang="scss">
+ .RoleLabels { display: flex; flex-wrap: wrap; gap: calc(var(--spacing) * 3); list-style: none; padding: 0; margin: 0; }
  .MemberRoles { border: 0; padding: 0; margin: 0; min-width: 0; }
  .MemberRoles legend { padding: 0; margin-bottom: var(--spacing); font-weight: 600; }
  .RoleChecks { display: grid; gap: var(--spacing); }

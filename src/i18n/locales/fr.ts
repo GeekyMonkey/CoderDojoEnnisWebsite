@@ -406,6 +406,7 @@ export default {
 
 	profileImages: {
 		avatar: "Avatar",
+		copyAvatarToPhoto: "Copier l’avatar vers la photo",
 		delete: "Supprimer",
 		dropImage: "Choisir ou déposer une image",
 		edit: "Modifier l’image",

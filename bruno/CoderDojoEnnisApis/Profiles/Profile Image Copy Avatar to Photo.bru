@@ -1,0 +1,21 @@
+meta {
+  name: Profile Image Copy Avatar to Photo
+  type: http
+}
+post {
+  url: {{Host}}/api/Profile/images
+  body: json
+  auth: none
+}
+headers {
+  Authorization: Bearer {{AccessToken}}
+  Content-Type: application/json
+}
+body:json {
+{
+  "action": "copyAvatarToPhoto"
+}
+}
+docs {
+  Requires a verified mentor session and an existing avatar. Copies avatar bytes into the photo slot and preserves the avatar. Photo upload and deletion are also mentor-only. Non-mentor avatar editing remains available under existing profile/parent permissions.
+}

@@ -409,6 +409,7 @@ export default {
 
 	profileImages: {
 		avatar: "Abhatár",
+		copyAvatarToPhoto: "Cóipeáil abhatár go grianghraf",
 		delete: "Scrios",
 		dropImage: "Roghnaigh nó scaoil íomhá",
 		edit: "Cuir íomhá in eagar",
