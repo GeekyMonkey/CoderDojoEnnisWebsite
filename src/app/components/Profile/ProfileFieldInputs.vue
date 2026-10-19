@@ -2,9 +2,9 @@
 	import { computed, type ComputedRef } from "vue";
 	import type { MemberProfileFields } from "#shared/types/MemberProfile";
 	import { PROFILE_FIELDS, type ProfileField } from "./profileFields";
-	const props = withDefaults(defineProps<{ fields: MemberProfileFields & { login?: string }; includeLogin?: boolean; disabled?: boolean; pathPrefix?: string }>(), { includeLogin: false, disabled: false, pathPrefix: "" });
+	const props = withDefaults(defineProps<{ fields: MemberProfileFields & { login?: string }; includeLogin?: boolean; disabled?: boolean; visibleFields?: ProfileField[]; pathPrefix?: string }>(), { includeLogin: false, disabled: false, pathPrefix: "" });
 	const { t } = useI18n();
-	const inputFields: ComputedRef<(ProfileField | { key: "login"; autocomplete: "username"; type: "text" })[]> = computed((): (ProfileField | { key: "login"; autocomplete: "username"; type: "text" })[] => props.includeLogin ? [{ key: "login", autocomplete: "username", type: "text" }, ...PROFILE_FIELDS] : PROFILE_FIELDS);
+	const inputFields: ComputedRef<(ProfileField | { key: "login"; autocomplete: "username"; type: "text" })[]> = computed((): (ProfileField | { key: "login"; autocomplete: "username"; type: "text" })[] => props.includeLogin ? [{ key: "login", autocomplete: "username", type: "text" }, ...(props.visibleFields ?? PROFILE_FIELDS)] : (props.visibleFields ?? PROFILE_FIELDS));
 	/** Keep shared profile inputs typed in both signup and edit forms. */
 	function update(key: keyof MemberProfileFields | "login", value: string | number): void { props.fields[key] = String(value); }
 </script>

@@ -32,6 +32,8 @@ describe("profile image framing", (): void => {
     });
     it("rejects unknown slots and unexpected action fields", (): void => {
         expect(profileImageActionSchema.safeParse({ action: "delete", slot: "other" }).success).toBe(false);
-        expect(profileImageActionSchema.safeParse({ action: "swap", memberId: "someone" }).success).toBe(false);
+        expect(profileImageActionSchema.safeParse({ action: "swap" }).success).toBe(false);
+        expect(profileImageActionSchema.safeParse({ action: "copyAvatarToPhoto", memberId: "someone" }).success).toBe(false);
+        expect(profileImageActionSchema.safeParse({ action: "copyAvatarToPhoto" }).success).toBe(true);
     });
 });

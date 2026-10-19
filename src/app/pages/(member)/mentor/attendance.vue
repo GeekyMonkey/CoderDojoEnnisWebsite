@@ -409,12 +409,12 @@
 		if (!chosen?.id) {
 			return;
 		}
-		await navigateTo(`/mentor/coder/${chosen.id}`);
+		await navigateTo(`/member/member/${chosen.id}`);
 	};
 
 	/** Open reusable member details for every role. */
  const memberClicked = async (member: MemberModel): Promise<void> => {
-  if (member.id) await navigateTo(`/mentor/member/${member.id}`);
+  if (member.id) await navigateTo(`/member/member/${member.id}`);
  };
 
 	const isSavingByMemberId = ref<Record<string, true>>({});

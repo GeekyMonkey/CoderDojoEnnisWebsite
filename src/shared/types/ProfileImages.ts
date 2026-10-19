@@ -4,11 +4,11 @@ export type ProfileImageSlot = "photo" | "avatar";
 export const MAX_IMAGE_PIXELS: number = 800;
 export const MAX_IMAGE_BYTES: number = 3_000_000;
 export const MAX_SOURCE_BYTES: number = 20_000_000;
-export type ProfileImageAction = { action: "upload"; slot: ProfileImageSlot; png: string } | { action: "delete"; slot: ProfileImageSlot } | { action: "swap" };
+export type ProfileImageAction = { action: "upload"; slot: ProfileImageSlot; png: string } | { action: "delete"; slot: ProfileImageSlot } | { action: "copyAvatarToPhoto" };
 export const profileImageActionSchema: z.ZodType<ProfileImageAction> = z.discriminatedUnion("action", [
     z.strictObject({ action: z.literal("upload"), slot: z.enum(["photo", "avatar"]), png: z.string().max(4_000_000).regex(/^[A-Za-z0-9+/]+={0,2}$/) }),
     z.strictObject({ action: z.literal("delete"), slot: z.enum(["photo", "avatar"]) }),
-    z.strictObject({ action: z.literal("swap") }),
+    z.strictObject({ action: z.literal("copyAvatarToPhoto") }),
 ]);
 export type ImagePoint = { x: number; y: number };
 export type ImageTransform = { zoom: number; panX: number; panY: number };

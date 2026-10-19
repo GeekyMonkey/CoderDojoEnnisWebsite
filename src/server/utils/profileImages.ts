@@ -11,7 +11,6 @@ import { FormatBucketFileName } from "#shared/types/Supabase";
 import { memberFromRecord, type MemberModel, type MemberRecord } from "#shared/types/models/MemberModel";
 
 type StoredImage = { path: string; blob: Blob | null };
-const SLOTS: ProfileImageSlot[] = ["photo", "avatar"];
 
 /** Resolve the existing member image naming convention. */
 function imagePath(memberId: string, slot: ProfileImageSlot, extension: string): string {
@@ -40,17 +39,20 @@ export async function changeProfileImages(event: H3Event, own: boolean, parent: 
     const parsed: ReturnType<typeof profileImageActionSchema.safeParse> = profileImageActionSchema.safeParse(await readBody<unknown>(event));
     if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid image action" });
     const action: ProfileImageAction = parsed.data;
+    if ((action.action === "copyAvatarToPhoto" || action.slot === "photo") && !actor.member.isMentor) {
+        throw createError({ statusCode: 403, statusMessage: "Only mentors can change photos" });
+    }
     const member: MemberModel = parent ? await requireLinkedChild(actor, id) : (await readProfile(actor, id)).member;
     const png: Buffer | null = action.action === "upload" ? validateProfilePng(action.png) : null;
-    const slots: ProfileImageSlot[] = action.action === "swap" ? SLOTS : [action.slot];
-    const before: StoredImage[] = await snapshot(actor, id, slots);
+    if (action.action === "copyAvatarToPhoto" && !member.hasAvatar) throw createError({ statusCode: 409, statusMessage: "Avatar unavailable" });
+    const slots: ProfileImageSlot[] = action.action === "copyAvatarToPhoto" ? ["photo"] : [action.slot];
+    const before: StoredImage[] = await snapshot(actor, id, action.action === "copyAvatarToPhoto" ? ["photo", "avatar"] : slots);
     const bucket: ReturnType<typeof actor.client.storage.from> = actor.client.storage.from("coderdojo");
     const values: { has_photo: boolean; has_avatar: boolean } = { has_photo: member.hasPhoto, has_avatar: member.hasAvatar };
     try {
         for (const slot of slots) {
-            const other: ProfileImageSlot = slot === "photo" ? "avatar" : "photo";
-            const populated: boolean = action.action === "swap" ? (other === "photo" ? member.hasPhoto : member.hasAvatar) : action.action === "upload";
-            const source: Blob | Buffer | null = action.action === "upload" ? png : action.action === "swap" && populated ? before.find((image: StoredImage): boolean => image.path === imagePath(id, other, "png") && Boolean(image.blob))?.blob ?? before.find((image: StoredImage): boolean => image.path === imagePath(id, other, "jpg"))?.blob ?? null : null;
+            const populated: boolean = action.action === "copyAvatarToPhoto" || action.action === "upload";
+            const source: Blob | Buffer | null = action.action === "upload" ? png : action.action === "copyAvatarToPhoto" ? before.find((image: StoredImage): boolean => image.path === imagePath(id, "avatar", "png") && Boolean(image.blob))?.blob ?? before.find((image: StoredImage): boolean => image.path === imagePath(id, "avatar", "jpg"))?.blob ?? null : null;
             if (populated && !source) throw new Error("Missing source image");
             if (source) {
                 const { error } = await bucket.upload(imagePath(id, slot, "png"), source, { upsert: true, contentType: source instanceof Blob ? source.type : "image/png", cacheControl: "0" });
@@ -65,7 +67,7 @@ export async function changeProfileImages(event: H3Event, own: boolean, parent: 
         if (error || !data) throw new Error("Unable to save image flags");
         return memberFromRecord(data as MemberRecord);
     } catch (failure: unknown) {
-        const restored: PromiseSettledResult<void>[] = await Promise.allSettled(before.map(async (image: StoredImage): Promise<void> => {
+        const restored: PromiseSettledResult<void>[] = await Promise.allSettled(before.filter((image: StoredImage): boolean => slots.some((slot: ProfileImageSlot): boolean => ["png", "jpg"].some((extension: string): boolean => image.path === imagePath(id, slot, extension)))).map(async (image: StoredImage): Promise<void> => {
             const result: { error: unknown } = image.blob ? await bucket.upload(image.path, image.blob, { upsert: true, contentType: image.blob.type, cacheControl: "0" }) : await bucket.remove([image.path]);
             if (result.error) throw result.error;
         }));

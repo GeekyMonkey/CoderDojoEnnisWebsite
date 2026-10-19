@@ -10,3 +10,15 @@ export const PROFILE_FIELDS: ProfileField[] = [
 { key: "scratchName", autocomplete: "off", type: "text" },
 { key: "xboxGamertag", autocomplete: "off", type: "text" },
 ];
+
+
+export type ProfileRoleSubject = { isNinja: boolean; isParent: boolean; isMentor: boolean };
+
+/** Combine fields for all assigned roles while retaining shared identity fields. */
+export function profileFieldsForRoles(member: ProfileRoleSubject): ProfileField[] {
+ return PROFILE_FIELDS.filter((field: ProfileField): boolean => {
+  if (field.key === "nameFirst" || field.key === "nameLast") return true;
+  if (field.key === "email" || field.key === "phone") return member.isParent || member.isMentor;
+  return member.isNinja || member.isMentor;
+ });
+}

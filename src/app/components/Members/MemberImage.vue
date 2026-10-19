@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, watch, type Ref } from "vue";
 		import type { MemberImageSubject } from "#shared/types/MemberPresentation";
-		
+
 	type LinkToOption = "NONE" | "HERE" | "NEW_TAB";
 
 	const props = defineProps<{
@@ -25,35 +25,7 @@
 		const currentPath: string = route.path.toLowerCase();
 		const memberId: string = props.member.id;
 
-		// Determine role prefix from current route
-		let rolePrefix: string | null = null;
-		if (currentPath.startsWith("/mentor/")) {
-			rolePrefix = "/mentor";
-		} else if (currentPath.startsWith("/coder/")) {
-			rolePrefix = "/coder";
-		} else if (currentPath.startsWith("/parent/")) {
-			rolePrefix = "/parent";
-		}
-
-		// Disable link if route doesn't match known patterns
-		if (!rolePrefix) {
-			return null;
-		}
-
-		if (rolePrefix === "/mentor") return `/mentor/member/${memberId}`;
-
-		// Determine member type
-		let memberType: string;
-		if (props.member.isMentor) {
-			memberType = "mentor";
-		} else if (props.member.isNinja) {
-			memberType = "coder";
-		} else {
-			// Default to parent if neither mentor nor coder
-			memberType = "parent";
-		}
-
-		return `${rolePrefix}/${memberType}/${memberId}`;
+		return ["/mentor/", "/parent/", "/coder/", "/member/"].some((prefix: string): boolean => currentPath.startsWith(prefix)) ? `/member/member/${memberId}` : null;
 	});
 
 	const linkTarget = computed<string | null>(() => {
@@ -134,7 +106,7 @@
 		outline: 3px solid var(--member-image-border);
 		outline-offset: 2px;
 		&:has(span) {
-			
+
 			display: flex;
 			align-items: center;
 			justify-content: center;

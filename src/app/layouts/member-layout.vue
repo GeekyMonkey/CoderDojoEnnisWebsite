@@ -158,10 +158,9 @@
 		searchInputRef.value?.inputRef?.focus();
 	}
 
-	/** Open the profile for the current role area. */
+	/** Open the shared personal profile for every role. */
 	function openProfile(): void {
-		const base: string = roleBase.value;
-		router.push(`${base}/profile`);
+		router.push("/member/my-profile");
 	}
 
 	/** Open theme preferences from the user menu. */

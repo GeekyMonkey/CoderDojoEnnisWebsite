@@ -1,9 +1,10 @@
 <script setup lang="ts">
+	import type { ProfileMode } from "#shared/types/MemberProfile";
 	import ShowcaseEvidenceCards from "./ShowcaseEvidenceCards.vue";
 	import { useMemberPresenceStore } from "~/stores/useMemberPresenceStore";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import type { ColumnDef, Row } from "@tanstack/vue-table";
-	import type { ComputedRef, Ref } from "vue";
+	import { watch, type ComputedRef, type Ref } from "vue";
 	import type {
 		AchievementDecision,
 		AchievementKind,
@@ -19,7 +20,7 @@
 	import ApplicationFeedback from "./ApplicationFeedback.vue";
 	import BeltColor from "~/components/Belts/BeltColor.vue";
 
-	const props = defineProps<{ kind: AchievementKind; memberId?: string }>();
+	const props = withDefaults(defineProps<{ kind: AchievementKind; memberId?: string; mode?: ProfileMode }>(), { mode: "edit" });
 	type Action = AchievementDecision["action"];
 	type ReviewGroup = { key: string; rows: AchievementReview[] };
 	const { t } = useI18n();
@@ -169,7 +170,7 @@
 		review: AchievementReview,
 		action: Action,
 	): Promise<void> {
-		if (busy.value) return;
+		if (props.mode !== "edit" || busy.value) return;
 		busy.value = review.id;
 		try {
 			await reviews.decide(
@@ -200,6 +201,7 @@
 		review: AchievementReview,
 		action: Action,
 	): void {
+		if (props.mode !== "edit") return;
 		confirmation.value = { review, action };
 		confirmationOpen.value = true;
 	}
@@ -211,6 +213,11 @@
 		confirmation.value = null;
 		if (selected) await submit(selected.review, selected.action);
 	}
+	watch((): ProfileMode => props.mode, (): void => {
+        confirmationOpen.value = false;
+        confirmation.value = null;
+        notes.value = {};
+    });
 </script>
 
 <template>
@@ -262,7 +269,7 @@
 							size="sm"
 						/>
 						<NuxtLink
-							:to="`/mentor/coder/${row.original.memberId}`"
+							:to="`/member/member/${row.original.memberId}`"
 							@click.stop
 							>{{ row.original.memberName }}</NuxtLink
 						>
@@ -319,7 +326,7 @@
 							:key="rejection.id"
 						>
 							<ApplicationFeedback :review="rejection" /><UButton
-								v-if="rejection.applicationDate"
+								v-if="mode === 'edit' && rejection.applicationDate"
 								color="neutral"
 								:disabled="Boolean(busy)"
 								@click="requestConfirmation(rejection, 'undo')"
@@ -373,14 +380,14 @@
 								}}
 							</blockquote>
 							<UButton
-								v-if="row.original.applicationDate"
+								v-if="mode === 'edit' && row.original.applicationDate"
 								color="neutral"
 								:disabled="Boolean(busy)"
 								@click="requestConfirmation(row.original, 'undo')"
 								>{{ t("achievementReviews.undo") }}</UButton
 							>
 						</template>
-						<template v-else-if="row.original.applicationDate">
+						<template v-else-if="mode === 'edit' && row.original.applicationDate">
 							<label :for="`decision-notes-${row.original.id}`">{{
 								t("achievementReviews.notes")
 							}}</label>
@@ -418,7 +425,7 @@
 				</template>
 			</UTable>
 		</section>
-		<UModal
+		<UModal v-if="mode === 'edit'"
 			v-model:open="confirmationOpen"
 			:title="t('achievementReviews.confirmTitle')"
 			:description="t('achievementReviews.confirmDescription')"
