@@ -1,7 +1,8 @@
 export type PublicNavigationLink = { label: string; to: string };
 export const PUBLIC_PRIMARY_LINKS: readonly PublicNavigationLink[] = [
   { label: "Home", to: "/" }, { label: "About", to: "/about" },
-  { label: "Visit", to: "/visit" }, { label: "Join", to: "/join" },
+  { label: "Visit", to: "/visit" }, { label: "Calendar", to: "/calendar" },
+  { label: "Join", to: "/join" },
   { label: "Explore", to: "/explore" }, { label: "Showcase", to: "/showcase" },
   { label: "News", to: "/news" }, { label: "Contact", to: "/contact" },
 ];
