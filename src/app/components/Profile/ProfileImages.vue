@@ -52,14 +52,16 @@
 
 <template>
  <section :class="['ProfileImages', { MentorView: mentorView }]" :aria-label="t('profileImages.title')">
-  <div v-for="slot in slots" :key="slot.key" :class="['ImageSlot', slot.key === 'photo' ? 'PhotoSlot' : 'AvatarSlot']">
+  <template v-for="(slot, index) in slots" :key="slot.key">
+  <div :class="['ImageSlot', slot.key === 'photo' ? 'PhotoSlot' : 'AvatarSlot']">
    <h3>{{ t(`profileImages.${slot.key}`) }}</h3>
    <ImageEditor :identity="`${member.id}:${slot.key}`" :label="t(`profileImages.${slot.key}`)" :populated="slot.populated" :round="slot.key === 'photo'" :canEdit="slot.editable" :saving="saving" :locked="copying" :change="slot.change" @busy="busySlots[slot.key] = $event">
     <ProfileImage v-if="slot.populated" :memberId="member.id" :slot="slot.key" :revision="revision" />
     <UIcon v-else name="i-lucide-image" class="EmptyImageIcon" />
    </ImageEditor>
   </div>
-  <UButton v-if="mentorView && canEdit" class="CopyAction" type="button" icon="i-lucide-copy" variant="outline" :loading="copying" :disabled="busy || !member.hasAvatar" @click="copyAvatar">{{ t('profileImages.copyAvatarToPhoto') }}</UButton>
+  <UButton v-if="index === 0 && mentorView && canEdit && member.hasAvatar" class="CopyAction" type="button" icon="i-lucide-copy" variant="outline" :loading="copying" :disabled="busy" @click="copyAvatar">{{ t('profileImages.copyAvatarToPhoto') }}</UButton>
+  </template>
  </section>
 </template>
 
@@ -71,6 +73,6 @@
  .MentorView .PhotoSlot { width: 14rem; font-size: inherit; color: inherit; }
  .MentorView .AvatarSlot { width: 8rem; }
  .ImageSlot h3 { text-align: center; }
- .CopyAction { align-self: end; max-width: 100%; white-space: normal; }
+ .CopyAction { align-self: center; max-width: 100%; white-space: normal; }
  .EmptyImageIcon { width: 2rem; height: 2rem; color: var(--ui-text-muted); }
 </style>
