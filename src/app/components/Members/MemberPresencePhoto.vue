@@ -9,5 +9,5 @@
 	const statusLabel: ComputedRef<string> = computed((): string => present.value === null ? t("profile.loading") : present.value ? t("attendance.columns.present") : props.member.registeredCurrentTerm ? t("maintenance.registeredCurrentTerm") : t("attendance.include.otherMembers"));
 </script>
 <template>
-	<span :title="statusLabel"><MemberPhoto :member="member" :size="size ?? 'sm'" :borderColor="borderColor" /></span>
+	<span :title="statusLabel"><MemberPhoto mode="PHOTO_INITIALS" :member="member" :size="size ?? 'sm'" :borderColor="borderColor" /></span>
 </template>

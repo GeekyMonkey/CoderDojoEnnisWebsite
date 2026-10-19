@@ -1,12 +1,15 @@
 <script setup lang="ts">
-	import { ref, watch, type Ref } from "vue";
-		import type { MemberImageSubject } from "#shared/types/MemberPresentation";
+	import { computed, ref, watch, type ComputedRef, type Ref } from "vue";
+		import type { MemberImageMode, MemberImageSubject } from "#shared/types/MemberPresentation";
+
+	import { memberImageCandidates, memberImageIsRound, type MemberImageCandidate } from "~/utils/memberImages";
 
 	type LinkToOption = "NONE" | "HERE" | "NEW_TAB";
 
 	const props = defineProps<{
 		member: MemberImageSubject;
-		kind: "photo" | "avatar";
+		mode?: MemberImageMode;
+		kind?: "photo" | "avatar";
 		borderColor?: string | null;
 		size: "sm" | "md" | "lg";
 		linkTo?: LinkToOption;
@@ -33,16 +36,16 @@
 		return linkOption === "NEW_TAB" ? "_blank" : null;
 	});
 
-	const legacy: Ref<boolean> = ref(false);
+	const candidateIndex: Ref<number> = ref(0);
 	const { revision, refresh: refreshImages } = useProfileImageRevision((): string => props.member.id);
-	watch((): MemberImageSubject => props.member, (): void => { legacy.value = false; refreshImages(); });
-	/** Resolve only the requested image, with a legacy JPEG fallback. */
-	const src = computed<string | null>(() => {
-		const available: boolean = props.kind === "photo" ? props.member.hasPhoto : props.member.hasAvatar;
-		if (!available) return null;
-		const url: string = props.kind === "photo" ? MemberPhotoUrl(props.member.id) : MemberAvatarUrl(props.member.id);
-		return `${legacy.value ? url : url.replace(/\.jpg$/, ".png")}?v=${revision.value}`;
-	});
+	const mode: ComputedRef<MemberImageMode> = computed((): MemberImageMode => props.mode ?? (props.kind === "photo" ? "PHOTO_INITIALS" : "AVATAR_INITIALS"));
+	const round: ComputedRef<boolean> = computed((): boolean => memberImageIsRound(mode.value));
+	const candidates: ComputedRef<MemberImageCandidate[]> = computed((): MemberImageCandidate[] => memberImageCandidates(props.member, mode.value, MemberPhotoUrl(props.member.id), MemberAvatarUrl(props.member.id), revision.value));
+	const src: ComputedRef<string | null> = computed((): string | null => candidates.value[candidateIndex.value]?.url ?? null);
+	/** Advance from PNG to legacy JPEG, then the next preferred image or initials. */
+	function imageFailed(): void { candidateIndex.value = Math.min(candidateIndex.value + 1, candidates.value.length); }
+	watch(candidates, (): void => { candidateIndex.value = 0; }, { flush: "sync" });
+	watch((): MemberImageSubject => props.member, (): void => { refreshImages(); });
 
 	const alt = computed<string>(() => {
 		const name: string =
@@ -70,8 +73,9 @@
 		class="MemberAvatarLink"
 	>
 		<UAvatar
-			:class="['MemberImage', { SquareImage: kind === 'avatar', PhotoImage: kind === 'photo' }]"
-	    @error="legacy = true"
+			:key="src ?? 'initials'"
+			:class="['MemberImage', { SquareImage: !round, PhotoImage: round }]"
+	    @error="imageFailed"
 			:src="src ?? undefined"
 			:alt="alt"
 			:title="alt"
@@ -80,9 +84,10 @@
 		/>
 	</NuxtLink>
 	<UAvatar
+			:key="src ?? 'initials'"
 		v-else
-		:class="['MemberImage', { SquareImage: kind === 'avatar', PhotoImage: kind === 'photo' }]"
-	    @error="legacy = true"
+		:class="['MemberImage', { SquareImage: !round, PhotoImage: round }]"
+	    @error="imageFailed"
 		:src="src ?? undefined"
 		:alt="alt"
 		:title="alt"

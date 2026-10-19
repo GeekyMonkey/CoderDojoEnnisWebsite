@@ -1022,6 +1022,7 @@
 						<template #name-cell="{ row }">
 							<div class="flex items-center gap-3">
 								<MemberAvatar
+                                    mode="PHOTO_INITIALS"
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
@@ -1088,6 +1089,7 @@
 						<template #name-cell="{ row }">
 							<div class="MemberAvatarNameCell flex items-center gap-3">
 								<MemberAvatar
+                                    mode="PHOTO_INITIALS"
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
