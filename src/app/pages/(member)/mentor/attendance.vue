@@ -1045,6 +1045,7 @@
 						</template>
 						<template #beltColor-cell="{ row }">
 							<MemberBelt
+								class="AttendanceBelt"
 								:member="row.original.member"
 								size="sm"
 							/>
@@ -1126,6 +1127,12 @@
 
 	.CodersTable {
 		max-width: 800px;
+
+		.AttendanceBelt {
+			@media (max-width: 640px) {
+				inline-size: 2rem;
+			}
+		}
 	}
 
 	.MentorsTable {
