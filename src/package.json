@@ -35,7 +35,7 @@
 		"jose": "6.2.12",
 		"mitt": "3.0.1",
 		"mssql": "12.7.4",
-		"nuxt": "4.6.1",
+		"nuxt": "4.6.2",
 		"qrcode": "1.5.4",
 		"tailwindcss": "4.3.3",
 		"temporal-polyfill": "1.0.5",
