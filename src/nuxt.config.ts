@@ -55,6 +55,8 @@ export default defineNuxtConfig({
 	devtools: { enabled: false },
 
 	experimental: {
+		// Preserve server imports until https://github.com/nuxt-modules/i18n/issues/4175 is resolved.
+		nitroAutoImports: true,
 		scanPageMeta: "after-resolve",
 	},
 
