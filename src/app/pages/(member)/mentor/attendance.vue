@@ -1022,6 +1022,7 @@
 						<template #name-cell="{ row }">
 							<div class="flex items-center gap-3">
 								<MemberAvatar
+                                    mode="PHOTO_INITIALS"
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
@@ -1044,6 +1045,7 @@
 						</template>
 						<template #beltColor-cell="{ row }">
 							<MemberBelt
+								class="AttendanceBelt"
 								:member="row.original.member"
 								size="sm"
 							/>
@@ -1088,6 +1090,7 @@
 						<template #name-cell="{ row }">
 							<div class="MemberAvatarNameCell flex items-center gap-3">
 								<MemberAvatar
+                                    mode="PHOTO_INITIALS"
 									v-if="row.original.member"
 									:member="row.original.member"
 									size="sm"
@@ -1124,6 +1127,12 @@
 
 	.CodersTable {
 		max-width: 800px;
+
+		.AttendanceBelt {
+			@media (max-width: 640px) {
+				inline-size: 2rem;
+			}
+		}
 	}
 
 	.MentorsTable {
