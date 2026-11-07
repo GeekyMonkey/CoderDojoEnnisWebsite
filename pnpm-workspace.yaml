@@ -24,6 +24,18 @@ minimumReleaseAgeExclude:
   - vue-i18n@11.4.14
   - vue-tsc@3.3.13
   - zod@4.6.7
+  - '@biomejs/biome@2.6.5'
+  - '@biomejs/cli-android-arm64@2.6.5'
+  - '@biomejs/cli-android-x64@2.6.5'
+  - '@biomejs/cli-darwin-arm64@2.6.5'
+  - '@biomejs/cli-darwin-x64@2.6.5'
+  - '@biomejs/cli-linux-arm64-musl@2.6.5'
+  - '@biomejs/cli-linux-arm64@2.6.5'
+  - '@biomejs/cli-linux-x64-musl@2.6.5'
+  - '@biomejs/cli-linux-x64@2.6.5'
+  - '@biomejs/cli-win32-arm64@2.6.5'
+  - '@biomejs/cli-win32-x64@2.6.5'
+  - '@cloudflare/workers-types@5.20261107.1'
 overrides:
   '@simple-git/argv-parser': 2.0.1
   simple-git: 4.0.2

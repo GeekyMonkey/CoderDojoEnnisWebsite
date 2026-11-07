@@ -4,6 +4,11 @@
 	"SQL-Formatter-VSCode.ignoreTabSettings": true,
 	"SQL-Formatter-VSCode.insertSpacesOverride": true,
 	"chat.mcp.gallery.enabled": true,
+	"chat.tools.terminal.autoApprove": {
+		"openspec": true,
+		"command": true,
+		"npm i": true
+	},
 	"chat.useNestedAgentsMdFiles": true,
 	"cSpell.words": [
 		"agentic",
@@ -41,6 +46,7 @@
 		"openspec",
 		"Orla",
 		"parallelizable",
+		"pglite",
 		"Polina",
 		"prefault",
 		"qrcode",
@@ -107,7 +113,9 @@
 		}
 	],
 	"git.blame.statusBarItem.enabled": true,
-	"javascript.suggest.jsdoc.generateReturns": false,
+	"js/ts.suggest.jsdoc.generateReturns": false,
+	"npmDependencyLinks.registryUrl": "https://npmx.dev/package/",
+	"npmDependencyLinks.registryUrlPattern": "https://npmx.dev/package/{{pkg}}",
 	"peacock.color": "#215732",
 	"search.exclude": {
 		"**/bower_components": true,
@@ -118,7 +126,6 @@
 		["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 	],
 	"terminal.integrated.cwd": "${workspaceFolder}/src",
-	"typescript.suggest.jsdoc.generateReturns": false,
 	"workbench.colorCustomizations": {
 		"activityBar.activeBackground": "#2f7c47",
 		"activityBar.background": "#2f7c47",
@@ -147,10 +154,5 @@
 		"statusBar.debuggingBackground": "#215732",
 		"statusBar.debuggingForeground": "#e7e7e7",
 		"statusBar.inactiveBackground": "#215732"
-	},
-	"chat.tools.terminal.autoApprove": {
-		"openspec": true,
-		"command": true,
-		"npm i": true
 	}
 }
