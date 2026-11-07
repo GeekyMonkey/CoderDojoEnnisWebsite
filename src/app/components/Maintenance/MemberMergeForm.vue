@@ -4,7 +4,7 @@ import { z } from "zod";
 import ProfileImage from "~/components/Profile/ProfileImage.vue";
 import type { ProfileImageSlot } from "#shared/types/ProfileImages";
 import MergeFieldChoice from "~/components/Maintenance/MergeFieldChoice.vue";
-import { MERGE_FIELDS, reviewedMemberMerge, type MergeSource, type MergeImages, type MergeChoices, type MergeField, type MemberMerge } from "#shared/types/MemberMerge";
+import { MERGE_FIELDS, automaticMergeSource, reviewedMemberMerge, type MergeSource, type MergeImages, type MergeChoices, type MergeField, type MemberMerge } from "#shared/types/MemberMerge";
 import type { MemberModel } from "#shared/types/models/MemberModel";
 import type { TeamModel } from "#shared/types/models/TeamModel";
 import { compareMemberNames } from "#shared/utils/MemberNames";
@@ -35,7 +35,7 @@ const labels: ComputedRef<Record<MergeField, string>> = computed((): Record<Merg
 const teamNames: ComputedRef<Record<string, string>> = computed((): Record<string, string> => Object.fromEntries(props.teams.map((team: TeamModel): [string, string] => [team.id, team.teamName])));
 const fieldRows: ComputedRef<FieldRow[]> = computed((): FieldRow[] => {
  const selected: typeof preview.value = preview.value;
- return selected ? MERGE_FIELDS.filter((field: MergeField): boolean => selected.keep[field] !== selected.duplicate[field]).map((field: MergeField): FieldRow => ({ field, label: labels.value[field], keep: `${t("accountMerge.keep")}: ${value(selected.keep,field)}`, duplicate: `${t("accountMerge.duplicate")}: ${value(selected.duplicate,field)}` })) : [];
+ return selected ? MERGE_FIELDS.filter((field: MergeField): boolean => automaticMergeSource(selected.keep, selected.duplicate, field) === null).map((field: MergeField): FieldRow => ({ field, label: labels.value[field], keep: `${t("accountMerge.keep")}: ${value(selected.keep,field)}`, duplicate: `${t("accountMerge.duplicate")}: ${value(selected.duplicate,field)}` })) : [];
 });
 const request: ComputedRef<MemberMerge | null> = computed((): MemberMerge | null => preview.value ? reviewedMemberMerge(preview.value.keep, preview.value.duplicate, survivor.value, choices.value, imageChoices.value) : null);
 const imageSlots: ComputedRef<ProfileImageSlot[]> = computed((): ProfileImageSlot[] => preview.value ? (["photo", "avatar"] as const).filter((slot: ProfileImageSlot): boolean => {
@@ -50,7 +50,7 @@ function accountLabel(member: MemberModel): string {
 /** Select which account identity and password survives. */
 function selectSurvivor(_field: string, source: MergeSource): void { survivor.value = source; }
 /** Capture the exact records presented for confirmation; remote edits then cause a conflict. */
-function choose(member: MemberModel): void { preview.value = { keep: { ...props.member }, duplicate: { ...member } }; error.value = false; survivor.value = null; choices.value = {}; imageChoices.value = {}; }
+function choose(member: MemberModel): void { preview.value = { keep: { ...props.member }, duplicate: { ...member } }; error.value = false; survivor.value = automaticMergeSource(props.member, member, "login"); choices.value = {}; imageChoices.value = {}; }
 /** Render selected field values, resolving a team identity to its name. */
 function value(member: MemberModel, field: MergeField): string { const raw: string | number | boolean | null = member[field]; if (typeof raw === "boolean") return t(raw ? "maintenance.yes" : "maintenance.no"); return field === "teamId" ? teamNames.value[String(raw)] ?? t("maintenance.noTeam") : raw === null || raw === "" ? "—" : String(raw); }
 /** Update a single closed-set field choice. */
@@ -77,7 +77,7 @@ async function submit(): Promise<void> {
   </template>
   <form v-else class="MergeReview" @submit.prevent="submit">
    <p>{{ t('accountMerge.credentials') }}</p>
-   <MergeFieldChoice v-if="credentials" field="login" :label="t('login.username')" :keep="credentials.keep" :duplicate="credentials.duplicate" :selected="survivor" :disabled="saving" @change="selectSurvivor" />
+   <MergeFieldChoice v-if="credentials && !automaticMergeSource(preview.keep, preview.duplicate, 'login')" field="login" :label="t('login.username')" :keep="credentials.keep" :duplicate="credentials.duplicate" :selected="survivor" :disabled="saving" @change="selectSurvivor" />
    <p v-if="fieldRows.length">{{ t('accountMerge.review') }}</p>
    <MergeFieldChoice v-for="row in fieldRows" :key="row.field" :field="row.field" :label="row.label" :keep="row.keep" :duplicate="row.duplicate" :selected="choices[row.field]" :disabled="saving" @change="change" />
    <p>{{ t('accountMerge.imageReview') }}</p>

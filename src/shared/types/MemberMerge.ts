@@ -13,12 +13,25 @@ export const MemberMergeSchema: z.ZodType<MemberMerge> = z.strictObject({ duplic
 }));
 
 export type MergeSource = "keep" | "duplicate";
+/** Resolve empty values and inclusive registration without requiring a conflict choice. */
+export function automaticMergeSource(keep: MemberModel, duplicate: MemberModel, field: MergeField | "login"): MergeSource | null {
+ const first: string | number | boolean | null = keep[field];
+ const second: string | number | boolean | null = duplicate[field];
+ if (field === "registeredCurrentTerm") return first ? "keep" : second ? "duplicate" : "keep";
+ if (field !== "login" && first === second) return "keep";
+ const firstBlank: boolean = first === null || (typeof first === "string" && first.trim() === "");
+ const secondBlank: boolean = second === null || (typeof second === "string" && second.trim() === "");
+ if (firstBlank !== secondBlank) return firstBlank ? "duplicate" : "keep";
+ if (field !== "login" && firstBlank && secondBlank) return "keep";
+ return null;
+}
 /** Require review of every discrepancy and bind credentials to the selected account. */
 export function reviewedMemberMerge(keep: MemberModel, duplicate: MemberModel, survivor: MergeSource | null, reviewed: Partial<MergeChoices>, reviewedImages: Partial<MergeImages> = {}): MemberMerge | null {
+ survivor = automaticMergeSource(keep, duplicate, "login") ?? survivor;
  if (!survivor) return null;
  const choices: Partial<MergeChoices> = {};
  for (const field of MERGE_FIELDS) {
-  const source: MergeSource | undefined = keep[field] === duplicate[field] ? "keep" : reviewed[field];
+  const source: MergeSource | undefined = automaticMergeSource(keep, duplicate, field) ?? reviewed[field];
   if (!source) return null;
   choices[field] = survivor === "keep" ? source : source === "keep" ? "duplicate" : "keep";
  }

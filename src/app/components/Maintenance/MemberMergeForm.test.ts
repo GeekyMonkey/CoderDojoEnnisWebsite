@@ -28,6 +28,7 @@ describe("merge candidate roles", (): void => {
 });
 
 type ReviewState = {
+ fieldRows: ComputedRef<{ field: string }[]>;
  choose: (member: MemberModel) => void;
  selectSurvivor: (field: string, source: MergeSource) => void;
  change: (field: string, source: MergeSource) => void;
@@ -66,7 +67,8 @@ it("requires all decisions and submits the selected username with independent im
  await state!.submit();
  expect(merge).toHaveBeenCalledWith(other.id, expect.objectContaining({ duplicateId: keep.id, expectedKeep: expect.objectContaining({ id: other.id }), choices: expect.objectContaining({ email: "duplicate" }), images: { photo: "duplicate", avatar: "keep" } }));
  expect(emit).toHaveBeenCalledWith("merged", other);
- state!.choose(other);
+ state!.choose({ ...other, email: null, registeredCurrentTerm: true });
+ expect(state!.fieldRows.value.some((row: { field: string }): boolean => ["email", "registeredCurrentTerm"].includes(row.field))).toBe(false);
  expect(state!.request.value).toBeNull();
 });
 it("renders two unselected required radio buttons for every review choice", async (): Promise<void> => {

@@ -38,4 +38,14 @@ describe("reviewed merge API", (): void => {
   mocks.rpc.mockResolvedValue({ data: null, error: { code: "P0001", message: "Accounts changed; review again" } });
   await expect(handler({} as H3Event)).rejects.toMatchObject({ statusCode: 409 });
  });
+ it("enforces populated fields and inclusive registration even if the submitted choice disagrees", async (): Promise<void> => {
+  body.expectedKeep.email = null;
+  body.expectedKeep.registeredCurrentTerm = false;
+  body.expectedDuplicate.registeredCurrentTerm = true;
+  body.choices.email = "keep";
+  body.choices.registeredCurrentTerm = "keep";
+  await handler({} as H3Event);
+  expect(mocks.rpc).toHaveBeenCalledWith("merge_members", expect.objectContaining({ p_fields: expect.objectContaining({ email: body.expectedDuplicate.email, registered_current_term: true }) }));
+ });
+
 });
