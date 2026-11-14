@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { DateStringSchema } from "../utils/DateHelpers";
+import { birthYearSchema } from "../validation/BirthYearSchema";
 import { memberProfileFieldsSchema, type MemberProfileFields } from "./MemberProfile";
 import { MemberModelSchema, type MemberModel } from "./models/MemberModel";
 import { MemberParentModelSchema } from "./models/MemberParentModel";
@@ -30,7 +31,7 @@ function nullableText(maximum: number): z.ZodType<string | null> {
 }
 
 export const accountFieldsSchema: z.ZodType<AccountFields> = z.strictObject({
-	birthYear: z.number().int().min(1900).max(new Date().getFullYear()).nullable(),
+	birthYear: birthYearSchema,
 	fingerprintId: z.number().int().min(1).max(2147483647).nullable(),
 	nfcTag: nullableText(100),
 	login: nullableText(100).refine((value: string | null): boolean => value === null || /^[\p{L}\p{N}._-]+$/u.test(value)),

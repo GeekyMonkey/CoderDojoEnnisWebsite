@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { birthYearSchema } from "../validation/BirthYearSchema";
 import { MemberModelSchema, type MemberModel } from "./models/MemberModel";
 import { TeamModelSchema, type TeamModel } from "./models/TeamModel";
 import { BeltModelSchema, type BeltModel } from "./models/BeltModel";
@@ -13,7 +14,7 @@ export const parentContactSchema:z.ZodType<ParentContact> = MemberModelSchema.pi
 export type ParentContact = Pick<MemberModel,"id"|"nameFirst"|"nameLast"|"email"|"phone">;
 export const parentChildSchema:z.ZodType<ParentChild> = z.strictObject({ member:childMemberSchema, currentBelt:BeltModelSchema.nullable(), attendanceCount:z.number().int().nonnegative(), team:TeamModelSchema.nullable(), roster:z.array(publicMemberSchema), parents:z.array(parentContactSchema) });
 export type ParentChild = ChildSummary & {team:TeamModel|null;roster:PublicMember[];parents:ParentContact[]};
-export const childFieldsSchema:z.ZodType<ChildFields> = profileEditableFieldsSchema.pick({ login:true, githubLogin:true, scratchName:true, xboxGamertag:true }).extend({ birthYear:z.number().int().min(1900).max(new Date().getUTCFullYear()).nullable() });
+export const childFieldsSchema:z.ZodType<ChildFields> = profileEditableFieldsSchema.pick({ login:true, githubLogin:true, scratchName:true, xboxGamertag:true }).extend({ birthYear:birthYearSchema });
 export type ChildFields = Pick<ProfileEditableFields,"login"|"githubLogin"|"scratchName"|"xboxGamertag"> & {birthYear:number|null};
 export const childSnapshotSchema:z.ZodType<ChildSnapshot> = MemberModelSchema.pick({ birthYear:true, login:true, githubLogin:true, scratchName:true, xboxGamertag:true }).strict();
 export type ChildSnapshot = Omit<ChildFields,"login"> & {login:string|null};
