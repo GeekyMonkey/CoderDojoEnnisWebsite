@@ -1,3 +1,4 @@
+import { validationFailureResponse } from "#server/utils/validationError";
 import type { Session } from "@supabase/supabase-js";
 import { defineEventHandler, readBody } from "h3";
 import { AuthService, AuthServiceError } from "#server/services/AuthService";
@@ -19,14 +20,7 @@ export default defineEventHandler(
 		try {
 			const body = await readBody<LoginRequest>(event);
 			const parsed = loginRequestSchema.safeParse(body);
-			if (!parsed.success) {
-				logs.push("Validation error");
-				return {
-					success: false,
-					error: parsed.error.issues.map((i) => i.message).join(", "),
-					logs,
-				};
-			}
+			if (!parsed.success) return validationFailureResponse(parsed.error, logs);
 			const { username, password } = parsed.data;
 
 			const authService = new AuthService(event);

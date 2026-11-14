@@ -1,3 +1,4 @@
+import { validationFailureResponse } from "#server/utils/validationError";
 import { defineEventHandler, readBody } from "h3";
 import { MemberAttendancesData } from "#server/db/MemberAttendancesData";
 import type { ApiResponse } from "#shared/types/ApiResponse";
@@ -28,14 +29,7 @@ export default defineEventHandler(async (event): Promise<ResponseBody> => {
 	try {
 		const body = await readBody<RequestBody>(event);
 		const parsed = requestSchema.safeParse(body);
-		if (!parsed.success) {
-			logs.push("Validation error");
-			return {
-				success: false,
-				error: parsed.error.issues.map((i) => i.message).join(", "),
-				logs,
-			};
-		}
+		if (!parsed.success) return validationFailureResponse(parsed.error, logs);
 
 		const { memberId, sessionDate, present } = parsed.data;
 		const ok = await MemberAttendancesData.SetMemberAttendancePresent(

@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import { createError, defineEventHandler, getQuery, setResponseHeader, type H3Event } from "h3";
 import { requireRequestMentor } from "#server/utils/requestMentor";
 import { ReportQuerySchema, ReportRowSchema, defaultReportSince, type ReportRow } from "#shared/types/MentorReport";
@@ -11,7 +12,8 @@ export default defineEventHandler(async (event: H3Event): Promise<ReportRow[]> =
  const actor: VerifiedMember = await requireRequestMentor(event);
  setResponseHeader(event, "Cache-Control", "private, no-store");
  const parsed: ReturnType<typeof ReportQuerySchema.safeParse> = ReportQuerySchema.safeParse(getQuery(event));
- if (!parsed.success || (parsed.data.kind !== "belts" && parsed.data.since)) throw createError({ statusCode: 400, statusMessage: "Invalid report filters" });
+ if (!parsed.success) throw validationError(parsed.error, "Invalid report filters");
+ if (parsed.data.kind !== "belts" && parsed.data.since) throw createError({ statusCode: 400, statusMessage: "Invalid report filters" });
  const db: ReturnType<typeof actor.client.schema> = actor.client.schema("coderdojo");
  const kind: string = parsed.data.kind;
  const { data: memberData, error: memberError } = kind === "belts"

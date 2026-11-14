@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useRequestValidation } from "~/composables/useRequestValidation";
 	import ProfileFieldsDisplay from "./ProfileFieldsDisplay.vue";
 	import ProfileCurrentBelt from "./ProfileCurrentBelt.vue";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
@@ -23,6 +24,7 @@
 
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
+	const { validationForm, showValidationErrors } = useRequestValidation();
 	const { fields, baseline, dirty, remoteChanged, reset } = useProfileDraft((): MemberModel => props.member);
 
 	const editing: ComputedRef<boolean> = computed((): boolean => profileModeSchema.parse(props.mode) === "edit" && props.canEdit && Boolean(props.save));
@@ -35,7 +37,7 @@
 			reset(member);
 			publish({ name: "profile.profiledetails.success", severity: "success", message: t("profile.saved") });
 			emit("saved");
-		} catch (failure: unknown) {
+		} catch (failure: unknown) { showValidationErrors(failure);
 			publish({ name: "profile.profiledetails.error", severity: "error", message: requestFailureMessage(failure) ?? t("profile.saveError") });
 		}
 	}
@@ -54,7 +56,7 @@
 		<ProfileCurrentBelt v-if="member.isNinja" :memberId="member.id" /><ProfileImages v-if="changeImages" :member="member" :canEdit="editing" :saving="savingImages ?? false" :changeImages="changeImages" />
 		<MemberAvatar v-else :member="member" size="lg" linkTo="NONE" />
 		<ProfileFieldsDisplay v-if="!editing" :member="member" />
-		<UForm v-else :schema="profileEditableFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
+		<UForm ref="validationForm" v-else :schema="profileEditableFieldsSchema" :state="fields" class="ProfileForm" @submit="submit">
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<ProfileFieldInputs :includeLogin="true" :fields="fields" :visibleFields="profileFieldsForRoles(member)" :disabled="saving" />
 			<div class="ProfileActions">

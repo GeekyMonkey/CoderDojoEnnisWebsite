@@ -1,4 +1,5 @@
-import { createError, defineEventHandler, readBody, setResponseHeader, type H3Event } from "h3";
+import { validationError } from "#server/utils/validationError";
+import { defineEventHandler, readBody, setResponseHeader, type H3Event } from "h3";
 import { z } from "zod";
 import { requireKiosk, requireKioskOrigin } from "#server/utils/kioskCookie";
 import { AuthService } from "#server/services/AuthService";
@@ -23,7 +24,7 @@ export default defineEventHandler(async (event: H3Event): Promise<ApiResponse<Ki
  requireKioskOrigin(event); await requireKiosk(event);
  setResponseHeader(event, "Cache-Control", "no-store");
  const parsed: ReturnType<typeof requestSchema.safeParse> = requestSchema.safeParse(await readBody(event));
- if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid sign-in request" });
+ if (!parsed.success) throw validationError(parsed.error, "Invalid sign-in request");
  const request: z.infer<typeof requestSchema> = parsed.data;
  try {
   const member: MemberModel | null = request.kind === "password"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useRequestValidation } from "~/composables/useRequestValidation";
 	import type { ProfileMode } from "#shared/types/MemberProfile";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
@@ -11,6 +12,7 @@
 	const emit = defineEmits<{ cancel: [] }>();
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
+	const { validationForm, showValidationErrors } = useRequestValidation();
 	const editing: ComputedRef<boolean> = computed((): boolean => props.mode === "edit");
 
 	const { fields, baseline, dirty, remoteChanged, reset } = useMemberSectionDraft((): MemberModel => props.member, accountSnapshot);
@@ -21,7 +23,7 @@
 	async function submit(): Promise<void> {
 		if (!editing.value || props.saving || remoteChanged.value) return;
 		try { await props.save({ fields: accountFieldsSchema.parse(fields), expected: baseline.value }); reset(); publish({ name: "maintenance.memberaccount.success", severity: "success", message: t("actionNotifications.saved") }); }
-		catch (failure: unknown) { publish({ name: "maintenance.memberaccount.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
+		catch (failure: unknown) { showValidationErrors(failure); publish({ name: "maintenance.memberaccount.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
 	watch((): ProfileMode => props.mode, (): void => { reset(); });
 </script>
@@ -32,7 +34,7 @@
 			<MemberRoles :modelValue="member" mode="view" />
 
 		</template>
-		<UForm v-else :state="fields" :schema="accountFieldsSchema" class="AccountForm" @submit="submit">
+		<UForm ref="validationForm" v-else :state="fields" :schema="accountFieldsSchema" class="AccountForm" @submit="submit">
 			<AccountFields :fields="fields" :teams="teams" :disabled="saving" />
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 

@@ -1,4 +1,5 @@
-import { defineEventHandler, getQuery, createError } from "h3";
+import { validationError } from "#server/utils/validationError";
+import { defineEventHandler, getQuery } from "h3";
 import { z } from "zod";
 import type { H3Event } from "h3";
 import { AchievementKindSchema, type AchievementKind, type AchievementReview } from "#shared/types/AchievementReview";
@@ -12,6 +13,6 @@ const QUERY_SCHEMA: z.ZodType<{ kind: AchievementKind }> = z.strictObject({ kind
 export default defineEventHandler(async (event: H3Event): Promise<ApiResponse<AchievementReview[]>> => {
 	const { id, client } = await requireRequestMentor(event);
 	const parsed: ReturnType<typeof QUERY_SCHEMA.safeParse> = QUERY_SCHEMA.safeParse(getQuery(event));
-	if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid achievement kind" });
+	if (!parsed.success) throw validationError(parsed.error, "Invalid achievement kind");
 	return { success: true, data: await getAchievementReviews(client, parsed.data.kind, undefined, id) };
 });

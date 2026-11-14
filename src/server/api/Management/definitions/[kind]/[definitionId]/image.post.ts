@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import { createError, defineEventHandler, getRouterParam, type H3Event } from "h3";
 import { maintenanceActor, maintenanceBody } from "#server/utils/maintenanceRequest";
 import { changeEntityImage } from "#server/utils/entityImages";
@@ -10,7 +11,7 @@ export default defineEventHandler(async (event: H3Event): Promise<Definition> =>
  if (getRouterParam(event, "kind") !== "category") throw createError({ statusCode: 404, statusMessage: "Image entity not found" });
  const actor: Awaited<ReturnType<typeof maintenanceActor>> = await maintenanceActor(event);
  const identity: ReturnType<typeof definitionIdSchema.safeParse> = definitionIdSchema.safeParse(getRouterParam(event,"definitionId"));
- if (!identity.success) throw createError({ statusCode:400,statusMessage:"Invalid category ID" });
+ if (!identity.success) throw validationError(identity.error, "Invalid category ID", "definitionId");
  const action: EntityImageAction = await maintenanceBody(event,entityImageActionSchema);
  return categoryDefinition(await changeEntityImage(actor,"category",identity.data,action) as BadgeCategoryRecord);
 });

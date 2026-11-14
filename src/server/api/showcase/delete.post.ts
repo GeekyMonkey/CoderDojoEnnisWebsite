@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import { cleanupShowcaseImages } from "#server/utils/showcaseCleanup";
 import { defineEventHandler, readBody, createError, type H3Event } from "h3";
 import { z } from "zod";
@@ -12,10 +13,7 @@ export default defineEventHandler(
 		const { actor, owner } = await showcaseActor(event);
 		const parsed = deleteSchema.safeParse(await readBody<unknown>(event));
 		if (!parsed.success)
-			throw createError({
-				statusCode: 400,
-				statusMessage: "Invalid showcase entry",
-			});
+			throw validationError(parsed.error, "Invalid showcase entry");
 		const { data, error } = await actor.readClient
 			.schema("coderdojo")
 			.from("member_showcase")

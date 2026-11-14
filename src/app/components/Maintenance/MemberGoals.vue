@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useRequestValidation } from "~/composables/useRequestValidation";
 	import GoalFieldsDisplay from "~/components/Profile/GoalFieldsDisplay.vue";
 	import MemberProgress from "~/components/Achievements/MemberProgress.vue";
 	import type { ProfileMode } from "#shared/types/MemberProfile";
@@ -13,6 +14,7 @@
 	const emit = defineEmits<{ cancel: [] }>();
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
+	const { validationForm, showValidationErrors } = useRequestValidation();
 	const editing: ComputedRef<boolean> = computed((): boolean => props.mode === "edit");
 
 	const { fields, baseline, dirty, remoteChanged, reset } = useMemberSectionDraft((): MemberModel => props.member, goalSnapshot);
@@ -22,14 +24,14 @@
 	async function submit(): Promise<void> {
 		if (!editing.value || props.saving || remoteChanged.value) return;
 		try { await props.save({ fields: goalFieldsSchema.parse(fields), expected: baseline.value }); reset(); publish({ name: "maintenance.membergoals.success", severity: "success", message: t("actionNotifications.saved") }); }
-		catch (failure: unknown) { publish({ name: "maintenance.membergoals.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
+		catch (failure: unknown) { showValidationErrors(failure); publish({ name: "maintenance.membergoals.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
 	watch((): ProfileMode => props.mode, (): void => { reset(); });
 </script>
 <template>
 	<UPageCard :title="t('maintenance.goals')">
 		<template v-if="!editing"><GoalFieldsDisplay :member="member" /></template>
-		<UForm v-else :schema="goalFieldsSchema" :state="fields" class="Goals" @submit="submit">
+		<UForm ref="validationForm" v-else :schema="goalFieldsSchema" :state="fields" class="Goals" @submit="submit">
 			<UFormField v-for="key in KEYS" :key="key" :name="key" :label="t(`maintenance.${key}`)"><UTextarea :modelValue="fields[key] ?? ''" :disabled="saving" class="GoalInput" @update:modelValue="(value: string): void => { fields[key] = value; }" /></UFormField>
 			<UAlert v-if="remoteChanged" color="warning" :title="t('profile.remoteChanged')" />
 			<div class="GoalActions"><UButton type="submit" :loading="saving" :disabled="!dirty || remoteChanged">{{ t('profile.save') }}</UButton><UButton variant="outline" :disabled="saving" @click="cancel">{{ t('profile.cancel') }}</UButton></div>

@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import { cleanupShowcaseImages } from "#server/utils/showcaseCleanup";
 import { defineEventHandler, readBody, createError, type H3Event } from "h3";
 import { z } from "zod";
@@ -29,10 +30,7 @@ export default defineEventHandler(
 		const { actor, owner } = await showcaseActor(event);
 		const parsed = saveSchema.safeParse(await readBody<unknown>(event));
 		if (!parsed.success)
-			throw createError({
-				statusCode: 400,
-				statusMessage: "Check the showcase fields and public project URL",
-			});
+			throw validationError(parsed.error, "Check the showcase fields and public project URL");
 		const input = parsed.data;
 		const fields = input.fields;
 		const id: string = input.id ?? crypto.randomUUID();

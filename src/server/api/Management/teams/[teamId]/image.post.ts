@@ -1,4 +1,5 @@
-import { createError, defineEventHandler, getRouterParam, type H3Event } from "h3";
+import { validationError } from "#server/utils/validationError";
+import { defineEventHandler, getRouterParam, type H3Event } from "h3";
 import { maintenanceActor, maintenanceBody } from "#server/utils/maintenanceRequest";
 import { changeEntityImage } from "#server/utils/entityImages";
 import { entityImageActionSchema, type EntityImageAction } from "#shared/types/ImageUpload";
@@ -9,7 +10,7 @@ import type { TeamRecord } from "#server/db/TeamsData";
 export default defineEventHandler(async (event: H3Event): Promise<TeamModel> => {
  const actor: Awaited<ReturnType<typeof maintenanceActor>> = await maintenanceActor(event);
  const identity: ReturnType<typeof teamIdSchema.safeParse> = teamIdSchema.safeParse(getRouterParam(event,"teamId"));
- if (!identity.success) throw createError({ statusCode:400,statusMessage:"Invalid team ID" });
+ if (!identity.success) throw validationError(identity.error, "Invalid team ID", "teamId");
  const action: EntityImageAction = await maintenanceBody(event,entityImageActionSchema);
  return teamFromRecord(await changeEntityImage(actor,"team",identity.data,action) as TeamRecord);
 });

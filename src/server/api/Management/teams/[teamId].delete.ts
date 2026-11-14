@@ -1,4 +1,5 @@
-import { defineEventHandler, createError, getRouterParam, type H3Event } from "h3";
+import { validationError } from "#server/utils/validationError";
+import { defineEventHandler, getRouterParam, type H3Event } from "h3";
 import { maintenanceActor, maintenanceBody } from "#server/utils/maintenanceRequest";
 import { maintainTeam } from "#server/db/TeamMaintenanceData";
 import { teamDeleteSchema, teamIdSchema } from "#shared/types/TeamMaintenance";
@@ -7,7 +8,7 @@ import { TeamModelSchema, type TeamModel } from "#shared/types/models/TeamModel"
 export default defineEventHandler(async (event: H3Event): Promise<TeamModel> => {
  const actor: Awaited<ReturnType<typeof maintenanceActor>> = await maintenanceActor(event);
  const parsed: ReturnType<typeof teamIdSchema.safeParse> = teamIdSchema.safeParse(getRouterParam(event, "teamId"));
- if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid team ID" });
+ if (!parsed.success) throw validationError(parsed.error, "Invalid team ID", "teamId");
  const id: string = parsed.data;
  const body: Awaited<ReturnType<typeof maintenanceBody<import("zod").infer<typeof teamDeleteSchema>>>> = await maintenanceBody(event, teamDeleteSchema);
  return TeamModelSchema.parse(await maintainTeam(actor, "delete", id, null, body.expected));

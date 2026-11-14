@@ -9,7 +9,7 @@ vi.mock("#server/db/ParentChildMaintenanceData", () => ({ mutateChild: mocks.mut
 vi.mock("#server/db/ProfilesData", () => ({ readProfile: mocks.read }));
 vi.mock("./profilePng", () => ({ validateProfilePng: mocks.validate }));
 vi.mock("h3", async (original): Promise<object> => ({ ...await original<object>(), getQuery: (): object => ({}), getRouterParam: (): string => "00000000-0000-4000-8000-000000000002", readBody: async (): Promise<unknown> => mocks.body }));
-vi.mock("#shared/types/models/MemberModel", () => ({ memberFromRecord: (record: unknown): unknown => record }));
+vi.mock("#shared/types/models/MemberModel", async (original): Promise<object> => ({ ...await original<object>(), memberFromRecord: (record: unknown): unknown => record }));
 import { changeProfileImages } from "./profileImages";
 
 const event: H3Event = {} as H3Event;

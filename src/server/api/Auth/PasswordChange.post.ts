@@ -1,3 +1,4 @@
+import { validationFailureResponse } from "#server/utils/validationError";
 import { defineEventHandler, readBody } from "h3";
 import type { ApiResponse } from "#shared/types/ApiResponse";
 import { AuthService, AuthServiceError } from "#server/services/AuthService";
@@ -20,14 +21,7 @@ export default defineEventHandler(
 		try {
 			const body = await readBody<PasswordChangeRequest>(event);
 			const parsed = passwordChangeRequestSchema.safeParse(body);
-			if (!parsed.success) {
-				logs.push("Validation error");
-				return {
-					success: false,
-					error: parsed.error.issues.map((i) => i.message).join(", "),
-					logs,
-				};
-			}
+			if (!parsed.success) return validationFailureResponse(parsed.error, logs);
 			const { username, oldPassword, newPassword } = parsed.data;
 
 			const authService = new AuthService(event);

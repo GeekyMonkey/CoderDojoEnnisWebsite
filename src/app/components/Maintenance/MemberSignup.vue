@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { useRequestValidation } from "~/composables/useRequestValidation";
 	import { useActionNotifications } from "~/composables/useActionNotifications";
 	import { requestFailureMessage } from "#shared/utils/RequestFailure";
 	import { computed, reactive, type ComputedRef } from "vue";
@@ -11,6 +12,7 @@
 	const emit = defineEmits<{ created: [member: MemberModel]; cancel: [] }>();
 	const { t } = useI18n();
 	const { publish } = useActionNotifications();
+	const { validationForm, showValidationErrors } = useRequestValidation();
 	const fields: NewMemberForm = reactive({ profile: { nameFirst: "", nameLast: "", email: null, phone: null, githubLogin: null, scratchName: null, xboxGamertag: null }, account: newAccount(props.role), password: "", confirmation: "", attended: props.role === "coder" });
 	const attendanceDate: ComputedRef<string> = computed((): string => props.sessionDate ?? today);
 	const attendanceLabel: ComputedRef<string> = computed((): string => attendanceDate.value === today ? t("maintenance.attendedToday") : t("maintenance.attendedSession", { date: attendanceDate.value }));
@@ -22,12 +24,12 @@
 			const parsed: NewMemberForm = newMemberFormSchema.parse(fields);
 			const member: MemberModel = await props.create(newMemberSchema.parse({ profile: parsed.profile, account: parsed.account, password: parsed.password || null, attendanceDate: parsed.attended ? DateStringSchema.parse(attendanceDate.value) : null }));
 			fields.password = ""; fields.confirmation = ""; emit("created", member); publish({ name: "maintenance.membersignup.success", severity: "success", message: t("actionNotifications.created") });
-		} catch (failure: unknown) { publish({ name: "maintenance.membersignup.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
+		} catch (failure: unknown) { showValidationErrors(failure); publish({ name: "maintenance.membersignup.error", severity: "error", message: requestFailureMessage(failure) ?? t("maintenance.saveError") }); }
 	}
 </script>
 <template>
 	<UPageCard :title="t('maintenance.signup')">
-		<UForm :schema="newMemberFormSchema" :state="fields" class="SignupForm" @submit="submit">
+		<UForm ref="validationForm" :schema="newMemberFormSchema" :state="fields" class="SignupForm" @submit="submit">
 			<ProfileFieldInputs :fields="fields.profile" pathPrefix="profile." :disabled="saving" />
 			<AccountFields :fields="fields.account" :teams="teams" pathPrefix="account." :disabled="saving" />
 			<UFormField name="attended"><UCheckbox v-model="fields.attended" :disabled="saving" :label="attendanceLabel" /></UFormField>

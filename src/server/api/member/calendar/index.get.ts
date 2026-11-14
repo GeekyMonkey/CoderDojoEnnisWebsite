@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import {
 	createError,
 	defineEventHandler,
@@ -30,10 +31,7 @@ export default defineEventHandler(
 		const parsed: ReturnType<typeof calendarQuerySchema.safeParse> =
 			calendarQuerySchema.safeParse(getQuery(event));
 		if (!parsed.success)
-			throw createError({
-				statusCode: 400,
-				statusMessage: "Invalid calendar filters",
-			});
+			throw validationError(parsed.error, "Invalid calendar filters");
 		setResponseHeader(event, "Cache-Control", "private, no-store");
 		return readMemberCalendar(actor, parsed.data.view);
 	},

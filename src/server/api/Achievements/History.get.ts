@@ -1,4 +1,5 @@
-import { defineEventHandler, getQuery, createError } from "h3";
+import { validationError } from "#server/utils/validationError";
+import { defineEventHandler, getQuery } from "h3";
 import type { H3Event } from "h3";
 import { z } from "zod";
 import { AchievementKindSchema, type AchievementReview } from "#shared/types/AchievementReview";
@@ -12,6 +13,6 @@ const querySchema: z.ZodType<{ kind: "badge" | "belt"; memberId: string }> = z.s
 export default defineEventHandler(async (event: H3Event): Promise<ApiResponse<AchievementReview[]>> => {
 	const { id, client } = await requireRequestMentor(event);
 	const parsed: ReturnType<typeof querySchema.safeParse> = querySchema.safeParse(getQuery(event));
-	if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid history request" });
+	if (!parsed.success) throw validationError(parsed.error, "Invalid history request");
 	return { success: true, data: await getAchievementReviews(client, parsed.data.kind, parsed.data.memberId, id) };
 });

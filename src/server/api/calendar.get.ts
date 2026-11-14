@@ -1,3 +1,4 @@
+import { validationError } from "#server/utils/validationError";
 import {
 	createError,
 	defineEventHandler,
@@ -20,10 +21,7 @@ export default defineEventHandler(
 		const parsed: ReturnType<typeof calendarQuerySchema.safeParse> =
 			calendarQuerySchema.safeParse(getQuery(event));
 		if (!parsed.success)
-			throw createError({
-				statusCode: 400,
-				statusMessage: "Invalid calendar filters",
-			});
+			throw validationError(parsed.error, "Invalid calendar filters");
 		const client: SupabaseClientType | null = await GetSupabaseClient(event);
 		if (!client)
 			throw createError({

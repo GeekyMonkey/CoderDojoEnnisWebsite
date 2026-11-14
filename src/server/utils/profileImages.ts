@@ -1,3 +1,4 @@
+import { validationError, validateRequest } from "#server/utils/validationError";
 import { Buffer } from "node:buffer";
 import { validateProfilePng } from "./profilePng";
 import { createError, getQuery, getRouterParam, readBody, type H3Event } from "h3";
@@ -33,11 +34,11 @@ async function snapshot(actor: VerifiedMember, memberId: string, slots: ProfileI
 export async function changeProfileImages(event: H3Event, own: boolean, parent: boolean = false): Promise<MemberModel> {
     const actor: VerifiedMember = parent ? await requireRequestParent(event) : await requireRequestMember(event);
     const identity: ReturnType<typeof profileIdentitySchema.safeParse> = profileIdentitySchema.safeParse(own ? actor.id : getRouterParam(event, "memberId"));
-    if (!identity.success) throw createError({ statusCode: 400, statusMessage: "Invalid profile identity" });
+    if (!identity.success) throw validationError(identity.error, "Invalid profile identity", "memberId");
     const id: string = identity.data;
-    if (!profileQuerySchema.safeParse(getQuery(event)).success) throw createError({ statusCode: 400, statusMessage: "Unexpected query fields" });
+    validateRequest(profileQuerySchema, getQuery(event), "Unexpected query fields");
     const parsed: ReturnType<typeof profileImageActionSchema.safeParse> = profileImageActionSchema.safeParse(await readBody<unknown>(event));
-    if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid image action" });
+    if (!parsed.success) throw validationError(parsed.error, "Invalid image action");
     const action: ProfileImageAction = parsed.data;
     if ((action.action === "copyAvatarToPhoto" || action.slot === "photo") && !actor.member.isMentor) {
         throw createError({ statusCode: 403, statusMessage: "Only mentors can change photos" });

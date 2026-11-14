@@ -1,3 +1,5 @@
+import type { ValidationFieldError } from "../utils/ValidationErrors";
+
 /**
  * Standard API response type. (Generic)
  */
@@ -9,6 +11,7 @@ export type ApiResponse<T> =
 	  }
 	| {
 			error: string;
+			validationErrors?: ValidationFieldError[];
 			success: false;
 			logs?: string[];
 	  };

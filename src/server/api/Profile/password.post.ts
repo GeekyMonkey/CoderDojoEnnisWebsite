@@ -1,3 +1,4 @@
+import { validationError, validateRequest } from "#server/utils/validationError";
 import { createError, defineEventHandler, getQuery, readBody, type H3Event } from "h3";
 import { requireRequestMember } from "#server/utils/requestMember";
 import { profilePasswordSchema, profileQuerySchema } from "#shared/types/MemberProfile";
@@ -6,11 +7,9 @@ import { GeneratePasswordHash } from "#server/utils/authUtils";
 /** Change only the authenticated member's password after checking the current hash. */
 export default defineEventHandler(async (event: H3Event): Promise<null> => {
 	const { id, client } = await requireRequestMember(event);
-	if (!profileQuerySchema.safeParse(getQuery(event)).success) {
-		throw createError({ statusCode: 400, statusMessage: "Unexpected profile query fields" });
-	}
+	validateRequest(profileQuerySchema, getQuery(event), "Unexpected profile query fields");
 	const parsed: ReturnType<typeof profilePasswordSchema.safeParse> = profilePasswordSchema.safeParse(await readBody<unknown>(event));
-	if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "Invalid password fields" });
+	if (!parsed.success) throw validationError(parsed.error, "Invalid password fields");
 	const salt: string = useRuntimeConfig(event).private.auth.pass_salt;
 	const currentHash: string | null = await GeneratePasswordHash(parsed.data.currentPassword, salt);
 	const newHash: string | null = await GeneratePasswordHash(parsed.data.newPassword, salt);
