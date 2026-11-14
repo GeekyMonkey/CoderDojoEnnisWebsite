@@ -1,14 +1,41 @@
 {
+	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Wrangler",
+			"name": "Website: Nuxt + Integrated Browser",
 			"type": "node",
-			"request": "attach",
-			"port": 9229,
-			"cwd": "/",
-			"resolveSourceMapLocations": null,
-			"attachExistingChildren": false,
-			"autoAttachChildProcesses": false
+			"request": "launch",
+			"cwd": "${workspaceFolder}/src",
+			"program": "${workspaceFolder}/src/node_modules/nuxt/bin/nuxt.mjs",
+			"args": ["dev", "--host", "localhost", "--port", "3000"],
+			"console": "integratedTerminal",
+			"outputCapture": "std",
+			"autoAttachChildProcesses": true,
+			"skipFiles": ["<node_internals>/**"],
+			"env": {
+				"NO_COLOR": "1",
+				"NODE_EXTRA_CA_CERTS": "${workspaceFolder}/certs/localhost.cert",
+				"NUXT_LOCAL_DEBUG": "1",
+				"NUXT_ENV_RUNTIME": "development",
+				"NUXT_PUBLIC_ENVIRONMENT_RUNTIME": "development",
+				"NITRO_PRESET": "node-server"
+			},
+			"serverReadyAction": {
+				"pattern": "Ready in[^\\r\\n]*→\\s+(https?://\\S+)",
+				"action": "startDebugging",
+				"name": "Website: Integrated Browser",
+				"killOnServerStop": true
+			}
+		},
+		{
+			"name": "Website: Integrated Browser",
+			"type": "editor-browser",
+			"request": "launch",
+			"url": "https://localhost:3000",
+			"webRoot": "${workspaceFolder}/src",
+			"presentation": {
+				"hidden": true
+			}
 		}
 	]
 }

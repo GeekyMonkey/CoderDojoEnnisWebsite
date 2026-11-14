@@ -146,7 +146,8 @@ export default defineNuxtConfig({
 		"@nuxtjs/i18n",
 		"@nuxtjs/supabase",
 		"@vueuse/nuxt",
-		"nitro-cloudflare-dev",
+		// Local VS Code debugging runs without Wrangler's Cloudflare emulator.
+		...(process.env.NUXT_LOCAL_DEBUG === "1" ? [] : ["nitro-cloudflare-dev"]),
 	],
 
 	nitro: {
